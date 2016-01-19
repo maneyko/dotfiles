@@ -1,2 +1,2 @@
 # dotfiles
-my dot setup
+config files for my custom setup

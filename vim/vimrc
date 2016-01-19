@@ -1,0 +1,93 @@
+" vimrc
+" =============================================================================
+"
+
+" vundle commands
+" =============================================================================
+"
+set nocompatible				" overwrite functionality of vi
+filetype off					" can't recognize filetype for vundle
+set rtp+=~/.vim/bundle/Vundle.vim " put vundle in rtp so it can start
+call vundle#begin()				" call vundle
+
+" vundle manages itself
+Plugin 'VundleVim/Vundle.vim'	" plugin manager
+
+" plugins
+Plugin 'ervandew/supertab'		" ????????????????????????
+" Plugin 'davidhalter/jedi-vim'	" python completeion
+Plugin 'scrooloose/nerdtree'	" tree view of pwd
+Plugin 'ctrlpvim/ctrlp.vim'		" searches for files relative to pwd
+Plugin 'tpope/vim-surround'		" surrounding actions
+Plugin 'vim-utils/vim-man'		" helps view man pages
+Plugin 'henrik/vim-indexed-search'
+" Plugin 'chriskempson/base16-vim' " colorschemes compatible with terminal
+" Plugin 'flazz/vim-colorschemes' " big folder of colorshemes
+
+call vundle#end()
+filetype plugin indent on       " load plugin and indent features for filetype
+
+" UI
+" =============================================================================
+"
+" visuals
+set number						" line numbers
+set ruler						" line & columns numbers on bottom
+set showcmd						" show command on bottom
+set numberwidth=3				" width of line number column
+set hlsearch                    " highlight search
+set incsearch                   " move while typing search pattern
+set scrolloff=5                 " keep cursor 5 lines frop top/bottom
+set relativenumber              " relative line numbering
+
+" tab control
+set tabstop=4					" <tab> == 4 spaces
+set shiftwidth=4				" number of spaces for indent and unindent
+set expandtab					" tab makes spaces
+set softtabstop=4				" edit as if tabs are 4 characters
+set autoindent					" automatically indent new lines
+set smartindent                 " knows when to indent
+set smarttab					" tab respects tab settings completely
+
+" wrapping
+set showbreak=...               " show ellipsis when going over
+
+" disable arrow keys in normal mode
+noremap <Up> 	<Nop>
+noremap <Down> 	<Nop>
+noremap <Left> 	<Nop>
+noremap <Right>	<Nop>
+
+" enable mouse functionality
+if has("mouse")
+	set mouse=a
+endif
+
+" misc
+set ignorecase					" ignore case for search
+set clipboard=unnamed			" system clipboard
+set tildeop                     " tilde operator for changing CASE
+let g:netrw_dirhistmax = 0      " no .netrwhist files
+
+" colors
+" ======================================
+"
+syntax on						" syntax highlighting
+" let base16colorspace=256		" access colors present in 256 colorspace
+set t_Co=256					" terminal supports 256 colors
+
+colorscheme colorsbox-stnight
+
+highlight Normal ctermbg=NONE	" make background same as terminal
+highlight Normal ctermfg=NONE	" make default font same as terminal
+
+" plugin options
+" =============================================================================
+"
+
+" supertab
+" =====================================
+
+let g:SuperTabDefaultCompletionType = "context" " contextual completion
+
+

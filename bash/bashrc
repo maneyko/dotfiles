@@ -1,0 +1,136 @@
+#
+# exports
+# ======================================================================
+
+# paths
+# =====================================
+export PATH="\
+/usr/local/gnubin:\
+/usr/local/bin:\
+/usr/local/sbin:\
+/bin:\
+/sbin:\
+/usr/bin:\
+/usr/sbin:\
+$PATH\
+"
+
+export MANPATH="\
+/usr/local/gnuman:\
+/usr/share/man:\
+/usr/local/share/man:\
+$MANPATH\
+"
+
+# UI
+# =====================================
+
+export PS1='\
+\[\e[0;36m\]┌─[\[\e[0m\]\
+\[\e[1;33m\]\u\[\e[0m\]\
+\[\e[0;36m\]]─[\[\e[0m\]\
+\[\e[1;31m\]\l\[\e[0m\]\
+\[\e[0;36m\]]—[\[\e[0m\]\
+\[\e[1;34m\]\w\[\e[0m\]\
+\[\e[0;36m\]]\[\e[0m\]\
+\n\
+\[\e[0;36m\]└─[\[\e[0m\]\
+\[\e[1;37m\]\$\[\e[0m\]\
+\[\e[0;36m\]]› \[\e[0m\]'
+
+ export PAGER="\
+ /bin/sh -c \"unset PAGER; col -bx | \
+ vim -c 'source ~/.vim/custom/pager.vim' -\""
+
+export LESS='-rI'
+export EDITOR='vim'
+export GREP_COLOR='0;34'
+eval `dircolors ~/.dircolors`
+
+# aliases
+# ======================================================================
+
+alias ..="cd ../"
+alias .2="cd ../../"
+alias .3="cd ../../../"
+alias .4="cd ../../../../"
+alias .5="cd ../../../../../"
+alias .6="cd ../../../../../../"
+
+alias gless="/usr/local/bin/less"
+alias less="~/.vim/macros/less.sh"
+alias ls="ls --color=auto"
+alias grep="grep -i --color=always"
+alias cp="cp -i"
+alias mv="mv -i"
+
+alias num="echo $(ls | wc -l)" 
+alias cls="clear && printf '\e[3J'"
+
+# misc
+# =====================================
+
+set -o ignoreeof
+
+# functions
+# ======================================================================
+
+extract () {
+    if [ -f $1 ]; then
+        case $1 in
+            *.tar.*)  echo "using tar"        ; tar xf $1            ;;
+            *.tar)    echo "using tar"        ; tar xf $1            ;;
+            *.tbz2)   echo "using tar"        ; tar xf $1            ;;
+            *.tgz)    echo "using tar"        ; tar xf $1            ;;
+            *.gz)     echo "using gunzip"     ; gunzip $1            ;;
+            *.bz2)    echo "using bunzip"     ; bunzip2 $1           ;;
+            *.dmg)    echo "using hdiutil"    ; hdiutil mount $1     ;;
+            *.zip)    echo "using unzip"      ; unzip -z $1          ;;
+            *.ZIP)    echo "using unzip"      ; unzip -z $1          ;;
+            *.rar)    echo "using unrar"      ; unrar x $1           ;;
+            *.pax)    echo "using pax"        ; cat $1 | pax -r      ;;
+            *.Z)      echo "using uncompress" ; uncompress $1        ;;
+            *.pax.Z)     uncompress $1 --stdout | pax -r             ;;
+            *) echo "'$1' cannot be extracted/mounted via extract()" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
+export -f extract
+
+sizes () {
+    for file in $(ls -a); do
+        du -sh $file
+    done | sort -h
+}
+export -f sizes
+
+os() {
+    if [[ $(uname -a | grep *Linux*) ]]; then
+        echo "linux"
+    else
+        echo "mac"
+    fi
+}
+export -f os
+
+
+# initializations
+# ======================================================================
+
+# terminal background
+export BACKGROUND="dark"
+export COLORS=~/.config/color_setup/base16-custom.$BACKGROUND.sh
+
+if [[ $(tty) = /dev/ttys00* ]]; then
+    sh $COLORS
+fi
+
+# screenfetch on first login
+if [ $(tput cols) -ge 70 ] && [ $(tput lines) -ge 19 ]; then
+    if [ $(tty) = "/dev/ttys001" ]; then
+        cat /usr/local/bin/screenfetch.out
+    fi
+fi
+

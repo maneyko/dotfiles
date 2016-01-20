@@ -1,9 +1,0 @@
-#!/bin/bash
-
-cd ~/dotfiles/
-
-for file in $(ls | grep -v setup); do
-
-	ln -sv dotfiles/$file ~/.$file 2>/dev/null
-
-done

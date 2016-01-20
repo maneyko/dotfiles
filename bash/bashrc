@@ -12,7 +12,6 @@ export PATH="\
 /sbin:\
 /usr/bin:\
 /usr/sbin:\
-$PATH\
 "
 
 export MANPATH="\
@@ -107,7 +106,7 @@ sizes () {
 export -f sizes
 
 os() {
-    if [[ $(uname -a | grep *Linux*) ]]; then
+    if [[ $(uname -a | grep -i linux) ]]; then
         echo "linux"
     else
         echo "mac"
@@ -121,16 +120,16 @@ export -f os
 
 # terminal background
 export BACKGROUND="dark"
-# export COLORS=~/.config/color_setup/base16-custom.$BACKGROUND.sh
+
 
 if [ $(os) = "linux" ]; then
-    sh ~/.config/color_setup/base16-custom.dark_LINUX.sh
+    export COLORS=~/.config/color_setup/base16-custom.dark_LINUX.sh
 else
-    sh ~/.config/color_setup/base16-custom.dark.sh
+    export COLORS=~/.config/color_setup/base16-custom.dark.sh
 fi
 
-if [[ $(tty) = /dev/ttys00* ]]; then
-    sh $COLORS
+if [[ $(tty) = /dev/ttys00* && $TERM = *screen* ]]; then
+    source $COLORS
 fi
 
 # screenfetch on first login
@@ -139,4 +138,3 @@ if [ $(tput cols) -ge 70 ] && [ $(tput lines) -ge 19 ]; then
         cat /usr/local/bin/screenfetch.out
     fi
 fi
-

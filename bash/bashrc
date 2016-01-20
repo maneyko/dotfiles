@@ -121,7 +121,13 @@ export -f os
 
 # terminal background
 export BACKGROUND="dark"
-export COLORS=~/.config/color_setup/base16-custom.$BACKGROUND.sh
+# export COLORS=~/.config/color_setup/base16-custom.$BACKGROUND.sh
+
+if [ $(os) = "linux" ]; then
+    sh ~/.config/color_setup/base16-custom.dark_LINUX.sh
+else
+    sh ~/.config/color_setup/base16-custom.dark.sh
+fi
 
 if [[ $(tty) = /dev/ttys00* ]]; then
     sh $COLORS

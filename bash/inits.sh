@@ -1,18 +1,10 @@
 #!/bin/bash
 # initializations
 # ======================================================================
-source ~/dotfiles/bash/functions.sh
-
-# misc
-# =====================================
 
 # enable some readline shortcuts
 stty -ixon
 set -o ignoreeof
-
-
-# terminal background
-export BACKGROUND="dark"
 
 if [ $(os) = "linux" ]; then
     export COLORS=~/.config/color_setup/base16-custom.${BACKGROUND}_LINUX.sh

@@ -26,3 +26,5 @@ cd ${HOME}/.vim/macros/
 wget https://raw.githubusercontent.com/vim/vim/master/runtime/macros/less.bat
 wget https://raw.githubusercontent.com/vim/vim/master/runtime/macros/less.sh
 wget https://raw.githubusercontent.com/vim/vim/master/runtime/macros/less.vim
+
+chmod +x less.sh

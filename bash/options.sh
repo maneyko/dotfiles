@@ -80,3 +80,5 @@ alias mv="mv -i"
 alias num="echo $(ls | wc -l)" 
 alias cls="clear && printf '\e[3J'"
 
+alias dots="cd ~/dotfiles/"
+

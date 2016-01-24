@@ -2,9 +2,7 @@
 # bashrc
 # ======================================================================
 
-source ${HOME}/dotfiles/bash/exports.sh
-
-source ${HOME}/dotfiles/bash/aliases.sh
+source ${HOME}/dotfiles/bash/options.sh
 
 source ${HOME}/dotfiles/bash/functions.sh
 

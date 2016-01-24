@@ -11,10 +11,8 @@ done
 cd ${HOME}/.vim/bundle/
 
 rm -fr *
-git clone https://github.com/VundleVim/Vundle.vim.git \
-    ${HOME}/.vim/bundle/Vundle.vim
 
-vim -c "PluginInstall" -c "q" -c "q"
+# source ${HOME}/dotfiles/vim/setup/plugin_install.sh
 
 source ${HOME}/.bashrc
 

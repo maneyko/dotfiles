@@ -30,8 +30,6 @@ Plugin 'tpope/vim-unimpaired'   " functionality with ][
 call vundle#end()
 filetype plugin indent on       " load plugin and indent features for filetype
 
-" source ~/.vim/ftplugin/man.vim
-
 " UI
 " ===========================================================================
 "

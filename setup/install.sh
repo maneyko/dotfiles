@@ -9,6 +9,7 @@ for file in $(ls | grep -v setup); do
 done
 
 cd ${HOME}/.vim/bundle/
+
 rm -fr *
 git clone https://github.com/VundleVim/Vundle.vim.git \
     ${HOME}/.vim/bundle/Vundle.vim
@@ -17,10 +18,11 @@ vim -c "PluginInstall" -c "q" -c "q"
 
 source ${HOME}/.bashrc
 
-mkdir ${HOME}/.vim/macros/
-mkdir ${HOME}/.vim/ftplugin/
-mkdir ${HOME}/.vim/syntax/
+mkdir ${HOME}/.vim/macros/ 2>/dev/null
+mkdir ${HOME}/.vim/ftplugin/ 2>/dev/null
+mkdir ${HOME}/.vim/syntax/ 2>/dev/null
 
-ln -s $VIMRUNTIME/macros/less.* ${HOME}/.vim/macros/
-ln -s $VIMRUNTIME/ftplugin/man.vim ${HOME}/.vim/ftplugin/
-ln -s $VIMRUNTIME/syntax/man.vim ${HOME}/.vim/syntax/
+cd ${HOME}/.vim/macros/
+wget https://raw.githubusercontent.com/vim/vim/master/runtime/macros/less.bat
+wget https://raw.githubusercontent.com/vim/vim/master/runtime/macros/less.sh
+wget https://raw.githubusercontent.com/vim/vim/master/runtime/macros/less.vim

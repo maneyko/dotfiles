@@ -1,13 +1,13 @@
 " vimrc
 " ===========================================================================
 "
-source ${HOME}/dotfiles/vim/setup/plugins.vim
+source ${HOME}/dotfiles/vim/src/plugins.vim
 
-source ${HOME}/dotfiles/vim/setup/visuals.vim
+source ${HOME}/dotfiles/vim/src/visuals.vim
 
-source ${HOME}/dotfiles/vim/setup/remaps.vim
+source ${HOME}/dotfiles/vim/src/remaps.vim
 
-source ${HOME}/dotfiles/vim/setup/functions.vim
+source ${HOME}/dotfiles/vim/src/functions.vim
 
-source ${HOME}/dotfiles/vim/setup/plugopts.vim
+source ${HOME}/dotfiles/vim/src/plugopts.vim
 

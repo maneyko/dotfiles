@@ -25,6 +25,13 @@ plugins=(\
 
 cd ${HOME}/.vim/bundle/
 
+if [ $(whoami) == "maneyko" ]; then
+    action="submodule add"
+else
+    action="clone"
+fi
+
 for plugin in "${plugins[@]}"; do
-    git submodule add https://github.com/$plugin
+    git $action https://github.com/$plugin
 done
+

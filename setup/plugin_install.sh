@@ -23,7 +23,7 @@ plugins=(\
 "tpope/vim-unimpaired" \
 )
 
-cd ${HOME}/dotfiles/vim/bundle/
+cd ${HOME}/.vim/bundle/
 
 for plugin in "${plugins[@]}"; do
     git submodule add https://github.com/$plugin

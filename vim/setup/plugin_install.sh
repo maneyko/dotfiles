@@ -26,8 +26,5 @@ plugins=(\
 cd ${HOME}/dotfiles/vim/bundle/
 
 for plugin in "${plugins[@]}"; do
-
-    # echo $plugin
     git submodule add https://github.com/$plugin
-
 done

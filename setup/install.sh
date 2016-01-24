@@ -2,7 +2,7 @@
 
 cd ${HOME}/dotfiles/
 
-for file in $(ls | grep -v setup); do
+for file in $(ls | grep -v setup | grep -v README); do
 
 	ln -sv dotfiles/$file ${HOME}/.$file 2>/dev/null
 

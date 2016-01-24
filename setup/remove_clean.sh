@@ -1,7 +1,7 @@
 #!/bin/sh
 
 cd ~/dotfiles/
-setup/remove
+setup/remove.sh
 
 if [ -d ~/dotfiles/setup/dotfiles_old ]; then
     cd ~/dotfiles/setup/dotfiles_old/

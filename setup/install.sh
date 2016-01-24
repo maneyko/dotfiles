@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 cd ${HOME}/dotfiles/
 
@@ -12,4 +12,15 @@ cd ${HOME}/.vim/bundle/
 rm -fr *
 git clone https://github.com/VundleVim/Vundle.vim.git \
     ${HOME}/.vim/bundle/Vundle.vim
-vim -c "PluginInstall"
+
+vim -c "PluginInstall" -c "q" -c "q"
+
+source ${HOME}/.bashrc
+
+mkdir ${HOME}/.vim/macros/
+mkdir ${HOME}/.vim/ftplugin/
+mkdir ${HOME}/.vim/syntax/
+
+ln -s $VIMRUNTIME/macros/less.* ${HOME}/.vim/macros/
+ln -s $VIMRUNTIME/ftplugin/man.vim ${HOME}/.vim/ftplugin/
+ln -s $VIMRUNTIME/syntax/man.vim ${HOME}/.vim/syntax/

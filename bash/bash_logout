@@ -1,0 +1,1 @@
+tmux confirm-before -p "kill-server? (y/n)" kill-server

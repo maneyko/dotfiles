@@ -26,6 +26,30 @@ extract () {
 }
 export -f extract
 
+tarc () {
+    if [ -d $1 ] || [ -f $1 ]; then
+
+        if [[ $1 == *"/"* ]]; then
+            echo "File cannot contain '/'"
+        else
+            tar -zcvf $1.tgz $1
+        fi
+
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
+export -f tarc
+
+tarx () {
+    if [ -f $1 ]; then
+        tar xf $1
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
+export -f tarx
+
 sizes () {
     for file in $(ls -a); do
         du -sh $file

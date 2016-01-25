@@ -4,6 +4,8 @@
 if has('autocmd')
   autocmd BufNewFile,BufRead *tmux.conf set ft=sh
   autocmd Filetype vim setlocal ts=2 sw=2 sts=2 expandtab
+  " autocmd BufNewFile *.sh :i<CR>#!/bin/sh<CR><CR><BS>:set ft=sh<CR><C-l>
+  autocmd BufNewFile *.sh set ft=sh execute 'i#!/bin/sh<CR><ESC>'
 endif
 
 if has("mouse")
@@ -21,6 +23,11 @@ function LessInitFunc()
   set hlsearch incsearch wrapscan nonumber nolist
   set so=999
   if @% == '' | set ft=man | endif
+endfunction
+
+function PluginUpdate()
+  !for file in $(ls ${HOME}/.vim/bundle/); do cd ${HOME}/.vim/bundle/$file && 
+        \git fetch -v; done
 endfunction
 
 function! ReadMode(togg)

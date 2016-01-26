@@ -7,9 +7,9 @@ stty -ixon
 set -o ignoreeof
 
 if [ $(os) = "linux" ]; then
-    export COLORS=~/.config/color_setup/base16-custom.${BACKGROUND}_LINUX.sh
+    export COLORS=${HOME}/.config/color_setup/base16-custom.${BACKGROUND}_LINUX.sh
 else
-    export COLORS=~/.config/color_setup/base16-custom.${BACKGROUND}.sh
+    export COLORS=${HOME}/.config/color_setup/base16-custom.${BACKGROUND}.sh
 fi
 
 if [[ $(tty) = /dev/ttys00* && $TERM = *screen* ]]; then

@@ -9,6 +9,7 @@ for file in $(ls | grep -v setup | grep -v README); do
 done
 
 source $HOME/.bashrc
+mkdir $HOME/.vim/bundle 2>/dev/null
 
 rm -fr $HOME/.vim/bundle/*
 cd $HOME/.vim/bundle
@@ -60,7 +61,7 @@ cd $HOME/.vim/ftplugin/
 rm man.vim
 wget https://raw.githubusercontent.com/vim/vim/master/runtime/ftplugin/man.vim
 
-if [ $(tmux -V) == *'1.'* ]; then
+if [[ $(tmux -V) == *'1.'* ]]; then
     git clone https://github.com/tmux/tmux.git
     cd tmux
     sh autogen.sh

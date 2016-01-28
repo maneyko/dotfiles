@@ -87,7 +87,7 @@ alias .4="cd ../../../../"
 alias .5="cd ../../../../../"
 alias .6="cd ../../../../../../"
 
-bind '"\e[24~":"pwd\n"'
+# bind '"\e[24~":"pwd\n"'
 
 source $HOME/dotfiles/bash/functions.sh
 source $HOME/dotfiles/bash/inits.sh
@@ -95,5 +95,5 @@ if [ -f $HOME/.local.bashrc ]; then
     source $HOME/.local.bashrc
 fi
 
-source $HOME/clipboard.sh
+# source $HOME/clipboard.sh
 

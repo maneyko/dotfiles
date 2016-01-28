@@ -61,6 +61,7 @@ cd $HOME/.vim/ftplugin/
 rm man.vim
 wget https://raw.githubusercontent.com/vim/vim/master/runtime/ftplugin/man.vim
 
+cd $HOME/dotfiles/setup/
 if [[ $(tmux -V) == *'1.'* ]]; then
     git clone https://github.com/tmux/tmux.git
     cd tmux

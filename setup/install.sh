@@ -11,6 +11,7 @@ done
 source $HOME/.bashrc
 
 rm -fr $HOME/.vim/bundle/*
+cd $HOME/.vim/bundle
 
 plugins=(\
 #

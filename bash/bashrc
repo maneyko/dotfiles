@@ -9,8 +9,8 @@
 # =====================================
 export PATH="\
 /usr/local/gnubin:\
+$HOME/local/bin:\
 /usr/local/bin:\
-$HOME/bin:\
 /usr/local/sbin:\
 /bin:\
 /sbin:\

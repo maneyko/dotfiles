@@ -12,15 +12,6 @@ source $HOME/.bashrc
 
 rm -fr $HOME/.vim/bundle/*
 
-cd $HOME/.vim/bundle/
-if [ $(whoami) == "maneyko" ]; then
-    action="submodule add"
-else
-    action="clone"
-fi
-
-declare -a plugins
-
 plugins=(\
 #
 # searches for files relative to pwd
@@ -52,7 +43,7 @@ plugins=(\
 )
 
 for plugin in "${plugins[@]}"; do
-    git $action https://github.com/$plugin
+    git clone https://github.com/$plugin
 done
 
 mkdir $HOME/.vim/macros/ 2>/dev/null
@@ -67,3 +58,11 @@ chmod +x less.sh
 cd $HOME/.vim/ftplugin/
 rm man.vim
 wget https://raw.githubusercontent.com/vim/vim/master/runtime/ftplugin/man.vim
+
+if [ $(tmux -V) == *'1.'* ]; then
+    git clone https://github.com/tmux/tmux.git
+    cd tmux
+    sh autogen.sh
+    ./configure && make
+fi
+

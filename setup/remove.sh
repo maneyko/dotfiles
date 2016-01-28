@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd ~/dotfiles/
+cd $HOME/dotfiles/
 
 for file in $(ls | grep -v setup); do
 

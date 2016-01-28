@@ -21,15 +21,18 @@ set completion-ignore-case on
 "\C-f":         forward-char
 
 "\C-l":         clear-screen
-"\C-_":         undo
 "\eu":          undo
-"\C-i":         complete
 
 # Modifying
 # =======================================
 #
 "\C-u":         unix-line-discard       # backward kill-line
 "\C-k":         kill-line               # forward  kill-line
+
+"\C-x(":        start-kbd-macro         # records all keystrokes
+"\C-x)":        end-kbd-macro           # records all keystrokes
+"\C-xe":        call-last-kbd-macro     # calls kbd-macro
+"\C-xp":        print-last-kbd-macro    # outputs macro
 
 "\C-w":         unix-word-rubout        # backward delete to white space
 

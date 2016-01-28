@@ -2,6 +2,16 @@
 # functions
 # ======================================================================
 
+man () {
+    if [ -n $(which $1 2>/dev/null) ] || [ -n "$(which $2 2>/dev/null)" ]; then
+        vim -c "Man $1 $2" -c 'execute "normal \<C-w>o"' \
+            -c "source ~/.vim/macros/less.vim"
+    else
+        env man $1 $2
+    fi
+}
+export -f man
+
 tarc () {
     if [ -d $1 ] || [ -f $1 ]; then
 

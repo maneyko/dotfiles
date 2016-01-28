@@ -1,14 +1,14 @@
 #!/bin/sh
 
-cd ~/dotfiles/
+cd $HOME/dotfiles/
 setup/remove.sh
 
-if [ -d ~/dotfiles/setup/dotfiles_old ]; then
-    cd ~/dotfiles/setup/dotfiles_old/
+if [ -d $HOME/dotfiles/setup/dotfiles_old ]; then
+    cd $HOME/dotfiles/setup/dotfiles_old/
     for file in $(ls); do
         echo "moving ~/dotfiles/setup/dotfiles_old/$file to ~/.$file"
-        mv $file ~/.$file
+        mv $file $HOME/.$file
     done
-    rmdir ~/dotfiles/setup/dotfiles_old/
+    rmdir $HOME/dotfiles/setup/dotfiles_old/
 fi
 

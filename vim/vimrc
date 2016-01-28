@@ -7,6 +7,7 @@
 runtime bundle/vim-pathogen/autoload/pathogen.vim
 execute pathogen#infect()
 filetype plugin indent on
+source $HOME/.vim/ftplugin/man.vim
 
 " UI
 " =====================================
@@ -22,6 +23,11 @@ set scrolloff=5                 " keep cursor 5 lines frop top/bottom
 set showbreak=...               " show ellipsis when going over
 set list
 set listchars=tab:\ \ ,trail:⋅
+if version >= 702
+  au InsertEnter * :set nolist  " dont list trailing chars in insert
+  au InsertLeave * :set list
+endif
+
 
 " tab control
 set tabstop=4                   " <tab> == 4 spaces
@@ -37,6 +43,10 @@ set ignorecase                  " ignore case for search
 set clipboard=unnamed           " system clipboard
 set tildeop                     " tilde operator for changing CASE
 let g:netrw_dirhistmax = 0      " no .netrwhist files
+if has("mouse")
+  set mouse=a
+endif
+
 
 " colors
 " ======================================
@@ -65,12 +75,14 @@ nnoremap <silent> <C-l> :nohl<CR><C-l>
 nnoremap <silent> <C-n> :set relativenumber!<CR>
 
 " use jk for scrolling the page
-nnoremap <leader>v :call ReadMode(togg)<CR>
+nnoremap <leader>r :call ReadMode(togg)<CR>
 
+nnoremap <silent> <leader>vc :source $HOME/.vim/vimrc<CR>:nohl<CR><C-l>
+      \:echo "reloaded vimrc"<CR>
 " change tabbing for whole file
-nmap \t :set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab<CR>
+nnoremap \n :set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab<CR>
       \:%retab!<CR>:echo "noexpandtab"<CR>
-nmap \s :set tabstop=4 softtabstop=4 shiftwidth=4 expandtab<CR>
+nnoremap \t :set tabstop=4 softtabstop=4 shiftwidth=4 expandtab<CR>
       \:%retab!<CR>:echo "expandtab"<CR>
 
 " disable arrow keys
@@ -80,43 +92,53 @@ nnoremap <Left>     <NOP>
 nnoremap <Right>    <NOP>
 
 nnoremap Y y$
+nnoremap <leader><leader> :w<CR>
+nnoremap <leader>q :q<CR>
 
 " paste from system register
 inoremap <C-p>  <C-r>*
-inoremap jk <ESC>
+inoremap jk <Esc>
+inoremap <C-h> <Left>
+inoremap <C-j> <Down>
+inoremap <C-k> <Up>
+inoremap <C-l> <Right>
+
 
 vnoremap . :normal .<CR>
+"this is some string of text"
 
 " functions
 " =====================================
 "
+" file specific autocommands
 if has('autocmd')
-  autocmd BufNewFile,BufRead *tmux.conf set ft=sh
-  autocmd Filetype vim setlocal ts=2 sw=2 sts=2 expandtab
+  autocmd BufRead *tmux.conf set ft=sh
+  autocmd BufNewFile main.c{,pp} execute
+        \"normal oint\<Space>main()\<CR>{\<CR>\<CR>}\<Up>\<Tab>
+        \return\<Space>0;\<Esc>0"
+  autocmd BufNewFile *.sh execute "normal i#!/bin/sh\<CR>\<Esc>"
+
+  autocmd FileType vim setlocal ts=2 sw=2 sts=2 expandtab keywordprg=:help
+  autocmd FileType help setlocal ro keywordprg=:help
+  autocmd FileType c{,pp} source $HOME/.vim/ftplugin/c.vim
+  autocmd FileType sh source $HOME/.vim/ftplugin/sh.vim
 
 endif
 
-if has("mouse")
-  set mouse=a
-endif
 
-if version >= 702
-  au InsertEnter * :set nolist    " dont list trailing chars in insert
-  au InsertLeave * :set list
-endif
-
-function LessInitFunc()
+function! LessInitFunc()
   highlight Normal ctermbg=NONE
   highlight Normal ctermfg=NONE
   set hlsearch incsearch wrapscan nonumber nolist
   set so=999
-  if @% == '' | set ft=man | endif
+  if @% == '' | set ft=sh | endif
 endfunction
 
-function PluginUpdate()
-  !for file in $(ls ${HOME}/.vim/bundle/); do cd ${HOME}/.vim/bundle/$file && 
-        \git fetch -v; done
+function! PluginUpdate()
+  !for dir in $(ls ${HOME}/.vim/bundle/); do cd ${HOME}/.vim/bundle/$dir &&
+        \ git fetch -v; done
 endfunction
+command! PluginUpdate call PluginUpdate()
 
 function! ReadMode(togg)
   if a:togg==0
@@ -137,5 +159,6 @@ silent call ReadMode(togg)
 " plugin options
 " =====================================
 "
-let g:SuperTabDefaultCompletionType = "context" " contextual completion
+let g:SuperTabDefaultCompletionType="context" " contextual completion
+let g:SuperTabCrMapping=1
 

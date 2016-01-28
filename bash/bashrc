@@ -10,7 +10,7 @@
 export PATH="\
 /usr/local/gnubin:\
 /usr/local/bin:\
-${HOME}/bin:\
+$HOME/bin:\
 /usr/local/sbin:\
 /bin:\
 /sbin:\
@@ -69,6 +69,7 @@ export BACKGROUND="dark"
 
 alias gless="env less"
 alias less="~/.vim/macros/less.sh"
+alias gman="env man"
 alias ls="ls --color=auto"
 alias grep="grep -i --color=auto"
 alias cp="cp -i"
@@ -86,6 +87,13 @@ alias .4="cd ../../../../"
 alias .5="cd ../../../../../"
 alias .6="cd ../../../../../../"
 
+bind '"\e[24~":"pwd\n"'
 
-source ${HOME}/dotfiles/bash/functions.sh
-source ${HOME}/dotfiles/bash/inits.sh
+source $HOME/dotfiles/bash/functions.sh
+source $HOME/dotfiles/bash/inits.sh
+if [ -f $HOME/.local.bashrc ]; then
+    source $HOME/.local.bashrc
+fi
+
+source $HOME/clipboard.sh
+

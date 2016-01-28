@@ -75,4 +75,8 @@ extract () {
     fi
 }
 export -f extract
-
+if [ $HOME = "/Users/maneyko" ] && [ $(whoami) = "maneyko" ]; then
+    export is_maneyko='true'
+else
+    export is_maneyko=''
+fi

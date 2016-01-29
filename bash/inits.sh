@@ -6,13 +6,9 @@
 stty -ixon
 set -o ignoreeof
 
-if [ $(os) = "linux" ]; then
-    export COLORS=${HOME}/.config/color_setup/base16-custom.${BACKGROUND}_LINUX.sh
-else
-    export COLORS=${HOME}/.config/color_setup/base16-custom.${BACKGROUND}.sh
-fi
+export COLORS=${HOME}/.config/color_setup/base16-custom.${BACKGROUND}.sh
 
-if [[ $(tty) = /dev/ttys00* && $TERM = *screen* ]]; then
+if [[ -n "$TMUX" ]]; then
     source $COLORS
 fi
 

@@ -63,9 +63,7 @@ wget https://raw.githubusercontent.com/vim/vim/master/runtime/ftplugin/man.vim
 
 cd $HOME/dotfiles/setup/
 if [[ $(tmux -V) == *'1.'* ]]; then
-    git clone https://github.com/tmux/tmux.git
-    cd tmux
-    sh autogen.sh
-    ./configure && make
+    rm $HOME/local/bin/tmux 2>/dev/null
+    ./tmux_local_install.sh
 fi
 

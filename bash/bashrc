@@ -14,7 +14,7 @@ $HOME/local/bin:\
 /sbin:\
 /usr/bin:\
 /usr/sbin:\
-$PATH
+$PATH:\
 "
 
 export MANPATH="\
@@ -22,13 +22,13 @@ export MANPATH="\
 /usr/local/share/man:\
 /usr/local/man:\
 /usr/share/man:\
-$MANPATH\
+$MANPATH:\
 "
 
 export PYTHONPATH="\
 /usr/local/lib/python2.7/site-packages:\
 /usr/local/lib/python3.5/site-packages:\
-$PYTHONPATH\
+$PYTHONPATH:\
 "
 
 # export VIMRUNTIME="\

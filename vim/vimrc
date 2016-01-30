@@ -81,9 +81,6 @@ nnoremap <silent> <C-l> :nohl<CR><C-l>
 " enable relativenumber
 nnoremap <silent> <C-n> :set relativenumber!<CR>
 
-" use jk for scrolling the page
-nnoremap <leader>r :call ReadMode(togg)<CR>
-
 nnoremap <silent> <leader>vc :source $HOME/.vim/vimrc<CR>:nohl<CR><C-l>
       \:echo "reloaded vimrc"<CR>
 " change tabbing for whole file
@@ -124,10 +121,10 @@ if has('autocmd')
   autocmd BufNewFile main.c{,pp} execute
         \"normal oint\<Space>main()\<CR>{\<CR>\<CR>}\<Up>\<Tab>
         \return\<Space>0;\<Esc>0"
-
   autocmd BufNewFile *.sh execute "normal i#!/bin/sh\<CR>\<Esc>"
   autocmd FileType vim setlocal ts=2 sw=2 sts=2 expandtab keywordprg=:help
-  autocmd FileType help setlocal ro keywordprg=:help
+  autocmd FileType help setlocal so=0 keywordprg=:help |
+        \ silent! call ReadMode(1)
   autocmd FileType c{,pp} source $HOME/.vim/ftplugin/c.vim
   autocmd FileType sh source $HOME/.vim/ftplugin/sh.vim
 
@@ -142,45 +139,48 @@ function! LessInitFunc()
   if @% == '' | set ft=sh | endif
 endfunction
 
-function! PluginDo()
-  !mkdir $HOME/.vim/bundle 2>/dev/null; echo;
-        \ for plugin in $(cat $HOME/.vim/plugins.txt | egrep -o '^[^\#]*'); do
-        \ (cd $HOME/.vim/bundle/${plugin\#*/} 2>/dev/null && git fetch --all -v) ||
-        \ (cd $HOME/.vim/bundle && git clone https://github.com/$plugin);
-        \ echo;
-        \ done
-endfunction
-command! PluginDo silent call PluginDo()
-      \| silent execute '!sleep 3' | redraw!
-
 function! PluginInstall()
   !mkdir $HOME/.vim/bundle 2>/dev/null; echo;
-        \ for plugin in $(cat $HOME/.vim/plugins.txt | egrep -o '^[^\#]*'); do
-        \ if [ -d $HOME/.vim/bundle/${plugin\#*/} ]; then
-        \ cd $HOME/.vim/bundle/${plugin\#*/} && git fetch --all -v;
-        \ else
-        \ cd $HOME/.vim/bundle && git clone https://github.com/$plugin;
-        \ fi;
-        \ echo; done
+    \ for plugin in $(cat $HOME/.vim/plugins.txt | grep -Eo '^[^ \#]*'); do
+    \ if [ -d $HOME/.vim/bundle/${plugin\#*/} ]; then
+      \ cd $HOME/.vim/bundle/${plugin\#*/} && git fetch --all -v;
+    \ else
+      \ cd $HOME/.vim/bundle && git clone https://github.com/$plugin;
+    \ fi; echo; done;
+    \ for dir in $(ls $HOME/.vim/bundle); do
+    \ if [ \! "$(cat $HOME/.vim/plugins.txt |\
+                \grep -Eo '^[^ \#]*' | grep $dir)" ]; then
+      \ echo removing directory, $dir/;
+      \ rm -fr $HOME/.vim/bundle/$dir;
+    \ fi; done;
 endfunction
 command! PluginInstall silent call PluginInstall()
       \| silent execute '!sleep 3' | redraw!
 
-function! ReadMode(togg)
-  if a:togg==0
+function! ReadMode(rmd)
+  if a:rmd==1
     echo "Read Mode on"
-    set so=999
-    nnoremap q :q<CR>
-    let g:togg=1
+    set nomodifiable
+    set readonly
+    nnoremap <buffer> q :q<CR>
+    nnoremap <buffer> <leader>q :q!<CR>
+    nnoremap <buffer> j <C-e>L0:file<CR>
+    nnoremap <buffer> k <C-y>L0:file<CR>
+    let g:rmd=0
   else
     echo "Read Mode off"
-    set so=5
-    nunmap q
-    let g:togg=0
+    set modifiable
+    set noreadonly
+    nunmap <buffer> q
+    nunmap <buffer> <leader>q
+    nunmap <buffer> j
+    nunmap <buffer> k
+    execute "normal M"
+    let g:rmd=1
   endif
 endfunction
-let g:togg=0
-silent call ReadMode(togg)
+let g:rmd=1
+nnoremap <leader>r :call ReadMode(rmd)<CR>
 
 " plugin options
 " =====================================

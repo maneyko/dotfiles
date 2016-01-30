@@ -136,8 +136,8 @@ function! PluginInstall()
   \   fi;
   \ done;
 endfunction
-command! PluginInstall silent call PluginInstall()
-      \| silent execute '!sleep 3' | redraw!
+command! PluginInstall silent call PluginInstall() |
+      \ silent execute '!sleep 3' | redraw!
 
 function! ReadMode(rmd)
   if a:rmd==1

@@ -126,13 +126,15 @@ function! PluginInstall()
   \     cd $HOME/.vim/bundle/${plugin\#*/} && git fetch --all -v;
   \   else
   \     cd $HOME/.vim/bundle && git clone https://github.com/$plugin;
-  \ fi; echo; done;
+  \   fi; echo;
+  \ done;
   \ for dir in $(ls $HOME/.vim/bundle); do
-  \ if [ \! "$(cat $HOME/.vim/plugins.txt |\
-                  \grep -Eo '^[^ \#]*' | grep $dir)" ]; then
-  \   echo removing directory, $dir/;
-  \   rm -fr $HOME/.vim/bundle/$dir;
-  \ fi; done;
+  \   if [ \! "$(cat $HOME/.vim/plugins.txt |\
+                \grep -Eo '^[^ \#]*' | grep $dir)" ]; then
+  \     echo removing directory, $dir/;
+  \     rm -fr $HOME/.vim/bundle/$dir;
+  \   fi;
+  \ done;
 endfunction
 command! PluginInstall silent call PluginInstall()
       \| silent execute '!sleep 3' | redraw!

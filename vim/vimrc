@@ -123,7 +123,7 @@ function! PluginInstall()
   !mkdir $HOME/.vim/bundle 2>/dev/null; echo;
   \ for plugin in $(cat $HOME/.vim/plugins.txt | grep -Eo '^[^ \#]*'); do
   \   if [ -d $HOME/.vim/bundle/${plugin\#*/} ]; then
-  \     cd $HOME/.vim/bundle/${plugin\#*/} && git fetch --all -v;
+  \     cd $HOME/.vim/bundle/${plugin\#*/} && git pull --all -v;
   \   else
   \     cd $HOME/.vim/bundle && git clone https://github.com/$plugin;
   \   fi; echo;

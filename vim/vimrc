@@ -101,7 +101,6 @@ inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 inoremap <C-l> <Right>
 
-
 " functions
 " =====================================
 "
@@ -122,18 +121,18 @@ endif
 
 function! PluginInstall()
   !mkdir $HOME/.vim/bundle 2>/dev/null; echo;
-    \ for plugin in $(cat $HOME/.vim/plugins.txt | grep -Eo '^[^ \#]*'); do
-    \ if [ -d $HOME/.vim/bundle/${plugin\#*/} ]; then
-      \ cd $HOME/.vim/bundle/${plugin\#*/} && git fetch --all -v;
-    \ else
-      \ cd $HOME/.vim/bundle && git clone https://github.com/$plugin;
-    \ fi; echo; done;
-    \ for dir in $(ls $HOME/.vim/bundle); do
-    \ if [ \! "$(cat $HOME/.vim/plugins.txt |\
-                \grep -Eo '^[^ \#]*' | grep $dir)" ]; then
-      \ echo removing directory, $dir/;
-      \ rm -fr $HOME/.vim/bundle/$dir;
-    \ fi; done;
+  \ for plugin in $(cat $HOME/.vim/plugins.txt | grep -Eo '^[^ \#]*'); do
+  \   if [ -d $HOME/.vim/bundle/${plugin\#*/} ]; then
+  \     cd $HOME/.vim/bundle/${plugin\#*/} && git fetch --all -v;
+  \   else
+  \     cd $HOME/.vim/bundle && git clone https://github.com/$plugin;
+  \ fi; echo; done;
+  \ for dir in $(ls $HOME/.vim/bundle); do
+  \ if [ \! "$(cat $HOME/.vim/plugins.txt |\
+                  \grep -Eo '^[^ \#]*' | grep $dir)" ]; then
+  \   echo removing directory, $dir/;
+  \   rm -fr $HOME/.vim/bundle/$dir;
+  \ fi; done;
 endfunction
 command! PluginInstall silent call PluginInstall()
       \| silent execute '!sleep 3' | redraw!

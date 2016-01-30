@@ -1,12 +1,12 @@
 #
 # bashrc
-# ======================================================================
+# ====================================================
 #
 # exports
 # ===============================================
 
 export PATH="\
-/usr/local/gnubin:\
+/usr/local/opt/coreutils/libexec/gnubin:\
 $HOME/local/bin:\
 /usr/local/bin:\
 /usr/local/sbin:\
@@ -18,9 +18,10 @@ $PATH
 "
 
 export MANPATH="\
-/usr/local/gnuman:\
-/usr/share/man:\
+/usr/local/opt/coreutils/libexec/gnuman:\
 /usr/local/share/man:\
+/usr/local/man:\
+/usr/share/man:\
 $MANPATH\
 "
 
@@ -90,9 +91,8 @@ alias .6="cd ../../../../../../"
 
 source $HOME/dotfiles/bash/functions.sh
 source $HOME/dotfiles/bash/inits.sh
+source $HOME/dotfiles/tmux/clipboard.sh
+
 if [ -f $HOME/.local.bashrc ]; then
     source $HOME/.local.bashrc
 fi
-
-# source $HOME/clipboard.sh
-

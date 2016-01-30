@@ -1,0 +1,10 @@
+ctrlpvim/ctrlp.vim      # searches for files relative to pwd
+ervandew/supertab       # tab completion
+jiangmiao/auto-pairs    # pairs brackets, parens, etc.
+scrooloose/nerdtree     # tree view of pwd
+tpope/vim-commentary    # easier commenting
+tpope/vim-fugitive      # vim git wrapper
+tpope/vim-pathogen      # pathogen
+tpope/vim-repeat        # repeat more with '.'
+tpope/vim-surround      # surrounding motions
+tpope/vim-unimpaired    # functionality for '[' and ']'

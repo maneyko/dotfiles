@@ -1,13 +1,17 @@
 " vimrc
 " ===========================================================================
-"
-" pathogen init
-" =====================================
-"
+
 runtime bundle/vim-pathogen/autoload/pathogen.vim
-execute pathogen#infect()
+
+if isdirectory($HOME . "/.vim/bundle/vim-pathogen")
+  execute pathogen#infect()
+endif
+
 filetype plugin indent on
+
 source $HOME/.vim/ftplugin/man.vim
+
+" notes: create less page viewer
 
 " UI
 " =====================================
@@ -19,6 +23,7 @@ set showcmd                     " show command on bottom
 set numberwidth=3               " width of line number column
 set hlsearch                    " highlight search
 set incsearch                   " move while typing search pattern
+set smartcase                   " searches for capitals when I type them
 set scrolloff=5                 " keep cursor 5 lines frop top/bottom
 set showbreak=...               " show ellipsis when going over
 set list
@@ -46,6 +51,8 @@ let g:netrw_dirhistmax = 0      " no .netrwhist files
 if has("mouse")
   set mouse=a
 endif
+map <ScrollWheelUp> <C-y>
+map <ScrollWheelDown> <C-e>
 
 
 " colors
@@ -113,11 +120,12 @@ vnoremap . :normal .<CR>
 " file specific autocommands
 if has('autocmd')
   autocmd BufRead *tmux.conf set ft=sh
+  autocmd BufRead plugins.txt set ft=sh
   autocmd BufNewFile main.c{,pp} execute
         \"normal oint\<Space>main()\<CR>{\<CR>\<CR>}\<Up>\<Tab>
         \return\<Space>0;\<Esc>0"
-  autocmd BufNewFile *.sh execute "normal i#!/bin/sh\<CR>\<Esc>"
 
+  autocmd BufNewFile *.sh execute "normal i#!/bin/sh\<CR>\<Esc>"
   autocmd FileType vim setlocal ts=2 sw=2 sts=2 expandtab keywordprg=:help
   autocmd FileType help setlocal ro keywordprg=:help
   autocmd FileType c{,pp} source $HOME/.vim/ftplugin/c.vim
@@ -134,11 +142,29 @@ function! LessInitFunc()
   if @% == '' | set ft=sh | endif
 endfunction
 
-function! PluginUpdate()
-  !for dir in $(ls ${HOME}/.vim/bundle/); do cd ${HOME}/.vim/bundle/$dir &&
-        \ git fetch -v; done
+function! PluginDo()
+  !mkdir $HOME/.vim/bundle 2>/dev/null; echo;
+        \ for plugin in $(cat $HOME/.vim/plugins.txt | egrep -o '^[^\#]*'); do
+        \ (cd $HOME/.vim/bundle/${plugin\#*/} 2>/dev/null && git fetch --all -v) ||
+        \ (cd $HOME/.vim/bundle && git clone https://github.com/$plugin);
+        \ echo;
+        \ done
 endfunction
-command! PluginUpdate call PluginUpdate()
+command! PluginDo silent call PluginDo()
+      \| silent execute '!sleep 3' | redraw!
+
+function! PluginInstall()
+  !mkdir $HOME/.vim/bundle 2>/dev/null; echo;
+        \ for plugin in $(cat $HOME/.vim/plugins.txt | egrep -o '^[^\#]*'); do
+        \ if [ -d $HOME/.vim/bundle/${plugin\#*/} ]; then
+        \ cd $HOME/.vim/bundle/${plugin\#*/} && git fetch --all -v;
+        \ else
+        \ cd $HOME/.vim/bundle && git clone https://github.com/$plugin;
+        \ fi;
+        \ echo; done
+endfunction
+command! PluginInstall silent call PluginInstall()
+      \| silent execute '!sleep 3' | redraw!
 
 function! ReadMode(togg)
   if a:togg==0

@@ -56,5 +56,6 @@ cd ..
 # cleanup
 rm -rf $HOME/tmux_tmp
 
-echo "$HOME/local/bin/tmux is now available. You can optionally add $HOME/local/bin to your PATH."
+echo "$HOME/local/bin/tmux is now available. \
+    You can optionally add $HOME/local/bin to your PATH."
 unset tmux_v libevent_v ncurses_v

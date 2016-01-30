@@ -101,6 +101,8 @@ inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 inoremap <C-l> <Right>
 
+vnoremap . :normal .<cr>
+
 " functions
 " =====================================
 "
@@ -141,28 +143,29 @@ command! PluginInstall silent call PluginInstall() |
 
 function! ReadMode(rmd)
   if a:rmd==1
-    echo "Read Mode on"
-    set nomodifiable
-    set readonly
-    nnoremap <buffer> q :q<CR>
-    nnoremap <buffer> <leader>q :q!<CR>
-    nnoremap <buffer> j <C-e>L0:file<CR>
-    nnoremap <buffer> k <C-y>L0:file<CR>
+    silent! call FlyMode(0)
+    silent! set nomodifiable
+    silent! set readonly
+    silent! nnoremap <buffer> q :q<CR>
+    silent! nnoremap <buffer> <leader>q :q!<CR>
+    silent! nnoremap <buffer> j <C-e>L0:file<CR>
+    silent! nnoremap <buffer> k <C-y>L0:file<CR>
     if @% == ''
-      set ft=sh
-      nnoremap <buffer> q :q!<CR>
+      silent! set ft=sh
+      silent! nnoremap <buffer> q :q!<CR>
     endif
     let g:rmd=0
+    echo "Read Mode on"
   else
-    echo "Read Mode off"
-    set modifiable
-    set noreadonly
-    nunmap <buffer> q
-    nunmap <buffer> <leader>q
-    nunmap <buffer> j
-    nunmap <buffer> k
-    execute "normal M"
+    silent! set modifiable
+    silent! set noreadonly
+    silent! nunmap <buffer> q
+    silent! nunmap <buffer> <leader>q
+    silent! nunmap <buffer> j
+    silent! nunmap <buffer> k
+    silent! execute "normal M"
     let g:rmd=1
+    echo "Read Mode off"
   endif
 endfunction
 let g:rmd=1
@@ -170,15 +173,16 @@ nnoremap <leader>r :call ReadMode(rmd)<CR>
 
 function! FlyMode(fmd)
   if a:fmd==1
-    echo "Fly Mode on"
-    setlocal so=999
-    nnoremap <buffer> q :q<CR>
+    silent! call ReadMode(0)
+    silent! setlocal so=999
+    silent! nnoremap <buffer> q :q<CR>
     let g:fmd=0
+    echo "Fly Mode on"
   else
-    echo "Fly Mode off"
-    setlocal so=5
-    nunmap <buffer> q
+    silent! setlocal so=5
+    silent! nunmap <buffer> q
     let g:fmd=1
+    echo "Fly Mode off"
   endif
 endfunction
 let g:fmd=1

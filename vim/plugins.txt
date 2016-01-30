@@ -1,9 +1,12 @@
 
+# sort plugins.txt -o plugins.txt
+
 ctrlpvim/ctrlp.vim      # searches for files relative to pwd
 ervandew/supertab       # tab completion
 jiangmiao/auto-pairs    # pairs brackets, parens, etc.
 scrooloose/nerdtree     # tree view of pwd
 tpope/vim-commentary    # easier commenting
+tpope/vim-endwise       # smart closing for loops etc.
 tpope/vim-fugitive      # vim git wrapper
 tpope/vim-pathogen      # pathogen
 tpope/vim-repeat        # repeat more with '.'

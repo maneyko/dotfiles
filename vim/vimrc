@@ -11,8 +11,6 @@ filetype plugin indent on
 
 source $HOME/.vim/ftplugin/man.vim
 
-" notes: create less page viewer
-
 " UI
 " =====================================
 "
@@ -32,7 +30,6 @@ if version >= 702
   au InsertEnter * :set nolist  " dont list trailing chars in insert
   au InsertLeave * :set list
 endif
-
 
 " tab control
 set tabstop=4                   " <tab> == 4 spaces
@@ -54,13 +51,11 @@ endif
 map <ScrollWheelUp> <C-y>
 map <ScrollWheelDown> <C-e>
 
-
 " colors
 " ======================================
 "
 syntax on                       " syntax highlighting
 set t_Co=256                    " terminal supports 256 colors
-
 colorscheme colorsbox-stnight
 
 " make bg and fg colors same as terminal
@@ -108,9 +103,6 @@ inoremap <C-k> <Up>
 inoremap <C-l> <Right>
 
 
-vnoremap . :normal .<CR>
-"this is some string of text"
-
 " functions
 " =====================================
 "
@@ -123,13 +115,12 @@ if has('autocmd')
         \return\<Space>0;\<Esc>0"
   autocmd BufNewFile *.sh execute "normal i#!/bin/sh\<CR>\<Esc>"
   autocmd FileType vim setlocal ts=2 sw=2 sts=2 expandtab keywordprg=:help
-  autocmd FileType help setlocal so=0 keywordprg=:help |
+  autocmd FileType help setlocal keywordprg=:help |
         \ silent! call ReadMode(1)
   autocmd FileType c{,pp} source $HOME/.vim/ftplugin/c.vim
   autocmd FileType sh source $HOME/.vim/ftplugin/sh.vim
 
 endif
-
 
 function! LessInitFunc()
   highlight Normal ctermbg=NONE
@@ -181,6 +172,23 @@ function! ReadMode(rmd)
 endfunction
 let g:rmd=1
 nnoremap <leader>r :call ReadMode(rmd)<CR>
+
+function! FlyMode(fmd)
+  if a:fmd==1
+    echo "Fly Mode on"
+    setlocal so=999
+    nnoremap <buffer> q :q<CR>
+    let g:fmd=0
+  else
+    echo "Fly Mode off"
+    setlocal so=5
+    nunmap <buffer> q
+    let g:fmd=1
+  endif
+endfunction
+let g:fmd=1
+nnoremap <leader>f :call FlyMode(fmd)<CR>
+
 
 " plugin options
 " =====================================

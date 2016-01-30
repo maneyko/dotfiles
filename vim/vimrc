@@ -8,7 +8,6 @@ if isdirectory($HOME . "/.vim/bundle/vim-pathogen")
 endif
 
 filetype plugin indent on
-
 source $HOME/.vim/ftplugin/man.vim
 
 " UI
@@ -119,16 +118,7 @@ if has('autocmd')
         \ silent! call ReadMode(1)
   autocmd FileType c{,pp} source $HOME/.vim/ftplugin/c.vim
   autocmd FileType sh source $HOME/.vim/ftplugin/sh.vim
-
 endif
-
-function! LessInitFunc()
-  highlight Normal ctermbg=NONE
-  highlight Normal ctermfg=NONE
-  set hlsearch incsearch wrapscan nonumber nolist
-  set so=999
-  if @% == '' | set ft=sh | endif
-endfunction
 
 function! PluginInstall()
   !mkdir $HOME/.vim/bundle 2>/dev/null; echo;
@@ -157,6 +147,10 @@ function! ReadMode(rmd)
     nnoremap <buffer> <leader>q :q!<CR>
     nnoremap <buffer> j <C-e>L0:file<CR>
     nnoremap <buffer> k <C-y>L0:file<CR>
+    if @% == ''
+      set ft=sh
+      nnoremap <buffer> q :q!<CR>
+    endif
     let g:rmd=0
   else
     echo "Read Mode off"

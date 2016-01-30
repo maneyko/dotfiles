@@ -167,6 +167,9 @@ function! ReadMode(rmd)
 endfunction
 let g:rmd=1
 nnoremap <leader>r :call ReadMode(rmd)<CR>
+" " hello world
+" " hello world
+" hello world
 
 function! FlyMode(fmd)
   if a:fmd==1
@@ -183,7 +186,6 @@ function! FlyMode(fmd)
 endfunction
 let g:fmd=1
 nnoremap <leader>f :call FlyMode(fmd)<CR>
-
 
 " plugin options
 " =====================================

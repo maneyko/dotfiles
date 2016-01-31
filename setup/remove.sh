@@ -13,7 +13,7 @@ case $response in
     [yY]|"")
         for file in $(ls $dotfile_dir | grep -Ev 'README|setup'); do
             rm -v $PWD/.$file 2>/dev/null
-        done
+        done; echo
         ;;
     *)
         echo Not removing dotfiles
@@ -21,9 +21,8 @@ case $response in
 esac
 
 if [ -d $dotfile_backup ]; then
-    read -s -n 1 -p \
-        "Move files in dotfiles/setup/dotfiles_backup/ back to $PWD/ ?\
-        ( [y]/N ) " response
+    echo "Move files in dotfiles/setup/dotfiles_backup/ back to $PWD/ ?"
+    read -s -n 1 -p "( [y]/N ) " response
     echo
     case $response in
         [yY]|"")

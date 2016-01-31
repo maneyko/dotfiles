@@ -62,7 +62,7 @@ case $response in
         ;;
     *)
         echo Skipping PluginInstall
-        echo List of plugins can be found in $PWD/dotfiles/vim/plugins.txt
+        echo List of plugins can be found in dotfiles/vim/plugins.txt
         ;;
 esac
 
@@ -75,7 +75,7 @@ if [[ $(tmux -V) == *'1.'* ]]; then
             echo Installing tmux to $HOME/local/bin/tmux
             echo This may take a while...
             rm $HOME/local/bin/tmux 2>/dev/null
-            source $HOME/dotfiles/setup/tmux_local_install.sh
+            source $setup_dir/tmux_local_install.sh
             ;;
         *)
             echo Will not update tmux

@@ -83,12 +83,6 @@ nnoremap \n :set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab<CR>
 nnoremap \t :set tabstop=4 softtabstop=4 shiftwidth=4 expandtab<CR>
       \:%retab!<CR>:echo "expandtab"<CR>
 
-" disable arrow keys
-nnoremap <Up>       <NOP>
-nnoremap <Down>     <NOP>
-nnoremap <Left>     <NOP>
-nnoremap <Right>    <NOP>
-
 nnoremap Y y$
 nnoremap <leader><leader> :w<CR>
 nnoremap <leader>q :q<CR>
@@ -130,6 +124,7 @@ function! PluginInstall()
   \     cd $HOME/.vim/bundle && git clone https://github.com/$plugin;
   \   fi; echo;
   \ done;
+
   \ for dir in $(ls $HOME/.vim/bundle); do
   \   if [ \! "$(cat $HOME/.vim/plugins.txt |\
                 \grep -Eo '^[^ \#]*' | grep $dir)" ]; then

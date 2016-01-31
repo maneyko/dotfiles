@@ -1,32 +1,87 @@
 #!/bin/sh
 
-cd $HOME/dotfiles/
+setup_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+dotfile_dir=$setup_dir/..
+dotfile_backup=$setup_dir/dotfiles_old
 
-for file in $(ls | grep -Ev 'README|setup'); do
-	ln -sv dotfiles/$file $HOME/.$file 2>/dev/null
-done
+read -s -n 1 -p \
+    "Back up dotfiles that will be removed? ( [y]/N ) " response
+echo
+case $response in
+    [yY]|"")
+        printf "%s" "Creating backup directory and moving files..."
 
-source $HOME/.bashrc
+        for file in $(ls $dotfile_dir | grep -Ev 'README|setup'); do
+            if [ -f $dotfile_dir/../.$file ]; then
+                if [ ! -d $dotfile_backup ]; then
+                    mkdir $dotfile_backup
+                fi
+                mv $dotfile_dir/../.$file $dotfile_backup/$file
+            fi
+        done; echo done
+        echo Your dotfiles have been moved to $dotfile_backup
+        ;;
+    *)
+        echo Will overwrite conflicting dotfiles
+        ;;
+esac
 
-mkdir $HOME/.vim/macros/
-cd $HOME/.vim/macros/
-rm less.bat less.sh less.vim
-wget https://raw.githubusercontent.com/vim/vim/master/runtime/macros/less.bat
-wget https://raw.githubusercontent.com/vim/vim/master/runtime/macros/less.sh
-wget https://raw.githubusercontent.com/vim/vim/master/runtime/macros/less.vim
-chmod +x less.sh
+cd $dotfile_dir/../
+read -s -n 1 -p "Create symlinks to $PWD/ ? ( [y]/N ) " response
+echo
+case $response in
+    [yY]|"")
+        printf "%s" "Creating symlinks..."
+        for file in $(ls $dotfile_dir | grep -Ev 'README|setup'); do
+            ln -fs dotfiles/$file .$file
+        done; echo done
+        ;;
+    *)
+        echo No symlinks created to $PWD/
+        ;;
+esac
 
-cd $HOME/.vim/ftplugin/
-rm man.vim
-wget https://raw.githubusercontent.com/vim/vim/master/runtime/ftplugin/man.vim
+echo Sourcing new bashrc
+source $dotfile_dir/bashrc
 
-mkdir $HOME/.vim/bundle 2>/dev/null
-rm -fr $HOME/.vim/bundle/*
+printf "%s" "Updating vim/ftplugin/man.vim ..."
+rm $dotfile_dir/vim/ftplugin/man.vim 2>/dev/null
+wget -q https://raw.githubusercontent.com/vim/vim/master/runtime/ftplugin/man.vim
+echo done
 
-vim -c "PluginInstall" -c "q"
+read -s -n 1 -p \
+    "Install vim plugins to $HOME/.vim/bundle/ ? ( [y]/N ) " response
+echo
+case $response in
+    [yY]|"")
+        echo Installing plugins
+        rm -fr $dotfile_dir/vim/bundle/ 2>/dev/null
+        mkdir $dotfile_dir/vim/bundle
+        vim -c "source $dotfile_dir/vim/vimrc" -c "PluginInstall" -c "q"
+        echo done
+        ;;
+    *)
+        echo Skipping PluginInstall
+        echo List of plugins can be found in $PWD/dotfiles/vim/plugins.txt
+        ;;
+esac
 
 if [[ $(tmux -V) == *'1.'* ]]; then
-    rm $HOME/local/bin/tmux 2>/dev/null
-    source $HOME/dotfiles/setup/tmux_local_install.sh
+    read -s -n 1 -p \
+        "Tmux is out of date (version 1.x) update? ( [y]/N ) " response
+    echo
+    case $response in
+        [yY]|"")
+            echo Installing tmux to $HOME/local/bin/tmux
+            echo This may take a while...
+            rm $HOME/local/bin/tmux 2>/dev/null
+            source $HOME/dotfiles/setup/tmux_local_install.sh
+            ;;
+        *)
+            echo Will not update tmux
+            echo Current version is $(tmux -V)
+            ;;
+    esac
 fi
-
+unset setup_dir dotfile_dir dotfile_backup
+echo Successfully finished install

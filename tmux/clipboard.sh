@@ -36,6 +36,6 @@ _xyank() {
         ${READLINE_LINE:$READLINE_POINT}"
     READLINE_POINT=$(($READLINE_POINT + $COUNT))
 }
-bind -m emacs -x '"\eu": _xdiscard' # backwards kill from point
-bind -m emacs -x '"\ef": _xkill'
-bind -m emacs -x '"\ey": _xyank'
+# bind -m emacs -x '"\ed": _xdiscard' # backwards kill from point
+# bind -m emacs -x '"\ef": _xkill'
+# bind -m emacs -x '"\ey": _xyank'

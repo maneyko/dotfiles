@@ -1,9 +1,14 @@
+
 # Tab completion regardless of case
 set completion-ignore-case on
+# colored tab completion
+set colored-stats on
+# dont show hidden folders on tab completion
+set match-hidden-files off
 
-# Readline Notes
 # https://cnswww.cns.cwru.edu/php/chet/readline/readline.html
-# bind -p | less
+# bind -V | less # for 'set' options
+# bind -p | less # for keys
 # '\C' = CTRL
 # '\e' = Left Option
 # ==============================================================================

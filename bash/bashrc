@@ -75,7 +75,7 @@ alias cp="cp -i"
 alias mv="mv -i"
 alias vi="vim"
 
-alias num="echo $(ls | wc -l)" 
+alias num="echo $(ls | wc -l)"
 alias cls="clear && printf '\e[3J'"
 
 alias dots="cd ~/dotfiles/"
@@ -87,7 +87,7 @@ alias .4="cd ../../../../"
 alias .5="cd ../../../../../"
 alias .6="cd ../../../../../../"
 
-# bind '"\e[24~":"pwd\n"'
+bind '"\e[24~":"pwd\n"' # 'M-F12' calls pwd
 
 source $HOME/dotfiles/bash/functions.sh
 source $HOME/dotfiles/bash/inits.sh
@@ -96,3 +96,4 @@ source $HOME/dotfiles/tmux/clipboard.sh
 if [ -f $HOME/.local.bashrc ]; then
     source $HOME/.local.bashrc
 fi
+

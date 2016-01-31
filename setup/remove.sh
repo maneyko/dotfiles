@@ -39,6 +39,6 @@ if [ -d $dotfile_backup ]; then
                 dotfiles/setup/dotfiles_old/
             ;;
     esac
+    echo Successfully finished removal
 fi
 unset setup_dir dotfile_dir dotfile_backup
-echo Successfully finished removal

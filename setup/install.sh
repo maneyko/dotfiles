@@ -59,7 +59,6 @@ case $response in
         rm -fr $dotfile_dir/vim/bundle/ 2>/dev/null
         mkdir $dotfile_dir/vim/bundle
         vim -c "source $dotfile_dir/vim/vimrc" -c "PluginInstall" -c "q"
-        echo done
         ;;
     *)
         echo Skipping PluginInstall

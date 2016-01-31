@@ -19,7 +19,7 @@ case $response in
                 mv $dotfile_dir/../.$file $dotfile_backup/$file
             fi
         done; echo done
-        echo Your dotfiles have been moved to $dotfile_backup
+        echo Your dotfiles have been moved to dotfiles/setup/dotfiles_old/
         ;;
     *)
         echo Will overwrite conflicting dotfiles
@@ -44,8 +44,9 @@ esac
 echo Sourcing new bashrc
 source $dotfile_dir/bashrc
 
-printf "%s" "Updating vim/ftplugin/man.vim ..."
-rm $dotfile_dir/vim/ftplugin/man.vim 2>/dev/null
+printf "%s" "Updating dotfiles/vim/ftplugin/man.vim ..."
+cd $dotfile_dir/vim/ftplugin/
+rm man.vim 2>/dev/null
 wget -q https://raw.githubusercontent.com/vim/vim/master/runtime/ftplugin/man.vim
 echo done
 

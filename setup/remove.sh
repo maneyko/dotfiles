@@ -22,19 +22,21 @@ esac
 
 if [ -d $dotfile_backup ]; then
     read -s -n 1 -p \
-        "Move files in $dotfile_backup/ back to $PWD/ ?\
+        "Move files in dotfiles/setup/dotfiles_backup/ back to $PWD/ ?\
         ( [y]/N ) " response
     echo
     case $response in
         [yY]|"")
             for file in $(ls $dotfile_backup); do
-                echo "Moving $dotfile_backup/$file to $PWD/.$file"
+                echo "Moving dotfiles/setup/dotfiles_backup/$file \
+                    to $PWD/.$file"
                 mv $dotfile_backup/$file $PWD/.$file
             done
             rm -fr $dotfile_backup
             ;;
         *)
-            echo Old dotfiles are still located at $dotfile_backup
+            echo Old dotfiles are still located at \
+                dotfiles/setup/dotfiles_old/
             ;;
     esac
 fi

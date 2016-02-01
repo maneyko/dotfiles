@@ -1,8 +1,7 @@
-#
 # bashrc
-# ====================================================
-#
-# exports
+# ==============================================================
+
+# paths
 # ===============================================
 
 export PATH="\
@@ -36,7 +35,7 @@ $PYTHONPATH:\
 # /Contents/Resources/vim/runtime/"
 
 # UI
-# =====================================
+# ===============================================
 
 export BACKGROUND="dark"
 export EDITOR="vim"
@@ -88,6 +87,9 @@ alias .6="cd ../../../../../../"
 
 bind '"\e[24~":"pwd\n"' # 'M-F12' calls pwd
 
+# sourcing
+# ===============================================
+
 source $HOME/dotfiles/bash/functions.sh
 source $HOME/dotfiles/bash/inits.sh
 source $HOME/dotfiles/tmux/clipboard.sh
@@ -95,4 +97,3 @@ source $HOME/dotfiles/tmux/clipboard.sh
 if [ -f $HOME/.local.bashrc ]; then
     source $HOME/.local.bashrc
 fi
-

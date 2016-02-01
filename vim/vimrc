@@ -99,4 +99,3 @@ vnoremap . :normal .<CR>
 
 let g:SuperTabDefaultCompletionType="context" " contextual completion
 let g:SuperTabCrMapping=1
-

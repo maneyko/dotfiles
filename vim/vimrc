@@ -41,6 +41,7 @@ set smartindent                 " knows when to indent
 set smarttab                    " tab respects tab settings completely
 
 " misc
+let $BASH_ENV="~/.bash_aliases"
 set ignorecase                  " ignore case for search
 set clipboard=unnamed           " system clipboard
 set tildeop                     " tilde operator for changing CASE

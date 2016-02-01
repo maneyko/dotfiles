@@ -13,9 +13,9 @@ set match-hidden-files off
 # '\e' = Left Option
 # ==============================================================================
 
-# Movements & Commands
+# movements & commands
 # =======================================
-#
+
 "\C-a":         beginning-of-line
 "\C-e":         end-of-line
 
@@ -28,9 +28,9 @@ set match-hidden-files off
 "\C-l":         clear-screen
 "\eu":          undo
 
-# Modifying
+# modifying
 # =======================================
-#
+
 "\C-u":         unix-line-discard       # backward kill-line
 "\C-k":         kill-line               # forward  kill-line
 
@@ -47,9 +47,9 @@ set match-hidden-files off
 "\C-h":         backward-delete-char    # backward delete-char
 "\C-d":         delete-char             # forward  delete-char
 
-# History
+# history
 # =======================================
-#
+
 "\C-p":         previous-history
 "\C-n":         next-history
 
@@ -59,3 +59,7 @@ set match-hidden-files off
 "\e<":          beginning-of-history
 "\e>":          end-of-history
 
+# random
+# =======================================
+
+"\e[24~":       "pwd\n"                 # 'M-F12' calls pwd

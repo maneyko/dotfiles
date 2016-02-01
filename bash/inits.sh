@@ -2,21 +2,21 @@
 # initializations
 # ======================================================================
 
-# enable some readline shortcuts
 stty -ixon
+# disable CTRL-D
 set -o ignoreeof
 
-export COLORS=${HOME}/.config/color_setup/base16-custom.${BACKGROUND}.sh
+export COLORS=$HOME/.config/color_setup/base16-custom.${BACKGROUND}.sh
 
 if [[ -n "$TMUX" ]]; then
-    source $COLORS
+  source $COLORS
 fi
 
 # screenfetch on first login
 if [ $(tput cols) -ge 70 ] && [ $(tput lines) -ge 19 ]; then
-    if [ $(tty) = "/dev/ttys001" ]; then
-        if [ -f /usr/local/bin/screenfetch.out ]; then
-            cat /usr/local/bin/screenfetch.out
-        fi
+  if [ $(tty) = "/dev/ttys001" ]; then
+    if [ -f /usr/local/bin/screenfetch.out ]; then
+      cat /usr/local/bin/screenfetch.out
     fi
+  fi
 fi

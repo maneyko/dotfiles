@@ -9,10 +9,11 @@ endif
 
 filetype plugin indent on
 source $HOME/.vim/ftplugin/man.vim
+source $HOME/.vim/src/functions.vim
 
 " UI
 " =====================================
-"
+
 " visuals
 set number                      " line numbers
 set ruler                       " line & columns numbers on bottom
@@ -47,12 +48,13 @@ let g:netrw_dirhistmax = 0      " no .netrwhist files
 if has("mouse")
   set mouse=a
 endif
+" change scroll from 3 lines to 1
 map <ScrollWheelUp> <C-y>
 map <ScrollWheelDown> <C-e>
 
 " colors
 " ======================================
-"
+
 syntax on                       " syntax highlighting
 set t_Co=256                    " terminal supports 256 colors
 colorscheme colorsbox-stnight
@@ -63,29 +65,24 @@ highlight Normal ctermfg=NONE
 
 " remaps
 " =====================================
-"
+
 let g:mapleader = ","
-
-" spell check
-nnoremap <silent> <leader>s :setlocal spell! spelllang=en_us<CR>
-
-" redraw screen and remove highlights
-nnoremap <silent> <C-l> :nohl<CR><C-l>
-
-" enable relativenumber
-nnoremap <silent> <C-n> :set relativenumber!<CR>
-
-nnoremap <silent> <leader>vc :source $HOME/.vim/vimrc<CR>:nohl<CR><C-l>
-      \:echo "reloaded vimrc"<CR>
-" change tabbing for whole file
-nnoremap \n :set tabstop=4 softtabstop=4 shiftwidth=4 noexpandtab<CR>
-      \:%retab!<CR>:echo "noexpandtab"<CR>
-nnoremap \t :set tabstop=4 softtabstop=4 shiftwidth=4 expandtab<CR>
-      \:%retab!<CR>:echo "expandtab"<CR>
 
 nnoremap Y y$
 nnoremap <leader><leader> :w<CR>
 nnoremap <leader>q :q<CR>
+nnoremap <leader>kq :q!<CR>
+
+nnoremap <silent> <leader>s :setlocal spell! spelllang=en_us<CR>
+nnoremap <silent> <C-l> :nohl<CR><C-l>
+nnoremap <silent> <C-n> :set relativenumber!<CR>
+
+" change tabbing for whole file with count
+nnoremap \e :<C-U>call TabFxn(v:count1,1)<CR>
+nnoremap \n :<C-U>call TabFxn(v:count1,0)<CR>
+
+nnoremap <leader>r :call ReadMode(readmode_togg)<CR>
+nnoremap <leader>f :call FlyMode(flymode_togg)<CR>
 
 " paste from system register
 inoremap <C-p>  <C-r>*
@@ -95,97 +92,11 @@ inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 inoremap <C-l> <Right>
 
-vnoremap . :normal .<cr>
-
-" functions
-" =====================================
-"
-" file specific autocommands
-if has('autocmd')
-  autocmd BufRead *tmux.conf set ft=sh
-  autocmd BufRead plugins.txt set ft=sh
-  autocmd BufNewFile main.c{,pp} execute
-        \"normal oint\<Space>main()\<CR>{\<CR>\<CR>}\<Up>\<Tab>
-        \return\<Space>0;\<Esc>0"
-  autocmd BufNewFile *.sh execute "normal i#!/bin/sh\<CR>\<Esc>"
-  autocmd FileType vim setlocal ts=2 sw=2 sts=2 expandtab keywordprg=:help
-  autocmd FileType help setlocal keywordprg=:help |
-        \ silent! call ReadMode(1)
-  autocmd FileType c{,pp} source $HOME/.vim/ftplugin/c.vim
-  autocmd FileType sh source $HOME/.vim/ftplugin/sh.vim
-endif
-
-function! PluginInstall()
-  !mkdir $HOME/.vim/bundle 2>/dev/null; echo;
-  \ for plugin in $(cat $HOME/.vim/plugins.txt | grep -Eo '^[^ \#]*'); do
-  \   if [ -d $HOME/.vim/bundle/${plugin\#*/} ]; then
-  \     cd $HOME/.vim/bundle/${plugin\#*/} && git pull --all -v;
-  \   else
-  \     cd $HOME/.vim/bundle && git clone https://github.com/$plugin;
-  \   fi; echo;
-  \ done;
-
-  \ for dir in $(ls $HOME/.vim/bundle); do
-  \   if [ \! "$(cat $HOME/.vim/plugins.txt |\
-                \grep -Eo '^[^ \#]*' | grep $dir)" ]; then
-  \     echo removing directory, $dir/;
-  \     rm -fr $HOME/.vim/bundle/$dir;
-  \   fi;
-  \ done;
-endfunction
-command! PluginInstall silent call PluginInstall() |
-      \ silent execute '!sleep 3' | redraw!
-
-function! ReadMode(rmd)
-  if a:rmd==1
-    silent! call FlyMode(0)
-    silent! set nomodifiable
-    silent! set readonly
-    silent! nnoremap <buffer> q :q<CR>
-    silent! nnoremap <buffer> <leader>q :q!<CR>
-    silent! nnoremap <buffer> j <C-e>L0:file<CR>
-    silent! nnoremap <buffer> k <C-y>L0:file<CR>
-    if @% == ''
-      silent! set ft=sh
-      silent! nnoremap <buffer> q :q!<CR>
-    endif
-    let g:rmd=0
-    echo "Read Mode on"
-  else
-    silent! set modifiable
-    silent! set noreadonly
-    silent! nunmap <buffer> q
-    silent! nunmap <buffer> <leader>q
-    silent! nunmap <buffer> j
-    silent! nunmap <buffer> k
-    silent! execute "normal M"
-    let g:rmd=1
-    echo "Read Mode off"
-  endif
-endfunction
-let g:rmd=1
-nnoremap <leader>r :call ReadMode(rmd)<CR>
-
-function! FlyMode(fmd)
-  if a:fmd==1
-    silent! call ReadMode(0)
-    silent! setlocal so=999
-    silent! nnoremap <buffer> q :q<CR>
-    let g:fmd=0
-    echo "Fly Mode on"
-  else
-    silent! setlocal so=5
-    silent! nunmap <buffer> q
-    let g:fmd=1
-    echo "Fly Mode off"
-  endif
-endfunction
-let g:fmd=1
-nnoremap <leader>f :call FlyMode(fmd)<CR>
+vnoremap . :normal .<CR>
 
 " plugin options
 " =====================================
-"
+
 let g:SuperTabDefaultCompletionType="context" " contextual completion
 let g:SuperTabCrMapping=1
 

@@ -75,9 +75,15 @@ alias vi="vim"
 
 alias cls="clear && printf '\e[3J'"
 alias dots="cd ~/dotfiles/"
-alias la="ls -ahl"
+alias la="ls -Ahl"
+alias ld="ls -A -I'*'"
 alias ll="ls -hl"
-alias num="echo $(ls | wc -l)"
+alias lld="ls -Ahl -I'*'"
+alias num="ls | wc -l"
+
+alias showDesktop='chflags nohidden ~/Desktop/*'
+alias hideDesktop='chflags hidden ~/Desktop/*'
+alias rm_DS='find . -name .DS_Store -exec rm -v {} \;'
 
 alias ..="cd ../"
 alias .2="cd ../../"

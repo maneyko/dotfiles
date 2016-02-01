@@ -75,7 +75,8 @@ alias vi="vim"
 
 alias cls="clear && printf '\e[3J'"
 alias dots="cd ~/dotfiles/"
-alias ll="ls -l"
+alias la="ls -ahl"
+alias ll="ls -hl"
 alias num="echo $(ls | wc -l)"
 
 alias ..="cd ../"

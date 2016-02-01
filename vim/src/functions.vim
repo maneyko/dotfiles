@@ -37,6 +37,7 @@ function! ReadMode(readmode_togg)
     silent! call FlyMode(0)
     silent! set nomodifiable
     silent! set readonly
+    silent! set nolist
     silent! nnoremap <buffer> q :q<CR>
     silent! nnoremap <buffer> <leader>q :q!<CR>
     silent! nnoremap <buffer> j <C-e>L0:file<CR>

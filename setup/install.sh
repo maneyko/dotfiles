@@ -5,40 +5,40 @@ dotfile_dir=$setup_dir/..
 dotfile_backup=$setup_dir/dotfiles_old
 
 read -s -n 1 -p \
-    "Back up dotfiles that will be removed? ( [y]/N ) " response
+  "Back up dotfiles that will be removed ([y]/N)? " response
 echo
 case $response in
-    [yY]|"")
-        printf "%s" "Creating backup directory and moving files..."
+  [yY]|"")
+    printf "%s" "Creating backup directory and moving files..."
 
-        for file in $(ls $dotfile_dir | grep -Ev 'README|setup'); do
-            if [ -f $dotfile_dir/../.$file ]; then
-                if [ ! -d $dotfile_backup ]; then
-                    mkdir $dotfile_backup
-                fi
-                mv $dotfile_dir/../.$file $dotfile_backup/$file
-            fi
-        done; echo done
-        echo Your dotfiles have been moved to dotfiles/setup/dotfiles_old/
-        ;;
-    *)
-        echo Will overwrite conflicting dotfiles
-        ;;
+    for file in $(ls $dotfile_dir | grep -Ev 'README|setup'); do
+      if [ -f $dotfile_dir/../.$file ]; then
+        if [ ! -d $dotfile_backup ]; then
+          mkdir $dotfile_backup
+        fi
+        mv $dotfile_dir/../.$file $dotfile_backup/$file
+      fi
+    done; echo done
+    echo Your dotfiles have been moved to dotfiles/setup/dotfiles_old/
+    ;;
+  *)
+    echo Will overwrite conflicting dotfiles
+    ;;
 esac
 
 cd $dotfile_dir/../
-read -s -n 1 -p "Create symlinks to $PWD/ ? ( [y]/N ) " response
+read -s -n 1 -p "Create symlinks to $PWD/ ([y]/N)? " response
 echo
 case $response in
-    [yY]|"")
-        printf "%s" "Creating symlinks..."
-        for file in $(ls $dotfile_dir | grep -Ev 'README|setup'); do
-            ln -fs dotfiles/$file .$file
-        done; echo done
-        ;;
-    *)
-        echo No symlinks created to $PWD/
-        ;;
+  [yY]|"")
+    printf "%s" "Creating symlinks..."
+    for file in $(ls $dotfile_dir | grep -Ev 'README|setup'); do
+      ln -fs dotfiles/$file .$file
+    done; echo done
+    ;;
+  *)
+    echo No symlinks created to $PWD/
+    ;;
 esac
 
 echo Sourcing new bashrc
@@ -51,37 +51,37 @@ wget -q https://raw.githubusercontent.com/vim/vim/master/runtime/ftplugin/man.vi
 echo done
 
 read -s -n 1 -p \
-    "Install vim plugins to $HOME/.vim/bundle/ ? ( [y]/N ) " response
+  "Install vim plugins to $HOME/.vim/bundle/ ([y]/N)? " response
 echo
 case $response in
-    [yY]|"")
-        echo Installing plugins
-        rm -fr $dotfile_dir/vim/bundle/ 2>/dev/null
-        mkdir $dotfile_dir/vim/bundle
-        vim -c "source $dotfile_dir/vim/vimrc" -c "PluginInstall" -c "q"
-        ;;
-    *)
-        echo Skipping PluginInstall
-        echo List of plugins can be found in dotfiles/vim/plugins.txt
-        ;;
+  [yY]|"")
+    echo Installing plugins
+    rm -fr $dotfile_dir/vim/bundle/ 2>/dev/null
+    mkdir $dotfile_dir/vim/bundle
+    vim -c "source $dotfile_dir/vim/vimrc" -c "PluginInstall" -c "q"
+    ;;
+  *)
+    echo Skipping PluginInstall
+    echo List of plugins can be found in dotfiles/vim/plugins.txt
+    ;;
 esac
 
 if [[ $(tmux -V) == *'1.'* ]]; then
-    read -s -n 1 -p \
-        "Tmux is out of date (version 1.x) update? ( [y]/N ) " response
-    echo
-    case $response in
-        [yY]|"")
-            echo Installing tmux to $HOME/local/bin/tmux
-            echo This may take a while...
-            rm $HOME/local/bin/tmux 2>/dev/null
-            source $setup_dir/tmux_local_install.sh
-            ;;
-        *)
-            echo Will not update tmux
-            echo Current version is $(tmux -V)
-            ;;
-    esac
+  read -s -n 1 -p \
+    "Tmux is out of date (version 1.x) update? ([y]/N)? " response
+  echo
+  case $response in
+    [yY]|"")
+      echo Installing tmux to $HOME/local/bin/tmux
+      echo This may take a while...
+      rm $HOME/local/bin/tmux 2>/dev/null
+      source $setup_dir/tmux_local_install.sh
+      ;;
+    *)
+      echo Will not update tmux
+      echo Current version is $(tmux -V)
+      ;;
+  esac
 fi
 unset setup_dir dotfile_dir dotfile_backup
 echo Successfully finished install

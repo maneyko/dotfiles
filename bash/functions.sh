@@ -15,12 +15,15 @@ man () {
   if [ -n "$(which $@ 2>/dev/null)" ]; then
     args=$@
     vim -c "execute 'Man ' . '$args'" -c "execute \"normal \<C-w>o\"" \
-      -c "silent! call ReadMode(1)"
+        -c "silent! call ReadMode(1)" -c "set so=0 ft=man"
   else
     /usr/bin/env man $@
   fi
 }
 export -f man
+
+csview () { sed 's/,,/, ,/g;s/,,/, ,/g' $@ | column -s, -t; }
+export -f csview
 
 tarc () {
   if [ -d $1 ] || [ -f $1 ]; then

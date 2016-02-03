@@ -19,7 +19,7 @@ alias la="ls -Ahl"
 alias ld="ls -A -I'*'"
 alias ll="ls -hl"
 alias lld="ls -Ahl -I'*'"
-alias num="ls | wc -l"
+alias num="ls $@ | wc -l"
 
 alias showDesktop='chflags nohidden ~/Desktop/*'
 alias hideDesktop='chflags hidden ~/Desktop/*'

@@ -1,7 +1,10 @@
 " vimrc
 " ========================================================================
+" set rtp+=~/local/src/vim/share/vim/vim74
 
+set nocompatible
 runtime bundle/vim-pathogen/autoload/pathogen.vim
+syntax on
 
 if isdirectory($HOME . "/.vim/bundle/vim-pathogen")
   execute pathogen#infect()
@@ -11,56 +14,48 @@ filetype plugin indent on
 source $HOME/.vim/ftplugin/man.vim
 source $HOME/.vim/src/functions.vim
 
-" UI
+" set
 " =====================================
 
-" visuals
-set number                      " line numbers
-set ruler                       " line & columns numbers on bottom
-set showcmd                     " show command on bottom
-set numberwidth=3               " width of line number column
+set autoindent                  " automatically indent new lines
+set breakindent                 " wrap and indent
+set clipboard=unnamed           " system clipboard
+set expandtab                   " tab makes spaces
 set hlsearch                    " highlight search
+set ignorecase                  " ignore case for search
 set incsearch                   " move while typing search pattern
-set smartcase                   " searches for capitals when I type them
-set scrolloff=5                 " keep cursor 5 lines frop top/bottom
-set showbreak=...               " show ellipsis when going over
 set list
 set listchars=tab:\ \ ,trail:⋅
-if version >= 702
-  au InsertEnter * :set nolist  " dont list trailing chars in insert
-  au InsertLeave * :set list
-endif
-
-" tab control
-set tabstop=4                   " <tab> == 4 spaces
-set shiftwidth=4                " number of spaces for indent and unindent
-set softtabstop=4               " edit 4 spaces as if they are tabs
-set expandtab                   " tab makes spaces
-set autoindent                  " automatically indent new lines
-set smartindent                 " knows when to indent
-set smarttab                    " tab respects tab settings completely
-
-" misc
-let $BASH_ENV="~/.bash_aliases"
-set ignorecase                  " ignore case for search
-set clipboard=unnamed           " system clipboard
-set tildeop                     " tilde operator for changing CASE
-let g:netrw_dirhistmax = 0      " no .netrwhist files
 if has("mouse")
   set mouse=a
 endif
-" change scroll from 3 lines to 1
-map <ScrollWheelUp> <C-y>
-map <ScrollWheelDown> <C-e>
+if version >= 702
+  au InsertLeave * :set list
+  au InsertEnter * :set nolist  " dont list trailing chars in insert
+endif
+set number                      " line numbers
+set numberwidth=3               " width of line number column
+set ruler                       " line & columns numbers on bottom
+set smartcase                   " searches for capitals when I type them
+set scrolloff=5                 " keep cursor 5 lines frop top/bottom
+set shiftwidth=4                " number of spaces for indent and unindent
+set showbreak=...               " show ellipsis when going over
+set showcmd                     " show command on bottom
+set smartindent                 " knows when to indent
+set smarttab                    " tab respects tab settings completely
+set softtabstop=4               " edit 4 spaces as if they are tabs
+set t_Co=256                    " terminal supports 256 colors
+set tabstop=4                   " <tab> == 4 spaces
+set tildeop                     " tilde operator for changing CASE
+
+let g:netrw_dirhistmax = 0      " no .netrwhist files
+let $BASH_ENV="~/dotfiles/bash/aliases.bash"
 
 " colors
 " ======================================
 
-syntax on                       " syntax highlighting
-set t_Co=256                    " terminal supports 256 colors
 colorscheme colorsbox-stnight
-
-" make bg and fg colors same as terminal
+                                " make bg and fg colors same as terminal
 highlight Normal ctermbg=NONE
 highlight Normal ctermfg=NONE
 
@@ -69,33 +64,35 @@ highlight Normal ctermfg=NONE
 
 let g:mapleader = ","
 
-nnoremap Y y$
-nnoremap <leader><leader> :w<CR>
-nnoremap <leader>q :q<CR>
-nnoremap <leader>kq :q!<CR>
 
-nnoremap <silent> <leader>s :setlocal spell! spelllang=en_us<CR>
-nnoremap <silent> <C-l> :nohl<CR><C-l>
-nnoremap <silent> <C-n> :set relativenumber!<CR>
-
-" change tabbing for whole file with count
-nnoremap \e :<C-U>call TabFxn(v:count1,1)<CR>
-nnoremap \n :<C-U>call TabFxn(v:count1,0)<CR>
-
-nnoremap <leader>r :call ReadMode(readmode_togg)<CR>
-nnoremap <leader>f :call FlyMode(flymode_togg)<CR>
-
-" paste from system register
-inoremap <C-p>  <C-r>*
-inoremap jk <Esc>
 inoremap <C-h> <Left>
 inoremap <C-j> <Down>
 inoremap <C-k> <Up>
 inoremap <C-l> <Right>
+inoremap <C-p>  <C-r>*
+inoremap jk <Esc>
+
+nnoremap <C-n> :set relativenumber!<CR>
+nnoremap <leader><leader> :w<CR>
+nnoremap <leader>f :call FlyMode(flymode_togg)<CR>
+nnoremap <leader>kq :q!<CR>
+nnoremap <leader>n :NERDTreeToggle<CR>
+nnoremap <leader>q :q<CR>
+nnoremap <leader>r :call ReadMode(readmode_togg)<CR>
+nnoremap <leader>s :setlocal spell! spelllang=en_us<CR>
+nnoremap <C-l> :nohl<CR><C-l>
+nnoremap \e :<C-U>call TabFxn(v:count1*2,1)<CR>
+nnoremap \n :<C-U>call TabFxn(v:count1*2,0)<CR>
+nnoremap \w :%s/\s\+$//<CR>:nohl<CR><C-l>
+nnoremap U <C-r>
+nnoremap Y y$
 
 vnoremap . :normal .<CR>
 
-" plugin options
+map <ScrollWheelUp> <C-y>
+map <ScrollWheelDown> <C-e>
+
+" plugins
 " =====================================
 
 let g:SuperTabDefaultCompletionType="context" " contextual completion

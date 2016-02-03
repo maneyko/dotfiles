@@ -16,48 +16,48 @@ set match-hidden-files off
 # movements & commands
 # =======================================
 
-"\C-a":         beginning-of-line
-"\C-e":         end-of-line
+# "\C-a":         beginning-of-line
+# "\C-e":         end-of-line
 
-"\eb":          backward-word
-"\ef":          forward-word
+# "\eb":          backward-word
+# "\ef":          forward-word
 
-"\C-b":         backward-char
-"\C-f":         forward-char
+# "\C-b":         backward-char
+# "\C-f":         forward-char
 
-"\C-l":         clear-screen
-"\eu":          undo
+# "\C-l":         clear-screen
+# "\eu":          undo
 
 # modifying
 # =======================================
 
-"\C-u":         unix-line-discard       # backward kill-line
-"\C-k":         kill-line               # forward  kill-line
+# "\C-u":         unix-line-discard       # backward kill-line
+# "\C-k":         kill-line               # forward  kill-line
 
-"\C-x(":        start-kbd-macro         # records all keystrokes
-"\C-x)":        end-kbd-macro           # records all keystrokes
-"\C-xe":        call-last-kbd-macro     # calls kbd-macro
-"\C-xp":        print-last-kbd-macro    # outputs macro
+# "\C-x(":        start-kbd-macro         # records all keystrokes
+# "\C-x)":        end-kbd-macro           # records all keystrokes
+# "\C-xe":        call-last-kbd-macro     # calls kbd-macro
+# "\C-xp":        print-last-kbd-macro    # outputs macro
 
-"\C-w":         unix-word-rubout        # backward delete to white space
+# "\C-w":         unix-word-rubout        # backward delete to white space
 
-"\es":          backward-kill-word      # backward delete to word
-"\ed":          kill-word               # forward  delete to word
+# "\es":          backward-kill-word      # backward delete to word
+# "\ed":          kill-word               # forward  delete to word
 
-"\C-h":         backward-delete-char    # backward delete-char
-"\C-d":         delete-char             # forward  delete-char
+# "\C-h":         backward-delete-char    # backward delete-char
+# "\C-d":         delete-char             # forward  delete-char
 
 # history
 # =======================================
 
-"\C-p":         previous-history
-"\C-n":         next-history
+# "\C-p":         previous-history
+# "\C-n":         next-history
 
-"\C-r":         reverse-search-history
-"\C-s":         forward-search-history
+# "\C-r":         reverse-search-history
+# "\C-s":         forward-search-history
 
-"\e<":          beginning-of-history
-"\e>":          end-of-history
+# "\e<":          beginning-of-history
+# "\e>":          end-of-history
 
 # random
 # =======================================

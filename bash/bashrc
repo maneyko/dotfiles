@@ -5,15 +5,13 @@
 # ===============================================
 
 export PATH="\
-/usr/local/opt/coreutils/libexec/gnubin:\
 $HOME/local/bin:\
 /usr/local/bin:\
 /usr/local/sbin:\
-/bin:\
-/sbin:\
 /usr/bin:\
 /usr/sbin:\
-$PATH:\
+/bin:\
+/sbin:\
 "
 
 export MANPATH="\
@@ -24,15 +22,15 @@ export MANPATH="\
 $MANPATH:\
 "
 
-export PYTHONPATH="\
-/usr/local/lib/python2.7/site-packages:\
-/usr/local/lib/python3.5/site-packages:\
-$PYTHONPATH:\
-"
+# sourcing
+# ===============================================
 
-# export VIMRUNTIME="\
-# /usr/local/Cellar/macvim/current/MacVim.app\
-# /Contents/Resources/vim/runtime/"
+if [ -f $HOME/.bashrc.local ]; then
+  source $HOME/.bashrc.local
+fi
+source $HOME/dotfiles/bash/functions.sh
+source $HOME/dotfiles/bash/aliases.bash
+source $HOME/dotfiles/bash/inits.sh
 
 # UI
 # ===============================================
@@ -41,7 +39,7 @@ export BACKGROUND="dark"
 export EDITOR="vim"
 export GREP_COLOR='0;34'
 export LESS="-rI"
-eval `dircolors ~/dotfiles/bash/dircolors`
+eval `dircolors -b ~/dotfiles/bash/dircolors`
 
 export PAGER="\
 /bin/sh -c \"unset PAGER; \
@@ -59,14 +57,3 @@ export PS1='\
 \[\e[0;36m\]└─[\[\e[0m\]\
 \[\e[1;37m\]\$\[\e[0m\]\
 \[\e[0;36m\]]› \[\e[0m\]'
-
-# sourcing
-# ===============================================
-
-source $HOME/dotfiles/bash/functions.sh
-source $HOME/dotfiles/bash/aliases.bash
-source $HOME/dotfiles/bash/inits.sh
-
-if [ -f $HOME/.local.bashrc ]; then
-  source $HOME/.local.bashrc
-fi

@@ -24,8 +24,8 @@ set expandtab                   " tab makes spaces
 set hlsearch                    " highlight search
 set ignorecase                  " ignore case for search
 set incsearch                   " move while typing search pattern
-set list
-set listchars=tab:\ \ ,trail:⋅
+set list                        " show interesting characters
+set listchars=tab:\ \ ,trail:⋅  " dots on trailing whitespace
 if has("mouse")
   set mouse=a
 endif
@@ -38,18 +38,18 @@ set numberwidth=3               " width of line number column
 set ruler                       " line & columns numbers on bottom
 set smartcase                   " searches for capitals when I type them
 set scrolloff=5                 " keep cursor 5 lines frop top/bottom
-set shiftwidth=4                " number of spaces for indent and unindent
+set shiftwidth=2                " number of spaces for indent and unindent
 set showbreak=...               " show ellipsis when going over
 set showcmd                     " show command on bottom
 set smartindent                 " knows when to indent
 set smarttab                    " tab respects tab settings completely
-set softtabstop=4               " edit 4 spaces as if they are tabs
+set softtabstop=2               " edit 4 spaces as if they are tabs
 set t_Co=256                    " terminal supports 256 colors
-set tabstop=4                   " <tab> == 4 spaces
+set tabstop=2                   " <tab> == n spaces
 set tildeop                     " tilde operator for changing CASE
 
 let g:netrw_dirhistmax = 0      " no .netrwhist files
-let $BASH_ENV="~/dotfiles/bash/aliases.bash"
+let $BASH_ENV="~/.bashrc"       " normal shell behavior
 
 " colors
 " ======================================
@@ -63,7 +63,6 @@ highlight Normal ctermfg=NONE
 " =====================================
 
 let g:mapleader = ","
-
 
 inoremap <C-h> <Left>
 inoremap <C-j> <Down>

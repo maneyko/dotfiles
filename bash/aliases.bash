@@ -15,22 +15,16 @@ alias vi="vim"
 
 alias cls="clear && printf '\e[3J'"
 alias dots="cd ~/dotfiles/"
-alias la="ls -Ahl"
+alias la="ls -A"
 alias ld="ls -A -I'*'"
 alias ll="ls -hl"
+alias lla="ls -Ahl"
 alias lld="ls -Ahl -I'*'"
-alias num="ls $@ | wc -l"
+alias lls="ls -hl"
 
-alias showDesktop='chflags nohidden ~/Desktop/*'
 alias hideDesktop='chflags hidden ~/Desktop/*'
+alias showDesktop='chflags nohidden ~/Desktop/*'
 alias rm_DS='find . -name .DS_Store -exec rm -v {} \;'
-
-alias ..="cd ../"
-alias .2="cd ../../"
-alias .3="cd ../../../"
-alias .4="cd ../../../../"
-alias .5="cd ../../../../../"
-alias .6="cd ../../../../../../"
 
 if [ $(os) = "mac" ]; then
   alias ccopy="pbcopy"
@@ -43,4 +37,11 @@ if [ $(os) = "mac" ]; then
 else
   alias cput="xclip -o"
 fi
+
+alias ..="cd ../"
+alias .2="cd ../../"
+alias .3="cd ../../../"
+alias .4="cd ../../../../"
+alias .5="cd ../../../../../"
+alias .6="cd ../../../../../../"
 

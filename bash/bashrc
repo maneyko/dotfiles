@@ -15,22 +15,11 @@ $HOME/local/bin:\
 "
 
 export MANPATH="\
-/usr/local/opt/coreutils/libexec/gnuman:\
 /usr/local/share/man:\
 /usr/local/man:\
 /usr/share/man:\
 $MANPATH:\
 "
-
-# sourcing
-# ===============================================
-
-if [ -f $HOME/.bashrc.local ]; then
-  source $HOME/.bashrc.local
-fi
-source $HOME/dotfiles/bash/functions.sh
-source $HOME/dotfiles/bash/aliases.bash
-source $HOME/dotfiles/bash/inits.sh
 
 # UI
 # ===============================================
@@ -39,7 +28,6 @@ export BACKGROUND="dark"
 export EDITOR="vim"
 export GREP_COLOR='0;34'
 export LESS="-rI"
-eval `dircolors -b ~/dotfiles/bash/dircolors`
 
 export PAGER="\
 /bin/sh -c \"unset PAGER; \
@@ -57,3 +45,13 @@ export PS1='\
 \[\e[0;36m\]└─[\[\e[0m\]\
 \[\e[1;37m\]\$\[\e[0m\]\
 \[\e[0;36m\]]› \[\e[0m\]'
+
+# sourcing
+# ===============================================
+
+if [ -f $HOME/.bashrc.local ]; then
+  source $HOME/.bashrc.local
+fi
+source $HOME/dotfiles/bash/functions.sh
+source $HOME/dotfiles/bash/aliases.bash
+source $HOME/dotfiles/bash/inits.sh

@@ -2,16 +2,16 @@
 " =====================================
 
 if has('autocmd')
-  autocmd BufRead *tmux.conf set ft=sh
-  autocmd BufRead plugins.txt set ft=sh
-  autocmd BufNewFile *.sh execute "normal i#!/bin/sh\<CR>\<Esc>"
-  autocmd FileType c{,pp} source $HOME/.vim/ftplugin/c.vim
-  autocmd FileType help setlocal keywordprg=:help |
+  au BufRead *tmux.conf set ft=sh
+  au BufRead plugins.txt set ft=sh
+  au BufNewFile *.sh execute "normal i#!/bin/sh\<CR>\<Esc>"
+  au FileType c{,pp} source $HOME/.vim/ftplugin/c.vim
+  au FileType help setlocal keywordprg=:help |
   \                     silent! call ReadMode(1)
-  autocmd FileType man set so=0
-  autocmd FileType sh source $HOME/.vim/ftplugin/sh.vim
-  autocmd FileType vim setlocal ts=2 sw=2 sts=2 expandtab keywordprg=:help
-  autocmd BufNewFile main.c{,pp} execute
+  au FileType man set so=0
+  au FileType sh source $HOME/.vim/ftplugin/sh.vim
+  au FileType vim setlocal ts=2 sw=2 sts=2 expandtab keywordprg=:help
+  au BufNewFile main.c{,pp} execute
         \"normal oint\<Space>main()\<CR>{\<CR>\<CR>}\<Up>\<Tab>
         \return\<Space>0;\<Esc>0"
 endif
@@ -85,19 +85,19 @@ endfunction
 
 function! PluginInstall()
   !mkdir $HOME/.vim/bundle 2>/dev/null; echo;
-  \ for plugin in $(cat $HOME/.vim/plugins.txt | grep -Eo '^[^ \#]*'); do
-  \   if [ -d $HOME/.vim/bundle/${plugin\#*/} ]; then
-  \     cd $HOME/.vim/bundle/${plugin\#*/} && git pull --all -v;
+  \ for plugin in $(cat $HOME/dot/vim/src/plugins.txt | grep -Eo '^[^ \#]*'); do
+  \   if [ -d $HOME/dot/vim/bundle/${plugin\#*/} ]; then
+  \     cd $HOME/dot/vim/bundle/${plugin\#*/} && git pull --all -v;
   \   else
-  \     cd $HOME/.vim/bundle && git clone https://github.com/$plugin;
+  \     cd $HOME/dot/vim/bundle && git clone https://github.com/$plugin;
   \   fi; echo;
   \ done;
   \
-  \ for dir in $(ls $HOME/.vim/bundle); do
+  \ for dir in $(ls $HOME/dot/vim/bundle); do
   \   if [ \! "$(cat $HOME/.vim/plugins.txt |\
                 \grep -Eo '^[^ \#]*' | grep $dir)" ]; then
   \     echo removing directory, $dir/;
-  \     rm -fr $HOME/.vim/bundle/$dir;
+  \     rm -fr $HOME/dot/vim/bundle/$dir;
   \   fi;
   \ done
 endfunction

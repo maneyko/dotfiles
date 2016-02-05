@@ -33,7 +33,7 @@ if [ -d $dotfile_backup ]; then
       rm -fr $dotfile_backup
       ;;
     *)
-      echo Old dotfiles are still located at dot/setup/dotfiles_old/
+      echo Old dotfiles are still located in dot/setup/dotfiles_old/
       ;;
   esac
   echo Successfully finished removal

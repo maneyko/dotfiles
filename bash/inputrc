@@ -6,6 +6,7 @@ set colored-stats on
 # dont show hidden folders on tab completion
 set match-hidden-files off
 
+set mark-symlinked-directories on
 # https://cnswww.cns.cwru.edu/php/chet/readline/readline.html
 # bind -V | less # for 'set' options
 # bind -p | less # for keys

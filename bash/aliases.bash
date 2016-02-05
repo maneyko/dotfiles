@@ -1,11 +1,14 @@
 # aliases
 # ===============================================
 
+# ps ax | grep itunes | awk -F" " '{print $1}' | xargs kill 2>/dev/null
+
 shopt -s expand_aliases
 
 alias gless="/usr/bin/env less"
 alias gman="/usr/bin/env man"
 
+alias cc="clang"
 alias cp="cp -i"
 alias grep="grep -i --color=auto"
 alias less="~/.vim/macros/less.sh"
@@ -14,13 +17,12 @@ alias mv="mv -i"
 alias vi="vim"
 
 alias cls="clear && printf '\e[3J'"
-alias dots="cd ~/dotfiles/"
+alias dots="cd ~/dot/"
 alias la="ls -A"
 alias ld="ls -A -I'*'"
 alias ll="ls -hl"
 alias lla="ls -Ahl"
 alias lld="ls -Ahl -I'*'"
-alias lls="ls -hl"
 
 alias hideDesktop='chflags hidden ~/Desktop/*'
 alias showDesktop='chflags nohidden ~/Desktop/*'

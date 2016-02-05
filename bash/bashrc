@@ -1,8 +1,8 @@
 # bashrc
-# ==============================================================
+# ========================================
 
 # paths
-# ===============================================
+# ========================================
 
 export PATH="\
 $HOME/local/bin:\
@@ -15,23 +15,25 @@ $HOME/local/bin:\
 "
 
 export MANPATH="\
+$HOME/local/share/man:\
 /usr/local/share/man:\
 /usr/local/man:\
 /usr/share/man:\
-$MANPATH:\
+"
+
+export PYTHON3PATH="\
+/usr/local/lib/python3.5/site-packages:\
 "
 
 # UI
-# ===============================================
+# ========================================
 
 export BACKGROUND="dark"
 export EDITOR="vim"
 export GREP_COLOR='0;34'
 export LESS="-rI"
 
-export PAGER="\
-/bin/sh -c \"unset PAGER; \
-col -bx | source ~/.vim/macros/less.sh -\""
+export PAGER="vimpager"
 
 export PS1='\
 \[\e[0;36m\]┌─[\[\e[0m\]\
@@ -47,11 +49,11 @@ export PS1='\
 \[\e[0;36m\]]› \[\e[0m\]'
 
 # sourcing
-# ===============================================
+# ========================================
 
 if [ -f $HOME/.bashrc.local ]; then
   source $HOME/.bashrc.local
 fi
-source $HOME/dotfiles/bash/functions.sh
-source $HOME/dotfiles/bash/aliases.bash
-source $HOME/dotfiles/bash/inits.sh
+source $HOME/.bash/functions.sh
+source $HOME/.bash/aliases.bash
+source $HOME/.bash/inits.sh

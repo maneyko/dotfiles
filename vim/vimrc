@@ -1,16 +1,33 @@
 " vimrc
 " ========================================================================
-" set rtp+=~/local/src/vim/share/vim/vim74
 
 set nocompatible
-runtime bundle/vim-pathogen/autoload/pathogen.vim
-syntax on
+filetype off
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
 
-if isdirectory($HOME . "/.vim/bundle/vim-pathogen")
-  execute pathogen#infect()
-endif
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'davidhalter/jedi-vim'
+Plugin 'ervandew/supertab'
+Plugin 'hdima/python-syntax'
+Plugin 'jiangmiao/auto-pairs'
+Plugin 'scrooloose/nerdtree'
+Plugin 'tpope/vim-commentary'
+Plugin 'tpope/vim-endwise'
+Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-pathogen'
+Plugin 'tpope/vim-repeat'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-unimpaired'
+Plugin 'VundleVim/Vundle.vim'
 
+call vundle#end()
 filetype plugin indent on
+
+" if isdirectory($HOME . "/.vim/bundle/vim-pathogen")
+"   execute pathogen#infect()
+" endif
+
 source $HOME/.vim/ftplugin/man.vim
 source $HOME/.vim/src/functions.vim
 
@@ -49,11 +66,12 @@ set tabstop=2                   " <tab> == n spaces
 set tildeop                     " tilde operator for changing CASE
 
 let g:netrw_dirhistmax = 0      " no .netrwhist files
-let $BASH_ENV="~/.bashrc"       " normal shell behavior
+let $BASH_ENV="~/.bash/aliases.bash"
 
 " colors
 " ======================================
 
+syntax on
 colorscheme colorsbox-stnight
                                 " make bg and fg colors same as terminal
 highlight Normal ctermbg=NONE
@@ -70,6 +88,7 @@ inoremap <C-k> <Up>
 inoremap <C-l> <Right>
 inoremap <C-p>  <C-r>*
 inoremap jk <Esc>
+inoremap <C-u> <C-o>A
 
 nnoremap <C-n> :set relativenumber!<CR>
 nnoremap <leader><leader> :w<CR>
@@ -80,8 +99,8 @@ nnoremap <leader>q :q<CR>
 nnoremap <leader>r :call ReadMode(readmode_togg)<CR>
 nnoremap <leader>s :setlocal spell! spelllang=en_us<CR>
 nnoremap <C-l> :nohl<CR><C-l>
-nnoremap \e :<C-U>call TabFxn(v:count1*2,1)<CR>
-nnoremap \n :<C-U>call TabFxn(v:count1*2,0)<CR>
+nnoremap \e :<C-U>call TabFun(v:count1*2,1)<CR>
+nnoremap \n :<C-U>call TabFun(v:count1*2,0)<CR>
 nnoremap \w :%s/\s\+$//<CR>:nohl<CR><C-l>
 nnoremap U <C-r>
 nnoremap Y y$
@@ -96,3 +115,6 @@ map <ScrollWheelDown> <C-e>
 
 let g:SuperTabDefaultCompletionType="context" " contextual completion
 let g:SuperTabCrMapping=1
+let g:vimpager_scrolloff = 5
+let g:vimpager_less_mode = 0
+

@@ -9,14 +9,16 @@ if has('autocmd')
   au FileType help setlocal keywordprg=:help |
   \                     silent! call ReadMode(1)
   au FileType man set so=0
+  au FileType python imap <Tab> <C-Space>
   au FileType sh source $HOME/.vim/ftplugin/sh.vim
   au FileType vim setlocal ts=2 sw=2 sts=2 expandtab keywordprg=:help
   au BufNewFile main.c{,pp} execute
         \"normal oint\<Space>main()\<CR>{\<CR>\<CR>}\<Up>\<Tab>
         \return\<Space>0;\<Esc>0"
 endif
+au BufNewFile,BufRead *_T_tmp* set ft=python
 
-function! FlyMode(flymode_togg)
+fun! FlyMode(flymode_togg)
   if a:flymode_togg==1
     silent! call ReadMode(0)
     silent! setlocal so=999
@@ -29,10 +31,10 @@ function! FlyMode(flymode_togg)
     let g:flymode_togg=1
     echo "Fly Mode off"
   endif
-endfunction
+endfun
 let g:flymode_togg=1
 
-function! ReadMode(readmode_togg)
+fun! ReadMode(readmode_togg)
   if a:readmode_togg==1
     silent! call FlyMode(0)
     silent! set nomodifiable
@@ -42,8 +44,8 @@ function! ReadMode(readmode_togg)
     silent! nnoremap <buffer> <leader>q :q!<CR>
     silent! nnoremap <buffer> j <C-e>L0:file<CR>
     silent! nnoremap <buffer> k <C-y>L0:file<CR>
-    silent! nnoremap <buffer> i <C-d>L0:file<CR>
-    silent! nnoremap <buffer> o <C-u>L0:file<CR>
+    silent! nnoremap <buffer> i 5<C-e>L0:file<CR>
+    silent! nnoremap <buffer> o 5<C-y>L0:file<CR>
     if @% == ''
       silent! set ft=sh
       silent! nnoremap <buffer> q :q!<CR>
@@ -57,14 +59,16 @@ function! ReadMode(readmode_togg)
     silent! nunmap <buffer> <leader>q
     silent! nunmap <buffer> j
     silent! nunmap <buffer> k
+    silent! nunmap <buffer> i
+    silent! nunmap <buffer> o
     silent! execute "normal M"
     let g:readmode_togg=1
     echo "Read Mode off"
   endif
-endfunction
+endfun
 let g:readmode_togg=1
 
-function! TabFxn(tb, expd)
+fun! TabFun(tb, expd)
   execute "set tabstop="     . &l:tabstop
   execute "set softtabstop=" . &l:softtabstop
   execute "set shiftwidth="  . &l:shiftwidth
@@ -81,25 +85,26 @@ function! TabFxn(tb, expd)
   execute "set softtabstop=" . a:tb
   execute "set shiftwidth="  . a:tb
   %retab!
-endfunction
+endfun
 
-function! PluginInstall()
-  !mkdir $HOME/.vim/bundle 2>/dev/null; echo;
-  \ for plugin in $(cat $HOME/dot/vim/src/plugins.txt | grep -Eo '^[^ \#]*'); do
-  \   if [ -d $HOME/dot/vim/bundle/${plugin\#*/} ]; then
-  \     cd $HOME/dot/vim/bundle/${plugin\#*/} && git pull --all -v;
-  \   else
-  \     cd $HOME/dot/vim/bundle && git clone https://github.com/$plugin;
-  \   fi; echo;
-  \ done;
-  \
-  \ for dir in $(ls $HOME/dot/vim/bundle); do
-  \   if [ \! "$(cat $HOME/.vim/plugins.txt |\
-                \grep -Eo '^[^ \#]*' | grep $dir)" ]; then
-  \     echo removing directory, $dir/;
-  \     rm -fr $HOME/dot/vim/bundle/$dir;
-  \   fi;
-  \ done
-endfunction
-command! PluginInstall silent call PluginInstall() |
-                     \ silent execute '!sleep 3' | redraw!
+" fun! PluginInstall()
+"   !mkdir $HOME/dot/vim/bundle 2>/dev/null; echo;
+"   \ for plugin in $(cat $HOME/dot/vim/src/plugins.txt |
+"   \                 grep -Eo '^[^ \#]*'); do
+"   \   if [ -d $HOME/dot/vim/bundle/${plugin\#*/} ]; then
+"   \     cd $HOME/dot/vim/bundle/${plugin\#*/} && git pull --all -v;
+"   \   else
+"   \     cd $HOME/dot/vim/bundle && git clone https://github.com/$plugin;
+"   \   fi; echo;
+"   \ done;
+"   \
+"   \ for dir in $(ls $HOME/dot/vim/bundle); do
+"   \   if [ \! "$(cat $HOME/dot/vim/src/plugins.txt |\
+"                 \grep -Eo '^[^ \#]*' | grep $dir)" ]; then
+"   \     echo removing directory, $dir/;
+"   \     rm -fr $HOME/dot/vim/bundle/$dir;
+"   \   fi;
+"   \ done
+" endfun
+" command! PluginInstall silent call PluginInstall() |
+"                      \ silent execute '!sleep 3' | redraw!

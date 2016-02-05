@@ -13,7 +13,7 @@ if [[ -n "$TMUX" ]]; then
   source $COLORS
 fi
 
-eval `dircolors -b ~/dotfiles/bash/dircolors`
+eval `dircolors -b ~/.bash/dircolors`
 
 # screenfetch on first login
 if [ $(tput cols) -ge 70 ] && [ $(tput lines) -ge 19 ] && \

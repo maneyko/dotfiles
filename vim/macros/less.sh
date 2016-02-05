@@ -18,8 +18,8 @@ else
       echo "Missing filename" 1>&2
       exit
     fi
-    cat
+    /usr/local/bin/less
   else
-    cat "$@"
+    /usr/local/bin/less "$@"
   fi
 fi

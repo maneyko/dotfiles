@@ -1,4 +1,5 @@
 @echo off
+rem https://github.com/vim/vim/blob/master/runtime/macros/less.bat
 rem batch file to start Vim with less.vim.
 rem Read stdin if no arguments were given.
 rem Written by Ken Takata.

@@ -11,8 +11,21 @@ os () {
 }
 export -f os
 
+setcv3 () {
+  export PYTHONPATH="/usr/local/opt/opencv3/lib/python2.7/site-packages:$PYTHONPATH"
+}
+export -f setcv3
+
+setcv2 () {
+  export PYTHONPATH="/usr/local/lib/python2.7/site-packages:$PYTHONPATH"
+}
+export -f setcv2
+
 man () {
+  # shopt -s expand_aliases
   if [ -n "$(which $@ 2>/dev/null)" ]; then
+    # if after you evaluate the arg it has a space, man it regularly
+    # otherwise, evaluate the alias then man it
     args=$@
     vim -c "execute 'Man ' . '$args'" -c "execute \"normal \<C-w>o\"" \
         -c "silent! call ReadMode(1)" -c "set so=0 ft=man"

@@ -15,7 +15,7 @@ fi
 
 eval `dircolors -b ~/.bash/dircolors`
 
-if [ $(tput cols) -ge 70 ] && [ $(tput lines) -ge 19 ] && \
+if [ $(tput cols) -ge 68 ] && [ $(tput lines) -ge 20 ] && \
    [ $(tty | grep 001) ] && \
    [ $(os) = "mac" ]; then
     for i in {00..15}; do

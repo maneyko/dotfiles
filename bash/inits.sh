@@ -15,9 +15,8 @@ fi
 
 eval `dircolors -b ~/.bash/dircolors`
 
-if test `tput cols` -ge 68 && test `tput lines` -ge 20 && \
-   test `tty | grep 001` && \
-   test `os` = "mac"; then
+if test `tput cols` -ge 68 -a `tput lines` -ge 20 -a \
+        "`tty | grep 001`" -a `os` = "mac"; then
     for i in {00..15}; do
       export c0$i="`tput setaf $(expr $i + 0)`"
     done

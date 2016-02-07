@@ -6,13 +6,14 @@ k_arch=`uname -m`
 k_os=`echo \`sysctl -n kern.ostype\` \`sysctl -n kern.osrelease\``
 hw=`uname -i`
 sh=`echo $SHELL | sed 's@.*/@@'`
-sh_v=${BASH_VERSION%%[^0-9.]*}
+sh_v=`echo $BASH_VERSION | sed 's/(.*$//'`
 font="Inconsolata 14pt"
 
-pack=`expr $(num /usr/local/opt/) + $(num /opt/homebrew-cask/Caskroom/)`
+pack=`expr $(ls /usr/local/opt/ | wc -l) + \
+           $(ls /opt/homebrew-cask/Caskroom/ | wc -l)`
 
 bins=`for path in $(echo $PATH | sed 's/:/\n/g');
-        do n=$(( $n + $(num $path) )); done; echo $n`
+        do n=$(( $n + $(ls $path | wc -l) )); done; echo $n`
 
 vim_v=`vim --version | grep -oE '[0-9].[0-9]' | head -1`
 

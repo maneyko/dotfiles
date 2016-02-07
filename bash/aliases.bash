@@ -1,7 +1,7 @@
 # aliases
 # ===============================================
 
-# ps ax | grep itunes | awk -F" " '{print $1}' | xargs kill 2>/dev/null
+# ps ax | grep itunes | sed 's/[ ].*$//'
 
 shopt -s expand_aliases
 
@@ -19,10 +19,10 @@ alias vi="vim"
 alias cls="clear && printf '\e[3J'"
 alias dots="cd ~/dot/"
 alias la="ls -A"
-alias ld="ls -A -I'*'"
 alias ll="ls -hl"
 alias lla="ls -Ahl"
 alias lld="ls -Ahl -I'*'"
+alias lsd="ls -A -I'*'"
 
 alias hideDesktop='chflags hidden ~/Desktop/*'
 alias showDesktop='chflags nohidden ~/Desktop/*'

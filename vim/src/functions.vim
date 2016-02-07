@@ -40,12 +40,16 @@ fun! ReadMode(readmode_togg)
     silent! set nomodifiable
     silent! set readonly
     silent! set nolist
+    silent! set timeout timeoutlen=0 ttimeoutlen=0
+    silent! nnoremap <buffer> r :call ReadMode(0)<CR>
     silent! nnoremap <buffer> q :q<CR>
-    silent! nnoremap <buffer> <leader>q :q!<CR>
+    silent! nnoremap <buffer> <M-q> :q!<CR>
     silent! nnoremap <buffer> j <C-e>L0:file<CR>
     silent! nnoremap <buffer> k <C-y>L0:file<CR>
     silent! nnoremap <buffer> i 5<C-e>L0:file<CR>
     silent! nnoremap <buffer> o 5<C-y>L0:file<CR>
+    silent! nnoremap <buffer> y <C-d>L0:file<CR>
+    silent! nnoremap <buffer> u <C-u>L0:file<CR>
     if @% == ''
       silent! set ft=sh
       silent! nnoremap <buffer> q :q!<CR>
@@ -55,12 +59,16 @@ fun! ReadMode(readmode_togg)
   else
     silent! set modifiable
     silent! set noreadonly
+    silent! set timeout nottimeout timeoutlen=1000 ttimeoutlen=-1
+    silent! nunmap <buffer> r
     silent! nunmap <buffer> q
-    silent! nunmap <buffer> <leader>q
+    silent! nunmap <buffer> <M-q>
     silent! nunmap <buffer> j
     silent! nunmap <buffer> k
     silent! nunmap <buffer> i
     silent! nunmap <buffer> o
+    silent! nunmap <buffer> y
+    silent! nunmap <buffer> u
     silent! execute "normal M"
     let g:readmode_togg=1
     echo "Read Mode off"

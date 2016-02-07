@@ -1,7 +1,8 @@
 #!/bin/sh
 
 setup_dir="` cd "\` dirname "${BASH_SOURCE[0]}" \`" && pwd `"
-dotfile_dir=$setup_dir/..
+dotfile_dir=`echo $setup_dir | sed 's%/[^/]*$%%'`
+home_dir=`echo $dotfile_dir | sed 's%/[^/]*$%%'`
 dotfile_backup=$setup_dir/dotfiles_old
 
 read -s -n 1 -p \
@@ -26,7 +27,7 @@ case $response in
     ;;
 esac
 
-cd $dotfile_dir/../
+cd $home_dir
 read -s -n 1 -p "Create symlinks to $PWD/ ([y]/N)? " response
 echo
 case $response in
@@ -84,5 +85,9 @@ if test "`tmux -V | grep " 1."`"; then
       ;;
   esac
 fi
-unset setup_dir dotfile_dir dotfile_backup
+dotfile_plain=`echo $dotfile_dir | sed 's@.*/@@' | tr -d '.'`
+cd $home_dir;
+mv $dotfile_plain .$dotfile_plain 2>/dev/null
+cd .$dotfile_plain
+unset setup_dir dotfile_dir dotfile_backup dotfile_plain
 echo Successfully finished install

@@ -77,15 +77,14 @@ highlight Normal ctermfg=NONE
 
 let g:mapleader = ","
 
-inoremap <C-h> <Left>
-inoremap <C-j> <Down>
-inoremap <C-k> <Up>
-inoremap <C-l> <Right>
+" inoremap <C-h> <Left>
+" inoremap <C-j> <Down>
+" inoremap <C-k> <Up>
+" inoremap <C-l> <Right>
+nnoremap <C-l> :nohl<CR><C-l>
 inoremap <C-p>  <C-r>*
-inoremap jk <Esc>
-inoremap <C-u> <C-o>A
-
 nnoremap <C-n> :set relativenumber!<CR>
+inoremap <C-u> <C-o>A
 nnoremap <leader><leader> :w<CR>
 nnoremap <leader>f :call FlyMode(flymode_togg)<CR>
 nnoremap <leader>kq :q!<CR>
@@ -93,10 +92,10 @@ nnoremap <leader>n :NERDTreeToggle<CR>
 nnoremap <leader>q :q<CR>
 nnoremap <leader>r :call ReadMode(readmode_togg)<CR>
 nnoremap <leader>s :setlocal spell! spelllang=en_us<CR>
-nnoremap <C-l> :nohl<CR><C-l>
 nnoremap \e :<C-U>call TabFun(v:count1*2,1)<CR>
 nnoremap \n :<C-U>call TabFun(v:count1*2,0)<CR>
 nnoremap \w :%s/\s\+$//<CR>:nohl<CR><C-l>
+inoremap jk <Esc>
 nnoremap U <C-r>
 nnoremap Y y$
 

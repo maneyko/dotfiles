@@ -15,9 +15,13 @@ fi
 
 eval `dircolors -b ~/.bash/dircolors`
 
-# screenfetch on first login
 if [ $(tput cols) -ge 70 ] && [ $(tput lines) -ge 19 ] && \
-   [ $(tty) = "/dev/ttys001" ] && \
-   [ -f /usr/local/bin/screenfetch.out ]; then
-    cat /usr/local/bin/screenfetch.out
+   [ $(tty | grep 001) ] && \
+   [ $(os) = "mac" ]; then
+    for i in {00..15}; do
+      export c0$i="$(tput setaf $(expr $i + 0))"
+    done
+    export csgr="$(tput sgr0)"
+    cat $HOME/.bin/mac_screenfetch.out
 fi
+

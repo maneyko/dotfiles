@@ -19,7 +19,7 @@ case $response in
         mv $dotfile_dir/../.$file $dotfile_backup/$file
       fi
     done; echo done
-    echo Your dotfiles have been moved to dot/setup/dotfiles_old/
+    echo Your dotfiles have been moved to .dotfiles/setup/dotfiles_old/
     ;;
   *)
     echo Will overwrite conflicting dotfiles
@@ -33,7 +33,7 @@ case $response in
   [yY]|"")
     printf "%s" "Creating symlinks..."
     for file in $(ls $dotfile_dir | grep -Ev 'README|setup'); do
-      ln -fs dot/$file .$file
+      ln -fs .dotfiles/$file .$file
     done; echo done
     ;;
   *)
@@ -44,31 +44,32 @@ esac
 echo Sourcing new bashrc
 source $dotfile_dir/bashrc
 
-printf "%s" "Updating dot/vim/ftplugin/man.vim ..."
+printf "%s" "Updating ~/.vim/ftplugin/man.vim ..."
 cd $dotfile_dir/vim/ftplugin/
 rm man.vim 2>/dev/null
 wget -q https://raw.githubusercontent.com/vim/vim/master/runtime/ftplugin/man.vim
 echo done
 
 read -s -n 1 -p \
-  "Install vim plugins to $HOME/.vim/bundle/ ([y]/N)? " response
+  "Install vim plugins to ~/.vim/bundle/ ([y]/N)? " response
 echo
 case $response in
   [yY]|"")
     echo Installing plugins
     rm -fr $dotfile_dir/vim/bundle/ 2>/dev/null
     mkdir $dotfile_dir/vim/bundle
-    vim -c "source $dotfile_dir/vim/vimrc" -c "PluginInstall" -c "q"
+    vim +PluginInstall +qall
     ;;
   *)
     echo Skipping PluginInstall
-    echo List of plugins can be found in dot/vim/plugins.txt
+    echo List of plugins can be found in ~/.vimrc
     ;;
 esac
 
 if [[ $(tmux -V) == *'1.'* ]]; then
+  echo "Tmux is out of date (version 1.x) update?"
   read -s -n 1 -p \
-    "Tmux is out of date (version 1.x) update? ([y]/N)? " response
+    "May take up to 30 minutes... ([y]/N) " response
   echo
   case $response in
     [yY]|"")

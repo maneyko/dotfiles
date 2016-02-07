@@ -1,0 +1,40 @@
+#!/bin/sh
+
+user=$(whoami)
+osx_v=$(sw_vers -productVersion)
+build_v=$(sw_vers -buildVersion)
+k_arch=$(uname -m)
+k_name=$(uname -s)
+k_rels=$(uname -r)
+hw=$(uname -i)
+bash_v=${BASH_VERSION%%[^0-9.]*}
+vim_v=$(vim --version | grep -oE '[0-9].[0-9]' | sed -n 1p)
+res=$(system_profiler SPDisplaysDataType | grep resolution | \
+      sed -r 's/\s+//g' | sed 's/.*://')
+cpu=$(sysctl -n machdep.cpu.brand_string | sed -e 's/([^()]*)//g')
+gpu=$(system_profiler SPDisplaysDataType | grep Chipset | sed 's/.*: //')
+ram=$(system_profiler SPHardwareDataType | grep Memory | sed 's/.*: //')
+
+printf "\
+\n\
+${c002}                 -/+:.         ${csgr}\n\
+${c002}                :++++.         ${c006} Username:${csgr} $user\n\
+${c002}               /+++/.          ${c006} OS:${csgr} 64bit MacOS X $osx_v $build_v\n\
+${c002}       .:-::- .+/:-''.::-      ${c006} Kernel:${csgr} $k_arch $k_name $k_rels\n\
+${c002}    .:/++++++/::::/++++++/:'   ${c006} Hardware:${csgr} $hw\n\
+${c003}  .:///////////////////////:'  ${c006} Shell:${csgr} bash $bash_v\n\
+${c003}  ////////////////////////'    ${c006} Resolution:${csgr} $res\n\
+${c001} -+++++++++++++++++++++++'     ${c006} DE:${csgr} Aqua\n\
+${c001} /++++++++++++++++++++++/      ${c006} WM:${csgr} Quartz Compositor\n\
+${c001} /sssssssssssssssssssssss.     ${c006} WM Theme:${csgr} Blue\n\
+${c001} :ssssssssssssssssssssssss-    ${c006} Font:${csgr} Inconsolata 14\n\
+${c005}  osssssssssssssssssssssssso/' ${c006} \$EDITOR:${csgr} $EDITOR $vim_v\n\
+${c005}  'syyyyyyyyyyyyyyyyyyyyyyyy+' ${c006} CPU:${csgr} $cpu\n\
+${c004}   'ossssssssssssssssssssss/   ${c006} GPU:${csgr} $gpu\n\
+${c004}     :ooooooooooooooooooo+.    ${c006} RAM:${csgr} $ram\n\
+${c004}      ':+oo+/:-..-:/+o+/-      ${csgr}\n\
+\n\
+"
+
+unset user osx_v build_v k_arch k_name k_rels
+unset hw bash_v vim_v res cpu gpu ram

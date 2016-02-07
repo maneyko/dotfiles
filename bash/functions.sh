@@ -3,7 +3,7 @@
 # ======================================================================
 
 os () {
-  if [[ $(uname -a | grep -i linux) ]]; then
+  if test "`uname -a | grep -i linux`"; then
     echo "linux"
   else
     echo "mac"
@@ -23,7 +23,7 @@ export -f setcv2
 
 man () {
   # shopt -s expand_aliases
-  if [ -n "$(which $@ 2>/dev/null)" ]; then
+  if test "`which $@ 2>/dev/null`"; then
     # if after you evaluate the arg it has a space, man it regularly
     # otherwise, evaluate the alias then man it
     args=$@
@@ -41,7 +41,7 @@ num () { ls $@ | wc -l; }
 export -f num
 
 tarc () {
-  if [ -d $1 ] || [ -f $1 ]; then
+  if test -d $1 || test -f $1; then
     tar -zcvf $1.tgz $1
   else
     echo "'$1' is not a valid file"
@@ -50,7 +50,7 @@ tarc () {
 export -f tarc
 
 tarx () {
-  if [ -f $1 ]; then
+  if test -f $1; then
     tar xf $1
   else
     echo "'$1' is not a valid file"
@@ -59,14 +59,14 @@ tarx () {
 export -f tarx
 
 sizes () {
-  for file in $(ls -a $@); do
+  for file in `ls -a $@`; do
     du -sh $@$file
   done | sort -h
 }
 export -f sizes
 
 extract () {
-  if [ -f $1 ]; then
+  if test -f $1; then
     case $1 in
       *.tar.*) echo "using tar"        ; tar xf $1        ;;
       *.tar)   echo "using tar"        ; tar xf $1        ;;
@@ -89,7 +89,7 @@ extract () {
 }
 export -f extract
 
-if [ $HOME = "/Users/maneyko" ]; then
+if test $HOME = "/Users/maneyko"; then
   export is_maneyko='true'
 else
   export is_maneyko=''

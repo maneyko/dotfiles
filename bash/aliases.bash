@@ -28,13 +28,13 @@ alias hideDesktop='chflags hidden ~/Desktop/*'
 alias showDesktop='chflags nohidden ~/Desktop/*'
 alias rm_DS='find . -name .DS_Store -exec rm -v {} \;'
 
-if [ $(os) = "mac" ]; then
+if test `os` = "mac"; then
   alias ccopy="pbcopy"
 else
   alias ccopy="xclip -selection c"
 fi
 
-if [ $(os) = "mac" ]; then
+if test `os` = "mac"; then
   alias cput="pbpaste"
 else
   alias cput="xclip -o"

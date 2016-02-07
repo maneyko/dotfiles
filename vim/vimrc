@@ -111,4 +111,5 @@ let g:SuperTabDefaultCompletionType="context" " contextual completion
 let g:SuperTabCrMapping=1
 let g:vimpager_scrolloff = 5
 let g:vimpager_less_mode = 0
+let g:SuperTabLongestHighlight = 1
 

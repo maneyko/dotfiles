@@ -1,6 +1,6 @@
 #!/bin/sh
 
-setup_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+setup_dir="` cd "\` dirname "${BASH_SOURCE[0]}" \`" && pwd `"
 dotfile_dir=$setup_dir/..
 dotfile_backup=$setup_dir/dotfiles_old
 
@@ -11,9 +11,9 @@ case $response in
   [yY]|"")
     printf "%s" "Creating backup directory and moving files..."
 
-    for file in $(ls $dotfile_dir | grep -Ev 'README|setup'); do
-      if [ -f $dotfile_dir/../.$file ]; then
-        if [ ! -d $dotfile_backup ]; then
+    for file in `ls $dotfile_dir | grep -Ev 'README|setup'`; do
+      if test -f $dotfile_dir/../.$file; then
+        if test ! -d $dotfile_backup; then
           mkdir $dotfile_backup
         fi
         mv $dotfile_dir/../.$file $dotfile_backup/$file
@@ -32,7 +32,7 @@ echo
 case $response in
   [yY]|"")
     printf "%s" "Creating symlinks..."
-    for file in $(ls $dotfile_dir | grep -Ev 'README|setup'); do
+    for file in `ls $dotfile_dir | grep -Ev 'README|setup'`; do
       ln -fs .dotfiles/$file .$file
     done; echo done
     ;;
@@ -66,7 +66,7 @@ case $response in
     ;;
 esac
 
-if [[ $(tmux -V) == *'1.'* ]]; then
+if test "`tmux -V | grep " 1."`"; then
   echo "Tmux is out of date (version 1.x) update?"
   read -s -n 1 -p \
     "May take up to 30 minutes... ([y]/N) " response
@@ -80,7 +80,7 @@ if [[ $(tmux -V) == *'1.'* ]]; then
       ;;
     *)
       echo Will not update tmux
-      echo Current version is $(tmux -V)
+      echo Current version is `tmux -V`
       ;;
   esac
 fi

@@ -51,7 +51,7 @@ export PS1='\
 # sourcing
 # ========================================
 
-if [ -f $HOME/.bashrc.local ]; then
+if test -f $HOME/.bashrc.local; then
   source $HOME/.bashrc.local
 fi
 source $HOME/.bash/functions.sh

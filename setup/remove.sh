@@ -1,6 +1,6 @@
 #!/bin/sh
 
-setup_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+setup_dir="` cd "\` dirname "${BASH_SOURCE[0]}" \`" && pwd `"
 dotfile_dir=$setup_dir/..
 dotfile_backup=$setup_dir/dotfiles_old
 
@@ -11,7 +11,7 @@ read -s -n 1 -p \
 echo
 case $response in
   [yY]|"")
-    for file in $(ls $dotfile_dir | grep -Ev 'README|setup'); do
+    for file in `ls $dotfile_dir | grep -Ev 'README|setup'`; do
       rm -v $PWD/.$file 2>/dev/null
     done; echo
     ;;
@@ -20,7 +20,7 @@ case $response in
     ;;
 esac
 
-if [ -d $dotfile_backup ]; then
+if test -d $dotfile_backup; then
   echo "Move files in setup/dotfiles_old/ back to $PWD/ ?"
   read -s -n 1 -p "([y]/N) " response
   echo

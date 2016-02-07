@@ -88,21 +88,21 @@ fun! TabFun(tb, expd)
 endfun
 
 " fun! PluginInstall()
-"   !mkdir $HOME/dot/vim/bundle 2>/dev/null; echo;
-"   \ for plugin in $(cat $HOME/dot/vim/src/plugins.txt |
+"   !mkdir $HOME/.vim/bundle 2>/dev/null; echo;
+"   \ for plugin in $(cat $HOME/.vim/src/plugins.txt |
 "   \                 grep -Eo '^[^ \#]*'); do
-"   \   if [ -d $HOME/dot/vim/bundle/${plugin\#*/} ]; then
-"   \     cd $HOME/dot/vim/bundle/${plugin\#*/} && git pull --all -v;
+"   \   if test -d $HOME/.vim/bundle/${plugin\#*/}; then
+"   \     cd $HOME/.vim/bundle/${plugin\#*/} && git pull --all -v;
 "   \   else
-"   \     cd $HOME/dot/vim/bundle && git clone https://github.com/$plugin;
+"   \     cd $HOME/.vim/bundle && git clone https://github.com/$plugin;
 "   \   fi; echo;
 "   \ done;
 "   \
-"   \ for dir in $(ls $HOME/dot/vim/bundle); do
-"   \   if [ \! "$(cat $HOME/dot/vim/src/plugins.txt |\
+"   \ for dir in $(ls $HOME/.vim/bundle); do
+"   \   if test \! "$(cat $HOME/.vim/src/plugins.txt |\
 "                 \grep -Eo '^[^ \#]*' | grep $dir)" ]; then
 "   \     echo removing directory, $dir/;
-"   \     rm -fr $HOME/dot/vim/bundle/$dir;
+"   \     rm -fr $HOME/.vim/bundle/$dir;
 "   \   fi;
 "   \ done
 " endfun

@@ -1,22 +1,29 @@
 #!/bin/sh
 
-user=$(whoami)
-sw=$(sw_vers | sed 's/.*:\t/ /' | tr -d '\n' | sed 's/^[ \t]*//')
-k_arch=$(uname -m)
-k_os=$(echo $(sysctl -n kern.ostype) $(sysctl -n kern.osrelease))
-hw=$(uname -i)
-sh=$(echo $SHELL | sed 's@.*/@@')
+user=`whoami`
+sw=`sw_vers | sed 's/.*:\t/ /' | tr -d '\n' | sed 's/^[ \t]*//'`
+k_arch=`uname -m`
+k_os=`echo \`sysctl -n kern.ostype\` \`sysctl -n kern.osrelease\``
+hw=`uname -i`
+sh=`echo $SHELL | sed 's@.*/@@'`
 sh_v=${BASH_VERSION%%[^0-9.]*}
-pack=$(($(ls /usr/local/opt/ | wc -l)+
-        $(ls /opt/homebrew-cask/Caskroom/ | wc -l)))
-vim_v=$(vim --version | grep -oE '[0-9].[0-9]' | sed -n 1p)
-res=$(system_profiler SPDisplaysDataType | grep resolution | \
-      sed -r 's/.*://' | tr -d ' ')
 font="Inconsolata 14pt"
-cpu=$(sysctl -n machdep.cpu.brand_string | sed 's/([^()]*)//g' | \
-                                           sed 's/CPU //')
-gpu=$(system_profiler SPDisplaysDataType | grep Chipset | sed 's/.*: //')
-ram=$(system_profiler SPHardwareDataType | grep Memory | sed 's/.*: //')
+
+pack=`expr $(num /usr/local/opt/) + $(num /opt/homebrew-cask/Caskroom/)`
+
+bins=`for path in $(echo $PATH | sed 's/:/\n/g');
+        do n=$(( $n + $(num $path) )); done; echo $n`
+
+vim_v=`vim --version | grep -oE '[0-9].[0-9]' | head -1`
+
+res=`system_profiler SPDisplaysDataType | \
+     grep Resolution | sed -r 's/.*://' | tr -d ' '`
+
+cpu=`sysctl -n machdep.cpu.brand_string | \
+                    sed 's/([^()]*)//g' | sed 's/CPU //'`
+
+gpu=`system_profiler SPDisplaysDataType | grep Chipset | sed 's/.*: //'`
+ram=`system_profiler SPHardwareDataType | grep Memory | sed 's/.*: //'`
 
 printf "\
 \n\
@@ -28,14 +35,15 @@ ${c002}     .:/++++++/::::/++++++/:'    ${c006} Kernel: ${csgr}$k_arch $k_os\n\
 ${c003}   .:///////////////////////:'   ${c006} Hardware: ${csgr}$hw\n\
 ${c003}   ////////////////////////'     ${c006} Shell: ${csgr}$sh $sh_v\n\
 ${c001}  -+++++++++++++++++++++++'      ${c006} Packages: ${csgr}$pack\n\
-${c001}  /++++++++++++++++++++++/       ${c006} \$EDITOR: ${csgr}$EDITOR $vim_v\n\
-${c001}  /sssssssssssssssssssssss.      ${c006} Resolution: ${csgr}$res\n\
-${c001}  :ssssssssssssssssssssssss-     ${c006} Font: ${csgr}$font\n\
-${c005}   osssssssssssssssssssssssso/'  ${c006} CPU: ${csgr}$cpu\n\
-${c005}   'syyyyyyyyyyyyyyyyyyyyyyyy+'  ${c006} GPU: ${csgr}$gpu\n\
-${c004}    'ossssssssssssssssssssss/    ${c006} RAM: ${csgr}$ram\n\
-${c004}      :ooooooooooooooooooo+.     ${csgr}\n\
+${c001}  /++++++++++++++++++++++/       ${c006} Binaries: ${csgr}$bins\n\
+${c001}  /sssssssssssssssssssssss.      ${c006} \$EDITOR: ${csgr}$EDITOR $vim_v\n\
+${c001}  :ssssssssssssssssssssssss-     ${c006} Resolution: ${csgr}$res\n\
+${c005}   osssssssssssssssssssssssso/'  ${c006} Font: ${csgr}$font\n\
+${c005}   'syyyyyyyyyyyyyyyyyyyyyyyy+'  ${c006} CPU: ${csgr}$cpu\n\
+${c004}    'ossssssssssssssssssssss/    ${c006} GPU: ${csgr}$gpu\n\
+${c004}      :ooooooooooooooooooo+.     ${c006} RAM: ${csgr}$ram\n\
 ${c004}       ':+oo+/:-..-:/+o+/-       ${csgr}\n\
 \n\
 "
-unset user sw k_arch k_os hw sh sh_v pack res vim_v cpu gpu ram
+unset user sw k_arch k_os hw sh sh_v pack
+unset bins path n vim_v res font cpu gpu ram

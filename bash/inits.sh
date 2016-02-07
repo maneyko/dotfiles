@@ -7,21 +7,21 @@ stty -ixon
 # disable C-d to quit session
 set -o ignoreeof
 
-export COLORS=$HOME/.config/color_setup/base16-custom.${BACKGROUND}.sh
+export COLORS=$HOME/.config/color_setup/base16-custom.$BACKGROUND.sh
 
-if [[ -n "$TMUX" ]]; then
+if test $TMUX; then
   source $COLORS
 fi
 
 eval `dircolors -b ~/.bash/dircolors`
 
-if [ $(tput cols) -ge 68 ] && [ $(tput lines) -ge 20 ] && \
-   [ $(tty | grep 001) ] && \
-   [ $(os) = "mac" ]; then
+if test `tput cols` -ge 68 && test `tput lines` -ge 20 && \
+   test `tty | grep 001` && \
+   test `os` = "mac"; then
     for i in {00..15}; do
-      export c0$i="$(tput setaf $(expr $i + 0))"
+      export c0$i="`tput setaf $(expr $i + 0)`"
     done
-    export csgr="$(tput sgr0)"
+    export csgr="`tput sgr0`"
     cat $HOME/.bin/mac_screenfetch.out
 fi
 

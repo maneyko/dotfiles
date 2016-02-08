@@ -1,6 +1,11 @@
 #!/bin/sh
 
-user=`whoami`
+if test ! "$c006"; then
+  for i in {1..6}; do export c00$i="`tput setaf $i`"; done
+  export csgr="`tput sgr0`"
+fi
+
+user=$USER
 sw=`sw_vers | sed 's/.*:\t/ /' | tr -d '\n' | sed 's/^[ \t]*//'`
 k_arch=`uname -m`
 k_os=`echo \`sysctl -n kern.ostype\` \`sysctl -n kern.osrelease\``
@@ -46,5 +51,3 @@ ${c004}      :ooooooooooooooooooo+.     ${c006} RAM: ${csgr}$ram\n\
 ${c004}       ':+oo+/:-..-:/+o+/-       ${csgr}\n\
 \n\
 "
-unset user sw k_arch k_os hw sh sh_v pack
-unset bins path n vim_v res font cpu gpu ram

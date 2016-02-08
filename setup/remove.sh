@@ -26,7 +26,7 @@ if test -d $dotfile_backup; then
   echo
   case $response in
     [yY]|"")
-      for file in $(ls $dotfile_backup); do
+      for file in `ls $dotfile_backup`; do
         echo "Moving dotfiles_backup/$file to $PWD/.$file"
         mv $dotfile_backup/$file $PWD/.$file
       done

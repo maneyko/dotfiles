@@ -3,10 +3,10 @@
 # ======================================================================
 
 os () {
-  if test "`uname -a | grep -i linux`"; then
-    echo "linux"
-  else
+  if test `uname -s` = "Darwin"; then
     echo "mac"
+  else
+    echo "linux"
   fi
 }
 export -f os

@@ -1,9 +1,9 @@
 #!/bin/sh
 
-if test `os` = "mac"; then
+if test `uname -s` = "Darwin"; then
   while true
   do
-    if test -n "`osascript ~/.tmux/tunes.scpt`"; then
+    if test "`osascript ~/.tmux/tunes.scpt`"; then
       tmux set -g status-right \
         "#[fg=colour19]#(osascript ~/.tmux/tunes.scpt)" || break
     else

@@ -12,7 +12,6 @@ else
   fi
 fi
 
-
 if test ! "$c020"; then
   for i in {000..255}; do
     export c$i="`tput setaf $(expr $i + 0)`"
@@ -29,4 +28,3 @@ for i in `seq $start $stop`; do
     printf "`tput setaf $i` color$i ■■■■■■■■■■■■■■\n"
   fi
 done
-unset start stop

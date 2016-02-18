@@ -1,66 +1,19 @@
 
-# Tab completion regardless of case
+# tab completion regardless of case
 set completion-ignore-case on
+
 # colored tab completion
 set colored-stats on
+
 # dont show hidden folders on tab completion
 set match-hidden-files off
 
+# complete slash when going to symlinked directory
 set mark-symlinked-directories on
+
 # https://cnswww.cns.cwru.edu/php/chet/readline/readline.html
-# bind -V | less # for 'set' options
-# bind -p | less # for keys
-# '\C' = CTRL
-# '\e' = Left Option
-# ==============================================================================
+# bind -V | less  # for 'set' options
+# bind -p | less  # for keys
 
-# movements & commands
-# =======================================
-
-# "\C-a":         beginning-of-line
-# "\C-e":         end-of-line
-
-# "\eb":          backward-word
-# "\ef":          forward-word
-
-# "\C-b":         backward-char
-# "\C-f":         forward-char
-
-# "\C-l":         clear-screen
-# "\eu":          undo
-
-# modifying
-# =======================================
-
-# "\C-u":         unix-line-discard       # backward kill-line
-# "\C-k":         kill-line               # forward  kill-line
-
-# "\C-x(":        start-kbd-macro         # records all keystrokes
-# "\C-x)":        end-kbd-macro           # records all keystrokes
-# "\C-xe":        call-last-kbd-macro     # calls kbd-macro
-# "\C-xp":        print-last-kbd-macro    # outputs macro
-
-# "\C-w":         unix-word-rubout        # backward delete to white space
-
-# "\es":          backward-kill-word      # backward delete to word
-# "\ed":          kill-word               # forward  delete to word
-
-# "\C-h":         backward-delete-char    # backward delete-char
-# "\C-d":         delete-char             # forward  delete-char
-
-# history
-# =======================================
-
-# "\C-p":         previous-history
-# "\C-n":         next-history
-
-# "\C-r":         reverse-search-history
-# "\C-s":         forward-search-history
-
-# "\e<":          beginning-of-history
-# "\e>":          end-of-history
-
-# random
-# =======================================
-
-"\e[24~":       "pwd\n"                 # 'M-F12' calls pwd
+# 'M-F12' calls pwd
+"\e[24~":       "pwd\n"

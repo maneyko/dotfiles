@@ -77,39 +77,47 @@ highlight Normal ctermfg=NONE
 
 let g:mapleader = ","
 
-" inoremap <C-h> <Left>
-" inoremap <C-j> <Down>
-" inoremap <C-k> <Up>
-" inoremap <C-l> <Right>
-nnoremap <C-l> :nohl<CR><C-l>
-inoremap <C-p>  <C-r>*
-nnoremap <C-n> :set relativenumber!<CR>
-inoremap <C-u> <C-o>A
+nnoremap <C-l>            :nohl<CR><C-l>
+nnoremap <C-n>            :set relativenumber!<CR>
 nnoremap <leader><leader> :w<CR>
-nnoremap <leader>f :call FlyMode(flymode_togg)<CR>
-nnoremap <leader>kq :q!<CR>
-nnoremap <leader>n :NERDTreeToggle<CR>
-nnoremap <leader>q :q<CR>
-nnoremap <leader>r :call ReadMode(readmode_togg)<CR>
-nnoremap <leader>s :setlocal spell! spelllang=en_us<CR>
-nnoremap \e :<C-U>call TabFun(v:count1*2,1)<CR>
-nnoremap \n :<C-U>call TabFun(v:count1*2,0)<CR>
-nnoremap \w :%s/\s\+$//<CR>:nohl<CR><C-l>
-inoremap jk <Esc>
-nnoremap U <C-r>
-nnoremap Y y$
+nnoremap <leader>f        :call FlyMode(flymode_togg)<CR>
+nnoremap <leader>kq       :q!<CR>
+nnoremap <leader>n        :NERDTreeToggle<CR>
+nnoremap <leader>q        :q<CR>
+nnoremap <leader>r        :call ReadMode(readmode_togg)<CR>
+nnoremap <leader>s        :setlocal spell! spelllang=en_us<CR>
+nnoremap <C-i> wi
+nnoremap \e               :<C-U>call TabFun(v:count1*2,1)<CR>
+nnoremap \n               :<C-U>call TabFun(v:count1*2,0)<CR>
+nnoremap \w               :%s/\s\+$//<CR>:nohl<CR><C-l>
+nnoremap U                <C-r>
+nnoremap Y                y$
+nnoremap yaf              ggyG``:echo "File yanked"<CR>
 
-vnoremap . :normal .<CR>
+inoremap <C-a>            <C-o>^
+inoremap <C-d>            <C-o>x
+inoremap <C-e>            <C-o>$
+inoremap <C-p>            <C-r>*
+inoremap <M-b>            <C-o>b
+inoremap <M-f>            <C-o>w
+inoremap jk               <Esc>
 
-map <ScrollWheelUp> <C-y>
-map <ScrollWheelDown> <C-e>
+vnoremap .                :normal .<CR>
+
+map <ScrollWheelUp>       <C-y>
+map <ScrollWheelDown>     <C-e>
 
 " plugins
 " =====================================
 
 let g:SuperTabDefaultCompletionType="context" " contextual completion
 let g:SuperTabCrMapping=1
-let g:vimpager_scrolloff = 5
-let g:vimpager_less_mode = 0
 let g:SuperTabLongestHighlight = 1
+let g:vimpager = {}
+let g:less = {}
+let g:less.enabled=0
+let g:less.scrolloff = 5
+if exists('g:vimpager.enabled')
+
+endif
 

@@ -6,12 +6,12 @@
 shopt -s expand_aliases
 
 alias gless="/usr/bin/env less"
-alias gman="/usr/bin/env man"
+alias gman="/usr/bin/man"
 
 alias cp="cp -i"
 alias grep="grep -i --color=auto"
 alias less="~/.vim/macros/less.sh"
-alias ls="ls --color=auto"
+alias ls="ls --color=auto --group-directories-first"
 alias mv="mv -i"
 alias vi="vim"
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-setup_dir="` cd "\` dirname "${BASH_SOURCE[0]}" \`" && pwd `"
+setup_dir=`cd "\` dirname "${BASH_SOURCE[0]}" \`" && pwd`
 dotfile_dir=`echo $setup_dir | sed 's%/[^/]*$%%'`
 home_dir=`echo $dotfile_dir | sed 's%/[^/]*$%%'`
 dotfile_backup=$setup_dir/dotfiles_old
@@ -59,8 +59,10 @@ echo
 case $response in
   [yY]|"")
     echo Installing plugins
-    rm -fr $dotfile_dir/vim/bundle/ 2>/dev/null
-    mkdir $dotfile_dir/vim/bundle
+    if ! test -d $home_dir/.vim/bundle/Vundle.vim; then
+      mkdir -p $home_dir/.vim/bundle
+      git clone https://github.com/VundleVim/Vundle.vim.git $home_dir/.vim/bundle/Vundle.vim
+    fi
     vim +PluginInstall +qall
     ;;
   *)

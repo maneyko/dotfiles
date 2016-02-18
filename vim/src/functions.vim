@@ -12,11 +12,11 @@ if has('autocmd')
   au FileType python imap <Tab> <C-Space>
   au FileType sh source $HOME/.vim/ftplugin/sh.vim
   au FileType vim setlocal ts=2 sw=2 sts=2 expandtab keywordprg=:help
+  au BufNewFile,BufRead *_T_tmp* set ft=python
   au BufNewFile main.c{,pp} execute
         \"normal oint\<Space>main()\<CR>{\<CR>\<CR>}\<Up>\<Tab>
         \return\<Space>0;\<Esc>0"
 endif
-au BufNewFile,BufRead *_T_tmp* set ft=python
 
 fun! FlyMode(flymode_togg)
   if a:flymode_togg==1
@@ -43,13 +43,13 @@ fun! ReadMode(readmode_togg)
     silent! set timeout timeoutlen=0 ttimeoutlen=0
     silent! nnoremap <buffer> r :call ReadMode(0)<CR>
     silent! nnoremap <buffer> q :q<CR>
-    silent! nnoremap <buffer> <M-q> :q!<CR>
+    silent! nnoremap <buffer> x :q!<CR>
     silent! nnoremap <buffer> j <C-e>L0:file<CR>
     silent! nnoremap <buffer> k <C-y>L0:file<CR>
-    silent! nnoremap <buffer> i 5<C-e>L0:file<CR>
-    silent! nnoremap <buffer> o 5<C-y>L0:file<CR>
-    silent! nnoremap <buffer> y <C-d>L0:file<CR>
-    silent! nnoremap <buffer> u <C-u>L0:file<CR>
+    silent! nnoremap <buffer> u <C-d>L0:file<CR>
+    silent! nnoremap <buffer> i <C-u>L0:file<CR>
+    silent! nnoremap <buffer> o 5<C-e>L0:file<CR>
+    silent! nnoremap <buffer> p 5<C-y>L0:file<CR>
     if @% == ''
       silent! set ft=sh
       silent! nnoremap <buffer> q :q!<CR>
@@ -62,13 +62,13 @@ fun! ReadMode(readmode_togg)
     silent! set timeout nottimeout timeoutlen=1000 ttimeoutlen=-1
     silent! nunmap <buffer> r
     silent! nunmap <buffer> q
-    silent! nunmap <buffer> <M-q>
+    silent! nunmap <buffer> x
     silent! nunmap <buffer> j
     silent! nunmap <buffer> k
+    silent! nunmap <buffer> u
     silent! nunmap <buffer> i
     silent! nunmap <buffer> o
-    silent! nunmap <buffer> y
-    silent! nunmap <buffer> u
+    silent! nunmap <buffer> p
     silent! execute "normal M"
     let g:readmode_togg=1
     echo "Read Mode off"

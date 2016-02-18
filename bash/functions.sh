@@ -22,12 +22,17 @@ setcv2 () {
 export -f setcv2
 
 man () {
-  # shopt -s expand_aliases
   if test "`which $@ 2>/dev/null`"; then
-    # if after you evaluate the arg it has a space, man it regularly
-    # otherwise, evaluate the alias then man it
+    before_last=`echo $@ | sed 's, *[^ ]\+/*$,,'`
+    last=`echo $@ | sed 's@.* @@' | sed 's@.*/@@'`
+
+    if test "`type $last 2>/dev/null | head -1 | grep alias`"; then
+      last=`echo $(type $last) | sed 's@.*\`@@' | tr -d "'" | \
+        sed 's@.*/@@' | sed 's/[ .].*$//'`
+    fi
+    argss=`echo $before_last $last`
     args=$@
-    vim -c "execute 'Man ' . '$args'" -c "execute \"normal \<C-w>o\"" \
+    vim -c "execute 'Man ' . '$argss'" -c "execute \"normal \<C-w>o\"" \
         -c "silent! call ReadMode(1)" -c "set so=0 ft=man"
   else
     /usr/bin/env man $@
@@ -39,6 +44,7 @@ csview () { sed 's/,,/, ,/g;s/,,/, ,/g' $@ | column -s, -t; }
 export -f csview
 num () { ls $@ | wc -l; }
 export -f num
+goto () { mkdir -p $@ && cd $@;  }
 
 tarc () {
   if test -d $1 || test -f $1; then

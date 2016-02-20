@@ -1,11 +1,21 @@
 #!/bin/sh
 
 if test `uname -s` = "Darwin"; then
-  while true
+  while test "$TMUX"
   do
-    if test "`osascript ~/.tmux/tunes.scpt`"; then
-      tmux set -g status-right \
-        "#[fg=colour19]#(osascript ~/.tmux/tunes.scpt)" || break
+    if test "`~/.tmux/tunes.scpt`"; then
+      if test "`~/.tmux/tunes.scpt | grep 'missing value'`"; then
+        tmux set -g status-right \
+          "#[fg=colour19]#(~/.tmux/tunes.scpt | sed 's/ -.*//')" || break
+      elif test "`~/.tmux/tunes.scpt | wc -c`" -gt 42; then
+        tmux set -g status-right \
+          "#[fg=colour19]#(~/.tmux/tunes.scpt | \
+          sed -e 's/([^()]*)//g' | sed -e 's/\[[^][]*\]//g' | \
+          sed -n 's/  */ /gp' | sed -r 's/ /  /')" || break
+      else
+        tmux set -g status-right \
+          "#[fg=colour19]#(~/.tmux/tunes.scpt)" || break
+      fi
     else
       tmux set -g status-right \
         "#[fg=colour19]#(date +'%a %b %d %Y')" || break

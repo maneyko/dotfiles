@@ -5,12 +5,10 @@ if has('autocmd')
   au BufRead *tmux.conf set ft=sh
   au BufRead plugins.txt set ft=sh
   au BufNewFile *.sh execute "normal i#!/bin/sh\<CR>\<Esc>"
-  au FileType c{,pp} source $HOME/.vim/ftplugin/c.vim
+  au BufNewFile *.bash execute "normal i#!/bin/bash\<CR>\<Esc>"
   au FileType help setlocal keywordprg=:help |
   \                     silent! call ReadMode(1)
   au FileType man set so=0
-  au FileType python imap <Tab> <C-Space>
-  au FileType sh source $HOME/.vim/ftplugin/sh.vim
   au FileType vim setlocal ts=2 sw=2 sts=2 expandtab keywordprg=:help
   au BufNewFile,BufRead *_T_tmp* set ft=python
   au BufNewFile main.c{,pp} execute

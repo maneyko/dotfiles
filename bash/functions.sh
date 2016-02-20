@@ -11,6 +11,12 @@ os () {
 }
 export -f os
 
+sysbuild () {
+  export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
+  unalias -a
+}
+export -f sysbuild
+
 setcv3 () {
   export PYTHONPATH="/usr/local/opt/opencv3/lib/python2.7/site-packages:$PYTHONPATH"
 }

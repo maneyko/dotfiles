@@ -88,6 +88,6 @@ if test "`tmux -V | grep " 1."`"; then
   esac
 fi
 
-cd $home_dir;
+cd $home_dir
 mv $dotfile_plain .$dotfile_plain 2>/dev/null
 

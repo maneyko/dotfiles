@@ -6,12 +6,13 @@ if test ! "$c006"; then
 fi
 
 user=$USER
-sw=`sw_vers | sed 's/.*:\t/ /' | tr -d '\n' | sed 's/^[ \t]*//'`
+sw=`sw_vers | sed 's/.*[\t]//' | tr '\n' ' '`
+
 k_arch=`uname -m`
 k_os=`echo \`sysctl -n kern.ostype\` \`sysctl -n kern.osrelease\``
 hw=`uname -i`
-sh=`echo $SHELL | sed 's@.*/@@'`
-sh_v=`echo $BASH_VERSION | sed 's/(.*$//'`
+sh=`echo $SHELL | sed 's/.*[/]//'`
+sh_v=`echo $BASH_VERSION | sed 's/[(].*//'`
 font="Inconsolata 14pt"
 
 pack=`expr $(ls /usr/local/opt/ | wc -l) + \
@@ -23,7 +24,7 @@ bins=`for path in $(echo $PATH | sed 's/:/\n/g');
 vim_v=`vim --version | grep -oE '[0-9].[0-9]' | head -1`
 
 res=`system_profiler SPDisplaysDataType | \
-     grep Resolution | sed -r 's/.*://' | tr -d ' '`
+     grep Resolution | sed 's/.*://' | tr -d ' '`
 
 cpu=`sysctl -n machdep.cpu.brand_string | \
                     sed 's/([^()]*)//g' | sed 's/CPU //'`
@@ -33,21 +34,23 @@ ram=`system_profiler SPHardwareDataType | grep Memory | sed 's/.*: //'`
 
 printf "\
 \n\
-${c002}                  -/+:.          ${csgr}\n\
-${c002}                 :++++.          ${csgr}\n\
-${c002}                /+++/.           ${c006} Username: ${csgr}$user\n\
-${c002}        .:-::- .+/:-''.::-       ${c006} OS: ${csgr}$sw\n\
-${c002}     .:/++++++/::::/++++++/:'    ${c006} Kernel: ${csgr}$k_arch $k_os\n\
-${c003}   .:///////////////////////:'   ${c006} Hardware: ${csgr}$hw\n\
-${c003}   ////////////////////////'     ${c006} Shell: ${csgr}$sh $sh_v\n\
-${c001}  -+++++++++++++++++++++++'      ${c006} Packages: ${csgr}$pack\n\
-${c001}  /++++++++++++++++++++++/       ${c006} Binaries: ${csgr}$bins\n\
-${c001}  /sssssssssssssssssssssss.      ${c006} \$EDITOR: ${csgr}$EDITOR $vim_v\n\
-${c001}  :ssssssssssssssssssssssss-     ${c006} Resolution: ${csgr}$res\n\
-${c005}   osssssssssssssssssssssssso/'  ${c006} Font: ${csgr}$font\n\
-${c005}   'syyyyyyyyyyyyyyyyyyyyyyyy+'  ${c006} CPU: ${csgr}$cpu\n\
-${c004}    'ossssssssssssssssssssss/    ${c006} GPU: ${csgr}$gpu\n\
-${c004}      :ooooooooooooooooooo+.     ${c006} RAM: ${csgr}$ram\n\
-${c004}       ':+oo+/:-..-:/+o+/-       ${csgr}\n\
+$c002                  -/+:.          $csgr\n\
+$c002                 :++++.          $csgr\n\
+$c002                /+++/.           $c006 Username: ${csgr}$user\n\
+$c002        .:-::- .+/:-''.::-       $c006 OS: ${csgr}$sw\n\
+$c002     .:/++++++/::::/++++++/:'    $c006 Kernel: ${csgr}$k_arch $k_os\n\
+$c003   .:///////////////////////:'   $c006 Hardware: ${csgr}$hw\n\
+$c003   ////////////////////////'     $c006 Shell: ${csgr}$sh $sh_v\n\
+$c001  -+++++++++++++++++++++++'      $c006 Packages: ${csgr}$pack\n\
+$c001  /++++++++++++++++++++++/       $c006 Binaries: ${csgr}$bins\n\
+$c001  /sssssssssssssssssssssss.      $c006 \$EDITOR: ${csgr}$EDITOR $vim_v\n\
+$c001  :ssssssssssssssssssssssss-     $c006 Resolution: ${csgr}$res\n\
+$c005   osssssssssssssssssssssssso/'  $c006 Font: ${csgr}$font\n\
+$c005   'syyyyyyyyyyyyyyyyyyyyyyyy+'  $c006 CPU: ${csgr}$cpu\n\
+$c004    'ossssssssssssssssssssss/    $c006 GPU: ${csgr}$gpu\n\
+$c004      :ooooooooooooooooooo+.     $c006 RAM: ${csgr}$ram\n\
+$c004       ':+oo+/:-..-:/+o+/-       $csgr\n\
 \n\
 "
+
+unset user sw k_arch k_os hw sh sh_v font pack bins vim_v res cpu gpu ram

@@ -6,10 +6,11 @@ filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
+let g:ycm_confirm_extra_conf = 0
+
+Plugin 'VundleVim/Vundle.vim'
 Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'davidhalter/jedi-vim'
-Plugin 'ervandew/supertab'
-Plugin 'hdima/python-syntax'
+Plugin 'Valloric/YouCompleteMe'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'scrooloose/nerdtree'
 Plugin 'tpope/vim-commentary'
@@ -18,7 +19,6 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
-Plugin 'VundleVim/Vundle.vim'
 
 call vundle#end()
 filetype plugin indent on
@@ -120,4 +120,15 @@ let g:less.scrolloff = 5
 if exists('g:vimpager.enabled')
 
 endif
+
+let g:ycm_min_num_of_chars_for_completion = 1
+let g:ycm_seed_identifiers_with_syntax = 1
+let g:ycm_add_preview_to_completeopt = 1
+let g:ycm_autoclose_preview_window_after_completion = 1
+" let g:y
+
+let g:ycm_semantic_triggers =  {
+  \   'python' : ['re![a-zA-Z]+'],
+  \ }
+
 

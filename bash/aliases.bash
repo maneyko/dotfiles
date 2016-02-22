@@ -19,23 +19,24 @@ alias cls="clear && printf '\e[3J'"
 alias la="ls -A"
 alias ll="ls -hl"
 alias lla="ls -Ahl"
-alias lld="ls -Ahl -I'*'"
+alias lsld="ls -Ahl -I'*'"
 alias lsd="ls -A -I'*'"
 
 alias hideDesktop='chflags hidden ~/Desktop/*'
 alias showDesktop='chflags nohidden ~/Desktop/*'
 alias rm_DS='find . -name .DS_Store -exec rm -v {} \;'
+alias readline-keys="cat ~/local/bin/readline-keys.out"
 
 if test `uname -s` = "Darwin" 2>/dev/null; then
-  alias ccopy="pbcopy"
+  alias mcopy="pbcopy"
 else
-  alias ccopy="xclip -selection c"
+  alias mcopy="xclip -selection c"
 fi
 
 if test `uname -s` = "Darwin" 2>/dev/null; then
-  alias cput="pbpaste"
+  alias mpaste="pbpaste"
 else
-  alias cput="xclip -o"
+  alias mpaste="xclip -o"
 fi
 
 alias ..="cd ../"

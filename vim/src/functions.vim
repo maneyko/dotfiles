@@ -2,7 +2,7 @@
 " =====================================
 
 if has('autocmd')
-  au BufRead *tmux.conf set ft=sh
+  au BufRead *tmux.conf,*.tmux set ft=sh
   au BufRead plugins.txt set ft=sh
   au BufNewFile *.sh execute "normal i#!/bin/sh\<CR>\<Esc>"
   au BufNewFile *.bash execute "normal i#!/bin/bash\<CR>\<Esc>"

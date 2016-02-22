@@ -10,8 +10,8 @@ if test `uname -s` = "Darwin"; then
       elif test "`~/.tmux/tunes.scpt | wc -c`" -gt 42; then
         tmux set -g status-right \
           "#[fg=colour19]#(~/.tmux/tunes.scpt | \
-          sed -e 's/([^()]*)//g' | sed -e 's/\[[^][]*\]//g' | \
-          sed -n 's/  */ /gp' | sed -r 's/ /  /')" || break
+          sed 's/([^()]*)//g' | sed 's/\[[^][]*\]//g' | \
+          sed 's/  */ /gp' | sed 's/ /  /')" || break
       else
         tmux set -g status-right \
           "#[fg=colour19]#(~/.tmux/tunes.scpt)" || break
@@ -20,6 +20,11 @@ if test `uname -s` = "Darwin"; then
       tmux set -g status-right \
         "#[fg=colour19]#(date +'%a %b %d %Y')" || break
     fi
+    # if test "`ps ax | grep tmux | grep 'sh -c . ~/.tmux/bar.sh' \
+    #   | head -n -2`"; then
+    #   ps ax | grep tmux | grep 'sh -c . ~/.tmux/bar.sh' | head -n -2 | \
+    #     sed 's/ .*//g' | xargs kill 2>/dev/null
+    # fi
     sleep 10
   done &
 else

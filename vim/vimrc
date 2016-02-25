@@ -10,7 +10,7 @@ let g:ycm_confirm_extra_conf = 0
 
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'ctrlpvim/ctrlp.vim'
-" Plugin 'Valloric/YouCompleteMe'
+Plugin 'Valloric/YouCompleteMe'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'scrooloose/nerdtree'
 Plugin 'tpope/vim-commentary'
@@ -50,14 +50,14 @@ set numberwidth=3               " width of line number column
 set ruler                       " line & columns numbers on bottom
 set smartcase                   " searches for capitals when I type them
 set scrolloff=5                 " keep cursor 5 lines frop top/bottom
-set shiftwidth=2                " number of spaces for indent and unindent
+set shiftwidth=4                " number of spaces for indent and unindent
 set showbreak=...               " show ellipsis when going over
 set showcmd                     " show command on bottom
 set smartindent                 " knows when to indent
 set smarttab                    " tab respects tab settings completely
-set softtabstop=2               " edit 4 spaces as if they are tabs
+set softtabstop=4               " edit 4 spaces as if they are tabs
 set t_Co=256                    " terminal supports 256 colors
-set tabstop=2                   " <tab> == n spaces
+set tabstop=4                   " <tab> == n spaces
 set tildeop                     " tilde operator for changing CASE
 
 let g:netrw_dirhistmax = 0      " no .netrwhist files

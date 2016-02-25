@@ -18,7 +18,7 @@ font="Inconsolata 14pt"
 pack=`expr $(ls /usr/local/opt/ | wc -l) + \
            $(ls /opt/homebrew-cask/Caskroom/ | wc -l)`
 
-bins=`for path in $(echo $PATH | sed 's/:/\n/g');
+bins=`for path in $(echo $PATH | tr ':' '\n');
         do n=$(( $n + $(ls $path | wc -l) )); done; echo $n`
 
 vim_v=`vim --version | grep -oE '[0-9].[0-9]' | head -1`

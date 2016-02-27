@@ -31,7 +31,6 @@ man () {
   if test "`which $@ 2>/dev/null`"; then
     before_last=`echo $@ | sed 's, *[^ ]\+/*$,,'`
     last=`echo $@ | sed 's@.* @@' | sed 's@.*/@@'`
-
     if test "`type $last 2>/dev/null | head -1 | grep alias`"; then
       last=`echo $(type $last) | sed 's@.*\`@@' | tr -d "'" | \
         sed 's@.*/@@' | sed 's/[ .].*$//'`

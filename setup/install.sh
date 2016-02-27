@@ -48,6 +48,7 @@ case $response in
 esac; echo
 
 printf "Updating ~/.vim/ftplugin/man.vim ..."
+mkdir $dotfile_dir/vim/ftplugin/
 cd $dotfile_dir/vim/ftplugin/
 rm man.vim 2>/dev/null
 wget -q https://raw.githubusercontent.com/vim/vim/master/runtime/ftplugin/man.vim
@@ -61,7 +62,8 @@ case $response in
     echo Installing plugins
     if ! test -d $home_dir/.vim/bundle/Vundle.vim; then
       mkdir -p $home_dir/.vim/bundle
-      git clone https://github.com/VundleVim/Vundle.vim.git $home_dir/.vim/bundle/Vundle.vim
+      git clone https://github.com/VundleVim/Vundle.vim.git \
+          $home_dir/.vim/bundle/Vundle.vim
     fi
     vim +PluginInstall +qall
     ;;
@@ -87,6 +89,7 @@ if test "`tmux -V | grep " 1."`"; then
       ;;
   esac
 fi
+echo Finished install
 
 cd $home_dir
 mv $dotfile_plain .$dotfile_plain 2>/dev/null

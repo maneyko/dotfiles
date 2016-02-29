@@ -1,6 +1,51 @@
-#!/bin/bash
+#!/bin/sh
 # functions
 # ======================================================================
+
+csview () { sed 's/,,/, ,/g;s/,,/, ,/g' $@ | column -s, -t;}
+goto () { mkdir -p $@ && cd $@; }
+num () { ls $@ | wc -l; }
+
+setcv2 () {
+  export PYTHONPATH="/usr/local/lib/python2.7/site-packages:$PYTHONPATH"
+}
+
+setcv3 () {
+  export PYTHONPATH="/usr/local/opt/opencv3/lib/python2.7/site-packages:$PYTHONPATH"
+}
+
+sizes () {
+  for file in `ls -a $@`; do
+    du -sh $@$file
+  done | sort -h
+}
+
+sysbuild () {
+  export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
+  unalias -a
+}
+
+tarc () {
+  if test -d $1 || test -f $1; then
+    tar -zcvf $1.tgz $1
+  else
+    echo "'$1' is not a valid file"
+  fi
+}
+
+tarx () {
+  if test -f $1; then
+    tar xf $1
+  else
+    echo "'$1' is not a valid file"
+  fi
+}
+
+if test $HOME = "/Users/maneyko"; then
+  export is_maneyko='true'
+else
+  export is_maneyko=''
+fi
 
 os () {
   if test `uname -s` = "Darwin"; then
@@ -9,30 +54,13 @@ os () {
     echo "linux"
   fi
 }
-export -f os
-
-sysbuild () {
-  export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
-  unalias -a
-}
-export -f sysbuild
-
-setcv3 () {
-  export PYTHONPATH="/usr/local/opt/opencv3/lib/python2.7/site-packages:$PYTHONPATH"
-}
-export -f setcv3
-
-setcv2 () {
-  export PYTHONPATH="/usr/local/lib/python2.7/site-packages:$PYTHONPATH"
-}
-export -f setcv2
 
 man () {
   if test "`which $@ 2>/dev/null`"; then
     before_last=`echo $@ | sed 's, *[^ ]\+/*$,,'`
     last=`echo $@ | sed 's@.* @@' | sed 's@.*/@@'`
     if test "`type $last 2>/dev/null | head -1 | grep alias`"; then
-      last=`echo $(type $last) | sed 's@.*\`@@' | tr -d "'" | \
+      last=`echo \`type $last\` | sed 's@.*\`@@' | tr -d "'" | \
         sed 's@.*/@@' | sed 's/[ .].*$//'`
     fi
     argss=`echo $before_last $last`
@@ -43,38 +71,6 @@ man () {
     /usr/bin/env man $@
   fi
 }
-export -f man
-
-csview () { sed 's/,,/, ,/g;s/,,/, ,/g' $@ | column -s, -t; }
-export -f csview
-num () { ls $@ | wc -l; }
-export -f num
-goto () { mkdir -p $@ && cd $@;  }
-
-tarc () {
-  if test -d $1 || test -f $1; then
-    tar -zcvf $1.tgz $1
-  else
-    echo "'$1' is not a valid file"
-  fi
-}
-export -f tarc
-
-tarx () {
-  if test -f $1; then
-    tar xf $1
-  else
-    echo "'$1' is not a valid file"
-  fi
-}
-export -f tarx
-
-sizes () {
-  for file in `ls -a $@`; do
-    du -sh $@$file
-  done | sort -h
-}
-export -f sizes
 
 extract () {
   if test -f $1; then
@@ -98,10 +94,6 @@ extract () {
     echo "'$1' is not a valid file"
   fi
 }
-export -f extract
 
-if test $HOME = "/Users/maneyko"; then
-  export is_maneyko='true'
-else
-  export is_maneyko=''
-fi
+export -f csview goto num setcv2 setcv3 sizes sysbuild tarc tarx
+export -f os man extract

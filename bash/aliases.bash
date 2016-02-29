@@ -25,7 +25,13 @@ alias lsd="ls -A -I'*'"
 alias hideDesktop='chflags hidden ~/Desktop/*'
 alias showDesktop='chflags nohidden ~/Desktop/*'
 alias rm_DS='find . -name .DS_Store -exec rm -v {} \;'
-alias readline-keys="cat ~/local/bin/readline-keys.out"
+
+alias ..="cd ../"
+alias .2="cd ../../"
+alias .3="cd ../../../"
+alias .4="cd ../../../../"
+alias .5="cd ../../../../../"
+alias .6="cd ../../../../../../"
 
 if test `uname -s` = "Darwin" 2>/dev/null; then
   alias mcopy="pbcopy"
@@ -38,11 +44,4 @@ if test `uname -s` = "Darwin" 2>/dev/null; then
 else
   alias mpaste="xclip -o"
 fi
-
-alias ..="cd ../"
-alias .2="cd ../../"
-alias .3="cd ../../../"
-alias .4="cd ../../../../"
-alias .5="cd ../../../../../"
-alias .6="cd ../../../../../../"
 

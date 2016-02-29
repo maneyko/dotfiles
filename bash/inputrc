@@ -16,4 +16,5 @@ set mark-symlinked-directories on
 # bind -p | less  # for keys
 
 # 'M-F12' calls pwd
-"\e[24~":       "pwd\n"
+"\e[24~":          "pwd\n"
+"\e\C-l":          "cls\n"

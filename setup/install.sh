@@ -6,11 +6,12 @@ home_dir=`echo $dotfile_dir | sed 's%/[^/]*$%%'`
 dotfile_backup=$setup_dir/dotfiles_old
 dotfile_plain=`echo $dotfile_dir | sed 's@.*/@@' | tr -d '.'`
 
+conflicting=""
 for file in `ls $dotfile_dir | grep -Ev 'README|setup'`; do
   if test -f $home_dir/.$file -o -d $home_dir/.$file; then
     conflicting="yes"
   fi
-done;
+done
 
 if test "$conflicting"; then
   read -s -n 1 -p \
@@ -48,7 +49,7 @@ case $response in
 esac; echo
 
 printf "Updating ~/.vim/ftplugin/man.vim ..."
-mkdir $dotfile_dir/vim/ftplugin/
+mkdir $dotfile_dir/vim/ftplugin/ 2>/dev/null
 cd $dotfile_dir/vim/ftplugin/
 rm man.vim 2>/dev/null
 wget -q https://raw.githubusercontent.com/vim/vim/master/runtime/ftplugin/man.vim
@@ -80,7 +81,6 @@ if test "`tmux -V | grep " 1."`"; then
   case $response in
     [yY]|"")
       echo Installing tmux to $HOME/local/bin/tmux
-      rm $HOME/local/bin/tmux 2>/dev/null
       $setup_dir/tmux_local_install.sh
       ;;
     *)

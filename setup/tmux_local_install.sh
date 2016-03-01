@@ -16,6 +16,8 @@ ncurses_v=6.0
 mkdir -p $HOME/local $HOME/tmux_tmp
 cd $HOME/tmux_tmp
 
+rm $HOME/local/bin/tmux 2>/dev/null
+
 # download source files for tmux, libevent, and ncurses
 wget -O tmux-${tmux_v}.tar.gz https://github.com/tmux/tmux/releases/download/${tmux_v}/tmux-${tmux_v}.tar.gz
 wget https://github.com/libevent/libevent/releases/download/release-${libevent_v}-stable/libevent-${libevent_v}-stable.tar.gz

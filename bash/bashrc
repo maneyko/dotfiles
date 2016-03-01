@@ -6,6 +6,7 @@
 
 export PATH="\
 $HOME/local/bin:\
+$HOME/.bin:\
 /usr/local/bin:\
 /usr/local/sbin:\
 /usr/bin:\
@@ -55,6 +56,11 @@ export PS1='\
 if test -f $HOME/.bashrc.local; then
   source $HOME/.bashrc.local
 fi
+
+if test `uname -s` == "Darwin"; then
+  source $HOME/.mac/functions.sh
+fi
+
 source $HOME/.bash/functions.sh
 source $HOME/.bash/aliases.bash
 source $HOME/.bash/inits.sh

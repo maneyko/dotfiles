@@ -95,6 +95,8 @@ nnoremap \n               :<C-U>call TabFun(v:count1*2,0)<CR>
 nnoremap \w               :%s/\s\+$//<CR>:nohl<CR><C-l>
 nnoremap U                <C-r>
 nnoremap Y                y$
+nnoremap daf              ggdG:echo "File deleted"<CR>
+nnoremap gcaf             gggcG``
 nnoremap yaf              ggyG``:echo "File yanked"<CR>
 
 inoremap <C-a>            <C-o>^

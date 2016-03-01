@@ -1,0 +1,9 @@
+#!/bin/sh
+
+brew update
+brew update
+brew upgrade
+pip-upgrade
+vim +PluginUpdate +qall
+brew cask update
+brew cask update

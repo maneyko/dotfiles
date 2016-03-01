@@ -2,18 +2,14 @@
 " =====================================
 
 if has('autocmd')
-  au BufRead *tmux.conf,*.tmux set ft=sh
-  au BufRead plugins.txt set ft=sh
   au BufNewFile *.sh execute "normal i#!/bin/sh\<CR>\<Esc>"
   au BufNewFile *.bash execute "normal i#!/bin/bash\<CR>\<Esc>"
+  au BufRead *tmux.conf,*.tmux set ft=sh
   au FileType help setlocal keywordprg=:help |
   \                     silent! call ReadMode(1)
   au FileType man set so=0
-  au FileType vim setlocal ts=2 sw=2 sts=2 expandtab keywordprg=:help
-  au BufNewFile,BufRead *_T_tmp* set ft=python
-  au BufNewFile main.c{,pp} execute
-        \"normal oint\<Space>main()\<CR>{\<CR>\<CR>}\<Up>\<Tab>
-        \return\<Space>0;\<Esc>0"
+  au FileType sh,vim setlocal ts=2 sw=2 sts=2 expandtab
+  au FileType vim setlocal keywordprg=:help
 endif
 
 fun! FlyMode(flymode_togg)
@@ -93,24 +89,3 @@ fun! TabFun(tb, expd)
   %retab!
 endfun
 
-" fun! PluginInstall()
-"   !mkdir $HOME/.vim/bundle 2>/dev/null; echo;
-"   \ for plugin in $(cat $HOME/.vim/src/plugins.txt |
-"   \                 grep -Eo '^[^ \#]*'); do
-"   \   if test -d $HOME/.vim/bundle/${plugin\#*/}; then
-"   \     cd $HOME/.vim/bundle/${plugin\#*/} && git pull --all -v;
-"   \   else
-"   \     cd $HOME/.vim/bundle && git clone https://github.com/$plugin;
-"   \   fi; echo;
-"   \ done;
-"   \
-"   \ for dir in $(ls $HOME/.vim/bundle); do
-"   \   if test \! "$(cat $HOME/.vim/src/plugins.txt |\
-"                 \grep -Eo '^[^ \#]*' | grep $dir)" ]; then
-"   \     echo removing directory, $dir/;
-"   \     rm -fr $HOME/.vim/bundle/$dir;
-"   \   fi;
-"   \ done
-" endfun
-" command! PluginInstall silent call PluginInstall() |
-"                      \ silent execute '!sleep 3' | redraw!

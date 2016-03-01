@@ -47,14 +47,6 @@ else
   export is_maneyko=''
 fi
 
-os () {
-  if test `uname -s` = "Darwin"; then
-    echo "mac"
-  else
-    echo "linux"
-  fi
-}
-
 man () {
   if test "`which $@ 2>/dev/null`"; then
     before_last=`echo $@ | sed 's, *[^ ]\+/*$,,'`
@@ -95,5 +87,4 @@ extract () {
   fi
 }
 
-export -f csview goto num setcv2 setcv3 sizes sysbuild tarc tarx
-export -f os man extract
+export -f csview goto num setcv2 setcv3 sizes sysbuild tarc tarx man extract

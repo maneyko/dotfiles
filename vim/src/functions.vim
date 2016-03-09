@@ -2,11 +2,10 @@
 " =====================================
 
 if has('autocmd')
-  au BufNewFile *.sh execute "normal i#!/bin/sh\<CR>\<Esc>"
-  au BufNewFile *.bash execute "normal i#!/bin/bash\<CR>\<Esc>"
+  au BufNewFile *.sh,*.bash execute "normal! i#!/bin/bash\<CR>\<Esc>"
   au BufRead *tmux.conf,*.tmux set ft=sh
-  au FileType help setlocal keywordprg=:help |
-  \                     silent! call ReadMode(1)
+  au BufLeave help silent! call ReadMode(0)
+  au FileType help setlocal keywordprg=:help | silent! call ReadMode(1)
   au FileType man set so=0
   au FileType sh,vim setlocal ts=2 sw=2 sts=2 expandtab
   au FileType vim setlocal keywordprg=:help
@@ -16,12 +15,10 @@ fun! FlyMode(flymode_togg)
   if a:flymode_togg==1
     silent! call ReadMode(0)
     silent! setlocal so=999
-    silent! nnoremap <buffer> q :q<CR>
     let g:flymode_togg=0
     echo "Fly Mode on"
   else
     silent! setlocal so=5
-    silent! nunmap <buffer> q
     let g:flymode_togg=1
     echo "Fly Mode off"
   endif
@@ -63,7 +60,7 @@ fun! ReadMode(readmode_togg)
     silent! nunmap <buffer> i
     silent! nunmap <buffer> o
     silent! nunmap <buffer> p
-    silent! execute "normal M"
+    silent! execute "normal! M"
     let g:readmode_togg=1
     echo "Read Mode off"
   endif

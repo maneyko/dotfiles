@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if test ! "$c006"; then
   for i in {1..6}; do export c00$i="`tput setaf $i`"; done
@@ -11,7 +11,7 @@ sw=`sw_vers | sed 's/.*[\t]//' | tr '\n' ' '`
 k_arch=`uname -m`
 k_os=`echo \`sysctl -n kern.ostype\` \`sysctl -n kern.osrelease\``
 hw=`uname -i`
-sh=`echo $SHELL | sed 's/.*[/]//'`
+sh=`basename $SHELL`
 sh_v=`echo $BASH_VERSION | sed 's/[(].*//'`
 font="Inconsolata 14pt"
 

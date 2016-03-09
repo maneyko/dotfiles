@@ -1,14 +1,14 @@
-#!/bin/sh
+#!/bin/bash
 
 setup_dir=`cd "\` dirname "${BASH_SOURCE[0]}" \`" && pwd`
-dotfile_dir=`echo $setup_dir | sed 's%/[^/]*$%%'`
-home_dir=`echo $dotfile_dir | sed 's%/[^/]*$%%'`
+dotfile_dir=`cd ../ && pwd`
+home_dir=`cd ../ && pwd`
 dotfile_backup=$setup_dir/dotfiles_old
-dotfile_plain=`echo $dotfile_dir | sed 's@.*/@@' | tr -d '.'`
+dotfile_plain=`basename $dotfile_dir | tr -d '.'`
 
 conflicting=""
-for file in `ls $dotfile_dir | grep -Ev 'README|setup'`; do
-  if test -f $home_dir/.$file -o -d $home_dir/.$file; then
+for f in `ls $dotfile_dir | grep -Ev 'README|setup'`; do
+  if test -f $home_dir/.$f -o -d $home_dir/.$f; then
     conflicting="yes"
   fi
 done
@@ -21,9 +21,9 @@ if test "$conflicting"; then
     [yY]|"")
       printf "Creating backup directory and moving files..."
       mkdir $dotfile_backup 2>/dev/null
-      for file in `ls $dotfile_dir | grep -Ev 'README|setup'`; do
-        if test -f $home_dir/.$file; then
-          mv $home_dir/.$file $dotfile_backup/$file
+      for f in `ls $dotfile_dir | grep -Ev 'README|setup'`; do
+        if test -f $home_dir/.$f; then
+          mv $home_dir/.$f $dotfile_backup/$f
         fi
       done; echo done
       ;;
@@ -89,8 +89,9 @@ if test "`tmux -V | grep " 1."`"; then
       ;;
   esac
 fi
-echo Finished install
 
 cd $home_dir
 mv $dotfile_plain .$dotfile_plain 2>/dev/null
+
+echo Finished install
 

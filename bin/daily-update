@@ -1,9 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 
+sysbuild
 brew update
 brew update
 brew upgrade
-pip-upgrade
+$HOME/.bin/pip-upgrade
 vim +PluginUpdate +qall
 brew cask update
 brew cask update
+brew doctor
+. ~/.bashrc > /dev/null

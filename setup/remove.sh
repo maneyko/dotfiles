@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 setup_dir="` cd "\` dirname "${BASH_SOURCE[0]}" \`" && pwd `"
 dotfile_dir=$setup_dir/..
@@ -39,3 +39,4 @@ if test -d $dotfile_backup; then
   echo Successfully finished removal
 fi
 unset setup_dir dotfile_dir dotfile_backup
+

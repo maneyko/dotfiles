@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 # functions
 # ======================================================================
 
-csview () { sed 's/,,/, ,/g;s/,,/, ,/g' $@ | column -s, -t;}
+csview () { perl -pe 's/,,/, ,/g;s/,,/, ,/g' $@ | column -s, -t;}
 goto () { mkdir -p $@ && cd $@; }
 num () { ls $@ | wc -l; }
 
@@ -25,14 +25,6 @@ sysbuild () {
   unalias -a
 }
 
-tarc () {
-  if test -d $1 || test -f $1; then
-    tar -zcvf $1.tgz $1
-  else
-    echo "'$1' is not a valid file"
-  fi
-}
-
 tarx () {
   if test -f $1; then
     tar xf $1
@@ -49,15 +41,7 @@ fi
 
 man () {
   if test "`which $@ 2>/dev/null`"; then
-    before_last=`echo $@ | sed 's, *[^ ]\+/*$,,'`
-    last=`echo $@ | sed 's@.* @@' | sed 's@.*/@@'`
-    if test "`type $last 2>/dev/null | head -1 | grep alias`"; then
-      last=`echo \`type $last\` | sed 's@.*\`@@' | tr -d "'" | \
-        sed 's@.*/@@' | sed 's/[ .].*$//'`
-    fi
-    argss=`echo $before_last $last`
-    args=$@
-    vim -c "execute 'Man ' . '$argss'" -c "execute \"normal \<C-w>o\"" \
+    vim -c "execute 'Man ' . '$@'" -c "execute \"normal \<C-w>o\"" \
         -c "silent! call ReadMode(1)" -c "set so=0 ft=man"
   else
     /usr/bin/env man $@

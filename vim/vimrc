@@ -76,10 +76,8 @@ highlight Normal ctermfg=NONE
 
 let g:mapleader = ","
 
-nnoremap <C-H>            <C-w>h
-nnoremap <C-J>            <C-w>j
-nnoremap <C-K>            <C-w>k
-nnoremap <C-L>            <C-w>l
+nnoremap <C-j>            <C-w>j
+nnoremap <C-k>            <C-w>k
 nnoremap <C-l>            :nohl<CR><C-l>
 nnoremap <C-n>            :set relativenumber!<CR>
 nnoremap <leader><leader> :w<CR>
@@ -95,9 +93,8 @@ nnoremap \n               :<C-U>call TabFun(v:count1*2,0)<CR>
 nnoremap \w               :%s/\s\+$//<CR>:nohl<CR><C-l>
 nnoremap U                <C-r>
 nnoremap Y                y$
-nnoremap daf              ggdG:echo "File deleted"<CR>
-nnoremap gcaf             gggcG``
-nnoremap yaf              ggyG``:echo "File yanked"<CR>
+nnoremap daf              :1,$d<CR>
+nnoremap yaf              :1,$y<CR>
 
 inoremap <C-a>            <C-o>^
 inoremap <C-d>            <C-o>x
@@ -107,7 +104,7 @@ inoremap <M-b>            <C-o>b
 inoremap <M-f>            <C-o>w
 inoremap jk               <Esc>
 
-vnoremap .                :normal .<CR>
+vnoremap .                :normal! .<CR>
 
 map <ScrollWheelUp>       <C-y>
 map <ScrollWheelDown>     <C-e>
@@ -131,7 +128,6 @@ let g:ycm_min_num_of_chars_for_completion = 1
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
-" let g:y
 
 let g:ycm_semantic_triggers =  {
   \   'python' : ['re![a-zA-Z]+'],

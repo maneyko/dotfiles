@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if test -f $HOME/.bashrc; then
   source $HOME/.bashrc

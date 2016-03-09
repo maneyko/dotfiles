@@ -13,6 +13,7 @@ alias grep="grep -i --color=auto"
 alias less="~/.vim/macros/less.sh"
 alias ls="ls --color=auto --group-directories-first"
 alias mv="mv -i"
+alias top="top -u"
 alias vi="vim"
 
 alias cls="clear && printf '\e[3J'"
@@ -23,6 +24,8 @@ alias lsld="ls -Ahl -I'*'"
 alias lsd="ls -A -I'*'"
 
 alias hideDesktop='chflags hidden ~/Desktop/*'
+alias readline-keys="less -c 'set ft=sh' ~/.bin/readline-keys.out"
+alias shortps1='export PS1=$SPS1'
 alias showDesktop='chflags nohidden ~/Desktop/*'
 alias rm_DS='find . -name .DS_Store -exec rm -v {} \;'
 

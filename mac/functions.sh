@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 google() {
   if test "$1" == "-i"; then

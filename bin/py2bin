@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if ! test -x "`which pyinstaller`"; then
+  exit 1
+fi
+
 for p in $@; do
   if ! test -f $p; then continue; fi
   mkdir ${p}__temp_dir && cd ${p}__temp_dir
@@ -9,3 +13,4 @@ for p in $@; do
   cd ../
   rm -fr ${p}__temp_dir
 done
+

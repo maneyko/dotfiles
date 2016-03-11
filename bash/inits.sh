@@ -7,7 +7,7 @@ stty -ixon
 # disable C-d to quit session
 set -o ignoreeof
 # posix mode
-set -o posix
+# set -o posix
 
 export COLORS=$HOME/.config/colors/custom/base16-custom.$BACKGROUND.sh
 

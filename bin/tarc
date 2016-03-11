@@ -10,10 +10,15 @@ if test -d $file || test -f $file; then
 
   if test `tail -c 2 <<< $file` == '/'; then
     arg=`sed 's/.$//' <<< $file`
-
   else
     arg=$file
   fi
+
+  if ! test "$2"; then
+    tar -a -cvf $arg.tar.xz $arg
+    exit 0
+  fi
+
   if test "$1" == "--bz2" -o "$1" == "-b"; then
     tar -a -cvf $arg.tar.bz2 $arg
 
@@ -56,11 +61,11 @@ if test -d $file || test -f $file; then
   elif test "$1" == "--Z" -o "$1" == "-Z"; then
     tar -a -cvf $arg.tar.Z $arg
 
-  elif ! test "$2"; then
-    tar -a -cvf $arg.tar.xz $arg
-
   else
-    echo "'$file' is not a valid file"
+    echo "Invalid argument"
   fi
+
+else
+    echo "'$file' is not a valid file"
 fi
 

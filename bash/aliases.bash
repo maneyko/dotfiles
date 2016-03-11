@@ -23,6 +23,7 @@ alias lla="ls -Ahl"
 alias lsld="ls -Ahl -I'*'"
 alias lsd="ls -A -I'*'"
 
+alias bashrc='source ~/.bashrc'
 alias hideDesktop='chflags hidden ~/Desktop/*'
 alias readline-keys="less -c 'set ft=sh' ~/.bin/readline-keys.out"
 alias shortps1='export PS1=$SPS1'

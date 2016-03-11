@@ -71,4 +71,4 @@ extract () {
   fi
 }
 
-export -f csview goto num setcv2 setcv3 sizes sysbuild tarc tarx man extract
+export -f csview goto num setcv2 setcv3 sizes sysbuild tarx man extract

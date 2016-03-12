@@ -37,8 +37,8 @@ fun! ReadMode(readmode_togg)
     silent! nnoremap <buffer> x :q!<CR>
     silent! nnoremap <buffer> j <C-e>L0:file<CR>
     silent! nnoremap <buffer> k <C-y>L0:file<CR>
-    silent! nnoremap <buffer> u <C-d>L0:file<CR>
-    silent! nnoremap <buffer> i <C-u>L0:file<CR>
+    silent! nnoremap <buffer> d <C-d>L0:file<CR>
+    silent! nnoremap <buffer> u <C-u>L0:file<CR>
     silent! nnoremap <buffer> o 5<C-e>L0:file<CR>
     silent! nnoremap <buffer> p 5<C-y>L0:file<CR>
     if @% == ''
@@ -57,7 +57,7 @@ fun! ReadMode(readmode_togg)
     silent! nunmap <buffer> j
     silent! nunmap <buffer> k
     silent! nunmap <buffer> u
-    silent! nunmap <buffer> i
+    silent! nunmap <buffer> d
     silent! nunmap <buffer> o
     silent! nunmap <buffer> p
     silent! execute "normal! M"

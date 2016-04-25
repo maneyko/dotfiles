@@ -23,7 +23,7 @@ if test `tput cols` -ge 70 -a `tput lines` -ge 20 -a \
   if test $TMUX; then
     if test `tput cols` -eq 181 -a `tput lines` -eq 48; then
       tmux split-window -h
-    fi
+    fi # full screen
   fi
-fi
+fi # first login on mac
 

@@ -9,9 +9,9 @@ user=$USER
 sw=`sw_vers | sed 's/.*[\t]//' | tr '\n' ' '`
 
 k_arch=`uname -m`
-k_os=`echo \`sysctl -n kern.ostype\` \`sysctl -n kern.osrelease\``
+k_os="`sysctl -n kern.ostype` `sysctl -n kern.osrelease`"
 hw=`uname -i`
-sh=`basename $SHELL`
+shell=`basename $SHELL`
 sh_v=`echo $BASH_VERSION | sed 's/[(].*//'`
 font="Inconsolata 14pt"
 
@@ -41,7 +41,7 @@ $c002                /+++/.           $c006 Username: ${csgr}$user\n\
 $c002        .:-::- .+/:-''.::-       $c006 OS: ${csgr}$sw\n\
 $c002     .:/++++++/::::/++++++/:'    $c006 Kernel: ${csgr}$k_arch $k_os\n\
 $c003   .:///////////////////////:'   $c006 Hardware: ${csgr}$hw\n\
-$c003   ////////////////////////'     $c006 Shell: ${csgr}$sh $sh_v\n\
+$c003   ////////////////////////'     $c006 Shell: ${csgr}$shell $sh_v\n\
 $c001  -+++++++++++++++++++++++'      $c006 Packages: ${csgr}$pack\n\
 $c001  /++++++++++++++++++++++/       $c006 Binaries: ${csgr}$bins\n\
 $c001  /sssssssssssssssssssssss.      $c006 \$EDITOR: ${csgr}$EDITOR $vim_v\n\

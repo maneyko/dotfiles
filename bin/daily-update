@@ -10,3 +10,4 @@ brew cask update
 brew cask update
 brew doctor
 . ~/.bashrc > /dev/null
+

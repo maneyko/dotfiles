@@ -9,7 +9,7 @@ dotfile_plain=`basename $dotfile_dir | tr -d '.'`
 conflicting=""
 for f in `ls $dotfile_dir | grep -Ev 'README|setup'`; do
   if test -f $home_dir/.$f -o -d $home_dir/.$f; then
-    conflicting="yes"
+    conflicting="conflicting"
   fi
 done
 

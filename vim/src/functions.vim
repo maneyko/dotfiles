@@ -3,6 +3,7 @@
 
 if has('autocmd')
   au BufNewFile *.sh,*.bash execute "normal! i#!/bin/bash\<CR>\<Esc>"
+  au BufNewFile *.py execute "normal! i#!/usr/bin/env python\<CR>\<Esc>"
   au BufRead *tmux.conf,*.tmux set ft=sh
   au BufLeave help silent! call ReadMode(0)
   au FileType help setlocal keywordprg=:help | silent! call ReadMode(1)
@@ -15,10 +16,11 @@ fun! FlyMode(flymode_togg)
   if a:flymode_togg==1
     silent! call ReadMode(0)
     silent! setlocal so=999
+    " normal zz
     let g:flymode_togg=0
     echo "Fly Mode on"
   else
-    silent! setlocal so=5
+    silent! setlocal so=3
     let g:flymode_togg=1
     echo "Fly Mode off"
   endif

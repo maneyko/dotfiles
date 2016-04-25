@@ -26,7 +26,7 @@ alias lsd="ls -A -I'*'"
 alias bashrc='source ~/.bashrc'
 alias hideDesktop='chflags hidden ~/Desktop/*'
 alias readline-keys="less -c 'set ft=sh' ~/.bin/readline-keys.out"
-alias shortps1='export PS1=$SPS1'
+alias shortps1='export PS1=$SHORT_PS1'
 alias showDesktop='chflags nohidden ~/Desktop/*'
 alias rm_DS='find . -name .DS_Store -exec rm -v {} \;'
 

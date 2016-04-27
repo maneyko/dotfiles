@@ -27,7 +27,7 @@ sysbuild () {
 
 tarx () {
   if test -f $1; then
-    tar xf $1
+    tar xvzf $1
   else
     echo "'$1' is not a valid file"
   fi

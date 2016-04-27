@@ -1,5 +1,5 @@
 #!/bin/bash
 
 if test -f $HOME/.bashrc; then
-  source $HOME/.bashrc
+  . $HOME/.bashrc
 fi

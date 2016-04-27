@@ -20,7 +20,7 @@ fun! FlyMode(flymode_togg)
     let g:flymode_togg=0
     echo "Fly Mode on"
   else
-    silent! setlocal so=3
+    silent! setlocal so=1
     let g:flymode_togg=1
     echo "Fly Mode off"
   endif

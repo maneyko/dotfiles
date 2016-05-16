@@ -25,7 +25,7 @@ vim_v=`$EDITOR --version | head -1 | tr -d [:alpha:] | tr -d ' ' | \
     sed 's/[(].*//g' | tr -d '-'`
 
 res=`system_profiler SPDisplaysDataType | \
-     grep Resolution | sed 's/.*://' | tr -d ' '`
+                        grep Resolution | sed 's/.*://' | tr -d ' '`
 
 cpu=`sysctl -n machdep.cpu.brand_string | \
                     sed 's/([^()]*)//g' | sed 's/CPU //'`

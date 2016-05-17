@@ -34,11 +34,11 @@ export LESS="-rI"
 export PAGER="vimpager"
 
 export PS1='\
-`printf "\`tput setaf  88\`%s"  "┌─["`\
-`printf "\`tput setaf  23\`%s"  "maneyko"`\
-`printf "\`tput setaf 250\`%s"  "@"`\
-`printf "\`tput setaf 255\`%s"  "OSX"`\
-`printf "\`tput setaf  88\`%s"  "]─|─["`\
+`printf "\`tput setaf   88\`%s"  "┌─["`\
+`printf "\`tput setaf   23\`%s"  "maneyko"`\
+`printf "\`tput setaf  250\`%s"  "@"`\
+`printf "\`tput setaf  255\`%s"  "OSX"`\
+`printf "\`tput setaf   88\`%s"  "]─|─["`\
 \[\e[34m\]\w\[\e[0m\]\
 `printf "\`tput setaf   88\`%s"  "]"`\
 \n\
@@ -47,36 +47,9 @@ export PS1='\
 `printf "\`tput setaf   88\`%s"  "]›"`\
 `printf "\`tput sgr0      \`%s"  " "`\
 '
+# `printf "\`tput setaf  226\`%s"  "CAT"`\
+# `printf "\`tput setaf  208\`%s" "EWS"`\
 
-# export PS1='\
-# `printf "\`tput setaf  88\`%s"  "┌─["`\
-# `printf "\`tput setaf  23\`%s"  "maneyko"`\
-# `printf "\`tput setaf 250\`%s"  "@"`\
-# `printf "\`tput setaf 226\`%s"  "CAT"`\
-# `printf "\`tput setaf  88\`%s"  "]─|─["`\
-# \[\e[34m\]\w\[\e[0m\]\
-# `printf "\`tput setaf   88\`%s"  "]"`\
-# \n\
-# `printf "\`tput setaf   88\`%s"  "└["`\
-# `printf "\`tput setaf    7\`%s"  "$"`\
-# `printf "\`tput setaf   88\`%s"  "]›"`\
-# `printf "\`tput sgr0      \`%s"  " "`\
-# '
-
-# export PS1='\
-# `printf "\`tput setaf   88\`%s" "┌─["`\
-# `printf "\`tput setaf  23\`%s" "\`whoami\`"`\
-# `printf "\`tput setaf 250\`%s" "@"`\
-# `printf "\`tput setaf 208\`%s" "EWS"`\
-# `printf "\`tput setaf   88\`%s" "]─|─["`\
-# \[\e[34m\]\w\[\e[0m\]\
-# `printf "\`tput setaf   88\`%s" "]"`\
-# \n\
-# `printf "\`tput setaf   88\`%s" "└["`\
-# `printf "\`tput setaf    7\`%s" "$"`\
-# `printf "\`tput setaf   88\`%s" "]›"`\
-# `printf "\`tput sgr0      \`%s" " "`\
-# '
 
 export SHORT_PS1='\
 \[\e[31m\][\[\e[0m\]\

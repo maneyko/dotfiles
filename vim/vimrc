@@ -52,7 +52,7 @@ set ruler                       " line & columns numbers on bottom
 set smartcase                   " searches for capitals when I type them
 set scrolloff=1                 " keep cursor 1 lines frop top/bottom
 set shiftwidth=4                " number of spaces for indent and unindent
-set showbreak=...               " show ellipsis when going over
+" set showbreak=...               " show ellipsis when going over
 set showcmd                     " show command on bottom
 set smartindent                 " knows when to indent
 set smarttab                    " tab respects tab settings completely

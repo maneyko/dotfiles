@@ -33,30 +33,33 @@ export LESS="-rI"
 
 export PAGER="vimpager"
 
-export PS1='\
-`printf "\`tput setaf   88\`%s"  "┌─["`\
-`printf "\`tput setaf   23\`%s"  "maneyko"`\
-`printf "\`tput setaf  250\`%s"  "@"`\
-`printf "\`tput setaf  255\`%s"  "OSX"`\
-`printf "\`tput setaf   88\`%s"  "]─|─["`\
+# https://www.logilab.org/blogentry/20255
+function EXT_COLOR () { echo -ne "\[\033[38;5;$1m\]"; }
+NO_COLOR="\[\033[0m\]"
+
+export PS1="\
+`EXT_COLOR 88  `┌─[${NO_COLOR}\
+`EXT_COLOR 23  `maneyko${NO_COLOR}\
+`EXT_COLOR 250 `@${NO_COLOR}\
+`EXT_COLOR 255 `OSX${NO_COLOR}\
+`EXT_COLOR 88  `]─|─[${NO_COLOR}\
 \[\e[34m\]\w\[\e[0m\]\
-`printf "\`tput setaf   88\`%s"  "]"`\
+`EXT_COLOR 88  `]${NO_COLOR}\
 \n\
-`printf "\`tput setaf   88\`%s"  "└["`\
-`printf "\`tput setaf    7\`%s"  "$"`\
-`printf "\`tput setaf   88\`%s"  "]›"`\
-`printf "\`tput sgr0      \`%s"  " "`\
-'
-# `printf "\`tput setaf  226\`%s"  "CAT"`\
-# `printf "\`tput setaf  208\`%s" "EWS"`\
+`EXT_COLOR 88  `└[${NO_COLOR}\
+\[\e[37m\]\$\[\e[0m\]\
+`EXT_COLOR 88  `]› ${NO_COLOR}\
+"
+# `EXT_COLOR 226 `CAT${NO_COLOR}\
+# `EXT_COLOR 208 `EWS${NO_COLOR}\
 
-
-export SHORT_PS1='\
-\[\e[31m\][\[\e[0m\]\
-`printf "\`tput setaf 2\`%s\`tput sgr0\`" \`basename "$PWD"\``\
-\[\e[31m\]]\[\e[0m\]\
+export SHORT_PS1="\
+`EXT_COLOR 88  `[${NO_COLOR}\
+\[\e[34m\]\w\[\e[0m\]\
+`EXT_COLOR 88  `]${NO_COLOR}\
 \n\
-+ '
+`EXT_COLOR 255 `+ ${NO_COLOR}\
+"
 
 # sourcing
 # ========================================

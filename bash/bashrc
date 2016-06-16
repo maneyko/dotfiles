@@ -23,6 +23,8 @@ export PYTHON3PATH="\
 /usr/local/lib/python3.5/site-packages:\
 "
 
+export PYTHONSTARTUP="$HOME/.pythonrc.py"
+
 # UI
 # ========================================
 
@@ -34,12 +36,12 @@ export LESS="-rI"
 export PAGER="vimpager"
 
 # https://www.logilab.org/blogentry/20255
-function EXT_COLOR () { echo -ne "\[\033[38;5;$1m\]"; }
+function EXT_COLOR () { printf "\[\033[38;5;$1m\]"; }
 NO_COLOR="\[\033[0m\]"
 
 export PS1="\
 `EXT_COLOR 88  `┌─[${NO_COLOR}\
-`EXT_COLOR 23  `maneyko${NO_COLOR}\
+`EXT_COLOR 23  ``whoami`${NO_COLOR}\
 `EXT_COLOR 250 `@${NO_COLOR}\
 `EXT_COLOR 255 `OSX${NO_COLOR}\
 `EXT_COLOR 88  `]─|─[${NO_COLOR}\

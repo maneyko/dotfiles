@@ -7,19 +7,24 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
+" Plugin 'Valloric/YouCompleteMe'
+Plugin 'davidhalter/jedi-vim'
+Plugin 'othree/es.next.syntax.vim'
+Plugin 'othree/yajs.vim'
 Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'elzr/vim-json'
+Plugin 'moll/vim-node'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'scrooloose/nerdtree'
-" Plugin 'scrooloose/syntastic'
 Plugin 'keith/swift.vim'
+Plugin 'mattn/emmet-vim'
+" Plugin 'scrooloose/syntastic'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-endwise'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
-Plugin 'davidhalter/jedi-vim'
-" Plugin 'Valloric/YouCompleteMe'
 
 call vundle#end()
 filetype plugin indent on
@@ -46,6 +51,7 @@ if version >= 702
   au InsertLeave * set list
   au InsertEnter * set nolist  " dont list trailing chars in insert
 endif
+set nowrap                      " dont wrap text
 set number                      " line numbers
 set numberwidth=3               " width of line number column
 set ruler                       " line & columns numbers on bottom
@@ -129,19 +135,19 @@ if exists('g:vimpager.enabled')
   " set nolist
 endif
 
-let g:ycm_confirm_extra_conf = 0
-let g:ycm_confirm_extra_conf = '~/.ycm_extra_conf.py'
-let g:ycm_min_num_of_chars_for_completion = 1
-let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_add_preview_to_completeopt = 1
-let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_server_use_vim_stdout = 0
-let g:ycm_server_keep_logfiles = 1
-let g:ycm_path_to_python_interpreter = '/usr/local/bin/python'
-let g:ycm_warning_symbol = '!!'
+let g:ycm_autoclose_preview_window_after_completion = 0
+let g:ycm_autoclose_preview_window_after_insertion = 1
+let g:ycm_confirm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_error_symbol   = '??'
+let g:ycm_min_num_of_chars_for_completion = 1
+let g:ycm_path_to_python_interpreter = '/usr/local/bin/python'
+let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_semantic_triggers =  {
   \   'python' : ['re![a-zA-Z]+'],
   \ }
+let g:ycm_server_use_vim_stdout = 0
+let g:ycm_server_keep_logfiles = 1
+let g:ycm_warning_symbol = '!!'
 " ~/.vim/bundle/YouCompleteMe/python/ycm/client/completion_request.py 32j
 

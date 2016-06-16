@@ -6,66 +6,66 @@ else
   file=$2
 fi
 
-if test -d $file || test -f $file; then
+if test -d "$file" || test -f "$file"; then
 
-  if test `tail -c 2 <<< $file` == '/'; then
-    arg=`sed 's/.$//' <<< $file`
+  if test `tail -c 2 <<< "$file"` == '/'; then
+    arg=`sed 's/.$//' <<< "$file"`
   else
-    arg=$file
+    arg="$file"
   fi
 
   if ! test "$2"; then
-    tar -a -cvf $arg.tar.xz $arg
+    tar -a -cvf "$arg".tar.xz "$arg"
     exit 0
   fi
 
   if test "$1" == "--bz2" -o "$1" == "-b"; then
-    tar -a -cvf $arg.tar.bz2 $arg
+    tar -a -cvf "$arg".tar.bz2 "$arg"
 
   elif test "$1" == "--gz" -o "$1" == "-g"; then
-    tar -a -cvf $arg.tar.gz $arg
+    tar -a -cvf "$arg".tar.gz "$arg"
 
   elif test "$1" == "--lz"; then
-    tar -a -cvf $arg.tar.lz $arg
+    tar -a -cvf "$arg".tar.lz "$arg"
 
   elif test "$1" == "--lzo"; then
-    tar -a -cvf $arg.tar.lzo $arg
+    tar -a -cvf "$arg".tar.lzo "$arg"
 
   elif test "$1" == "--lzma"; then
-    tar -a -cvf $arg.tar.lzma $arg
+    tar -a -cvf "$arg".tar.lzma "$arg"
 
   elif test "$1" == "--taz"; then
-    tar -a -cvf $arg.tar.taz $arg
+    tar -a -cvf "$arg".tar.taz "$arg"
 
   elif test "$1" == "--taZ"; then
-    tar -a -cvf $arg.tar.taZ $arg
+    tar -a -cvf "$arg".tar.taZ "$arg"
 
   elif test "$1" == "--tbz"; then
-    tar -a -cvf $arg.tar.tbz $arg
+    tar -a -cvf "$arg".tar.tbz "$arg"
 
   elif test "$1" == "--tbz2"; then
-    tar -a -cvf $arg.tar.tbz2 $arg
+    tar -a -cvf "$arg".tar.tbz2 "$arg"
 
   elif test "$1" == "--tgz"; then
-    tar -a -cvf $arg.tar.tgz $arg
+    tar -a -cvf "$arg".tar.tgz "$arg"
 
   elif test "$1" == "--tlz"; then
-    tar -a -cvf $arg.tar.tlz $arg
+    tar -a -cvf "$arg".tar.tlz "$arg"
 
   elif test "$1" == "--tz2"; then
-    tar -a -cvf $arg.tar.tz2 $arg
+    tar -a -cvf "$arg".tar.tz2 "$arg"
 
   elif test "$1" == "--xz" -o "$1" == "-x"; then
-    tar -a -cvf $arg.tar.xz $arg
+    tar -a -cvf "$arg".tar.xz "$arg"
 
   elif test "$1" == "--Z" -o "$1" == "-Z"; then
-    tar -a -cvf $arg.tar.Z $arg
+    tar -a -cvf "$arg".tar.Z "$arg"
 
   else
     echo "Invalid argument"
   fi
 
 else
-    echo "'$file' is not a valid file"
+    echo "'"$file"' is not a valid file"
 fi
 

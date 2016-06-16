@@ -4,11 +4,13 @@
 if has('autocmd')
   au BufNewFile *.sh,*.bash execute "normal! i#!/bin/bash\<CR>\<Esc>"
   au BufNewFile *.py execute "normal! i#!/usr/bin/env python\<CR>\<Esc>"
+  au BufNewFile *.js execute "normal! i#!/usr/bin/env node\<CR>\<Esc>"
   au BufRead *tmux.conf,*.tmux set ft=sh
   au BufLeave help silent! call ReadMode(0)
   au FileType help setlocal keywordprg=:help | silent! call ReadMode(1)
   au FileType man set so=0
-  au FileType sh,vim setlocal ts=2 sw=2 sts=2 expandtab
+  au FileType html,javascript set nowrap
+  au FileType html,sh,vim setlocal ts=2 sw=2 sts=2 expandtab
   au FileType vim setlocal keywordprg=:help
 endif
 

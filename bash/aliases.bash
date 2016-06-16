@@ -18,10 +18,10 @@ alias vi="vim"
 
 alias cls="clear && printf '\e[3J'"
 alias la="ls -A"
-alias ll="ls -hl"
-alias lla="ls -Ahl"
-alias lsld="ls -Ahl -I'*'"
-alias lsd="ls -A -I'*'"
+alias ll="ls -hlG"
+alias lla="ls -AhlG"
+alias lsld="ls -AhlGI'*'"
+alias lsd="ls -AI'*'"
 
 alias bashrc='source ~/.bashrc'
 alias hideDesktop='chflags hidden ~/Desktop/*'

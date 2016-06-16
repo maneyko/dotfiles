@@ -1,7 +1,5 @@
 # paths
 # ========================================
-# hello world
-# hello world
 
 export PATH="\
 $HOME/local/bin:\

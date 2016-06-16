@@ -76,5 +76,6 @@ fi
 
 source $HOME/.bash/functions.sh
 source $HOME/.bash/aliases.bash
+source $HOME/.bash/git-completion.bash
 source $HOME/.bash/inits.sh
 

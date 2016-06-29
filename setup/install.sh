@@ -17,12 +17,14 @@ files="\
 .vim/vimrc
 "
 
-mkdir .dotfiles/backup/
+mkdir ~/.dotfiles/backup/
 for f in $files; do
   link=".`basename $f`" # Note the dot in front of `basename`
   ln -s $f $link || \
-    (mv $link ~/.dotfiles/backup/ && ln -s $f $link)
+    (mv $link ~/.dotfiles/backup/`basename $f` && ln -s $f $link)
 done
+
+. ~/.bashrc
 
 if [[ "$1" == +(-p|--plugins) ]]; then
   git clone https://github.com/VundleVim/Vundle.vim ~/.vim/bundle/Vundle.vim

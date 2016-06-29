@@ -24,6 +24,7 @@ for f in $files; do
 done
 
 if [[ "$1" != +(-p|--plugins) ]]; then
+  git clone https://github.com/VundleVim/Vundle.vim ~/.vim/bundle/Vundle.vim
   vim +PluginInstall
 fi
 

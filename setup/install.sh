@@ -19,8 +19,9 @@ files="\
 
 mkdir .dotfiles/backup/
 for f in $files; do
-  ln -s $f . || \
-    (mv .`basename $f` ~/dotfiles/backup/`basename $f` && ln -s $f .)
+  link=".`basename $f`" # Note the dot in front of `basename`
+  ln -s $f $link || \
+    (mv $link ~/dotfiles/backup/ && ln -s $f $link)
 done
 
 if [[ "$1" != +(-p|--plugins) ]]; then

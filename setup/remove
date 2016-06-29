@@ -1,0 +1,21 @@
+#!/bin/bash
+
+cd ~/
+
+files="\
+.bash
+.bin
+.config
+.tmux
+.vim
+.bashrc
+.bash_profile
+.inputrc
+.tmux.conf
+.vimrc
+"
+
+for f in $files; do
+  rm $f
+done
+

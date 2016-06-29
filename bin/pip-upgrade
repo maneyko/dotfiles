@@ -1,4 +1,8 @@
 #!/bin/bash
 
-pip list --outdated | sed 's/(.*//g' | xargs pip install -U
+pip list \
+  --outdated | \
+  grep -v 'numpy' | \
+  sed 's/(.*//g' | \
+  xargs pip install -U
 

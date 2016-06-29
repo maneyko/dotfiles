@@ -3,34 +3,49 @@
 
 set nocompatible
 filetype off
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+if !empty(glob("~/.vim/bundle/Vundle.vim"))
+  set rtp+=~/.vim/bundle/Vundle.vim
+  call vundle#begin()
 
-Plugin 'VundleVim/Vundle.vim'
-" Plugin 'Valloric/YouCompleteMe'
-Plugin 'davidhalter/jedi-vim'
-Plugin 'othree/es.next.syntax.vim'
-Plugin 'othree/yajs.vim'
-Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'elzr/vim-json'
-Plugin 'moll/vim-node'
-Plugin 'jiangmiao/auto-pairs'
-Plugin 'scrooloose/nerdtree'
-Plugin 'keith/swift.vim'
-Plugin 'mattn/emmet-vim'
-" Plugin 'scrooloose/syntastic'
-Plugin 'tpope/vim-commentary'
-Plugin 'tpope/vim-endwise'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-repeat'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-unimpaired'
+  Plugin 'VundleVim/Vundle.vim'        " plugin manager
+  " Plugin 'Valloric/YouCompleteMe'      " completion engine
+  Plugin 'davidhalter/jedi-vim'        " python completion
 
-call vundle#end()
+  " syntax
+  Plugin 'lepture/vim-jinja'           " python jinja syntax
+  " Plugin 'Glench/Vim-Jinja2-Syntax'    " python jinja syntax
+  " Plugin 'othree/es.next.syntax.vim'   " new javascript syntax
+  " Plugin 'othree/yajs.vim'             " Yet Another JavaScript Syntax
+  " Plugin 'elzr/vim-json'               " json syntax
+  " Plugin 'keith/swift.vim'             " swift syntax
+
+  " misc
+  Plugin 'alvan/vim-closetag'          " closes html tags
+  Plugin 'jiangmiao/auto-pairs'        " completes pairs
+  " Plugin 'scrooloose/nerdtree'         " filetree in vim
+  " Plugin 'scrooloose/syntastic'        " syntax linter
+  " Plugin 'ctrlpvim/ctrlp.vim'          " fuzzy finder
+
+  " filetype specific
+  " Plugin 'moll/vim-node'               " node commands
+  Plugin 'mattn/emmet-vim'             " html completion
+
+  " tpope
+  Plugin 'tpope/vim-commentary'        " commenting motions
+  Plugin 'tpope/vim-endwise'           " closes functions (if and fi)
+  " Plugin 'tpope/vim-fugitive'          " git integration
+  Plugin 'tpope/vim-repeat'            " '.' for plugins
+  Plugin 'tpope/vim-surround'          " surrounding motions
+  Plugin 'tpope/vim-unimpaired'        " bracket functions and more
+
+  call vundle#end()
+endif
 filetype plugin indent on
 
-source $HOME/.vim/ftplugin/man.vim
-source $HOME/.vim/src/functions.vim
+if !empty(glob("~/.vim/ftplugin/man.vim"))
+    source $HOME/.vim/ftplugin/man.vim
+endif
+source $HOME/.vim/src/fun.vim
 
 " set
 " =====================================
@@ -84,8 +99,12 @@ highlight Normal ctermfg=NONE
 
 let g:mapleader = ","
 
+" nnoremap r                :call ReadMode(readmode_togg)<CR>
+nnoremap<leader>r         :call ReadMode(readmode_togg)<CR>
 nnoremap <C-j>            <C-w>j
 nnoremap <C-k>            <C-w>k
+" nnoremap <C-j>            <C-o><C-w>j
+" nnoremap <C-k>            <C-o><C-w>k
 nnoremap <C-l>            :nohl<CR><C-l>
 nnoremap <C-n>            :set relativenumber!<CR>
 nnoremap <leader><leader> :w<CR>
@@ -95,9 +114,9 @@ nnoremap <leader>n        :NERDTreeToggle<CR>
 nnoremap <leader>q        :q<CR>
 nnoremap <leader>r        :call ReadMode(readmode_togg)<CR>
 nnoremap <leader>s        :setlocal spell! spelllang=en_us<CR>
-nnoremap <C-i> wi
 nnoremap \e               :<C-U>call TabFun(v:count1*2,1)<CR>
 nnoremap \n               :<C-U>call TabFun(v:count1*2,0)<CR>
+nnoremap \r               :call ReadMode(readmode_togg)<CR>
 nnoremap \w               :%s/\s\+$//<CR>:nohl<CR><C-l>
 nnoremap Q                <Esc>
 nnoremap U                <C-r>
@@ -108,8 +127,6 @@ nnoremap yaf              :1,$y<CR>
 inoremap <C-a>            <C-o>^
 inoremap <C-d>            <C-o>x
 inoremap <C-e>            <C-o>$
-nnoremap <C-j>            <C-o><C-w>j
-nnoremap <C-k>            <C-o><C-w>k
 inoremap <C-p>            <C-r>*
 inoremap <C-w>            <C-o><C-w>
 inoremap <M-b>            <C-o>b
@@ -125,11 +142,11 @@ map <ScrollWheelDown>     <C-e>
 " =====================================
 
 let g:SuperTabDefaultCompletionType="context" " contextual completion
-let g:SuperTabCrMapping=1
+let g:SuperTabCrMapping = 1
 let g:SuperTabLongestHighlight = 1
 let g:vimpager = {}
 let g:less = {}
-let g:less.enabled=0
+let g:less.enabled = 0
 let g:less.scrolloff = 5
 if exists('g:vimpager.enabled')
   " set nolist
@@ -141,7 +158,7 @@ let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_confirm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_error_symbol   = '??'
 let g:ycm_min_num_of_chars_for_completion = 1
-let g:ycm_path_to_python_interpreter = '/usr/local/bin/python'
+let g:ycm_path_to_python_interpreter = '/usr/bin/env python'
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_semantic_triggers =  {
   \   'python' : ['re![a-zA-Z]+'],

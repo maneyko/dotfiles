@@ -5,9 +5,9 @@
 [32m        .:-::- .+/:-''.::-       [36m OS: [mMac OS X 10.10.5 14F1605 
 [32m     .:/++++++/::::/++++++/:'    [36m Kernel: [mx86_64 Darwin 14.5.0
 [33m   .:///////////////////////:'   [36m Hardware: [mMacBookPro9,2
-[33m   ////////////////////////'     [36m Shell: [mbash 4.3.42
-[31m  -+++++++++++++++++++++++'      [36m Packages: [m301
-[31m  /++++++++++++++++++++++/       [36m Binaries: [m3811
+[33m   ////////////////////////'     [36m Shell: [mbash 4.3.46
+[31m  -+++++++++++++++++++++++'      [36m Packages: [m306
+[31m  /++++++++++++++++++++++/       [36m Binaries: [m3829
 [31m  /sssssssssssssssssssssss.      [36m $EDITOR: [mvim 7.4
 [31m  :ssssssssssssssssssssssss-     [36m Resolution: [m1280x800
 [35m   osssssssssssssssssssssssso/'  [36m Font: [mInconsolata 14pt

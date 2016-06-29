@@ -2,7 +2,7 @@
 # functions
 # ======================================================================
 
-csview () { perl -pe 's/,,/, ,/g;s/,,/, ,/g' $@ | column -s, -t;}
+csview () { sed 's/,,/, ,/g;s/,,/, ,/g' $@ | column -s, -t;}
 goto () { mkdir -p $@ && cd $@; }
 num () { ls $@ | wc -l; }
 

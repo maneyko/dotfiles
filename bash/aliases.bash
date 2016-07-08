@@ -45,7 +45,7 @@ else
   alias mpaste="xclip -o"
 fi
 
-if test -f /usr/local/etc/bash_completion.d/; then
+if test -d /usr/local/etc/bash_completion.d/; then
   for file in /usr/local/etc/bash_completion.d/*; do
     f=`basename "$file"`
     noext=`echo $f | sed 's/[.].*//'`
@@ -54,7 +54,6 @@ if test -f /usr/local/etc/bash_completion.d/; then
     else
       alias "${noext}-completion"="source $file"
     fi
-    echo $noext
   done
 fi
 unset file f noext

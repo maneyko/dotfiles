@@ -7,15 +7,10 @@ else
 fi
 
 if test -d "$file" || test -f "$file"; then
-
-  if test `tail -c 2 <<< "$file"` == '/'; then
-    arg=`sed 's/.$//' <<< "$file"`
-  else
-    arg="$file"
-  fi
+  arg=${file%/}
 
   if ! test "$2"; then
-    tar -a -cvf "$arg".tar.xz "$arg"
+    tar -a -cvf "$arg".tar.gz "$arg"
     exit 0
   fi
 

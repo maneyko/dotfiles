@@ -2,34 +2,47 @@
 # functions
 # ======================================================================
 
-csview () { sed 's/,,/, ,/g;s/,,/, ,/g' $@ | column -s, -t;}
-goto () { mkdir -p $@ && cd $@; }
-num () { ls $@ | wc -l; }
+csview() { sed 's/,,/, ,/g;s/,,/, ,/g' $@ | column -s, -t;}
+goto() { mkdir -p $@ && cd $@; }
+num() { ls $@ | wc -l; }
 
-setcv2 () {
-  export PYTHONPATH="/usr/local/lib/python2.7/site-packages:$PYTHONPATH"
+href() {
+  if test -f "$1"; then
+    cmd="cat"
+  else
+    cmd="wget -qO -"
+  fi
+  $cmd "$1" | \
+    grep -i -o '<a href=['"'"'"][^"'"'"']*['"'"'"]' | \
+    sed -e 's/^<a href=["'"'"']//I' -e 's/["'"'"']$//I'
 }
 
-setcv3 () {
-  export PYTHONPATH="/usr/local/opt/opencv3/lib/python2.7/site-packages:$PYTHONPATH"
-}
 
-sizes () {
-  for file in `ls -a $@`; do
-    du -sh $@$file
+sizes() {
+  for f in ${1%/}/*; do
+    du -sh $f
   done | sort -h
 }
 
-sysbuild () {
+sysbuild() {
   export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
   unalias -a
 }
 
-tarx () {
-  if test -f $1; then
-    tar xvzf $1
+tarx() {
+  if test -f "$1"; then
+    tar xvzf "$1"
   else
     echo "'$1' is not a valid file"
+  fi
+}
+
+zipc() {
+  if test -d "$1"; then
+    comp="`echo "$1" | sed 's/[.].*//'`"
+    zip -r "${comp%/}.zip" "$1"
+  else
+    echo "$1" is not a valid file
   fi
 }
 
@@ -39,16 +52,26 @@ else
   export is_maneyko=''
 fi
 
-man () {
+man() {
   if test "`which $@ 2>/dev/null`"; then
-    vim -c "execute 'Man ' . '$@'" -c "execute \"normal \<C-w>o\"" \
-        -c "silent! call ReadMode(1)" -c "set so=0 ft=man"
+    vim -c "execute 'Man ' . '$@'" \
+        -c "execute \"normal \<C-w>o\"" \
+        -c "silent! call ReadMode(1)" \
+        -c "set so=0 ft=man"
   else
     /usr/bin/env man $@
   fi
 }
 
-extract () {
+setcv2() {
+  export PYTHONPATH="/usr/local/lib/python2.7/site-packages:$PYTHONPATH"
+}
+
+setcv3() {
+  export PYTHONPATH="/usr/local/opt/opencv3/lib/python2.7/site-packages:$PYTHONPATH"
+}
+
+extract() {
   if test -f $1; then
     case $1 in
       *.tar.*) echo "using tar"        ; tar xf $1        ;;

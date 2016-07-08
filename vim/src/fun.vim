@@ -16,6 +16,7 @@ if has('autocmd')
 
   au FileType   help        setlocal keywordprg=:help |
                             silent! call ReadMode(1)
+  au FileType   html,css,jinja,blade setlocal keywordprg=:help |
   au FileType   jinja       inoremap {% {%<Space>%}<Left><Left><Left><Space>
   au FileType   html,jinja.html,sh,sql,vim setlocal ts=2 sw=2 sts=2 expandtab
   au FileType   man         set so=0

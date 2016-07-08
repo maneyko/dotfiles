@@ -2,9 +2,9 @@
 
 cd ~/
 
-mv ~/dotfiles/ ~/.dotfiles/ || exit 1
+mv ~/dotfiles/ ~/.dotfiles/ || (echo Move ~/dotfiles/ && exit 1)
 
-files="\
+bases="\
 .dotfiles/bash/
 .dotfiles/bin/
 .dotfiles/config/
@@ -18,16 +18,18 @@ files="\
 "
 
 mkdir ~/.dotfiles/backup/
-for f in $files; do
-  link=".`basename $f`" # Note the dot in front of `basename`
-  ln -s $f $link || \
-    (mv $link ~/.dotfiles/backup/`basename $f` && ln -s $f $link)
+for base in $bases; do
+  name="`basename "$base"`"
+  if test -f .$name; then
+    mv .$name ~/.dotfiles/backup/$name
+  fi
+  ln -s $base .$name
 done
 
 . ~/.bashrc
 
-if [[ "$1" == +(-p|--plugins) ]]; then
+if test "$1" == "--plugins" -o "$1" == "-p" ; then
   git clone https://github.com/VundleVim/Vundle.vim ~/.vim/bundle/Vundle.vim
-  vim +PluginInstall
+  vim +PluginInstall +qall
 fi
 

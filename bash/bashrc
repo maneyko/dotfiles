@@ -71,11 +71,10 @@ if test -f $HOME/.bashrc.local; then
 fi
 
 if test `uname -s` == "Darwin"; then
-  source $HOME/.mac/functions.sh
+  source $HOME/.mac/functions.bash
 fi
 
-source $HOME/.bash/functions.sh
+source $HOME/.bash/functions.bash
 source $HOME/.bash/aliases.bash
-source $HOME/.bash/git-completion.bash
-source $HOME/.bash/inits.sh
+source $HOME/.bash/inits.bash
 

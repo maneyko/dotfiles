@@ -13,6 +13,7 @@ if !empty(glob("~/.vim/bundle/Vundle.vim"))
 
   " syntax
   Plugin 'lepture/vim-jinja'           " python jinja syntax
+  Plugin 'jwalton512/vim-blade'
   " Plugin 'Glench/Vim-Jinja2-Syntax'    " python jinja syntax
   " Plugin 'othree/es.next.syntax.vim'   " new javascript syntax
   " Plugin 'othree/yajs.vim'             " Yet Another JavaScript Syntax
@@ -28,7 +29,7 @@ if !empty(glob("~/.vim/bundle/Vundle.vim"))
 
   " filetype specific
   " Plugin 'moll/vim-node'               " node commands
-  Plugin 'mattn/emmet-vim'             " html completion
+  " Plugin 'mattn/emmet-vim'             " html completion
 
   " tpope
   Plugin 'tpope/vim-commentary'        " commenting motions
@@ -123,6 +124,8 @@ nnoremap U                <C-r>
 nnoremap Y                y$
 nnoremap daf              :1,$d<CR>
 nnoremap yaf              :1,$y<CR>
+nnoremap zfs              :mkview<CR>
+nnoremap zfl              :loadview<CR>
 
 inoremap <C-a>            <C-o>^
 inoremap <C-d>            <C-o>x
@@ -141,6 +144,7 @@ map <ScrollWheelDown>     <C-e>
 " plugins
 " =====================================
 
+let g:user_emmet_leader_key='<Tab>'
 let g:SuperTabDefaultCompletionType="context" " contextual completion
 let g:SuperTabCrMapping = 1
 let g:SuperTabLongestHighlight = 1

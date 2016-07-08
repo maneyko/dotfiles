@@ -39,13 +39,23 @@ alias .6="cd ../../../../../../"
 
 if test `uname -s` = "Darwin" 2>/dev/null; then
   alias mcopy="pbcopy"
-else
-  alias mcopy="xclip -selection c"
-fi
-
-if test `uname -s` = "Darwin" 2>/dev/null; then
   alias mpaste="pbpaste"
 else
+  alias mcopy="xclip -selection c"
   alias mpaste="xclip -o"
 fi
+
+if test -f /usr/local/etc/bash_completion.d/; then
+  for file in /usr/local/etc/bash_completion.d/*; do
+    f=`basename "$file"`
+    noext=`echo $f | sed 's/[.].*//'`
+    if [[ "$noext" ==  *completion* ]]; then
+      alias "$noext"="source $file"
+    else
+      alias "${noext}-completion"="source $file"
+    fi
+    echo $noext
+  done
+fi
+unset file f noext
 

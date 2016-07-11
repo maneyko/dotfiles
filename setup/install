@@ -9,6 +9,7 @@ bases="\
 .dotfiles/bin/
 .dotfiles/config/
 .dotfiles/tmux/
+.dotfiles/utils/
 .dotfiles/vim/
 .bash/bashrc
 .bash/bash_profile
@@ -21,6 +22,7 @@ mkdir ~/.dotfiles/backup/
 for base in $bases; do
   name="`basename "$base"`"
   if test -f .$name; then
+    cat .$name >> ~/.$name.local
     mv .$name ~/.dotfiles/backup/$name
   fi
   ln -s $base .$name

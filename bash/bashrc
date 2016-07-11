@@ -66,10 +66,6 @@ export SHORT_PS1="\
 # sourcing
 # ========================================
 
-if test -f $HOME/.bashrc.local; then
-  source $HOME/.bashrc.local
-fi
-
 if test `uname -s` == "Darwin"; then
   source $HOME/.mac/functions.bash
 fi
@@ -77,4 +73,10 @@ fi
 source $HOME/.bash/functions.bash
 source $HOME/.bash/aliases.bash
 source $HOME/.bash/inits.bash
+
+if test -f $HOME/.bashrc.local; then
+  source $HOME/.bashrc.local
+fi
+
+eval `dircolors -b ~/.bash/dircolors 2>/dev/null`
 

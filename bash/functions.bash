@@ -6,18 +6,6 @@ csview() { sed 's/,,/, ,/g;s/,,/, ,/g' $@ | column -s, -t;}
 goto() { mkdir -p $@ && cd $@; }
 num() { ls $@ | wc -l; }
 
-href() {
-  if test -f "$1"; then
-    cmd="cat"
-  else
-    cmd="wget -qO -"
-  fi
-  $cmd "$1" | \
-    grep -i -o '<a href=['"'"'"][^"'"'"']*['"'"'"]' | \
-    sed -e 's/^<a href=["'"'"']//I' -e 's/["'"'"']$//I'
-}
-
-
 sizes() {
   for f in ${1%/}/*; do
     du -sh $f

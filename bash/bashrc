@@ -35,32 +35,32 @@ export LESS="-rI"
 
 export PAGER="vimpager"
 
-# https://www.logilab.org/blogentry/20255
-function EXT_COLOR () { printf "\[\033[38;5;$1m\]"; }
-NO_COLOR="\[\033[0m\]"
+function pcolor () {
+  printf "\[\033[38;5;$2m\]$1\[\033[0m\]"
+}
 
 export PS1="\
-`EXT_COLOR 88  `┌─[${NO_COLOR}\
-`EXT_COLOR 23  ``whoami`${NO_COLOR}\
-`EXT_COLOR 250 `@${NO_COLOR}\
-`EXT_COLOR 255 `OSX${NO_COLOR}\
-`EXT_COLOR 88  `]─|─[${NO_COLOR}\
+`pcolor "┌─["           88  `\
+`pcolor "\`whoami\`"    23  `\
+`pcolor "@"             250 `\
+`pcolor "OSX"           255 `\
+`pcolor "]─|─["         88  `\
 \[\e[34m\]\w\[\e[0m\]\
-`EXT_COLOR 88  `]${NO_COLOR}\
+`pcolor "]"             88  `\
 \n\
-`EXT_COLOR 88  `└[${NO_COLOR}\
+`pcolor "└["            88  `\
 \[\e[37m\]\$\[\e[0m\]\
-`EXT_COLOR 88  `]› ${NO_COLOR}\
+`pcolor "]› "           88  `\
 "
-# `EXT_COLOR 226 `CAT${NO_COLOR}\
-# `EXT_COLOR 208 `EWS${NO_COLOR}\
+# `pcolor "CAT"           226 `\
+# `pcolor "EWS"           208 `\
 
 export SHORT_PS1="\
-`EXT_COLOR 88  `[${NO_COLOR}\
+`pcolor 88  "["         `\
 \[\e[34m\]\w\[\e[0m\]\
-`EXT_COLOR 88  `]${NO_COLOR}\
+`pcolor 88  "]"         `\
 \n\
-`EXT_COLOR 255 `+ ${NO_COLOR}\
+`pcolor 255 "+ "        `\
 "
 
 # sourcing
@@ -72,6 +72,7 @@ fi
 
 source $HOME/.bash/functions.bash
 source $HOME/.bash/aliases.bash
+source $HOME/.bash/completions.bash
 source $HOME/.bash/inits.bash
 
 if test -f $HOME/.bashrc.local; then

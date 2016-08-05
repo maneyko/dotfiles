@@ -2,7 +2,7 @@
 
 cd ~/
 
-mv ~/dotfiles/ ~/.dotfiles/ || (echo Move ~/dotfiles/ && exit 1)
+mv ~/dotfiles/ ~/.dotfiles/ || (echo Move ~/.dotfiles/ && exit 1)
 
 bases="\
 .dotfiles/bash/
@@ -13,6 +13,7 @@ bases="\
 .dotfiles/vim/
 .bash/bashrc
 .bash/bash_profile
+.bash/completions.bash
 .bash/inputrc
 .tmux/tmux.conf
 .vim/vimrc

@@ -4,10 +4,12 @@ sysbuild
 brew update
 brew update
 brew upgrade
+brew cask update
+brew cask update
 $HOME/.bin/pip-upgrade
+npm update -g
+npm upgrade -g
 vim +PluginUpdate +qall
-brew cask update
-brew cask update
 brew doctor
 . ~/.bashrc > /dev/null
 

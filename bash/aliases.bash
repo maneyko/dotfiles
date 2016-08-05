@@ -1,8 +1,6 @@
 # aliases
 # ===============================================
 
-# ps ax | grep itunes | sed 's/[ ].*$//'
-
 shopt -s expand_aliases
 
 alias gless="/usr/bin/env less"
@@ -44,17 +42,18 @@ else
   alias mcopy="xclip -selection c"
   alias mpaste="xclip -o"
 fi
+alias git-completion="source /usr/local/etc/bash_completion.d/git-completion.bash"
 
-if test -d /usr/local/etc/bash_completion.d/; then
-  for file in /usr/local/etc/bash_completion.d/*; do
-    f=`basename "$file"`
-    noext=`echo $f | sed 's/[.].*//'`
-    if [[ "$noext" ==  *completion* ]]; then
-      alias "$noext"="source $file"
-    else
-      alias "${noext}-completion"="source $file"
-    fi
-  done
-fi
+# if test -d /usr/local/etc/bash_completion.d/; then
+#   for file in /usr/local/etc/bash_completion.d/*; do
+#     f=`basename "$file"`
+#     noext=`echo $f | sed 's/[.].*//'`
+#     if [[ "$noext" ==  *completion* ]]; then
+#       alias "$noext"="source $file"
+#     else
+#       alias "${noext}-completion"="source $file"
+#     fi
+#   done
+# fi
 unset file f noext
 

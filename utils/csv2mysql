@@ -1,0 +1,85 @@
+#!/bin/bash
+
+for arg in "$@"; do
+  if test ${arg::1} == "-"; then
+    opt=${arg//-}
+    if test ${arg:1:1} == "-"; then
+      opts+=($opt)
+    else
+      for c in "`echo $opt | grep -o .`"; do
+        opts+=($c)
+      done
+    fi
+  else
+    args+=($arg)
+  fi
+done
+
+csv="${args[0]}"
+db="${args[1]}"
+table="${args[2]}"
+out="out.sql"
+
+# Prints usage help and exits
+if test "`echo " ${opts[*]} " | grep -E ' h | help '`" -o \
+  ! -f "$csv"; then
+  echo "Usage:"
+  echo -e "\t`basename "$0"` [options] {file.csv} {database} [, {tablename}]\n"
+  echo "Options:"
+  echo -e "\t-c  --create       Creates database if doesn't exist"
+  echo -e "\t-f  --force        Overwrites table if exists"
+  echo -e "\t-h  --help         Prints this help page"
+  echo
+  return 2>/dev/null || exit 1
+fi
+
+# Looks for alternative sql outfile names if default is taken
+if test -f $out; then
+  for i in {1..100}; do
+    if ! test -f $out.$i; then
+      out=$out.$i
+      break
+    fi
+  done
+fi
+
+# Table name will be name of csv file unless specified
+if ! test "$table"; then
+  base="`basename "$csv"`"
+  table="${base%.*}"
+fi
+
+if test "`echo " ${opts[*]} " | grep -E ' c | create '`"; then
+  echo "CREATE DATABASE IF NOT EXISTS $db;" >> $out
+fi
+
+echo "USE $db;" >> $out
+
+if test "`echo " ${opts[*]} " | grep -E ' f | force '`"; then
+  echo "DROP TABLE IF EXISTS $table;" >> $out
+fi
+
+# Creates SQL script
+echo "CREATE TABLE $table (" >> $out
+for col in `head -n1 "$csv" | sed "s/[\'\"]//g" | tr ',' '\n'`; do
+  echo \`$col\` 'TEXT,' >> $out
+done
+sed -i 's/\r//g' $out       # Removes DOS newline
+sed -i '$ s/.$//' $out      # Removes last comma
+echo ");" >> $out
+
+cp "$csv" /tmp/
+
+cat << EOF >> $out
+LOAD DATA INFILE '/tmp/`basename "$csv"`'
+INTO TABLE $table
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+EOF
+
+mysql -u root < $out
+
+rm /tmp/`basename "$csv"`
+

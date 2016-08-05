@@ -12,13 +12,12 @@ if has('autocmd')
   au BufNewFile *.py        exe "normal! i#!/usr/bin/env python\<CR>\<Esc>"
 
   au BufRead            *.tmux* set ft=sh
-  au BufNewFile,BufRead *.html  set ft=jinja.html
+  au BufRead            *.ipynb set ft=json
 
   au FileType   help        setlocal keywordprg=:help |
                             silent! call ReadMode(1)
-  au FileType   html,css,jinja,blade setlocal keywordprg=:help |
-  au FileType   jinja       inoremap {% {%<Space>%}<Left><Left><Left><Space>
-  au FileType   html,jinja.html,sh,sql,vim setlocal ts=2 sw=2 sts=2 expandtab
+  au FileType   html,css setlocal keywordprg=:help |
+  au FileType   html,sh,sql,typescript,vim setlocal ts=2 sw=2 sts=2 expandtab
   au FileType   man         set so=0
   " au FileType   python      nnoremap ]r silent! call ReadMode()
   au FileType   vim         setlocal keywordprg=:help

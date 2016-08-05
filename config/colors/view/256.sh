@@ -14,12 +14,13 @@ fi
 
 if test ! "$c020"; then
   for i in {000..255}; do
-    export c$i="`tput setaf $(expr $i + 0)`"
+    export c$i="`tput setaf $(($i))`"
   done
   export csgr="`tput sgr0`"
 fi
 
 for i in `seq $start $stop`; do
+  printf "`tput setaf $i` color00$i ■■■■■■■■■■■■■■\n"
   if test $i -lt 10; then
     printf "`tput setaf $i` color00$i ■■■■■■■■■■■■■■\n"
   elif test $i -lt 100; then
@@ -28,3 +29,4 @@ for i in `seq $start $stop`; do
     printf "`tput setaf $i` color$i ■■■■■■■■■■■■■■\n"
   fi
 done
+

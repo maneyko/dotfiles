@@ -2,7 +2,6 @@
 
 pip list \
   --outdated | \
-  grep -v 'numpy' | \
-  sed 's/(.*//g' | \
-  xargs pip install -U
+  awk '{print $1}'| \
+  xargs pip install --upgrade
 

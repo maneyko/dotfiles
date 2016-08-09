@@ -1,85 +1,117 @@
-#!/bin/bash
+#!/usr/bin/env python
 
-for arg in "$@"; do
-  if test ${arg::1} == "-"; then
-    opt=${arg//-}
-    if test ${arg:1:1} == "-"; then
-      opts+=($opt)
-    else
-      for c in "`echo $opt | grep -o .`"; do
-        opts+=($c)
-      done
-    fi
-  else
-    args+=($arg)
-  fi
-done
+"""
+    Usage:
+        csv2mysql {file.csv} {db} [options] [, {table_name}]
 
-csv="${args[0]}"
-db="${args[1]}"
-table="${args[2]}"
-out="out.sql"
+    Loads a .csv file into a MySQL database.
 
-# Prints usage help and exits
-if test "`echo " ${opts[*]} " | grep -E ' h | help '`" -o \
-  ! -f "$csv"; then
-  echo "Usage:"
-  echo -e "\t`basename "$0"` [options] {file.csv} {database} [, {tablename}]\n"
-  echo "Options:"
-  echo -e "\t-c  --create       Creates database if doesn't exist"
-  echo -e "\t-f  --force        Overwrites table if exists"
-  echo -e "\t-h  --help         Prints this help page"
-  echo
-  return 2>/dev/null || exit 1
-fi
+    Options:
+        * Extends all mysql options
+        -d, --database     Creates database if doesn't exist
+        -t, --table        Overwrites table if exists
+        -h, --help         Prints this help page
+"""
 
-# Looks for alternative sql outfile names if default is taken
-if test -f $out; then
-  for i in {1..100}; do
-    if ! test -f $out.$i; then
-      out=$out.$i
-      break
-    fi
-  done
-fi
+from __future__ import print_function
+from os.path import abspath, basename, isfile
+from sys import argv
+import csv
 
-# Table name will be name of csv file unless specified
-if ! test "$table"; then
-  base="`basename "$csv"`"
-  table="${base%.*}"
-fi
+color = lambda text, number: '\033[38;5;%dm%s\033[0m'%(number, text)
 
-if test "`echo " ${opts[*]} " | grep -E ' c | create '`"; then
-  echo "CREATE DATABASE IF NOT EXISTS $db;" >> $out
-fi
+def get_args():
+    global myopts, sqlopts, sheet, db, table
+    args = [ arg for arg in argv if arg[0] != '-' ]
+    opts = set(argv).difference(args)
 
-echo "USE $db;" >> $out
+    myopts = opts.intersection([
+        '-d', '--database',
+        '-t', '--table',
+        '-h', '--help',
+        ])
+    sqlopts = opts.difference(myopts)
 
-if test "`echo " ${opts[*]} " | grep -E ' f | force '`"; then
-  echo "DROP TABLE IF EXISTS $table;" >> $out
-fi
+    if len(args) < 3 or myopts.intersection(['-h', '--help']):
+        print(__doc__)
+        exit(0)
 
-# Creates SQL script
-echo "CREATE TABLE $table (" >> $out
-for col in `head -n1 "$csv" | sed "s/[\'\"]//g" | tr ',' '\n'`; do
-  echo \`$col\` 'TEXT,' >> $out
-done
-sed -i 's/\r//g' $out       # Removes DOS newline
-sed -i '$ s/.$//' $out      # Removes last comma
-echo ");" >> $out
+    script, sheet, db = args[:3]
+    if not isfile(sheet):
+        print('\n', color("Bad csv file. '%s' is not valid"%sheet, 1))
+        print(__doc__)
+        exit(1)
 
-cp "$csv" /tmp/
+    if len(args) < 4:
+        table = basename(sheet).split('.')[0]
+    else:
+        table = args[3]
 
-cat << EOF >> $out
-LOAD DATA INFILE '/tmp/`basename "$csv"`'
-INTO TABLE $table
-FIELDS TERMINATED BY ','
-ENCLOSED BY '"'
-LINES TERMINATED BY '\n'
-IGNORE 1 ROWS;
-EOF
+def genfile():
+    from tempfile import NamedTemporaryFile
+    out = NamedTemporaryFile()
 
-mysql -u root < $out
+    cols = csv.DictReader(open(sheet)).fieldnames
+    out.write("""
+    {create_db}
+    USE {db};
+    {drop_table}
+    CREATE TABLE {table} (
+      {columns}
+    );
+    LOAD DATA INFILE '{sheet}'
+    INTO TABLE {table}
+    FIELDS TERMINATED BY ','
+    ENCLOSED BY '"'
+    LINES TERMINATED BY '\\n'
+    IGNORE 1 ROWS;
+    """.format(
+        create_db='CREATE DATABASE IF NOT EXISTS %s;'%db \
+                if myopts.intersection(['-d', '--database']) else '',
+        db=db,
+        drop_table='DROP TABLE IF EXISTS %s;'%table \
+                if myopts.intersection(['-t', '--table']) else '',
+        table=table,
+        columns='\n'.join([ "`%s` TEXT,"%col for col in cols ])[:-1],
+        sheet=abspath(sheet)
+        ))
+    out.seek(0)
+    return out
 
-rm /tmp/`basename "$csv"`
+def run(out):
+    from subprocess import Popen
+    code = Popen((['mysql'] + list(sqlopts)), stdin=out).wait()
+    if code == 0:
+        print("""
+        {success}
+
+        File         {sheet} loaded into
+        Database     {db}
+        Table        {table} with
+        SQL Options  {opts}
+                """.format(
+                    success=color('Success!', 2),
+                    sheet=color(sheet, 3),
+                    table=color(table, 3),
+                    db=color(db, 3),
+                    opts=', '.join([color(o, 3) for o in sqlopts]) or None
+                    ))
+    else:
+        err = 'err.sql'
+        print("""
+        {fail}
+        Check output SQL code in '{err}' to see
+        if there was an error in the generated file
+                """.format(
+                    fail=color('Failed!', 1),
+                    err=err
+                    ))
+        out.seek(0)
+        open(err, 'w').write(out.read())
+        exit(1)
+
+if __name__ == '__main__':
+    get_args()
+    out = genfile()
+    run(out)
 

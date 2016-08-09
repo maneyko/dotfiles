@@ -22,10 +22,11 @@ alias lsld="ls -AhlGI'*'"
 alias lsd="ls -AI'*'"
 
 alias bashrc='source ~/.bashrc'
+alias ipython='ipython --profile=maneyko'
 alias hideDesktop='chflags hidden ~/Desktop/*'
+alias showDesktop='chflags nohidden ~/Desktop/*'
 alias readline-keys="less -c 'set ft=sh' ~/.bin/readline-keys.out"
 alias shortps1='export PS1=$SHORT_PS1'
-alias showDesktop='chflags nohidden ~/Desktop/*'
 alias rm_DS='find . -name .DS_Store -exec rm -v {} \;'
 
 alias ..="cd ../"
@@ -46,8 +47,8 @@ alias git-completion="source /usr/local/etc/bash_completion.d/git-completion.bas
 
 # if test -d /usr/local/etc/bash_completion.d/; then
 #   for file in /usr/local/etc/bash_completion.d/*; do
-#     f=`basename "$file"`
-#     noext=`echo $f | sed 's/[.].*//'`
+#     base=`basename "$file"`
+#     noext=${base%.*}
 #     if [[ "$noext" ==  *completion* ]]; then
 #       alias "$noext"="source $file"
 #     else
@@ -55,5 +56,5 @@ alias git-completion="source /usr/local/etc/bash_completion.d/git-completion.bas
 #     fi
 #   done
 # fi
-unset file f noext
+# unset file base noext
 

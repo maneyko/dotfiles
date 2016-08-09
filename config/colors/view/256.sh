@@ -20,7 +20,6 @@ if test ! "$c020"; then
 fi
 
 for i in `seq $start $stop`; do
-  printf "`tput setaf $i` color00$i ■■■■■■■■■■■■■■\n"
   if test $i -lt 10; then
     printf "`tput setaf $i` color00$i ■■■■■■■■■■■■■■\n"
   elif test $i -lt 100; then

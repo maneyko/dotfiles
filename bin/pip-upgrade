@@ -1,7 +1,13 @@
 #!/bin/bash
 
-pip list \
+if test "$1" == '-3'; then
+  cmd="pip3"
+else
+  cmd="pip"
+fi
+
+$cmd list \
   --outdated | \
   awk '{print $1}'| \
-  xargs pip install --upgrade
+  xargs $cmd install --upgrade
 

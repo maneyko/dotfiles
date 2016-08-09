@@ -10,6 +10,7 @@ if has('autocmd')
   au BufNewFile *.html      exe "normal! i<!DOCTYPE html>\<CR>\<Esc>"
   au BufNewFile *.node      exe "normal! i#!/usr/bin/env node\<CR>\<Esc>"
   au BufNewFile *.py        exe "normal! i#!/usr/bin/env python\<CR>\<Esc>"
+  au BufNewFile *.pl        exe "normal! i#!/usr/bin/env perl\<CR>\<Esc>x"
 
   au BufRead            *.tmux* set ft=sh
   au BufRead            *.ipynb set ft=json
@@ -19,7 +20,6 @@ if has('autocmd')
   au FileType   html,css setlocal keywordprg=:help |
   au FileType   html,sh,sql,typescript,vim setlocal ts=2 sw=2 sts=2 expandtab
   au FileType   man         set so=0
-  " au FileType   python      nnoremap ]r silent! call ReadMode()
   au FileType   vim         setlocal keywordprg=:help
 endif
 
@@ -40,7 +40,6 @@ fun! ReadMode(readmode_togg)
     silent! nnoremap <buffer> o 5<C-e>L0:file<CR>
     silent! nnoremap <buffer> p 5<C-y>L0:file<CR>
     if @% == ''
-      silent! set ft=sh
       silent! nnoremap <buffer> q :q!<CR>
     endif
     let g:readmode_togg=0

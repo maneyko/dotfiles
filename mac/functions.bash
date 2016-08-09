@@ -9,15 +9,15 @@ google() {
     arg=`echo $@ | tr ' ' '+'`
   fi
   open $search$arg
-}
+}; export -f google
 
 trash() {
   mv $@ $HOME/.Trash/
-}
+}; export -f trash
 
 url() {
     open http://$1
-}
+}; export -f url
 
 volume() {
   if test $1 == "-r"; then
@@ -28,11 +28,10 @@ volume() {
   else
     /usr/bin/osascript -e "set volume output volume `echo $1 | tr -d [:alpha:]`"
   fi
-}
+}; export -f volume
 
 wiki() {
   search='https://en.wikipedia.org/wiki/Special:\Search?search='
   open $search`echo $@ | tr ' ' '+'`
-}
+}; export -f wiki
 
-export -f google trash url volume wiki

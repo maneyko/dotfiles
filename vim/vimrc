@@ -9,7 +9,7 @@ if !empty(glob("~/.vim/bundle/Vundle.vim"))
 
   Plugin 'VundleVim/Vundle.vim'        " plugin manager
   Plugin 'Valloric/YouCompleteMe'      " completion engine
-  " Plugin 'davidhalter/jedi-vim'        " python completion
+  Plugin 'davidhalter/jedi-vim'        " python completion
 
   " syntax
   Plugin 'burnettk/vim-angular'
@@ -175,3 +175,5 @@ let g:ycm_server_keep_logfiles = 1
 let g:ycm_warning_symbol = '!!'
 " ~/.vim/bundle/YouCompleteMe/python/ycm/client/completion_request.py 32j
 
+" let g:jedi#show_call_signatures="0"
+" let g:jedi#show_call_signatures_delay=1000

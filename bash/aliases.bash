@@ -43,7 +43,6 @@ else
   alias mcopy="xclip -selection c"
   alias mpaste="xclip -o"
 fi
-alias git-completion="source /usr/local/etc/bash_completion.d/git-completion.bash"
 
 # if test -d /usr/local/etc/bash_completion.d/; then
 #   for file in /usr/local/etc/bash_completion.d/*; do

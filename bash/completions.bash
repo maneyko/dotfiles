@@ -1,3 +1,9 @@
+# completions
+# ===========================================================================
+
+source /usr/local/etc/bash_completion.d/git-completion.bash
+source /usr/local/etc/bash_completion.d/ssh-completion
+
 alias brew-completion="source /usr/local/etc/bash_completion.d/brew"
 alias coreutil-completion="source /usr/local/etc/bash_completion.d/coreutils"
 alias django-completion="source /usr/local/etc/bash_completion.d/django"
@@ -11,3 +17,4 @@ alias npm-completion="source /usr/local/etc/bash_completion.d/npm"
 alias perl-completion="source /usr/local/etc/bash_completion.d/perl"
 alias ssh-completion="source /usr/local/etc/bash_completion.d/ssh"
 alias tmux-completion="source /usr/local/etc/bash_completion.d/tmux"
+

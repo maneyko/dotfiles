@@ -21,8 +21,8 @@ pack=`expr $(ls /usr/local/opt/ | wc -l) + \
 bins=`for path in $(echo $PATH | tr ':' '\n'); do
         n=$(( $n + $(ls $path | wc -l) )); done; echo $n`
 
-vim_v=`$EDITOR --version | head -1 | tr -d [:alpha:] | tr -d ' ' | \
-    sed 's/[(].*//g' | tr -d '-'`
+vim_v="`$EDITOR --version | head -1 | sed 's/[^0-9]*//' | sed 's/[ ].*//g'`.\
+`$EDITOR --version | head | grep 'Included patches' | sed 's/.*[-]//g'`"
 
 res=`system_profiler SPDisplaysDataType | \
                         grep Resolution | sed 's/.*://' | tr -d ' '`

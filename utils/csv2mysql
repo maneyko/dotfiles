@@ -80,8 +80,8 @@ def genfile():
 
 def run(out):
     from subprocess import Popen
-    code = Popen((['mysql'] + list(sqlopts)), stdin=out).wait()
-    if code == 0:
+    status = Popen((['mysql'] + list(sqlopts)), stdin=out).wait()
+    if status == 0:
         print("""
         {success}
 

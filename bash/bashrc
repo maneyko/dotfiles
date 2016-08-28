@@ -72,7 +72,6 @@ fi
 
 source $HOME/.bash/functions.bash
 source $HOME/.bash/aliases.bash
-source $HOME/.bash/completions.bash
 source $HOME/.bash/inits.bash
 
 if test -f $HOME/.bashrc.local; then

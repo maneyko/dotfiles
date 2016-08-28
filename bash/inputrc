@@ -5,6 +5,9 @@ set completion-ignore-case on
 # colored tab completion
 set colored-stats on
 
+# tilde auto completion
+set expand-tilde off
+
 # dont show hidden folders on tab completion
 set match-hidden-files off
 

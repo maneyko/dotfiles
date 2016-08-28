@@ -14,10 +14,12 @@ if has('autocmd')
 
   au BufRead            *.tmux* set ft=sh
   au BufRead            *.ipynb set ft=json
+  au BufRead,BufNewFile /usr/local/etc/nginx/*,/usr/local/nginx/conf/* set ft=nginx
 
   au FileType   help        setlocal keywordprg=:help |
                             silent! call ReadMode(1)
-  au FileType   html,css setlocal keywordprg=:help |
+  au FileType   html,css    setlocal keywordprg=:help |
+  au FileType   nginx       setlocal commentstring=#\ %s
   au FileType   html,sh,sql,typescript,vim setlocal ts=2 sw=2 sts=2 expandtab
   au FileType   man         set so=0
   au FileType   vim         setlocal keywordprg=:help

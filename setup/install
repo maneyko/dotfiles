@@ -13,7 +13,6 @@ bases="\
 .dotfiles/vim/
 .bash/bashrc
 .bash/bash_profile
-.bash/completions.bash
 .bash/inputrc
 .tmux/tmux.conf
 .vim/vimrc

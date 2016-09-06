@@ -40,11 +40,12 @@ function pcolor () { # number, text
 }
 
 border_color=88
+user_color=23
 host_color=255
 host_text="OSX"
 export PS1="\
 `pcolor $border_color   "┌─["       `\
-`pcolor 23              "$(whoami)" `\
+`pcolor $user_color     "$(whoami)" `\
 `pcolor 250             "@"         `\
 `pcolor $host_color     "$host_text"       `\
 `pcolor $border_color   "]─|─["     `\
@@ -55,15 +56,13 @@ export PS1="\
 \[\e[37m\]\\$\[\e[0m\]\
 `pcolor $border_color   "]› "       `\
 "
-# `pcolor "CAT"           226 `\
-# `pcolor "EWS"           208 `\
 
 export SHORT_PS1="\
-`pcolor 88  "["  `\
+`pcolor $border_color   "["  `\
 \[\e[34m\]\w\[\e[0m\]\
-`pcolor 88  "]"  `\
+`pcolor $border_color   "]"  `\
 \n\
-`pcolor 255 "+ " `\
+`pcolor 255             "+ " `\
 "
 
 # sourcing

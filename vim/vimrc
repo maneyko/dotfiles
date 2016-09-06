@@ -19,6 +19,7 @@ if !empty(glob("~/.vim/bundle/Vundle.vim"))
   " Plugin 'elzr/vim-json'               " json
   " Plugin 'keith/swift.vim'             " Swift
   Plugin 'leafgarland/typescript-vim'    " Typescript
+  Plugin 'vim-scripts/nginx.vim'       " Nginx
 
   " misc
   Plugin 'alvan/vim-closetag'          " closes html tags

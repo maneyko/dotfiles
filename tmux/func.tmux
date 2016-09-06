@@ -6,7 +6,7 @@ bind-key    'M-n'     new-window \; split-window -v \; split-window -h \;\
                       select-pane -D \; swap-pane -U \; resize-pane -R 25 \;\
                       select-pane -U \; select-pane -L
 
-bind-key     'n'      new-window \; split-window -h\; select-pane -L
+bind-key     'N'      new-window \; split-window -h\; select-pane -L
 
 bind-key -n 'M-Y'     copy-mode\;\
                       send-keys k0v$\;hy\;\

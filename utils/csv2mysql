@@ -18,7 +18,7 @@ from os.path import abspath, basename, isfile
 from sys import argv
 import csv
 
-color = lambda text, number: '\033[38;5;%dm%s\033[0m'%(number, text)
+color = lambda number, text: '\033[38;5;%dm%s\033[0m'%(number, text)
 
 def get_args():
     global myopts, sqlopts, sheet, db, table
@@ -29,7 +29,7 @@ def get_args():
         '-d', '--database',
         '-t', '--table',
         '-h', '--help',
-        ])
+    ])
     sqlopts = opts.difference(myopts)
 
     if len(args) < 3 or myopts.intersection(['-h', '--help']):
@@ -38,7 +38,7 @@ def get_args():
 
     script, sheet, db = args[:3]
     if not isfile(sheet):
-        print('\n', color("Bad csv file. '%s' is not valid"%sheet, 1))
+        print('\n', color(1, "Bad csv file. '%s' is not valid"%sheet))
         print(__doc__)
         exit(1)
 
@@ -53,9 +53,9 @@ def genfile():
 
     cols = csv.DictReader(open(sheet)).fieldnames
     out.write("""
-    {create_db}
+    {create_db};
     USE {db};
-    {drop_table}
+    {drop_table};
     CREATE TABLE {table} (
       {columns}
     );
@@ -66,21 +66,21 @@ def genfile():
     LINES TERMINATED BY '\\n'
     IGNORE 1 ROWS;
     """.format(
-        create_db='CREATE DATABASE IF NOT EXISTS %s;'%db \
+        create_db='CREATE DATABASE IF NOT EXISTS %s'%db \
                 if myopts.intersection(['-d', '--database']) else '',
         db=db,
-        drop_table='DROP TABLE IF EXISTS %s;'%table \
+        drop_table='DROP TABLE IF EXISTS %s'%table \
                 if myopts.intersection(['-t', '--table']) else '',
         table=table,
         columns='\n'.join([ "`%s` TEXT,"%col for col in cols ])[:-1],
         sheet=abspath(sheet)
-        ))
+    ))
     out.seek(0)
     return out
 
-def run(out):
+def run(outfile):
     from subprocess import Popen
-    status = Popen((['mysql'] + list(sqlopts)), stdin=out).wait()
+    status = Popen((['mysql'] + list(sqlopts)), stdin=outfile).wait()
     if status == 0:
         print("""
         {success}
@@ -90,12 +90,12 @@ def run(out):
         Table        {table} with
         SQL Options  {opts}
                 """.format(
-                    success=color('Success!', 2),
-                    sheet=color(sheet, 3),
-                    table=color(table, 3),
-                    db=color(db, 3),
-                    opts=', '.join([color(o, 3) for o in sqlopts]) or None
-                    ))
+            success=color(2, 'Success!'),
+            sheet=color(3, sheet),
+            table=color(3, table),
+            db=color(3, db),
+            opts=', '.join([color(3, o) for o in sqlopts]) or None
+        ))
     else:
         err = 'err.sql'
         print("""
@@ -103,15 +103,15 @@ def run(out):
         Check output SQL code in '{err}' to see
         if there was an error in the generated file
                 """.format(
-                    fail=color('Failed!', 1),
-                    err=err
-                    ))
-        out.seek(0)
-        open(err, 'w').write(out.read())
+            fail=color(1, 'Failed!'),
+            err=err
+        ))
+        outfile.seek(0)
+        open(err, 'w').write(outfile.read())
         exit(1)
 
 if __name__ == '__main__':
     get_args()
-    out = genfile()
-    run(out)
+    outfile = genfile()
+    run(outfile)
 

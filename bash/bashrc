@@ -35,38 +35,41 @@ export LESS="-rI"
 
 export PAGER="~/.vim/macros/less.sh"
 
-function pcolor () {
-  printf "\[\033[38;5;$2m\]$1\[\033[0m\]"
+function pcolor () { # number, text
+  printf "\[\033[38;5;$1m\]$2\[\033[0m\]"
 }
 
+border_color=88
+host_color=255
+host_text="OSX"
 export PS1="\
-`pcolor "┌─["           88  `\
-`pcolor "$(whoami)"     23  `\
-`pcolor "@"             250 `\
-`pcolor "OSX"           255 `\
-`pcolor "]─|─["         88  `\
+`pcolor $border_color   "┌─["       `\
+`pcolor 23              "$(whoami)" `\
+`pcolor 250             "@"         `\
+`pcolor $host_color     "$host_text"       `\
+`pcolor $border_color   "]─|─["     `\
 \[\e[34m\]\w\[\e[0m\]\
-`pcolor "]"             88  `\
+`pcolor $border_color   "]"         `\
 \n\
-`pcolor "└["            88  `\
+`pcolor $border_color   "└["        `\
 \[\e[37m\]\\$\[\e[0m\]\
-`pcolor "]› "           88  `\
+`pcolor $border_color   "]› "       `\
 "
 # `pcolor "CAT"           226 `\
 # `pcolor "EWS"           208 `\
 
 export SHORT_PS1="\
-`pcolor "["  88  `\
+`pcolor 88  "["  `\
 \[\e[34m\]\w\[\e[0m\]\
-`pcolor "]"  88  `\
+`pcolor 88  "]"  `\
 \n\
-`pcolor "+ " 255 `\
+`pcolor 255 "+ " `\
 "
 
 # sourcing
 # ========================================
 
-if test `uname -s` == "Darwin"; then
+if test `uname -s` == 'Darwin'; then
   source $HOME/.mac/functions.bash
 fi
 

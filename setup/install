@@ -18,21 +18,19 @@ bases="\
 .vim/vimrc
 "
 
-mkdir ~/.dotfiles/backup/
 for base in $bases; do
 
   link=`basename $base`
 
   if test -f ~/.$link; then
     cat ~/.$link >> ~/.$link.bak
-    mv ~/.$link ~/.dotfiles/backup/$link
   fi
 
-  ln -s $base .$link
+  ln -fs $base .$link
 
 done
 
-. ~/.bashrc
+source ~/.bashrc
 
 if test "$1" == "--plugins" -o "$1" == "-p" ; then
   git clone https://github.com/VundleVim/Vundle.vim ~/.vim/bundle/Vundle.vim

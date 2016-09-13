@@ -20,12 +20,16 @@ bases="\
 
 mkdir ~/.dotfiles/backup/
 for base in $bases; do
-  name="`basename "$base"`"
-  if test -f .$name; then
-    cat .$name >> ~/.$name.local
-    mv .$name ~/.dotfiles/backup/$name
+
+  link=`basename $base`
+
+  if test -f ~/.$link; then
+    cat ~/.$link >> ~/.$link.bak
+    mv ~/.$link ~/.dotfiles/backup/$link
   fi
-  ln -s $base .$name
+
+  ln -s $base .$link
+
 done
 
 . ~/.bashrc

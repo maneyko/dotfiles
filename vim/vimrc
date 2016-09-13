@@ -39,6 +39,7 @@ if !empty(glob("~/.vim/bundle/Vundle.vim"))
   Plugin 'tpope/vim-repeat'            " '.' for plugins
   Plugin 'tpope/vim-surround'          " surrounding motions
   Plugin 'tpope/vim-unimpaired'        " bracket functions and more
+  Plugin 'joonty/vim-do'
 
   call vundle#end()
 endif
@@ -116,6 +117,7 @@ nnoremap <leader>n        :NERDTreeToggle<CR>
 nnoremap <leader>q        :q<CR>
 nnoremap <leader>r        :call ReadMode(readmode_togg)<CR>
 nnoremap <leader>s        :setlocal spell! spelllang=en_us<CR>
+nnoremap <leader>kw       :w !sudo tee %<CR>
 nnoremap \e               :<C-U>call TabFun(v:count1*2,1)<CR>
 nnoremap \n               :<C-U>call TabFun(v:count1*2,0)<CR>
 nnoremap \r               :call ReadMode(readmode_togg)<CR>

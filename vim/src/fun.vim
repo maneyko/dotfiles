@@ -23,6 +23,7 @@ if has('autocmd')
   au FileType   html,json,sh,sql,typescript,vim setlocal ts=2 sw=2 sts=2 expandtab
   au FileType   man         set so=0
   au FileType   vim         setlocal keywordprg=:help
+  au FileType   tex         nnoremap <leader>c :DoQuietly pdflatex %<CR>
 endif
 
 fun! ReadMode(readmode_togg)

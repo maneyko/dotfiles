@@ -39,10 +39,13 @@ function pcolor () { # number, text
   printf "\[\033[38;5;$1m\]$2\[\033[0m\]"
 }
 
-border_color=88
+border_color=241
 user_color=23
 host_color=255
 host_text="OSX"
+if test `whoami` = 'root'; then
+  user_color=220
+fi
 export PS1="\
 `pcolor $border_color   "┌─["       `\
 `pcolor $user_color     "$(whoami)" `\

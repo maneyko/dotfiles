@@ -21,7 +21,8 @@ eval `dircolors -b ~/.bash/dircolors 2>/dev/null`
 if test "$TERM"; then
   if test `tput cols` -ge 70 -a `tput lines` -ge 20 -a \
           "`tty | grep 001`" -a `uname -s` = "Darwin" 2>/dev/null; then
-      cat $HOME/.bin/mac_screenfetch.out
+      echo; cowsay "Hello, `whoami`"; echo
+      # cat $HOME/.bin/mac_screenfetch.out
     if test $TMUX; then
       if test `tput cols` -eq 181 -a `tput lines` -eq 48; then
         tmux split-window -h

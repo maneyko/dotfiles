@@ -10,7 +10,7 @@ set -o ignoreeof
 # set -o posix
 shopt -s extglob
 
-export COLORS=$HOME/.config/colors/custom/base16-custom.$BACKGROUND.sh
+export COLORS=$HOME/.config/colors/base16-custom.$BACKGROUND.sh
 
 if test "$TMUX"; then
   source $COLORS

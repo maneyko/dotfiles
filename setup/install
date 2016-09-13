@@ -2,7 +2,7 @@
 
 cd ~/
 
-mv ~/dotfiles/ ~/.dotfiles/ || (echo Move ~/.dotfiles/ && exit 1)
+mv ~/dotfiles ~/.dotfiles || (echo Move ~/.dotfiles/ && exit 1)
 
 bases="\
 .dotfiles/bash/

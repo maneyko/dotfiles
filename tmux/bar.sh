@@ -3,18 +3,22 @@
 if test `uname -s` = "Darwin"; then
   while test "$TMUX"
   do
-    if test "`~/.mac/tunes.scpt`"; then
-      if test "`~/.mac/tunes.scpt | grep 'missing value'`"; then
+    tunes="`$HOME/.mac/tunes.scpt`"
+    if test $tunes; then
+      if test "`$tunes | grep 'missing value'`"; then
         tmux set -g status-right \
-          "#[fg=colour19]#(~/.mac/tunes.scpt | sed 's/ -.*//')" || break
-      elif test "`~/.mac/tunes.scpt | wc -c`" -gt 42; then
+          "#[fg=colour19]#($tunes | sed 's/ -.*//')" || break
+      elif test $tunes -gt 42; then
         tmux set -g status-right \
-          "#[fg=colour19]#(~/.mac/tunes.scpt | \
-          sed 's/([^()]*)//g' | sed 's/\[[^][]*\]//g' | \
-          sed 's/  */ /gp' | sed 's/ /  /')" || break
+          "#[fg=colour19]#($tunes \
+            | sed 's/([^()]*)//g;
+                   s/\[[^][]*\]//g;
+                   s/  */ /gp;
+                   s/ /  /'
+          )" || break
       else
         tmux set -g status-right \
-          "#[fg=colour19]#(~/.mac/tunes.scpt)" || break
+          "#[fg=colour19]#($tunes)" || break
       fi
     else
       tmux set -g status-right \

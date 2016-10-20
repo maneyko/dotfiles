@@ -32,25 +32,26 @@ color21="e8/e8/e8" # Base 06
 color_foreground="d8/d8/d8" # Base 05
 color_background="13/13/13" # Base 00
 color_cursor="d8/d8/d8" # Base 05
+esc="\033"
 
 if [ -n "$TMUX" ]; then
   # tell tmux to pass the escape sequences through
   # (Source: http://permalink.gmane.org/gmane.comp.terminal-emulators.tmux.user/1324)
-  printf_template="\033Ptmux;\033\033]4;%d;rgb:%s\007\033\\"
-  printf_template_var="\033Ptmux;\033\033]%d;rgb:%s\007\033\\"
-  printf_template_custom="\033Ptmux;\033\033]%s%s\007\033\\"
+  printf_template="${esc}Ptmux;${esc}${esc}]4;%d;rgb:%s\007${esc}\\"
+  printf_template_var="${esc}Ptmux;${esc}${esc}]%d;rgb:%s\007${esc}\\"
+  printf_template_custom="${esc}Ptmux;${esc}${esc}]%s%s\007${esc}\\"
 elif [ "${TERM%%-*}" = "screen" ]; then
   # GNU screen (screen, screen-256color, screen-256color-bce)
-  printf_template=          "\033P\033]4;%d;rgb:%s\007\033\\"
-  printf_template_var=      "\033P\033]%d;rgb:%s\007\033\\"
-  printf_template_custom=   "\033P\033]%s%s\007\033\\"
+  printf_template=          "${esc}P${esc}]4;%d;rgb:%s\007${esc}\\"
+  printf_template_var=      "${esc}P${esc}]%d;rgb:%s\007${esc}\\"
+  printf_template_custom=   "${esc}P${esc}]%s%s\007${esc}\\"
 elif [[ $- != *i* ]]; then
   # non-interactive
   alias printf=/bin/false
 else
-  printf_template=          "\033]4;%d;rgb:%s\033\\"
-  printf_template_var=      "\033]%d;rgb:%s\033\\"
-  printf_template_custom=   "\033]%s%s\033\\"
+  printf_template=          "${esc}]4;%d;rgb:%s${esc}\\"
+  printf_template_var=      "${esc}]%d;rgb:%s${esc}\\"
+  printf_template_custom=   "${esc}]%s%s${esc}\\"
 fi
 
 # 16 color space

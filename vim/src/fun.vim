@@ -12,18 +12,22 @@ if has('autocmd')
   au BufNewFile *.py        exe "normal! i#!/usr/bin/env python\<CR>\<Esc>"
   au BufNewFile *.pl        exe "normal! i#!/usr/bin/env perl\<CR>\<Esc>x"
 
-  au BufRead            *.tmux* set ft=sh
-  au BufRead            *.ipynb set ft=json
+  au BufRead    *.tmux*     set ft=sh
+  au BufRead    *.ipynb     set ft=json
   au BufRead,BufNewFile /usr/local/etc/nginx/*,/usr/local/nginx/conf/*,/etc/nginx/* set ft=nginx
 
   au FileType   help        setlocal keywordprg=:help |
                             silent! call ReadMode(1)
   au FileType   html,css    setlocal keywordprg=:help |
   au FileType   nginx       setlocal commentstring=#\ %s
-  au FileType   html,json,sh,sql,typescript,vim setlocal ts=2 sw=2 sts=2 expandtab
+  au FileType   html,json,sh,sql,tex,typescript,vim setlocal ts=2 sw=2 sts=2 expandtab
   au FileType   man         set so=0
   au FileType   vim         setlocal keywordprg=:help
   au FileType   tex         nnoremap <leader>c :DoQuietly pdflatex %<CR>
+  au FileType   tex         setlocal spell spelllang=en_us
+  au FileType   tex         setlocal colorcolumn=80
+  au FileType   jinja       setlocal commentstring=<!--%s-->
+  au FileType   sql         setlocal commentstring=--%s
 endif
 
 fun! ReadMode(readmode_togg)

@@ -1,22 +1,32 @@
-#!/bin/bash
 # functions
 # ======================================================================
 
-csview() { sed 's/,,/, ,/g;s/,,/, ,/g' $@ | column -s, -t;}; export -f csview
-csvhead() { head -n1 $@ | tr ',' '\n'; }; export -f csvhead
-goto() { mkdir -p $@ && cd $@; }; export -f goto
-num() { ls $@ | wc -l; }; export -f num
+csview() {
+  sed 's/,,/, ,/g; s/,,/, ,/g' $@ | column -s, -t
+}
+
+csvhead() {
+  head -n1 "$@" | tr ',' '\n'
+}
+
+goto() {
+  mkdir -p $@ && cd $@
+}
+
+num() {
+  ls $@ | wc -l
+}
 
 sizes() {
   for f in ${1%/}/*; do
     du -sh $f
   done | sort -h
-}; export -f sizes
+}
 
 sysbuild() {
   export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
   unalias -a
-}; export -f sysbuild
+}
 
 tarx() {
   if test -f "$1"; then
@@ -24,18 +34,18 @@ tarx() {
   else
     echo "'$1' is not a valid file"
   fi
-}; export -f tarx
+}
 
 zipc() {
-  if test -d "$1"; then
-    comp="`echo "$1" | sed 's/[.].*//'`"
-    zip -r "${comp%/}.zip" "$1"
+  if test -d "$1" -o -f "$1"; then
+    name=${1//\.*}
+    zip -r "${name%/}.zip" "$1"
   else
     echo "$1" is not a valid file
   fi
-}; export -f zipc
+}
 
-if test $HOME = "/Users/maneyko"; then
+if test $HOME = '/Users/maneyko'; then
   export is_maneyko='true'
 else
   export is_maneyko=''
@@ -50,15 +60,15 @@ man() {
   else
     /usr/bin/env man $@
   fi
-}; export -f man
+}
 
 setcv2() {
   export PYTHONPATH="/usr/local/lib/python2.7/site-packages:$PYTHONPATH"
-}; export -f setcv2
+}
 
 setcv3() {
   export PYTHONPATH="/usr/local/opt/opencv3/lib/python2.7/site-packages:$PYTHONPATH"
-}; export -f setcv3
+}
 
 extract() {
   if test -f $1; then
@@ -81,5 +91,9 @@ extract() {
   else
     echo "'$1' is not a valid file"
   fi
-}; export -f extract
+}
 
+funcs=`grep -o '[a-zA-Z0-9]\+()' $BASH_SOURCE`
+for fn in $funcs; do
+  export -f ${fn//[()]}
+done

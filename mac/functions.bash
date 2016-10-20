@@ -3,35 +3,36 @@
 google() {
   if test "$1" == "-i"; then
     search="https://www.google.com/images?q="
-    arg=`echo $@ | sed 's/[^ ]* //' | tr ' ' '+'`
   else
     search="https://www.google.com/search?q="
-    arg=`echo $@ | tr ' ' '+'`
   fi
+  arg=${@// /+}
   open $search$arg
-}; export -f google
+}
 
 trash() {
   mv $@ $HOME/.Trash/
-}; export -f trash
+}
 
 url() {
     open http://$1
-}; export -f url
+}
 
 volume() {
-  if test $1 == "-r"; then
+  arg="`echo $1 | tr -d [:alpha:]`"
+  if ! test ${arg//*'-r'*}; then
     /usr/bin/osascript -e 'output volume of (get volume settings)'
-  elif ! test "`echo $1 | tr -d [:alpha:]`"; then
-    echo Bad argument
-    exit 1
-  else
-    /usr/bin/osascript -e "set volume output volume `echo $1 | tr -d [:alpha:]`"
+  elif ! test ${arg//*[0-9]*}; then
+    /usr/bin/osascript -e "set volume output volume $arg"
   fi
-}; export -f volume
+}
 
 wiki() {
   search='https://en.wikipedia.org/wiki/Special:\Search?search='
-  open $search`echo $@ | tr ' ' '+'`
-}; export -f wiki
+  open $search${@// /+}
+}
 
+funcs=`grep -o '[a-zA-Z0-9]\+()' $BASH_SOURCE | sed 's/[()]//g'`
+for fn in $funcs; do
+  export -f $fn
+done

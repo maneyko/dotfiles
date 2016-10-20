@@ -19,11 +19,9 @@ $HOME/local/share/man:\
 /usr/share/man:\
 "
 
-export PYTHON3PATH="\
-/usr/local/lib/python3.5/site-packages:\
-"
-
-export PYTHONSTARTUP="$HOME/.pythonrc.py"
+if test -f "$HOME/.pythonrc.py"; then
+  export PYTHONSTARTUP="$HOME/.pythonrc.py"
+fi
 
 # UI
 # ========================================
@@ -35,7 +33,7 @@ export LESS="-rI"
 
 export PAGER="~/.vim/macros/less.sh"
 
-function pcolor () { # number, text
+function clr () { # (number, text)
   printf "\[\033[38;5;$1m\]$2\[\033[0m\]"
 }
 
@@ -47,41 +45,42 @@ if test `whoami` = 'root'; then
   user_color=220
 fi
 export PS1="\
-`pcolor $border_color   "┌─["       `\
-`pcolor $user_color     "$(whoami)" `\
-`pcolor 250             "@"         `\
-`pcolor $host_color     "$host_text"       `\
-`pcolor $border_color   "]─|─["     `\
-\[\e[34m\]\w\[\e[0m\]\
-`pcolor $border_color   "]"         `\
+`clr $border_color  '┌─['         `\
+`clr $user_color    "$(whoami)"   `\
+`clr 250            '@'           `\
+`clr $host_color    "$host_text"  `\
+`clr $border_color  ']─|─['       `\
+`clr 67             '\\w'         `\
+`clr $border_color  ']'           `\
 \n\
-`pcolor $border_color   "└["        `\
-\[\e[37m\]\\$\[\e[0m\]\
-`pcolor $border_color   "]› "       `\
+`clr $border_color  '└['          `\
+`clr 7              '\\$'         `\
+`clr $border_color  ']› '         `\
 "
 
 export SHORT_PS1="\
-`pcolor $border_color   "["  `\
+`clr $border_color   "["  `\
 \[\e[34m\]\w\[\e[0m\]\
-`pcolor $border_color   "]"  `\
+`clr $border_color   "]"  `\
 \n\
-`pcolor 255             "+ " `\
+`clr 255             "+ " `\
 "
 
 # sourcing
 # ========================================
 
-if test `uname -s` == 'Darwin'; then
-  source $HOME/.mac/functions.bash
+if test `uname -s` = 'Darwin'; then
+  for f in $HOME/.mac/*.bash; do
+    source $f
+  done
 fi
 
-source $HOME/.bash/functions.bash
-source $HOME/.bash/aliases.bash
-source $HOME/.bash/inits.bash
+for f in $HOME/.bash/*.bash; do
+  source $f
+done
 
 if test -f $HOME/.bashrc.local; then
   source $HOME/.bashrc.local
 fi
 
-eval `dircolors -b ~/.bash/dircolors 2>/dev/null`
-
+eval `dircolors -b ~/.bash/dircolors`

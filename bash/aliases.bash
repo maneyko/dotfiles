@@ -11,7 +11,6 @@ alias grep="grep -i --color=auto"
 alias less="~/.vim/macros/less.sh"
 alias ls="ls --color=auto --group-directories-first"
 alias mv="mv -i"
-alias top="top -u"
 alias vi="vim"
 
 alias cls="clear && printf '\e[3J'"
@@ -37,6 +36,7 @@ alias .5="cd ../../../../../"
 alias .6="cd ../../../../../../"
 
 if test `uname -s` = "Darwin" 2>/dev/null; then
+  alias top="top -u"
   alias mcopy="pbcopy"
   alias mpaste="pbpaste"
 else

@@ -1,16 +1,16 @@
 #!/bin/bash
 
 if ! test "$2"; then
-  file=$1
+  file="$1"
 else
-  file=$2
+  file="$2"
 fi
 
 if ! test -d "$file" && ! test -f "$file"; then
   echo "'"$file"' is not a valid file"
   exit 1
 fi
-arg=${file%/}
+arg="${file%/}"
 
 if ! test "$2"; then
   tar -a -cvf "$arg".tar.gz "$arg"

@@ -1,13 +1,27 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+# Managed by Homebrew
+no_update="\
+basemap
+matplotlib
+numpy
+pillow
+pygame
+scapy
+scipy
+"
+
 
 if test "$1" == '-3'; then
-  cmd="pip3"
-else
-  cmd="pip"
+  pyversion=3
 fi
+cmd="python$pyversion -m pip"
+
+_a=${no_update::-1}
+_b=${_a//$'\n'/\\|}
 
 $cmd list \
-  --outdated | \
-  awk '{print $1}'| \
-  xargs $cmd install --upgrade
-
+  --outdated \
+  | grep -iv $_b \
+  | awk '{print $1}' \
+  | xargs $cmd install --upgrade

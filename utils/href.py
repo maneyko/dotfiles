@@ -1,9 +1,33 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 
 import os
-from urllib2 import urlopen
 import sys
-from HTMLParser import HTMLParser
+from argparse import ArgumentParser
+if sys.version_info.major > 2:
+    from html.parser import HTMLParser
+    from urllib.request import urlopen
+else:
+    from HTMLParser import HTMLParser
+    from urllib2 import urlopen
+
+def parse_args():
+    parser = ArgumentParser()
+    parser.add_argument('url', help='link or html file')
+    return parser.parse_args()
+
+def html_contents(name):
+    if os.access(name, os.R_OK):
+        with open(name) as html_file:
+            return html_file.read()
+    if name[:4] != 'http':
+        name = 'http://' + name
+    try:
+        html_text = urlopen(name).read().decode()
+        return html_text
+    except Exception as e:
+        print('%s not a valid argument.' % name)
+        print(e)
+        sys.exit(1)
 
 def handle_starttag(self, tag, attrs):
     if tag.lower() == 'a':
@@ -11,41 +35,16 @@ def handle_starttag(self, tag, attrs):
         for h in hrefs:
             self.hrefs.append(h)
 
-def html_contents(name):
-    if os.access(name, os.R_OK):
-        return open(name).read()
-    if name[:4] != 'http':
-        name = 'http://' + name
-    try:
-        html_text = urlopen(name).read()
-        return html_text
-    except Exception as e:
-        print name, 'not a valid argument.'
-        print e
-        sys.exit(1)
-
-def usage():
-    print """
-    This script returns all 'href' links from a url or html file.
-    Examples:
-            {script} python.org
-            {script} ./index.html
-    """.format(script=script)
-    sys.exit(0)
-
-if __name__ == '__main__':
-    script = sys.argv[0]
-    if len(sys.argv) > 1:
-        website = sys.argv[1]
-    else:
-        usage()
-    if website in ['--help', '-h']:
-        usage()
-    html_text = html_contents(website)
+def get_hrefs(html_text):
     HTMLParser.handle_starttag = handle_starttag
     parser = HTMLParser()
     parser.hrefs = []
     parser.feed(html_text)
-    for h in parser.hrefs:
-        print h
+    return parser.hrefs
 
+if __name__ == '__main__':
+    args = parse_args()
+    html_text = html_contents(args.url)
+    hrefs = get_hrefs(html_text)
+    for h in hrefs:
+        print(h)

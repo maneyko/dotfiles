@@ -1,4 +1,3 @@
-#!/bin/bash
 # initializations
 # ======================================================================
 
@@ -12,22 +11,24 @@ shopt -s extglob
 
 export COLORS=$HOME/.config/colors/base16-custom.$BACKGROUND.sh
 
-if test "$TMUX"; then
+if test $TMUX; then
   source $COLORS
 fi
 
-eval `dircolors -b ~/.bash/dircolors 2>/dev/null`
-
 if test "$TERM"; then
-  if test `tput cols` -ge 70 -a `tput lines` -ge 20 -a \
-          "`tty | grep 001`" -a `uname -s` = "Darwin" 2>/dev/null; then
-      echo; cowsay "Hello, `whoami`"; echo
-      # cat $HOME/.bin/mac_screenfetch.out
+  ncols="`tput cols`"
+  nlines="`tput lines`"
+  if test \
+    $ncols -ge 70 \
+    -a $nlines -ge 20 \
+    -a "`tty | grep 001`" \
+    -a "`uname -s`" = "Darwin"; then
+      # echo; cowsay "Hello, `whoami`"; echo
+      cat $HOME/.bin/mac_screenfetch.out
     if test $TMUX; then
-      if test `tput cols` -eq 181 -a `tput lines` -eq 48; then
+      if test $ncols -eq 181 -a $nlines -eq 48; then
         tmux split-window -h
-      fi # full screen
+      fi
     fi
-  fi # first login on mac
+  fi
 fi
-

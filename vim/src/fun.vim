@@ -20,11 +20,11 @@ if has('autocmd')
                             silent! call ReadMode(1)
   au FileType   html,css    setlocal keywordprg=:help |
   au FileType   nginx       setlocal commentstring=#\ %s
-  au FileType   html,json,sh,sql,tex,typescript,vim setlocal ts=2 sw=2 sts=2 expandtab
+  au FileType   css,html,jinja,json,sh,sql,tex,typescript,vim setlocal ts=2 sw=2 sts=2 expandtab
   au FileType   man         set so=0
   au FileType   vim         setlocal keywordprg=:help
-  au FileType   tex         nnoremap <leader>c :DoQuietly pdflatex %<CR>
-  au FileType   tex         setlocal spell spelllang=en_us
+  au FileType   tex         nnoremap <leader>c :DoQuietly echo >> /tmp/_listener<CR>
+  au FileType   rst,tex     setlocal spell spelllang=en_us |
   au FileType   tex         setlocal colorcolumn=80
   au FileType   jinja       setlocal commentstring=<!--%s-->
   au FileType   sql         setlocal commentstring=--%s

@@ -26,7 +26,7 @@ alias hideDesktop='chflags hidden ~/Desktop/*'
 alias showDesktop='chflags nohidden ~/Desktop/*'
 alias readline-keys="less -c 'set ft=sh' ~/.bin/readline-keys.out"
 alias shortps1='export PS1=$SHORT_PS1'
-alias rm_DS='find . -name .DS_Store -exec rm -v {} \;'
+alias rm-DS='find . -name .DS_Store -delete -print'
 
 alias ..="cd ../"
 alias .2="cd ../../"
@@ -43,17 +43,4 @@ else
   alias mcopy="xclip -selection c"
   alias mpaste="xclip -o"
 fi
-
-# if test -d /usr/local/etc/bash_completion.d/; then
-#   for file in /usr/local/etc/bash_completion.d/*; do
-#     base=`basename "$file"`
-#     noext=${base%.*}
-#     if [[ "$noext" ==  *completion* ]]; then
-#       alias "$noext"="source $file"
-#     else
-#       alias "${noext}-completion"="source $file"
-#     fi
-#   done
-# fi
-# unset file base noext
 

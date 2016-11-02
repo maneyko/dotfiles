@@ -21,19 +21,12 @@ def html_contents(name):
             return html_file.read()
     if name[:4] != 'http':
         name = 'http://' + name
-    try:
-        html_text = urlopen(name).read().decode()
-        return html_text
-    except Exception as e:
-        print('%s not a valid argument.' % name)
-        print(e)
-        sys.exit(1)
+        return urlopen(name).read().decode('utf-8')
 
 def handle_starttag(self, tag, attrs):
+    'Overwrites HTMLParser.handle_starttag'
     if tag.lower() == 'a':
-        hrefs = [ a[1] for a in attrs if a[0].lower() == 'href' ]
-        for h in hrefs:
-            self.hrefs.append(h)
+        self.hrefs.extend([a[1] for a in attrs if a[0].lower() == 'href'])
 
 def get_hrefs(html_text):
     HTMLParser.handle_starttag = handle_starttag

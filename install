@@ -17,7 +17,7 @@ case "$1" in
     plugins='true';;
   '-h'|'--help')
     echo "$usage"
-    exit 0;;
+    return 2>/dev/null || exit 0;;
 esac
 
 for f in ${dot_base}/*; do
@@ -37,7 +37,9 @@ for f in ${dot_base}/*; do
 done
 
 if test "$plugins" = 'true'; then
-  git clone https://github.com/VundleVim/Vundle.vim ~/.vim/bundle/Vundle.vim
+  if ! test -d ~/.vim/bundle/Vundle.vim; then
+    git clone https://github.com/VundleVim/Vundle.vim ~/.vim/bundle/Vundle.vim
+  fi
   vim +PluginInstall +qall
 fi
 

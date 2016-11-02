@@ -29,6 +29,7 @@ fi
 export BACKGROUND="dark"
 export EDITOR="vim"
 export GREP_COLOR='0;34'
+export ACK_PAGER_COLOR='0;34'
 export LESS="-rI"
 
 export PAGER="~/.vim/macros/less.sh"
@@ -40,7 +41,7 @@ function clr () { # (number, text)
 border_color=241
 user_color=23
 host_color=255
-host_text="OSX"
+host_text='OSX'
 if test `whoami` = 'root'; then
   user_color=220
 fi
@@ -59,28 +60,24 @@ export PS1="\
 "
 
 export SHORT_PS1="\
-`clr $border_color   "["  `\
-\[\e[34m\]\w\[\e[0m\]\
-`clr $border_color   "]"  `\
+`clr $border_color   '['   `\
+`clr 67              '\\w' `\
+`clr $border_color   ']'   `\
 \n\
-`clr 255             "+ " `\
+`clr 255             '+ ' `\
 "
 
 # sourcing
 # ========================================
-
 if test `uname -s` = 'Darwin'; then
   for f in $HOME/.mac/*.bash; do
     source $f
   done
 fi
-
 for f in $HOME/.bash/*.bash; do
   source $f
 done
 
-if test -f $HOME/.bashrc.local; then
-  source $HOME/.bashrc.local
-fi
+f=$HOME/.bashrc.local; test -f $f && source $f
 
 eval `dircolors -b ~/.bash/dircolors`

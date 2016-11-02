@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function clr () { # (number, text)
-  printf "\033[38;5;$1m$2\033[0m"
+  printf "\033[38;5;${1}m${2}\033[0m"
 }
 
 user=$USER
@@ -13,15 +13,16 @@ shell=${SHELL//*\/}
 sh_v=${BASH_VERSION%\(*}
 font="Inconsolata 14pt"
 
-_d=(/usr/local/opt/* /usr/local/Caskroom/*)
-npack=${#_d[@]}
-
+npack=`
+  d=(/usr/local/opt/* /usr/local/Caskroom/*)
+  echo ${#d[@]}
+`
 nbin=`
-p=(${PATH//:/ })
-  for d in ${p[@]}; do
-    _s+=($d/*)
-  done
-  echo ${#_s[@]}
+  p=(${PATH//:/ })
+    for d in ${p[@]}; do
+      s+=($d/*)
+    done
+    echo ${#s[@]}
 `
 
 vim_v=`$EDITOR --version \

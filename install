@@ -6,6 +6,7 @@ Options:
     -u --uninstall  Remove symlinked dotfiles
     -p --plugins    Install vim plugins also
     -h --help       Print this help message
+
 "
 dot_base=`basename ${BASH_SOURCE[0]%\/*}`
 cd  # $dot_base must be in home directory
@@ -26,7 +27,7 @@ for f in ${dot_base}/*; do
     'install'|'README.md')
       continue;;
     'mac')
-      if test `uname -s` != 'Darwin'; then continue; fi;;
+      test `uname -s` != 'Darwin' && continue;;
     *);;
   esac
   if test "$uninstall" = 'true'; then

@@ -1,41 +1,36 @@
 " vimrc
-" ========================================================================
+" ==============
 
 set nocompatible
 filetype off
-if !empty(glob("~/.vim/bundle/Vundle.vim"))
+if !empty(glob('~/.vim/bundle/Vundle.vim'))
   set rtp+=~/.vim/bundle/Vundle.vim
   call vundle#begin()
 
   Plugin 'VundleVim/Vundle.vim'        " plugin manager
   Plugin 'Valloric/YouCompleteMe'      " completion engine
   Plugin 'davidhalter/jedi-vim'        " python completion
-  Plugin 'joonty/vim-do'               " execute commands in background
+  Plugin 'maneyko/vim-do'              " execute shell commands
 
   " syntax
-  Plugin 'Glench/Vim-Jinja2-Syntax'    " Python Jinja
-  Plugin 'digitaltoad/vim-pug'
-  " Plugin 'othree/es.next.syntax.vim'   " New JavaScript
-  " Plugin 'othree/yajs.vim'             " Yet Another JavaScript Syntax
-  " Plugin 'keith/swift.vim'             " Swift
-  Plugin 'leafgarland/typescript-vim'    " Typescript
-  Plugin 'vim-scripts/nginx.vim'       " Nginx
+  " Plugin 'Glench/Vim-Jinja2-Syntax'    " jinja html templates
+  " Plugin 'digitaltoad/vim-pug'         " pug html templates
+  " Plugin 'leafgarland/typescript-vim'  " typescript
+  " Plugin 'vim-scripts/nginx.vim'       " nginx
 
   " misc
-  Plugin 'alvan/vim-closetag'          " closes html tags
   Plugin 'jiangmiao/auto-pairs'        " completes pairs
-  " Plugin 'scrooloose/nerdtree'         " filetree in vim
+  Plugin 'ctrlpvim/ctrlp.vim'          " fuzzy file finder
+  " Plugin 'scrooloose/nerdtree'         " filetree
   " Plugin 'scrooloose/syntastic'        " syntax linter
-  Plugin 'ctrlpvim/ctrlp.vim'          " fuzzy finder
 
   " filetype specific
-  " Plugin 'moll/vim-node'               " node commands
   Plugin 'mattn/emmet-vim'             " html completion
 
   " tpope
   Plugin 'tpope/vim-commentary'        " commenting motions
   Plugin 'tpope/vim-endwise'           " closes functions (if and fi)
-  " Plugin 'tpope/vim-fugitive'          " git integration
+  Plugin 'tpope/vim-fugitive'          " git integration
   Plugin 'tpope/vim-repeat'            " '.' for plugins
   Plugin 'tpope/vim-surround'          " surrounding motions
   Plugin 'tpope/vim-unimpaired'        " bracket functions and more
@@ -44,64 +39,65 @@ if !empty(glob("~/.vim/bundle/Vundle.vim"))
 endif
 filetype plugin indent on
 
-if !empty(glob("~/.vim/ftplugin/man.vim"))
-    source $HOME/.vim/ftplugin/man.vim
+if !empty(glob('~/.vim/ftplugin/man.vim'))
+  source ~/.vim/ftplugin/man.vim
 endif
-source $HOME/.vim/src/fun.vim
+source ~/.vim/src/fun.vim
 
 " set
-" =====================================
+" ==============
 
-set autoindent                  " automatically indent new lines
-set breakindent                 " wrap and indent
-set clipboard=unnamed           " system clipboard
-set expandtab                   " tab makes spaces
-set hlsearch                    " highlight search
-set ignorecase                  " ignore case for search
-set incsearch                   " move while typing search pattern
-set list                        " show interesting characters
-set listchars=tab:\ \ ,trail:⋅  " dots on trailing whitespace
-if has("mouse")
+set autoindent
+if has('patch-7.4-346')
+  set breakindent
+endif
+set clipboard=unnamed
+set expandtab
+set hlsearch
+set ignorecase
+set incsearch
+set list
+set listchars=tab:\ \ ,trail:⋅
+if has('mouse')
   set mouse=a
 endif
 if version >= 702
   au InsertLeave * set list
-  au InsertEnter * set nolist  " dont list trailing chars in insert
+  au InsertEnter * set nolist
 endif
-set nowrap                      " dont wrap text
-set number                      " line numbers
-set numberwidth=3               " width of line number column
-set ruler                       " line & columns numbers on bottom
-set smartcase                   " searches for capitals when I type them
-set scrolloff=1                 " keep cursor 1 lines frop top/bottom
-set shiftwidth=4                " number of spaces for indent and unindent
-" set showbreak=...               " show ellipsis when going over
-set showcmd                     " show command on bottom
-set smartindent                 " knows when to indent
-set smarttab                    " tab respects tab settings completely
-set softtabstop=4               " edit 4 spaces as if they are tabs
-set t_Co=256                    " terminal supports 256 colors
-set tabstop=4                   " <tab> == n spaces
-set tildeop                     " tilde operator for changing CASE
+set nowrap
+set number
+set numberwidth=3
+set ruler
+set scrolloff=1
+set shiftwidth=4
+set showcmd
+set smartcase
+set smartindent
+set smarttab
+set softtabstop=4
+set t_Co=256
+set tabstop=4
+set tildeop
 
-let g:netrw_dirhistmax = 0      " no .netrwhist files
-let $BASH_ENV="~/.bash/aliases.bash"
+let g:netrw_dirhistmax=0  " no .netrwhist files
+let $BASH_ENV='~/.bash/aliases.bash'
 
 " colors
-" ======================================
+" ==============
 
 syntax on
 colorscheme colorsbox-stnight
-                                " make bg and fg colors same as terminal
+
+" make bg and fg colors same as terminal
 highlight Normal ctermbg=NONE
 highlight Normal ctermfg=NONE
 
 " remaps
-" =====================================
+" ==============
 
-let g:mapleader = ","
+let g:mapleader = ','
 
-nnoremap<leader>r         :call ReadMode(readmode_togg)<CR>
 nnoremap <C-j>            <C-w>j
 nnoremap <C-k>            <C-w>k
 nnoremap <C-l>            :nohl<CR><C-l>
@@ -136,43 +132,41 @@ inoremap <M-f>            <C-o>w
 inoremap jk               <Esc>
 
 vnoremap .                :normal! .<CR>
+vnoremap &                :normal! &<CR>
 
 map <ScrollWheelUp>       <C-y>
 map <ScrollWheelDown>     <C-e>
 
 " plugins
-" =====================================
+" ==============
 
-let g:user_emmet_leader_key='<NUL>' " <C-space>,
-let g:SuperTabDefaultCompletionType="context" " contextual completion
+let g:user_emmet_leader_key = '<NUL>'  " equals '<C-space>,'
+let g:do_refresh_key = '<C-M>'
+let g:SuperTabDefaultCompletionType = 'context'  " contextual completion
 let g:SuperTabCrMapping = 1
 let g:SuperTabLongestHighlight = 1
 let g:vimpager = {}
 let g:less = {}
 let g:less.enabled = 0
 let g:less.scrolloff = 5
-if exists('g:vimpager.enabled')
-  " set nolist
-endif
-
 
 let g:ycm_filetype_specific_completion_to_disable = {
-\  'python': 1,
-\}
+  \   'python': 1,
+\ }
 let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_autoclose_preview_window_after_completion = 0
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_confirm_extra_conf = 0
 " let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
-let g:ycm_error_symbol   = '??'
+let g:ycm_error_symbol = '??'
 let g:ycm_min_num_of_chars_for_completion = 1
 let g:ycm_seed_identifiers_with_syntax = 1
-let g:ycm_semantic_triggers =  {
-  \   'python' : ['re![a-zA-Z]+'],
-  \ }
+let g:ycm_semantic_triggers = {
+  \   'python': ['re![a-zA-Z]+'],
+\ }
 let g:ycm_server_use_vim_stdout = 0
 let g:ycm_server_keep_logfiles = 1
 " ~/.vim/bundle/YouCompleteMe/python/ycm/client/completion_request.py 32j
 
-" let g:jedi#show_call_signatures="0"
-" let g:jedi#show_call_signatures_delay=1000
+" let g:jedi#show_call_signatures = '0'
+" let g:jedi#show_call_signatures_delay = 1000

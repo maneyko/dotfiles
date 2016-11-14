@@ -52,7 +52,7 @@ else
 fi
 
 man() {
-  if test "`which $@ 2>/dev/null`"; then
+  if which $@ >/dev/null; then
     vim -c "execute 'Man ' . '$@'" \
         -c "execute \"normal \<C-w>o\"" \
         -c "silent! call ReadMode(1)" \

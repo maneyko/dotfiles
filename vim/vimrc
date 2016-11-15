@@ -42,6 +42,10 @@ filetype plugin indent on
 if !empty(glob('~/.vim/ftplugin/man.vim'))
   source ~/.vim/ftplugin/man.vim
 endif
+
+if has('autocmd')
+  source ~/.vim/src/autocmd.vim
+endif
 source ~/.vim/src/fun.vim
 
 " set
@@ -110,9 +114,11 @@ nnoremap <leader>q        :q<CR>
 nnoremap <leader>r        :call ReadMode(readmode_togg)<CR>
 nnoremap <leader>s        :setlocal spell! spelllang=en_us<CR>
 nnoremap <leader>kw       :w !sudo tee %<CR>
+nnoremap \a               080lF<Space>r<CR>
 nnoremap \e               :<C-U>call TabFun(v:count1*2,1)<CR>
 nnoremap \n               :<C-U>call TabFun(v:count1*2,0)<CR>
 nnoremap \r               :call ReadMode(readmode_togg)<CR>
+nnoremap \s               1z=
 nnoremap \w               :%s/\s\+$//<CR>:nohl<CR><C-l>
 nnoremap Q                <Esc>
 nnoremap U                <C-r>

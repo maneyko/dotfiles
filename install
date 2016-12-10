@@ -24,7 +24,7 @@ esac
 for f in ${dot_base}/*; do
   fbase=${f//*\/}
   case $fbase in
-    'install'|'README.md')
+    'install')
       continue;;
     'mac')
       test `uname -s` != 'Darwin' && continue;;

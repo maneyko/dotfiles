@@ -8,8 +8,8 @@ if !empty(glob('~/.vim/bundle/Vundle.vim'))
   call vundle#begin()
 
   Plugin 'VundleVim/Vundle.vim'        " plugin manager
-  Plugin 'Valloric/YouCompleteMe'      " completion engine
-  Plugin 'davidhalter/jedi-vim'        " python completion
+  " Plugin 'Valloric/YouCompleteMe'      " completion engine
+  " Plugin 'davidhalter/jedi-vim'        " python completion
   Plugin 'maneyko/vim-do'              " execute shell commands
 
   " syntax
@@ -17,6 +17,7 @@ if !empty(glob('~/.vim/bundle/Vundle.vim'))
   " Plugin 'digitaltoad/vim-pug'         " pug html templates
   " Plugin 'leafgarland/typescript-vim'  " typescript
   " Plugin 'vim-scripts/nginx.vim'       " nginx
+  " Plugin 'chikamichi/mediawiki.vim'    " wiki pages
 
   " misc
   Plugin 'jiangmiao/auto-pairs'        " completes pairs
@@ -60,6 +61,7 @@ set expandtab
 set hlsearch
 set ignorecase
 set incsearch
+set linebreak
 set list
 set listchars=tab:\ \ ,trail:⋅
 if has('mouse')
@@ -133,7 +135,7 @@ inoremap <C-d>            <C-o>x
 inoremap <C-e>            <C-o>$
 inoremap <C-p>            <C-r>*
 inoremap <C-w>            <C-o><C-w>
-inoremap <M-b>            <C-o>b
+inoremap <M-b>            <C-o>dd
 inoremap <M-f>            <C-o>w
 inoremap jk               <Esc>
 

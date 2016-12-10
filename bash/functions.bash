@@ -13,18 +13,15 @@ goto() {
   mkdir -p $@ && cd $@
 }
 
-num() {
-  ls $@ | wc -l
-}
-
-sizes() {
-  for f in ${1%/}/*; do
-    du -sh $f
-  done | sort -h
-}
-
 sysbuild() {
-  export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin"
+  export PATH="\
+/usr/local/bin:\
+/usr/local/sbin:\
+/usr/bin:\
+/usr/sbin:\
+/bin:\
+/sbin:
+"
   unalias -a
 }
 
@@ -73,18 +70,14 @@ setcv3() {
 extract() {
   if test -f $1; then
     case $1 in
-      *.tar.*) echo "using tar"        ; tar xf $1        ;;
-      *.tar)   echo "using tar"        ; tar xf $1        ;;
-      *.tbz2)  echo "using tar"        ; tar xf $1        ;;
-      *.tgz)   echo "using tar"        ; tar xf $1        ;;
-      *.gz)    echo "using gunzip"     ; gunzip $1        ;;
-      *.bz2)   echo "using bunzip"     ; bunzip2 $1       ;;
-      *.dmg)   echo "using hdiutil"    ; hdiutil mount $1 ;;
-      *.zip)   echo "using unzip"      ; unzip -z $1      ;;
-      *.ZIP)   echo "using unzip"      ; unzip -z $1      ;;
-      *.rar)   echo "using unrar"      ; unrar x $1       ;;
-      *.pax)   echo "using pax"        ; cat $1 | pax -r  ;;
-      *.Z)     echo "using uncompress" ; uncompress $1    ;;
+      *.tar.*|*.tar|*.tbz2|*.tgz) echo "using tar"        ; tar xf $1        ;;
+      *.gz)                       echo "using gunzip"     ; gunzip $1        ;;
+      *.bz2)                      echo "using bunzip"     ; bunzip2 $1       ;;
+      *.dmg)                      echo "using hdiutil"    ; hdiutil mount $1 ;;
+      *.zip|*.ZIP)                echo "using unzip"      ; unzip -z $1      ;;
+      *.rar)                      echo "using unrar"      ; unrar x $1       ;;
+      *.pax)                      echo "using pax"        ; cat $1 | pax -r  ;;
+      *.Z)                        echo "using uncompress" ; uncompress $1    ;;
       *.pax.Z) uncompress $1 --stdout | pax -r            ;;
       *) echo "'$1' cannot be extracted/mounted"          ;;
     esac

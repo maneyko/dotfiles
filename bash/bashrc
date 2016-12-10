@@ -26,11 +26,11 @@ fi
 # UI
 # ========================================
 
-export BACKGROUND="dark"
-export EDITOR="vim"
+export BACKGROUND='dark'
+export EDITOR='vim'
 export GREP_COLOR='0;34'
 export ACK_PAGER_COLOR='0;34'
-export LESS="-rI"
+export LESS='-rI'
 
 export PAGER="~/.vim/macros/less.sh"
 

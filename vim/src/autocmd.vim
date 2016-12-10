@@ -17,11 +17,11 @@ au BufRead,BufNewFile
       \ /usr/local/etc/nginx/*,/usr/local/nginx/conf/*,/etc/nginx/*
       \ setlocal ft=nginx
 
-au FileType   css,html,jinja,json,sh,sql,tex,typescript,vim
+au FileType   css,html,jinja,json,rst,sh,sql,tex,typescript,vim
       \ setlocal ts=2 sw=2 sts=2
 
 au FileType rst,tex
-      \ setlocal spell spelllang=en_us colorcolumn=80
+      \ setlocal spell spelllang=en_us colorcolumn=80 wrap
 
 au FileType tex
       \ nnoremap <leader>c :DoQuietly echo >> /tmp/_listener<CR>

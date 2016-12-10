@@ -44,3 +44,6 @@ else
   alias mpaste="xclip -o"
 fi
 
+alias wifi-name="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep -o ' SSID: .*' | sed 's/.*: //'"
+alias wifi-pass="security find-generic-password -wa \"`wifi-name`\""
+

@@ -1,11 +1,10 @@
 #!/bin/bash
 
-for f in "$@"; do
-
+for f in "$@"
+do
   input="$f"
   output="${input/%flac/mp3}"
 
   ffmpeg -i "$input" -qscale:a 0 "$output"
-
 done
 

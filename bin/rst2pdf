@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if ! which pdflatex >/dev/null 2>&1 \
+  && ! which rst2latex.py >/dev/null 2>&1; then
+  echo 'Need pdflatex and rst2latex.py'
+  exit 1
+fi
+
+if ! test -f "$1"; then
+  echo 'Need a .rst file as an argument'
+  exit 1
+fi
+
+texfile="${1/%rst/tex}"
+rst2latex.py "$1" > "$texfile"
+
+pdflatex "$texfile"
+rm "${texfile%.tex}".{aux,log,out}
+
+test "$2" == '-d' && rm "${texfile%.tex}".tex

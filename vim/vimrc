@@ -1,5 +1,5 @@
 " vimrc
-" ==============
+" =====
 
 set nocompatible
 filetype off
@@ -16,8 +16,7 @@ if !empty(glob('~/.vim/bundle/Vundle.vim'))
   " Plugin 'Glench/Vim-Jinja2-Syntax'    " jinja html templates
   " Plugin 'digitaltoad/vim-pug'         " pug html templates
   " Plugin 'leafgarland/typescript-vim'  " typescript
-  " Plugin 'vim-scripts/nginx.vim'       " nginx
-  " Plugin 'chikamichi/mediawiki.vim'    " wiki pages
+  Plugin 'vim-scripts/nginx.vim'       " nginx
 
   " misc
   Plugin 'jiangmiao/auto-pairs'        " completes pairs
@@ -50,7 +49,7 @@ endif
 source ~/.vim/src/fun.vim
 
 " set
-" ==============
+" ===
 
 set autoindent
 if has('patch-7.4-346')
@@ -90,7 +89,7 @@ let g:netrw_dirhistmax=0  " no .netrwhist files
 let $BASH_ENV='~/.bash/aliases.bash'
 
 " colors
-" ==============
+" ======
 
 syntax on
 colorscheme colorsbox-stnight
@@ -100,7 +99,7 @@ highlight Normal ctermbg=NONE
 highlight Normal ctermfg=NONE
 
 " remaps
-" ==============
+" ======
 
 let g:mapleader = ','
 
@@ -146,7 +145,7 @@ map <ScrollWheelUp>       <C-y>
 map <ScrollWheelDown>     <C-e>
 
 " plugins
-" ==============
+" =======
 
 let g:user_emmet_leader_key = '<NUL>'  " equals '<C-space>,'
 let g:do_refresh_key = '<C-M>'

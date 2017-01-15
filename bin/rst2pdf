@@ -15,6 +15,6 @@ texfile="${1/%rst/tex}"
 rst2latex.py "$1" > "$texfile"
 
 pdflatex "$texfile"
-rm "${texfile%.tex}".{aux,log,out}
+rm "${texfile%.tex}".{aux,log,out} 2>/dev/null
 
-test "$2" == '-d' && rm "${texfile%.tex}".tex
+test "$2" = '-d' && rm "${texfile%.tex}".tex

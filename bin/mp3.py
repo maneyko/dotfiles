@@ -24,7 +24,7 @@ def load(fileobj):
     path = fileobj.name
     if path.endswith('.mp3'):
         return mutagen.easyid3.EasyID3(path)
-    elif path.endswith('.m4a'):
+    elif path.endswith('.m4a') or path.endswith('.mp4'):
         return mutagen.easymp4.EasyMP4(path)
 
 def pprint(tags):

@@ -4,8 +4,6 @@ sysbuild
 brew update
 brew update
 brew upgrade
-brew cask update
-brew cask update
 $HOME/.bin/pip-upgrade
 $HOME/.bin/pip-upgrade -3
 npm update -g

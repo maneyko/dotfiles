@@ -3,7 +3,6 @@
 # Managed by Homebrew
 no_update="\
 basemap
-matplotlib
 numpy
 pillow
 pygame

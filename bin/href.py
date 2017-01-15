@@ -1,17 +1,13 @@
 #!/usr/bin/env python
 
 import os
-import sys
-from argparse import ArgumentParser
-if sys.version_info.major > 2:
-    from html.parser import HTMLParser
-    from urllib.request import urlopen
-else:
-    from HTMLParser import HTMLParser
-    from urllib2 import urlopen
+import argparse
+
+from six.moves.html_parser import HTMLParser
+from six.moves.urllib.request import urlopen
 
 def parse_args():
-    parser = ArgumentParser()
+    parser = argparse.ArgumentParser()
     parser.add_argument('url', help='link or html file')
     return parser.parse_args()
 
@@ -21,7 +17,7 @@ def html_contents(name):
             return html_file.read()
     if name[:4] != 'http':
         name = 'http://' + name
-        return urlopen(name).read().decode('utf-8')
+    return urlopen(name).read().decode('utf-8')
 
 def handle_starttag(self, tag, attrs):
     'Overwrites HTMLParser.handle_starttag'

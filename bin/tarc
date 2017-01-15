@@ -62,4 +62,3 @@ elif test "$1" == "--Z" -o "$1" == "-Z"; then
 else
   echo "Invalid argument"
 fi
-

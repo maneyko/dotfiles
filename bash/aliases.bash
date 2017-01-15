@@ -35,7 +35,8 @@ alias .4="cd ../../../../"
 alias .5="cd ../../../../../"
 alias .6="cd ../../../../../../"
 
-if test `uname -s` = "Darwin" 2>/dev/null; then
+if test $MAC_OS
+then
   alias top="top -u"
   alias mcopy="pbcopy"
   alias mpaste="pbpaste"
@@ -45,5 +46,5 @@ else
 fi
 
 alias wifi-name="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep -o ' SSID: .*' | sed 's/.*: //'"
-alias wifi-pass="security find-generic-password -wa \"`wifi-name`\""
+alias wifi-pass="security find-generic-password -wa \"$(wifi-name)\""
 

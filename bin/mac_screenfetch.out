@@ -2,13 +2,13 @@
 [38;5;2m                  -/+:.           [0m
 [38;5;2m                 :++++.           [0m
 [38;5;2m                /+++/.            [0m[38;5;6mUsername:[0m maneyko
-[38;5;2m        .:-::- .+/:-''.::-        [0m[38;5;6mOS:[0m Mac OS X 10.10.5 14F2009 
+[38;5;2m        .:-::- .+/:-''.::-        [0m[38;5;6mOS:[0m Mac OS X 10.10.5 14F2109 
 [38;5;2m     .:/++++++/::::/++++++/:'     [0m[38;5;6mKernel:[0m x86_64 Darwin 14.5.0
 [38;5;3m   .:///////////////////////:'    [0m[38;5;6mHardware:[0m MacBookPro9,2
 [38;5;3m   ////////////////////////'      [0m[38;5;6mShell:[0m bash 4.4.5
-[38;5;1m  -+++++++++++++++++++++++'       [0m[38;5;6mPackages:[0m 290
-[38;5;1m  /++++++++++++++++++++++/        [0m[38;5;6mBinaries:[0m 3833
-[38;5;1m  /sssssssssssssssssssssss.       [0m[38;5;6m$EDITOR:[0m vim 8.0.106
+[38;5;1m  -+++++++++++++++++++++++'       [0m[38;5;6mPackages:[0m 304
+[38;5;1m  /++++++++++++++++++++++/        [0m[38;5;6mBinaries:[0m 3935
+[38;5;1m  /sssssssssssssssssssssss.       [0m[38;5;6m$EDITOR:[0m vim 8.0.124
 [38;5;1m  :ssssssssssssssssssssssss-      [0m[38;5;6mResolution:[0m 1280 x 800
 [38;5;5m   osssssssssssssssssssssssso/'   [0m[38;5;6mFont:[0m Inconsolata 14pt
 [38;5;5m   'syyyyyyyyyyyyyyyyyyyyyyyy+'   [0m[38;5;6mCPU:[0m Intel Core i7-3520M @ 2.90GHz

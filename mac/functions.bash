@@ -1,7 +1,8 @@
 #!/bin/bash
 
 google() {
-  if test "$1" == "-i"; then
+  if test "$1" == "-i"
+  then
     search="https://www.google.com/images?q="
   else
     search="https://www.google.com/search?q="
@@ -20,9 +21,11 @@ url() {
 
 volume() {
   arg="`echo $1 | tr -d [:alpha:]`"
-  if ! test ${arg//*'-r'*}; then
+  if ! test ${arg//*'-r'*}
+  then
     /usr/bin/osascript -e 'output volume of (get volume settings)'
-  elif ! test ${arg//*[0-9]*}; then
+  elif ! test ${arg//*[0-9]*}
+  then
     /usr/bin/osascript -e "set volume output volume $arg"
   fi
 }
@@ -32,7 +35,9 @@ wiki() {
   open $search${@// /+}
 }
 
+# Export all functions in this script
 funcs=`grep -o '[a-zA-Z0-9]\+()' $BASH_SOURCE | sed 's/[()]//g'`
-for fn in $funcs; do
+for fn in $funcs
+do
   export -f $fn
 done

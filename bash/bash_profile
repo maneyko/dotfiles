@@ -1,5 +1,4 @@
 #!/bin/bash
 
-if test -f $HOME/.bashrc; then
-  . $HOME/.bashrc
-fi
+f=$HOME/.bashrc
+test -f "$f" && source "$f"

@@ -2,9 +2,7 @@
 
 for f in "$@"
 do
-  input="$f"
-  output="${input/%flac/mp3}"
-
-  ffmpeg -i "$input" -qscale:a 0 "$output"
+  output="${f/%flac/mp3}"
+  ffmpeg -i "$f" -qscale:a 0 "$output"
 done
 

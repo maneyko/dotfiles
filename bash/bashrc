@@ -1,5 +1,5 @@
 # paths
-# ========================================
+# ================
 
 export PATH="\
 $HOME/local/bin:\
@@ -19,12 +19,13 @@ $HOME/local/share/man:\
 /usr/share/man:\
 "
 
-if test -f "$HOME/.pythonrc.py"; then
-  export PYTHONSTARTUP="$HOME/.pythonrc.py"
+if test $(uname) = 'Darwin' 2>/dev/null
+then
+  export MAC_OS='true'
 fi
 
 # UI
-# ========================================
+# ================
 
 export BACKGROUND='dark'
 export EDITOR='vim'
@@ -34,7 +35,7 @@ export LESS='-rI'
 
 export PAGER="~/.vim/macros/less.sh"
 
-function clr () { # (number, text)
+clr () { # (number, text)
   printf "\[\033[38;5;$1m\]$2\[\033[0m\]"
 }
 
@@ -42,7 +43,8 @@ border_color=241
 user_color=23
 host_color=255
 host_text='OSX'
-if test `whoami` = 'root'; then
+if test $(whoami) = 'root'
+then
   user_color=220
 fi
 export PS1="\
@@ -68,16 +70,24 @@ export SHORT_PS1="\
 "
 
 # sourcing
-# ========================================
-if test `uname -s` = 'Darwin'; then
+# ================
+
+if test -f "$HOME/.pythonrc.py"
+then
+  export PYTHONSTARTUP="$HOME/.pythonrc.py"
+fi
+
+if test $MAC_OS; then
   for f in $HOME/.mac/*.bash; do
     source $f
   done
 fi
+
 for f in $HOME/.bash/*.bash; do
   source $f
 done
 
-f=$HOME/.bashrc.local; test -f $f && source $f
+f=$HOME/.bashrc.local
+test -f $f && source $f
 
-eval `dircolors -b ~/.bash/dircolors`
+eval $(dircolors -b ~/.bash/dircolors)

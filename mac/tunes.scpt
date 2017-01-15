@@ -1,6 +1,8 @@
 #!/usr/bin/osascript
+
 (* https://github.com/nicknisi/dotfiles/blob/master/applescripts/tunes.scpt *)
 (* Get the current song from iTunes or Spotify *)
+
 if application "iTunes" is running then
   tell application "iTunes"
     if exists current track then

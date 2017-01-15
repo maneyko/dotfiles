@@ -8,8 +8,10 @@ Options:
     -h --help       Print this help message
 
 "
-dot_base=`basename ${BASH_SOURCE[0]%\/*}`
-cd  # $dot_base must be in home directory
+
+# .dotfiles
+dot_base=$(basename ${BASH_SOURCE[0]%\/*})
+cd
 
 case "$1" in
   '-u'|'--uninstall')
@@ -21,26 +23,29 @@ case "$1" in
     return 2>/dev/null || exit 0;;
 esac
 
-for f in ${dot_base}/*; do
+for f in ${dot_base}/*
+do
   fbase=${f//*\/}
   case $fbase in
     'install')
       continue;;
     'mac')
-      test `uname -s` != 'Darwin' && continue;;
+      test $(uname) != 'Darwin' && continue;;
     *);;
   esac
-  if test "$uninstall" = 'true'; then
-    rm -v .$fbase
+  if test $uninstall = 'true'
+  then
+    test -L .$fbase && rm -v .$fbase
   else
     ln -ivs $f .$fbase
   fi
 done
 
-if test "$plugins" = 'true'; then
-  if ! test -d ~/.vim/bundle/Vundle.vim; then
+if test $plugins = 'true'
+then
+  if ! test -d ~/.vim/bundle/Vundle.vim
+  then
     git clone https://github.com/VundleVim/Vundle.vim ~/.vim/bundle/Vundle.vim
   fi
   vim +PluginInstall +qall
 fi
-

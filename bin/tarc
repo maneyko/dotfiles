@@ -1,64 +1,49 @@
-#!/bin/bash
+#!/usr/bin/env python
+"""
+Executes a tar compression of a directory or file.
+Available extensions are {}.
+"""
 
-if ! test "$2"; then
-  file="$1"
-else
-  file="$2"
-fi
+import os
+import argparse
+import subprocess
 
-if ! test -d "$file" && ! test -f "$file"; then
-  echo "'"$file"' is not a valid file"
-  exit 1
-fi
-arg="${file%/}"
+EXTENSIONS = [
+    'bz2',
+    'gz',
+    'lz',
+    'lzo',
+    'lzma',
+    'taz',
+    'taZ',
+    'tbz',
+    'tbz2',
+    'tgz',
+    'tlz',
+    'tz2',
+    'xz',
+    'Z',
+]
 
-if ! test "$2"; then
-  tar -a -cvf "$arg".tar.gz "$arg"
-  exit 0
-fi
+def parse_args(args=None):
+    parser = argparse.ArgumentParser(description=__doc__.format(EXTENSIONS))
+    parser.add_argument('file', help='file or directory to be compressed')
+    parser.add_argument('-e', '--extension', default='gz',
+            help='tar compressed extension (defaults to %(default)r)')
+    args = parser.parse_args(args)  # Overwriting
+    if args.extension not in EXTENSIONS:
+        return parser.error('extension must be in {}'.format(EXTENSIONS))
+    if not os.path.exists(args.file):
+        return parser.error('file {!r} does not exist!'.format(args.file))
+    return args
 
-if test "$1" == "--bz2" -o "$1" == "-b"; then
-  tar -a -cvf "$arg".tar.bz2 "$arg"
+def main(args):
+    if args.file.endswith('/'):  # Remove to format outfile
+        args.file = args.file[:-1]
+    outfile = '{0.file}.tar.{0.extension}'.format(args)
+    cmd = ['tar', '-a', '-cvf', outfile, args.file]
+    subprocess.call(cmd)
 
-elif test "$1" == "--gz" -o "$1" == "-g"; then
-  tar -a -cvf "$arg".tar.gz "$arg"
-
-elif test "$1" == "--lz"; then
-  tar -a -cvf "$arg".tar.lz "$arg"
-
-elif test "$1" == "--lzo"; then
-  tar -a -cvf "$arg".tar.lzo "$arg"
-
-elif test "$1" == "--lzma"; then
-  tar -a -cvf "$arg".tar.lzma "$arg"
-
-elif test "$1" == "--taz"; then
-  tar -a -cvf "$arg".tar.taz "$arg"
-
-elif test "$1" == "--taZ"; then
-  tar -a -cvf "$arg".tar.taZ "$arg"
-
-elif test "$1" == "--tbz"; then
-  tar -a -cvf "$arg".tar.tbz "$arg"
-
-elif test "$1" == "--tbz2"; then
-  tar -a -cvf "$arg".tar.tbz2 "$arg"
-
-elif test "$1" == "--tgz"; then
-  tar -a -cvf "$arg".tar.tgz "$arg"
-
-elif test "$1" == "--tlz"; then
-  tar -a -cvf "$arg".tar.tlz "$arg"
-
-elif test "$1" == "--tz2"; then
-  tar -a -cvf "$arg".tar.tz2 "$arg"
-
-elif test "$1" == "--xz" -o "$1" == "-x"; then
-  tar -a -cvf "$arg".tar.xz "$arg"
-
-elif test "$1" == "--Z" -o "$1" == "-Z"; then
-  tar -a -cvf "$arg".tar.Z "$arg"
-
-else
-  echo "Invalid argument"
-fi
+if __name__ == '__main__':
+    args = parse_args()
+    main(args)

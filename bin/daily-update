@@ -8,7 +8,6 @@ $HOME/.bin/pip-upgrade
 $HOME/.bin/pip-upgrade -3
 npm update -g
 npm upgrade -g
-vim +PluginUpdate +qall
 brew doctor
 . ~/.bashrc > /dev/null
 

@@ -6,10 +6,10 @@ import argparse
 from six.moves.html_parser import HTMLParser
 from six.moves.urllib.request import urlopen
 
-def parse_args():
+def parse_args(args=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('url', help='link or html file')
-    return parser.parse_args()
+    return parser.parse_args(args)
 
 def html_contents(name):
     if os.access(name, os.R_OK):

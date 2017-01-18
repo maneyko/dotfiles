@@ -2,6 +2,7 @@
 # coding: utf-8
 
 def ctext(text, style=38, fg=5, bg=7):
+    'Returns generic string of any style, foreground and background.'
     return """
 {esc}
 [{style};{fg};{bg}m{esc}
@@ -10,8 +11,9 @@ def ctext(text, style=38, fg=5, bg=7):
 """.replace('\n', '').format(text, esc='\033',
     style=style, sty10=style+10, fg=fg, bg=bg)
 
-for i in [0, 18, 19, 8, 20, 7, 21, 15, 9, 16, 3, 2, 6, 4, 5, 17]:
-    text = 'color %03d ' % i
+def ptext(text, style=38, fg=5, bg=7):
+    'Prints output of ``ctext``.'
+    print(ctext(text, style=style, fg=fg, bg=bg))
 
 for i in range(256):
-    print('%03d %s' % (i, ctext('=======', bg=i)))
+    print('{:03d} {}'.format(i, ctext('=======', bg=i)))

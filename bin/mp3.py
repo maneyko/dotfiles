@@ -7,7 +7,7 @@ import tabulate
 import mutagen.easyid3
 import mutagen.easymp4
 
-def parse_args():
+def parse_args(args=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('files', nargs='+', type=argparse.FileType('r'),
             help='MP3 or M4A files')
@@ -17,10 +17,12 @@ def parse_args():
             help='Use regular expression substitution on field')
     parser.add_argument('-d', '--dry-run', action='store_true',
             help='Preview changes with substitution')
-    return parser.parse_args()
+    return parser.parse_args(args)
 
 def load(fileobj):
-    fileobj.close()
+    'Loads a file object as a mutagen tag.'
+    if not fileobj.closed:
+        fileobj.close()
     path = fileobj.name
     if path.endswith('.mp3'):
         return mutagen.easyid3.EasyID3(path)
@@ -28,6 +30,7 @@ def load(fileobj):
         return mutagen.easymp4.EasyMP4(path)
 
 def pprint(tags):
+    'Prints table of mutagen tags with keys as headers.'
     keys = set( key for tag in tags for key in tag.keys() )
     d = { key: [] for key in sorted(keys) }
     for tag in tags:
@@ -36,14 +39,14 @@ def pprint(tags):
     print(tabulate.tabulate(d, headers='keys'))
 
 def edit(tag, pat, repl, field):
+    'Evaluates regexp substitution on mutagen tag.'
     try:
         new = re.sub(pat, repl, tag[field][0])
         tag[field] = [new]
     except KeyError:
         pass
 
-def main():
-    args = parse_args()
+def main(args):
     files = [ load(f) for f in args.files ]
     if args.__getattribute__('print'):
         pprint(files)
@@ -57,4 +60,5 @@ def main():
         pprint(files)
 
 if __name__ == '__main__':
-    main()
+    args = parse_args()
+    main(args)

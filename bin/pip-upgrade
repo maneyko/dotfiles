@@ -1,25 +1,24 @@
 #!/usr/bin/env bash
 
 # Managed by Homebrew
-no_update="\
-basemap
-numpy
-pillow
-pygame
-scapy
-scipy
-"
+no_update=(
+  basemap
+  numpy
+  pillow
+  pygame
+  scipy
+)
 
 test "$1" = '-3' && pyversion=3
 
 cmd="python$pyversion -m pip"
 
-_a=${no_update::-1}
-_b=${_a//$'\n'/\\|}
+_a=${no_update[@]}
+no_grep=${_a// /\\|}
 
 $cmd list \
   --outdated \
   --format=legacy \
-  | grep -iv $_b \
+  | grep -iv $no_grep \
   | awk '{print $1}' \
   | xargs $cmd install --upgrade

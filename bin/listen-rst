@@ -1,13 +1,15 @@
 #!/bin/bash
 
 if ! which rst2html.py >/dev/null 2>&1 \
-  && ! which when-changed >/dev/null 2>&1; then
-  echo 'Need rst2html.py when-changed'
-  echo 'pip install docutils whenchanged'
+  && ! which when-changed >/dev/null 2>&1
+then
+  echo "Need 'rst2html.py' and 'when-changed'"
+  echo '``pip install docutils whenchanged``'
   exit 1
 fi
 
-if ! test -f "$1"; then
+if ! test -f "$1"
+then
   echo 'Need a .rst file as an argument'
   exit 1
 fi
@@ -16,7 +18,7 @@ htmldir='html/'
 htmlfile="${1/%rst/html}"
 fullpath="${htmldir}${htmlfile}"
 
-test ! -d "$htmldir" && mkdir -v "$htmldir"
+test ! -d "$htmldir" && mkdir -pv "$htmldir"
 
 echo 'Listening...'
 when-changed "$1" "rst2html.py "$1" > "$fullpath""

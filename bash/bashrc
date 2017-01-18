@@ -36,7 +36,8 @@ export LESS='-rI'
 export PAGER="~/.vim/macros/less.sh"
 
 clr () { # (number, text)
-  printf "\[\033[38;5;$1m\]$2\[\033[0m\]"
+  esc="\033"
+  printf "\[$esc[38;5;%dm\]%s\[$esc[0m\]" "$1" "$2"
 }
 
 border_color=241
@@ -88,6 +89,6 @@ for f in $HOME/.bash/*.bash; do
 done
 
 f=$HOME/.bashrc.local
-test -f $f && source $f
+test -f "$f" && source "$f"
 
 eval $(dircolors -b ~/.bash/dircolors)

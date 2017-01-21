@@ -21,11 +21,12 @@ if test $TERM
 then
   ncols=$(tput cols)
   nlines=$(tput lines)
-  if test \
-    $ncols -ge 70 \
-    -a $nlines -ge 20 \
-    -a "$(tty | grep 001)" \
-    -a $MAC_OS
+
+
+  if test $MAC_OS \
+    && test $ncols -ge 70 \
+    && test $nlines -ge 20 \
+    && test "$(tty | grep 001)"
   then
     # cat $HOME/.bin/mac_screenfetch.out
     # printf "\n%s\n\n" "$(cowsay "Hello `whoami`")"

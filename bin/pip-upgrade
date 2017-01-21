@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Managed by Homebrew
+# Managed by Homebrew (or Ubuntu)
 no_update=(
   basemap
   numpy

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Does a quick conversion of a .rst file to pdf.
+Does a quick compilation of a '.rst' file to a '.pdf'.
 """
 
 import os
@@ -12,22 +12,23 @@ def parse_args(args=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('file', help='.rst file to convert')
     parser.add_argument('-d', '--delete', action='store_true',
-            help='deletes latex log files')
+            help='deletes latex file')
     return parser.parse_args(args)
 
 def main(args):
-    texfile = args.file.replace('.rst', '.tex')
+    texfile = args.file + '.tex'
     proc = subprocess.Popen(['rst2latex.py', args.file], stdout=subprocess.PIPE)
     out, err = proc.communicate()
     with open(texfile, 'wb') as f:
         f.write(out)
     subprocess.call(['pdflatex', texfile])
+    extensions = ['.aux', '.log', '.out']
+    for extension in extensions:
+        logfile = args.file + extension
+        if os.path.isfile(logfile):
+            os.remove(logfile)
     if args.delete:
-        files = []
-        extensions = ['*.aux', '*.log', '*.out']
-        for ext in extensions:
-            for f in glob.iglob(ext):
-                os.remove(f)
+        os.remove(texfile)
 
 if __name__ == '__main__':
     args = parse_args()

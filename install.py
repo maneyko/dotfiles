@@ -20,13 +20,23 @@ REL_PATH = EXEC_DIR.split(HOME)[1][1:]
 
 os.chdir(HOME)
 
-def parse_args():
+def parse_args(args=None):
     parser = argparse.ArgumentParser(description=__doc__.format(EXCLUDES))
     parser.add_argument('-p', '--plugins', action='store_true',
             help='install vim plugins (using Vundle)')
     parser.add_argument('-u', '--uninstall', action='store_true',
             help='remove symlinked dotfiles')
-    return parser.parse_args()
+    return parser.parse_args(args)
+
+def backup(path):
+    backups = os.path.join(REL_PATH, 'backups/')
+    backup_file = os.path.join(backups, path)
+    response = input('{!r} exists, move to {!r}? [Y/n] '.format(path, backups))
+    if response.lower() not in ['', 'y']:
+        return
+    if not os.path.exists(backups):
+        os.mkdir(backups)
+    os.rename(link_path, backup_file)
 
 def main(args):
     for filepath in glob.iglob('{}/*'.format(REL_PATH)):
@@ -40,16 +50,9 @@ def main(args):
                 print('Removed {!r}'.format(link_path))
         else:
             if os.path.exists(link_path):
-                backups = os.path.join(REL_PATH, 'backups/')
-                backup = os.path.join(backups, basename)
-                response = input('{!r} exists, move to {!r}? [Y/n] '.format(
-                                 link_path, backup))
-                if response.lower() not in ['', 'y']:
+                backup(link_path)
+                if os.path.exists(link_path):
                     continue
-                else:
-                    if not os.path.exists(backups):
-                        os.makedirs(backups)
-                    os.rename(link_path, backup)
             os.symlink(filepath, link_path)
             print('Linked: {!r:25s} -> {!r}'.format(filepath, link_path))
     if args.plugins:

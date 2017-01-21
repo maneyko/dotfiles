@@ -1,13 +1,20 @@
 #!/bin/bash
 
-sysbuild
-brew update
-brew update
-brew upgrade
+if test $MAC_OS
+then
+  sysbuild
+  brew update
+  brew update
+  brew upgrade
+else
+  apt-get update
+  apt-get dist-upgrade
+fi
+
 $HOME/.bin/pip-upgrade
 $HOME/.bin/pip-upgrade -3
 npm update -g
 npm upgrade -g
-brew doctor
+test $MAC_OS && brew doctor
 . ~/.bashrc > /dev/null
 

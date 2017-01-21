@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+"""
+Prints all values of ``href`` for ``<a>`` html tags from a link or html
+file.
+"""
 
 import os
 import argparse
@@ -7,33 +11,37 @@ from six.moves.html_parser import HTMLParser
 from six.moves.urllib.request import urlopen
 
 def parse_args(args=None):
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('url', help='link or html file')
     return parser.parse_args(args)
 
-def html_contents(name):
-    if os.access(name, os.R_OK):
-        with open(name) as html_file:
+def html_contents(path):
+    'Returns HTML text of a link or file.'
+    if os.access(path, os.R_OK):
+        with open(path) as html_file:
             return html_file.read()
-    if name[:4] != 'http':
-        name = 'http://' + name
-    return urlopen(name).read().decode('utf-8')
-
-def handle_starttag(self, tag, attrs):
-    'Overwrites HTMLParser.handle_starttag'
-    if tag.lower() == 'a':
-        self.hrefs.extend([a[1] for a in attrs if a[0].lower() == 'href'])
+    if path[:4] != 'http':
+        path = 'http://' + path
+    return urlopen(path).read().decode('utf-8')
 
 def get_hrefs(html_text):
+    'Returns list of link paths from ``html_text``.'
+    hrefs = []
+    def handle_starttag(self, tag, attrs):
+        if tag.lower() == 'a':
+            hrefs.extend([ a[1] for a in attrs
+                                if a[0].lower() == 'href' ])
     HTMLParser.handle_starttag = handle_starttag
     parser = HTMLParser()
-    parser.hrefs = []
     parser.feed(html_text)
-    return parser.hrefs
+    return hrefs
+
+def main(args):
+    text = html_contents(args.url)
+    hrefs = get_hrefs(text)
+    for href in hrefs:
+        print(href)
 
 if __name__ == '__main__':
     args = parse_args()
-    html_text = html_contents(args.url)
-    hrefs = get_hrefs(html_text)
-    for h in hrefs:
-        print(h)
+    main(args)

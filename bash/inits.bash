@@ -39,7 +39,7 @@ then  # Check if enough room to have first terminal instance greeting
     && test $nlines -ge 20 \
     && test "$(tty | grep 001)"
   then
-    # cat $HOME/.bin/mac_screenfetch.out
+    # cat $HOME/.mac/mac_screenfetch.out
     # printf "\n%s\n\n" "$(cowsay "Hello $USER")"
     printf "\n%s\n\n" "$(python -m this)"
     if test $TMUX

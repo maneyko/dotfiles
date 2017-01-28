@@ -1,34 +1,27 @@
 #!/bin/bash
 
-text_color=19
+TEXT_COLOR=19
 
 date_status() {
-  tmux set -g status-right \
-    "#[fg=colour$text_color]#(date +'%a %b %d %Y')" || break
+  text="#[fg=colour$TEXT_COLOR]#(date +'%a %b %d %Y')"
+  tmux set -g status-right "$text" || break
 }
 
-
-if test `uname` = 'Darwin'
+if test $(uname) = 'Darwin'
 then
-
   while test $TMUX
   do
-
     tunes="$($HOME/.mac/tunes.scpt)"
-
     if test "$tunes"
     then
-        tmux set -g status-right \
-          "#[fg=colour$text_color]$tunes" || break
+      text="#[fg=colour$TEXT_COLOR]$tunes"
+      tmux set -g status-right "$text" || break
     else
       date_status
     fi
-
     sleep 10
   done &  # Whole loop is background process - updates every 10 seconds
-
 else
   date_status
 fi
-
 exit 0

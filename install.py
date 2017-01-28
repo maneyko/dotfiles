@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
-Links all files in ``dotfiles/``, with the exception of {}, to HOME
-directory.
+Symlinks all files in '{}/' to HOME directory,
+with the exceptions of {}.
 """
 
 import os
@@ -10,7 +10,7 @@ import argparse
 import subprocess
 from six.moves import input
 
-EXCLUDES = [os.path.basename(__file__)]  # README (if there was one)
+EXCLUDES = [os.path.basename(__file__), 'README']
 if os.uname()[0] != 'Darwin':
     EXCLUDES.append('mac')
 
@@ -21,7 +21,8 @@ RELATIVE_PATH = EXEC_DIR.split(HOME)[1][1:]  # Relative to HOME
 os.chdir(HOME)
 
 def parse_args(args=None):
-    parser = argparse.ArgumentParser(description=__doc__.format(EXCLUDES))
+    parser = argparse.ArgumentParser(
+            description=__doc__.format(RELATIVE_PATH, EXCLUDES))
     parser.add_argument('-p', '--plugins',
             action='store_true',
             help='install vim plugins (using Vundle)')

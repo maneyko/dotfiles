@@ -193,7 +193,7 @@ def functions():
     ]))
 
 def write_file():
-    with open(os.path.join(OUTPUT), 'w') as f:
+    with open(OUTPUT, 'w') as f:
         f.write('# This file was created by {}\n'.format(
                 os.path.realpath(__file__)))
         f.write('\n'.join(LINES))

@@ -16,30 +16,32 @@ if os.uname()[0] != 'Darwin':
 
 HOME = os.environ['HOME']
 EXEC_DIR = os.path.dirname(os.path.realpath(__file__))
-REL_PATH = EXEC_DIR.split(HOME)[1][1:]
+RELATIVE_PATH = EXEC_DIR.split(HOME)[1][1:]  # Relative to HOME
 
 os.chdir(HOME)
 
 def parse_args(args=None):
     parser = argparse.ArgumentParser(description=__doc__.format(EXCLUDES))
-    parser.add_argument('-p', '--plugins', action='store_true',
+    parser.add_argument('-p', '--plugins',
+            action='store_true',
             help='install vim plugins (using Vundle)')
-    parser.add_argument('-u', '--uninstall', action='store_true',
+    parser.add_argument('-u', '--uninstall',
+            action='store_true',
             help='remove symlinked dotfiles')
     return parser.parse_args(args)
 
 def backup(path):
-    backups = os.path.join(REL_PATH, 'backups/')
-    backup_file = os.path.join(backups, path)
+    backups = os.path.join(RELATIVE_PATH, 'backups/')
+    backup_path = os.path.join(backups, path)
     response = input('{!r} exists, move to {!r}? [Y/n] '.format(path, backups))
     if response.lower() not in ['', 'y']:
         return
     if not os.path.exists(backups):
         os.mkdir(backups)
-    os.rename(link_path, backup_file)
+    os.rename(link_path, backup_path)
 
 def main(args):
-    for filepath in glob.iglob('{}/*'.format(REL_PATH)):
+    for filepath in glob.iglob('{}/*'.format(RELATIVE_PATH)):
         basename = os.path.basename(filepath)
         if basename in EXCLUDES:
             continue
@@ -51,7 +53,7 @@ def main(args):
         else:
             if os.path.exists(link_path):
                 backup(link_path)
-                if os.path.exists(link_path):
+                if os.path.exists(link_path):  # Chose not to backup
                     continue
             os.symlink(filepath, link_path)
             print('Linked: {!r:25s} -> {!r}'.format(filepath, link_path))

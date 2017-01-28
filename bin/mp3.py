@@ -9,13 +9,20 @@ import mutagen.easymp4
 
 def parse_args(args=None):
     parser = argparse.ArgumentParser()
-    parser.add_argument('files', nargs='+', type=argparse.FileType('r'),
+    parser.add_argument('files',
+            nargs='+',
+            type=argparse.FileType('r'),
             help='MP3 or M4A files')
-    parser.add_argument('-p', '--print', default=True, action='store_true',
+    parser.add_argument('-p', '--print',
+            action='store_true',
+            default=True,
             help='Print file info (defaults to %(default)s)')
-    parser.add_argument('-s', metavar=('PAT' , 'REPL', 'FIELD'), nargs=3,
+    parser.add_argument('-s',
+            metavar=('PAT' , 'REPL', 'FIELD'),
+            nargs=3,
             help='Use regular expression substitution on field')
-    parser.add_argument('-d', '--dry-run', action='store_true',
+    parser.add_argument('-d', '--dry-run',
+            action='store_true',
             help='Preview changes with substitution')
     return parser.parse_args(args)
 

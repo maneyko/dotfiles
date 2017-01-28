@@ -17,6 +17,7 @@ import contextlib
 from IPython import get_ipython
 from IPython.core.magic import register_line_magic
 
+HOME = os.environ['HOME']
 ipython = get_ipython()
 
 @contextlib.contextmanager
@@ -31,21 +32,19 @@ def suppress_stdout():
 
 @register_line_magic
 def saveall(line, exit=False):
-    'Saves entire history of session to log file.'
-    HOME = os.environ['HOME']
-    log_path = os.path.join(HOME, '.ipython/profile_maneyko/logs')
-    if not os.path.isdir(log_path):
-        os.makedirs(log_path)
+    """Saves entire history of session to log file."""
+    logs = os.path.join(HOME, '.ipython/profile_maneyko/logs')
+    ninputs = ipython.run_cell('len(In)').result
+    if not os.path.isdir(logs):
+        os.makedirs(logs)
     if exit:
         dec = 1
     else:  # Don't include magic command in log
         dec = 2
-    hist_size = ipython.run_cell('len(In)').result - dec
+    history =  ninputs - dec
     timestamp = time.strftime('%Y-%m-%d_@_%H:%M:%S')
-    filepath = os.path.join(log_path, timestamp)
-    filename = '{}.py'.format(filepath)
+    logfile = os.path.join(logs, timestamp) + '.py'
     with suppress_stdout():
-        ipython.magic('save {} 1-{:d}'.format(filename, hist_size))
+        ipython.magic('save {} 1-{:d}'.format(logfile, history))
 
 atexit.register(saveall, line=None, exit=True)
-

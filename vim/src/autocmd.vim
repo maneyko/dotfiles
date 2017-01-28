@@ -12,7 +12,6 @@ au BufNewFile *.py        exe "normal! i#!/usr/bin/env python\<CR>\<Esc>"
 au BufNewFile *.pl        exe "normal! i#!/usr/bin/env perl\<CR>\<Esc>x"
 
 au BufRead *.ipynb        setlocal ft=json
-au BufRead *.tmux*        setlocal ft=sh
 au BufRead,BufNewFile
       \ /usr/local/etc/nginx/*,/usr/local/nginx/conf/*,/etc/nginx/*
       \ setlocal ft=nginx

@@ -25,12 +25,14 @@ EXTENSIONS = [
     'Z',
 ]
 
-def parse_args(args=None):
+def parse_args(opts=None):
     parser = argparse.ArgumentParser(description=__doc__.format(EXTENSIONS))
-    parser.add_argument('file', help='file or directory to be compressed')
-    parser.add_argument('-e', '--extension', default='gz',
+    parser.add_argument('file',
+            help='file or directory to be compressed')
+    parser.add_argument('-e', '--extension',
+            default='gz',
             help='tar compressed extension (defaults to %(default)r)')
-    args = parser.parse_args(args)  # Overwriting
+    args = parser.parse_args(opts)
     if args.extension not in EXTENSIONS:
         return parser.error('extension must be in {}'.format(EXTENSIONS))
     if not os.path.exists(args.file):

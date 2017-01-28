@@ -8,8 +8,8 @@ if !empty(glob('~/.vim/bundle/Vundle.vim'))
   call vundle#begin()
 
   Plugin 'VundleVim/Vundle.vim'        " plugin manager
-  " Plugin 'Valloric/YouCompleteMe'      " completion engine
-  " Plugin 'davidhalter/jedi-vim'        " python completion
+  Plugin 'Valloric/YouCompleteMe'      " completion engine
+  Plugin 'davidhalter/jedi-vim'        " python completion
   Plugin 'maneyko/vim-do'              " execute shell commands
 
   " syntax

@@ -1,9 +1,12 @@
 #!/usr/bin/env python
-# coding: utf-8
 
 def ctext(n, text):
-    return '{esc}[38;5;{:d}m{}{esc}[0m'.format(n, text, esc='\033')
+    return """
+        {esc}
+        [38;5;{bg}m{esc}
+        [48;5;{bg}m{:s}
+        {esc}[39;49m
+    """.replace(' ', '').replace('\n', '').format(text, bg=n, esc='\033')
 
 for i in range(256):
-    text = 'color %03d ' % i
-    print(ctext(i, text + '■'*15))
+    print('{:03d} {}'.format(i, ctext(i, '=' * 7)))

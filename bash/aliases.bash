@@ -1,5 +1,5 @@
-# aliases
-# ===============================================
+# Bash Aliases
+# ============
 
 shopt -s expand_aliases
 
@@ -38,8 +38,7 @@ alias .4="cd ../../../../"
 alias .5="cd ../../../../../"
 alias .6="cd ../../../../../../"
 
-if test $MAC_OS
-then
+if test $MAC_OS; then
   alias top="top -u"
   alias mcopy="pbcopy"
   alias mpaste="pbpaste"

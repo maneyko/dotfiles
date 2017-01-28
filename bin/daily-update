@@ -17,4 +17,3 @@ npm update -g
 npm upgrade -g
 test $MAC_OS && brew doctor
 . ~/.bashrc > /dev/null
-

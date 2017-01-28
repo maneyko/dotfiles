@@ -60,12 +60,12 @@ man() {
         -c "silent! call ReadMode(1)" \
         -c "set so=0 ft=man"
   else
-    /usr/bin/env man $@
+    /usr/bin/env man "$@"
   fi
 }
 
 # Export all functions in this script
 funcs=$(grep -o '[a-zA-Z0-9]\+()' $BASH_SOURCE)
 for fn in $funcs; do
-  export -f ${fn//[()]}
+  export -f ${fn%()}
 done

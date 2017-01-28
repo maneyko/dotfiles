@@ -1,12 +1,8 @@
-"""Define magic command to save session history to log file.
+"""
+Define magic command to save session history to log file.
 
-Links
------
-Startup Files
-    https://ipython.readthedocs.io/en/stable/interactive/tutorial.html#startup-files
-
-Defining Custom Magics
-    https://ipython.readthedocs.io/en/stable/config/custommagics.html
+https://ipython.readthedocs.io/en/stable/interactive/tutorial.html#startup-files
+https://ipython.readthedocs.io/en/stable/config/custommagics.html
 """
 
 import os
@@ -37,11 +33,10 @@ def saveall(line, exit=False):
     ninputs = ipython.run_cell('len(In)').result
     if not os.path.isdir(logs):
         os.makedirs(logs)
-    if exit:
-        dec = 1
+    if exit == True:
+        history =  ninputs - 1
     else:  # Don't include magic command in log
-        dec = 2
-    history =  ninputs - dec
+        history =  ninputs - 2
     timestamp = time.strftime('%Y-%m-%d_@_%H:%M:%S')
     logfile = os.path.join(logs, timestamp) + '.py'
     with suppress_stdout():

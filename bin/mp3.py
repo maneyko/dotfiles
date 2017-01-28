@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 
-import argparse
 import re
+import argparse
 
 import tabulate
 import mutagen.easyid3
 import mutagen.easymp4
 
-def parse_args(args=None):
+def parse_args(opts=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('files',
             nargs='+',
@@ -16,15 +16,15 @@ def parse_args(args=None):
     parser.add_argument('-p', '--print',
             action='store_true',
             default=True,
-            help='Print file info (defaults to %(default)s)')
+            help='print file info (defaults to %(default)s)')
     parser.add_argument('-s',
             metavar=('PAT' , 'REPL', 'FIELD'),
             nargs=3,
-            help='Use regular expression substitution on field')
+            help='use regular expression substitution on field')
     parser.add_argument('-d', '--dry-run',
             action='store_true',
-            help='Preview changes with substitution')
-    return parser.parse_args(args)
+            help='preview changes with substitution')
+    return parser.parse_args(opts)
 
 def load(fileobj):
     'Loads a file object as a mutagen tag.'
@@ -39,10 +39,10 @@ def load(fileobj):
 def pprint(tags):
     'Prints table of mutagen tags with keys as headers.'
     keys = set( key for tag in tags for key in tag.keys() )
-    d = { key: [] for key in sorted(keys) }
+    d = {key: [] for key in sorted(keys)}
     for tag in tags:
-        for key in tag.keys():
-            d[key].append(tag[key][0])
+        for key, value in tag.items():
+            d[key].append(value[0])
     print(tabulate.tabulate(d, headers='keys'))
 
 def edit(tag, pat, repl, field):

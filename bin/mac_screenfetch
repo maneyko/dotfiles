@@ -8,7 +8,7 @@ user=$USER
 sw=$(sw_vers | perl -lane 'print "@F[1..$#F]"' | tr '\n' ' ')
 k_arch=$(uname -m)
 k_os="$(sysctl -n kern.ostype) $(sysctl -n kern.osrelease)"
-hw=$(uname -i)
+hw=$(test `which guname 2>/dev/null` && guname -i)
 shell=${SHELL//*\/}
 sh_v=${BASH_VERSION%\(*}
 font="Inconsolata 14pt"
@@ -27,7 +27,7 @@ nbin=$(
 
 vim_v=$($EDITOR --version \
   | grep -om2 '[0-9]\.[0-9]\|[0-9]\+\-[0-9]\+' \
-  | sed ':a; N; $!ba; s/\n[0-9]\+\-/\./g')
+  | gsed ':a; N; $!ba; s/\n[0-9]\+\-/\./g')
 
 res=$(system_profiler SPDisplaysDataType \
   | grep -o '[0-9]\+ x [0-9]\+')

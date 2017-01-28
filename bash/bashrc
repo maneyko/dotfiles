@@ -47,7 +47,7 @@ user_color=23
 host_color=255
 host_text='OSX'
 if test $(whoami) = 'root'; then
-  user_color=220
+  user_color=220  # Yellow
 fi
 export PS1="\
 `clr $border_color  '┌─['         `\
@@ -68,7 +68,7 @@ export SHORT_PS1="\
 `clr 67              '\\w' `\
 `clr $border_color   ']'   `\
 \n\
-`clr 255             '+ ' `\
+`clr 255             '\\$ ' `\
 "
 
 # Sourcing

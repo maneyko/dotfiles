@@ -31,7 +31,7 @@ fi
 
 
 if test $TERM
-then
+then  # Check if enough room to have first terminal instance greeting
   ncols=$(tput cols)
   nlines=$(tput lines)
   if test $MAC_OS \
@@ -44,7 +44,9 @@ then
     printf "\n%s\n\n" "$(python -m this)"
     if test $TMUX
     then
-      if test $ncols -ge 181 -a $nlines -ge 48  # Full screen on MacOS
+      if test \
+        $ncols -ge 181 \
+        -a $nlines -ge 48  # Full screen on MacOS
       then
         tmux split-window -h
       fi

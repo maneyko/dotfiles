@@ -1,10 +1,17 @@
 #!/usr/bin/env python3
+"""
+Creates main file sourced by 'tmux.conf'.
+
+Using the Tmux configuration system proved to be a pain so this is a
+script to generate it.
+"""
 
 import os
 import re
 import subprocess
 
-OUTPUT = '_tmux.conf'
+THIS_DIR = os.path.dirname(os.path.realpath(__file__))
+OUTPUT = os.path.join(THIS_DIR, '_tmux.conf')
 LINES = []
 
 env = os.environ
@@ -51,9 +58,11 @@ def set_prefix():
 def root_bindings():
     namespace = 'reattach-to-user-namespace'
     binds = {i: 'select-window -t :={:d}'.format(i) for i in range(10)}
-    binds.update({key: 'select-pane -{0}'.format(direction)
-        for key, direction in zip(list('hjkl'), list('LDUR'))})
     binds.update({
+        'h': 'select-pane -L',
+        'j': 'select-pane -D',
+        'k': 'select-pane -U',
+        'l': 'select-pane -R',
         'x': 'kill-pane',
         '[': 'copy-mode',
         ']': """run-shell
@@ -104,16 +113,16 @@ def regular_bindings():
 
 def vi_bindings():
     set('-gw mode-keys vi')
-    namespace = 'reattach-to-user-namespace'
+    namespace_copy = 'reattach-to-user-namespace pbcopy'
     binds = {
         'u': 'halfpage-up',
         'd': 'halfpage-down',
         'o': 'scroll-down',
         'p': 'scroll-up',
         'v': 'begin-selection',
-        'y': 'copy-pipe "{} pbcopy"'.format(namespace),
+        'y': 'copy-pipe "{}"'.format(namespace_copy),
         'Y': 'copy-end-of-line',
-        'Enter': 'copy-pipe "{} pbcopy"'.format(namespace),
+        'Enter': 'copy-pipe "{}"'.format(namespace_copy),
         'Down': 'scroll-down',
         'Up': 'scroll-up'
     }
@@ -135,15 +144,17 @@ def set_colors():
     set('-g default-terminal {!r}'.format(TERM))
     color_inactive = 19
     color_active = 183
-    set('-gw pane-border-style "fg=colour{}"'.format(color_inactive))
-    set('-gw pane-border-style "fg=colour{}"'.format(color_inactive))
-    set('-gw pane-active-border-style "fg=colour{}"'.format(color_active))
+    set('-gw pane-border-style "fg=colour{:d}"'.format(color_inactive))
+    set('-gw pane-active-border-style "fg=colour{:d}"'.format(color_active))
     set('-g status-bg black')
     set('-g status-fg white')
-    set('-g status-left ""')
-    set('-g status-right "#(. ~/.tmux/bar.sh)"')
+    set('-g status-left {!r}'.format(''))
+    set('-g status-right {!r}'.format('#(. ~/.tmux/bar.sh)'))
 
 def functions():
+    # Creates 4 panes with 2 main at the top and 2 smaller below then
+    # refocuses at top left pane.
+    height = 12
     bind_key("'M-n' " + '\; '.join([
         'new-window',
         'split-window -v',
@@ -151,7 +162,7 @@ def functions():
         'select-pane -U',
         'split-window -h',
         'select-pane -L',
-        'resize-pane -D 12',
+        'resize-pane -D {}'.format(height),
         'select-pane -D',
         'swap-pane -U',
         'select-pane -D',
@@ -160,16 +171,19 @@ def functions():
         'select-pane -U',
         'select-pane -L'
     ]))
+    # Creates 2 vertical panes in new window
     bind_key('N ' + '\; '.join([
         'new-window',
         'split-window -h',
         'select-pane -L'
     ]))
+    # Copys line above cursor to system clipboard
     bind_key("-n 'M-Y' " + '\; '.join([
         'copy-mode',
         'send-keys k0v$\;hy',
         'display "Yanked line above"'
     ]))
+    # Copys current line to system clipboard
     bind_key("-n 'M-U' " + '\; '.join([
         'copy-mode',
         'send-keys 0f',
@@ -179,8 +193,7 @@ def functions():
     ]))
 
 def write_file():
-    this_dir = os.path.dirname(os.path.realpath(__file__))
-    with open(os.path.join(this_dir, OUTPUT), 'w') as f:
+    with open(os.path.join(OUTPUT), 'w') as f:
         f.write('# This file was created by {}\n'.format(
                 os.path.realpath(__file__)))
         f.write('\n'.join(LINES))

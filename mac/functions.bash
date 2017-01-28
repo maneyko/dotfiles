@@ -36,8 +36,7 @@ wiki() {
 }
 
 # Export all functions in this script
-funcs=`grep -o '[a-zA-Z0-9]\+()' $BASH_SOURCE | sed 's/[()]//g'`
-for fn in $funcs
-do
-  export -f $fn
+funcs=$(grep -o '[a-zA-Z0-9]\+()' $BASH_SOURCE)
+for fn in $funcs; do
+  export -f ${fn%()}
 done

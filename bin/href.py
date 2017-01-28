@@ -10,10 +10,11 @@ import argparse
 from six.moves.html_parser import HTMLParser
 from six.moves.urllib.request import urlopen
 
-def parse_args(args=None):
+
+def parse_args(opts=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('url', help='link or html file')
-    return parser.parse_args(args)
+    return parser.parse_args(opts)
 
 def html_contents(path):
     'Returns HTML text of a link or file.'

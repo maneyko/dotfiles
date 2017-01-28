@@ -38,12 +38,11 @@ def parse_args(opts=None):
                 'file {!r} does not exist!'.format(args.file))
     if not contains(all_exts, args.file):
         return parser.error(
-                'file extension for {!r} not supported!'.format(args.file))
+                'file extension of {!r} not supported!'.format(args.file))
     return args
 
-def contains(extensions, fname):
-    bools = [ext in fname for ext in extensions]
-    return any(bools)
+def contains(extensions, filename):
+    return any(ext in filename for ext in extensions)
 
 def extract(cmd, filename):
     command = cmd.format(filename)

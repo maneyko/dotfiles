@@ -7,6 +7,5 @@ make using the terminal as pleasant an experience as possible.
 To install::
 
     git clone https://github.com/maneyko/dotfiles ~/.dotfiles
-    cd
-    .dotfiles/install.py  # For help use '-h'
+    ~/.dotfiles/install.py
 

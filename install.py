@@ -10,13 +10,14 @@ import argparse
 import subprocess
 from six.moves import input
 
-EXCLUDES = [os.path.basename(__file__), 'README']
-if os.uname()[0] != 'Darwin':
-    EXCLUDES.append('mac')
-
 HOME = os.environ['HOME']
+BACKUP_DIR = '_backups'
 EXEC_DIR = os.path.dirname(os.path.realpath(__file__))
 RELATIVE_PATH = EXEC_DIR.split(HOME)[1][1:]  # Relative to HOME
+
+EXCLUDES = [os.path.basename(__file__), 'README', BACKUP_DIR]
+if os.uname()[0] != 'Darwin':
+    EXCLUDES.append('mac')
 
 os.chdir(HOME)
 
@@ -32,14 +33,16 @@ def parse_args(args=None):
     return parser.parse_args(args)
 
 def backup(path):
-    backups = os.path.join(RELATIVE_PATH, 'backups/')
-    backup_path = os.path.join(backups, path)
-    response = input('{!r} exists, move to {!r}? [Y/n] '.format(path, backups))
+    backups = os.path.join(RELATIVE_PATH, BACKUP_DIR)
+    backup_base = os.path.basename(path[1:])  # Remove leading '.'
+    backup_path = os.path.join(backups, backup_base)
+    response = input('{!r} exists, move to {!r}? [Y/n] '.format(
+                     path, backup_path))
     if response.lower() not in ['', 'y']:
         return
     if not os.path.exists(backups):
         os.mkdir(backups)
-    os.rename(link_path, backup_path)
+    os.rename(path, backup_path)
 
 def main(args):
     for filepath in glob.iglob('{}/*'.format(RELATIVE_PATH)):

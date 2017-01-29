@@ -19,7 +19,7 @@ $HOME/local/share/man:\
 /usr/share/man:\
 "
 
-if test $(uname) = 'Darwin' 2>/dev/null; then
+if test $(uname) = 'Darwin'; then
   export MAC_OS='true'
 fi
 

@@ -19,6 +19,8 @@ $HOME/local/share/man:\
 /usr/share/man:\
 "
 
+export PYTHONPATH="$HOME/.ipython/maneyko:$PYTHONPATH"
+
 if test $(uname) = 'Darwin'; then
   export MAC_OS='true'
 fi
@@ -31,10 +33,10 @@ export EDITOR='vim'
 export GREP_COLOR='0;34'
 export ACK_PAGER_COLOR='0;34'
 export LESS='-rI'
-export PAGER="~/.vim/macros/less.sh"
+export PAGER='less'
 
-if test -f "$HOME/.pythonrc.py"; then
-  export PYTHONSTARTUP="$HOME/.pythonrc.py"
+if test -f "~/.pythonrc.py"; then
+  export PYTHONSTARTUP="~/.pythonrc.py"
 fi
 
 clr () { # (number, text)

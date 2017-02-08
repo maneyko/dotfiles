@@ -8,15 +8,16 @@ if !empty(glob('~/.vim/bundle/Vundle.vim'))
   call vundle#begin()
 
   Plugin 'VundleVim/Vundle.vim'        " plugin manager
-  " Plugin 'Valloric/YouCompleteMe'      " completion engine
-  " Plugin 'davidhalter/jedi-vim'        " python completion
+  Plugin 'Valloric/YouCompleteMe'      " completion engine
+  Plugin 'davidhalter/jedi-vim'        " python completion
   Plugin 'maneyko/vim-do'              " execute shell commands
 
   " syntax
-  " Plugin 'Glench/Vim-Jinja2-Syntax'    " jinja html templates
+  Plugin 'Glench/Vim-Jinja2-Syntax'    " jinja html templates
   " Plugin 'digitaltoad/vim-pug'         " pug html templates
   " Plugin 'leafgarland/typescript-vim'  " typescript
   Plugin 'vim-scripts/nginx.vim'       " nginx
+  Plugin 'chikamichi/mediawiki.vim'    " wikipedia source
 
   " misc
   Plugin 'jiangmiao/auto-pairs'        " completes pairs

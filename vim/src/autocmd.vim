@@ -16,7 +16,7 @@ au BufRead,BufNewFile
       \ /usr/local/etc/nginx/*,/usr/local/nginx/conf/*,/etc/nginx/*
       \ setlocal ft=nginx
 
-au FileType   css,html,jinja,json,rst,sh,sql,tex,typescript,vim
+au FileType   css,html,jinja,json,R,rst,sh,sql,tex,typescript,vim,yaml
       \ setlocal ts=2 sw=2 sts=2
 
 au FileType rst,tex

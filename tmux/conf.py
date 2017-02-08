@@ -56,7 +56,6 @@ def set_prefix():
     set('-g prefix {!r}'.format(prefix))
 
 def root_bindings():
-    namespace = 'reattach-to-user-namespace'
     binds = {i: 'select-window -t :={:d}'.format(i) for i in range(10)}
     binds.update({
         'h': 'select-pane -L',
@@ -66,14 +65,12 @@ def root_bindings():
         'x': 'kill-pane',
         '[': 'copy-mode',
         ']': """run-shell
-                "{0} pbpaste
+                "reattach-to-user-namespace pbpaste
                 | tmux load-buffer -
-                && tmux paste-buffer" """.format(
-             namespace).replace('\n', '')
+                && tmux paste-buffer" """.replace('\n', '')
     })
     for key, value in binds.items():
-        key = 'M-{}'.format(key)
-        bind_key('-n {!r} {}'.format(key, value))
+        bind_key('-n "M-{}" {}'.format(key, value))
 
 def recursive_bindings():
     bind_key('-r h resize-pane -L')
@@ -104,7 +101,7 @@ def regular_bindings():
         '}': 'swap-pane -D',
         'B': 'break-pane',
         'D': 'detach',
-        "'M-q'": 'confirm-before -p "kill-server? (y/n)" kill-server'
+        'M-q': 'confirm-before -p "kill-server? (y/n)" kill-server'
     })
     for key, value in binds.items():
         value = value.replace(';', '\;')

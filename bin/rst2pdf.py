@@ -18,7 +18,8 @@ def parse_args(opts=None):
 
 def main(args):
     texfile = args.file + '.tex'
-    proc = subprocess.Popen(['rst2latex.py', args.file], stdout=subprocess.PIPE)
+    proc = subprocess.Popen(['rst2latex.py', args.file],
+                            stdout=subprocess.PIPE)
     out, err = proc.communicate()
     with open(texfile, 'wb') as f:
         f.write(out)

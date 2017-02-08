@@ -27,7 +27,7 @@ def parse_args(opts=None):
     return parser.parse_args(opts)
 
 def load(fileobj):
-    'Loads a file object as a mutagen tag.'
+    """Loads a file object as a mutagen tag."""
     if not fileobj.closed:
         fileobj.close()
     path = fileobj.name
@@ -37,7 +37,7 @@ def load(fileobj):
         return mutagen.easymp4.EasyMP4(path)
 
 def pprint(tags):
-    'Prints table of mutagen tags with keys as headers.'
+    """Prints table of mutagen tags with keys as headers."""
     keys = set( key for tag in tags for key in tag.keys() )
     d = {key: [] for key in sorted(keys)}
     for tag in tags:
@@ -46,7 +46,7 @@ def pprint(tags):
     print(tabulate.tabulate(d, headers='keys'))
 
 def edit(tag, pat, repl, field):
-    'Evaluates regexp substitution on mutagen tag.'
+    """Evaluates regexp substitution on mutagen tag."""
     try:
         new = re.sub(pat, repl, tag[field][0])
         tag[field] = [new]

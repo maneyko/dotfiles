@@ -6,25 +6,16 @@ https://ipython.readthedocs.io/en/stable/config/custommagics.html
 """
 
 import os
-import sys
 import time
 import atexit
-import contextlib
+
 from IPython import get_ipython
 from IPython.core.magic import register_line_magic
 
+from maneyko import suppress_stdout
+
 HOME = os.environ['HOME']
 ipython = get_ipython()
-
-@contextlib.contextmanager
-def suppress_stdout():
-    with open(os.devnull, 'w') as devnull:
-        old_stdout = sys.stdout
-        sys.stdout = devnull
-        try:
-            yield
-        finally:
-            sys.stdout = old_stdout
 
 @register_line_magic
 def saveall(line, exit=False):

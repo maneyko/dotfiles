@@ -9,18 +9,13 @@ script to generate it.
 import os
 import re
 import subprocess
+from maneyko import sh
 
 THIS_DIR = os.path.dirname(os.path.realpath(__file__))
 OUTPUT = os.path.join(THIS_DIR, '_tmux.conf')
 LINES = []
 
 env = os.environ
-
-def sh(cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL):
-    proc = subprocess.Popen([cmd], shell=True, stdout=stdout, stderr=stderr)
-    out, err = proc.communicate()
-    return out.decode('utf-8').strip()
-
 TMUX_VERSION = tuple(map(int, sh('tmux -V').split()[-1].split('.')))
 
 def set(text):
@@ -152,7 +147,7 @@ def functions():
     # Creates 4 panes with 2 main at the top and 2 smaller below then
     # refocuses at top left pane.
     height = 12
-    bind_key("'M-n' " + '\; '.join([
+    bind_key('M-n ' + '\; '.join([
         'new-window',
         'split-window -v',
         'split-window -h',
@@ -175,13 +170,13 @@ def functions():
         'select-pane -L'
     ]))
     # Copys line above cursor to system clipboard
-    bind_key("-n 'M-Y' " + '\; '.join([
+    bind_key('-n M-Y ' + '\; '.join([
         'copy-mode',
         'send-keys k0v$\;hy',
         'display "Yanked line above"'
     ]))
     # Copys current line to system clipboard
-    bind_key("-n 'M-U' " + '\; '.join([
+    bind_key('-n M-U ' + '\; '.join([
         'copy-mode',
         'send-keys 0f',
         "send-keys 'Space'",

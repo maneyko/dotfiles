@@ -17,24 +17,22 @@ export COLORS=$HOME/.config/colors/base16-custom.$BACKGROUND.sh
 test $TMUX && source $COLORS
 
 # Find proper ``dircolors`` if exists on system
-if test "$(which gdircolors 2>/dev/null)"; then
-  alias dircolors='gdircolors'
-fi
-if test "$(type dircolors 2>/dev/null)"; then
-  # Creates and exports ``$LS_COLORS``
+if test $MACOS \
+  && which gdircolors >/dev/null 2>&1; then
+  eval $(gdircolors -b ~/.bash/dircolors)
+elif which dircolors >/dev/null 2>&1; then
   eval $(dircolors -b ~/.bash/dircolors)
 fi
 
 if test $HOME = '/Users/maneyko'; then
-  export MANEYKO='true'
+  export MANEYKO=true
 fi
-
 
 if test $TERM
 then  # Check if enough room to have first terminal instance greeting
   ncols=$(tput cols)
   nlines=$(tput lines)
-  if test $MAC_OS \
+  if test $MACOS \
     && test $ncols -ge 70 \
     && test $nlines -ge 20 \
     && test "$(tty | grep 001)"
@@ -46,7 +44,7 @@ then  # Check if enough room to have first terminal instance greeting
     then
       if test \
         $ncols -ge 181 \
-        -a $nlines -ge 48  # Full screen on MacOS
+        -a $nlines -ge 48  # Full screen on macOS
       then
         tmux split-window -h
       fi

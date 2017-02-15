@@ -10,17 +10,18 @@ alias grep='grep -i --color=auto'
 alias mv='mv -i'
 alias vi='vim'
 
-if test $MAC_OS
-then  # Need to ``brew install coreutils``
-  alias ls='gls --color=auto --group-directories-first'
-else
-  alias ls='ls --color=auto --group-directories-first'
+# Need to ``brew install coreutils`` to pass
+if ! test $MACOS \
+  || which gls >/dev/null 2>&1
+then
+  test $MACOS && _ls='gls' || _ls='ls'
+  alias ls="$_ls --color=auto --group-directories-first"
+  alias lsld="ls -AhlGI'*'"
+  alias lsd="ls -AI'*'"
 fi
 alias la='ls -A'
 alias ll='ls -hlG'
 alias lla='ls -AhlG'
-alias lsld='ls -AhlGI'*''
-alias lsd='ls -AI"*"'
 
 # Miniature Functions
 # -------------------
@@ -35,15 +36,13 @@ alias hide='chflags hidden'
 alias nohide='chflags nohidden'
 
 alias ..='cd ../'
-alias .2='cd ../../'
-alias .3='cd ../../../'
-alias .4='cd ../../../../'
-alias .5='cd ../../../../../'
-alias .6='cd ../../../../../../'
+for i in {2..8}; do
+  alias .$i='cd '"$(printf '../%.0s' `seq 1 $i`)"
+done
 
 # Platform Specific
 # -----------------
-if test $MAC_OS; then
+if test $MACOS; then
   alias top='top -u'
   alias mcopy='pbcopy'
   alias mpaste='pbpaste'

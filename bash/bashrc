@@ -22,7 +22,7 @@ $HOME/local/share/man:\
 export PYTHONPATH="$HOME/.ipython/maneyko:$PYTHONPATH"
 
 if test $(uname) = 'Darwin'; then
-  export MAC_OS='true'
+  export MACOS=true
 fi
 
 # Terminal Interface
@@ -76,7 +76,7 @@ export SHORT_PS1="\
 # Sourcing
 # ========
 
-if test $MAC_OS; then
+if test $MACOS; then
   for f in $HOME/.mac/*.bash; do
     source $f
   done

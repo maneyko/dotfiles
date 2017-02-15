@@ -17,7 +17,7 @@ import contextlib
 import subprocess
 
 def sh(cmd):
-    """Executes a blocking shell command."""
+    """Executes a shell command synchronously."""
     proc = subprocess.Popen([cmd], shell=True, stdout=subprocess.PIPE)
     out, err = proc.communicate()
     return out.decode('utf-8').strip()

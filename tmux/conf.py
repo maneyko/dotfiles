@@ -9,7 +9,9 @@ script to generate it.
 import os
 import re
 import subprocess
+
 from maneyko import sh
+
 
 THIS_DIR = os.path.dirname(os.path.realpath(__file__))
 OUTPUT = os.path.join(THIS_DIR, '_tmux.conf')

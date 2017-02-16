@@ -54,17 +54,17 @@ def edit(tag, pat, repl, field):
         pass
 
 def main(args):
-    files = [ load(f) for f in args.files ]
+    tags = [ load(f) for f in args.files ]
     if args.__getattribute__('print'):
-        pprint(files)
+        pprint(tags)
     if args.s:
         pat, repl, field = args.s
-        for f in files:
-            edit(f, pat, repl, field)
+        for tag in tags:
+            edit(tag, pat, repl, field)
             if not args.dry_run:
-                [ f.save() for f in files ]
+                tag.save()
         print('\n{:=^30}'.format(' Result '))
-        pprint(files)
+        pprint(tags)
 
 if __name__ == '__main__':
     args = parse_args()

@@ -44,8 +44,8 @@ then  # Check if enough room to have first terminal instance greeting
     then
       if test \
         $ncols -ge 181 \
-        -a $nlines -ge 48  # Full screen on macOS
-      then
+        -a $nlines -ge 48
+      then  # Full screen on macOS
         tmux split-window -h
       fi
     fi

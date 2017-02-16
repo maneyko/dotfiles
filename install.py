@@ -15,7 +15,7 @@ HOME = os.environ['HOME']
 EXEC_DIR = os.path.dirname(os.path.realpath(__file__))
 DOT_RELPATH = os.path.relpath(EXEC_DIR, HOME)
 
-EXCLUDES = [os.path.basename(__file__), 'README', BACKUP_DIR]
+EXCLUDES = [os.path.basename(__file__), BACKUP_DIR, 'README']
 if os.uname()[0] != 'Darwin':
     EXCLUDES.append('mac')
 
@@ -32,17 +32,17 @@ def parse_args(args=None):
             help='remove symlinked dotfiles')
     return parser.parse_args(args)
 
-def backup(path):
+def backup(filepath):
     backups = os.path.join(DOT_RELPATH, BACKUP_DIR)
-    backup_base = os.path.basename(path.lstrip('.'))
+    backup_base = os.path.basename(filepath.lstrip('.'))
     backup_dst = os.path.join(backups, backup_base)
     response = input('{!r} exists, move to {!r}? [Y/n] '.format(
-                     path, backup_dst))
+                     filepath, backup_dst))
     if response.lower() not in ['', 'y']:
         return
     if not os.path.exists(backups):
         os.mkdir(backups)
-    os.rename(path, backup_dst)
+    os.rename(filepath, backup_dst)
 
 def main(args):
     for link_src in glob.iglob(os.path.join(DOT_RELPATH, '*')):
@@ -63,9 +63,9 @@ def main(args):
             print('Linked: {!r:25s} -> {!r}'.format(link_src, link_dst))
     if args.plugins:
         repo = 'https://github.com/VundleVim/Vundle.vim'
-        path = os.path.join(HOME, '.vim/bundle/Vundle.vim')
-        if not os.path.exists(path):
-            subprocess.call(['git', 'clone', repo, path])
+        dest = os.path.join(HOME, '.vim/bundle/Vundle.vim')
+        if not os.path.exists(dest):
+            subprocess.call(['git', 'clone', repo, dest])
         subprocess.call(['vim', '+PluginInstall', '+qall'])
 
 if __name__ == '__main__':

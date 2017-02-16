@@ -40,8 +40,7 @@ def parse_args(opts=None):
     return args
 
 def main(args):
-    if args.file.endswith('/'):  # Remove to format outfile
-        args.file = args.file[:-1]
+    args.file = args.file.rstrip('/')
     outfile = '{0.file}.tar.{0.extension}'.format(args)
     cmd = ['tar', '-a', '-cvf', outfile, args.file]
     subprocess.call(cmd)

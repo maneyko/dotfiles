@@ -65,7 +65,7 @@ man() {
 }
 
 # Export all functions in this script
-funcs=$(grep -o '[a-zA-Z0-9]\+()' $BASH_SOURCE)
+funcs=$(grep -o '[0-9A-Z_a-z]\+()' "$BASH_SOURCE")
 for fn in $funcs; do
   export -f ${fn%()}
 done

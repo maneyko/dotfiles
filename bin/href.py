@@ -17,7 +17,7 @@ def parse_args(opts=None):
     return parser.parse_args(opts)
 
 def html_contents(path):
-    'Returns HTML text of a link or file.'
+    """Returns HTML text of a link or file."""
     if os.access(path, os.R_OK):
         with open(path) as html_file:
             return html_file.read()
@@ -26,12 +26,14 @@ def html_contents(path):
     return urlopen(path).read().decode('utf-8')
 
 def get_hrefs(html_text):
-    'Returns list of link paths from ``html_text``.'
+    """Returns list of link paths from ``html_text``."""
     hrefs = []
+
     def handle_starttag(self, tag, attrs):
         if tag.lower() == 'a':
-            hrefs.extend([ a[1] for a in attrs
-                                if a[0].lower() == 'href' ])
+            hrefs.extend([a[1] for a in attrs
+                          if a[0].lower() == 'href'])
+
     HTMLParser.handle_starttag = handle_starttag
     parser = HTMLParser()
     parser.feed(html_text)

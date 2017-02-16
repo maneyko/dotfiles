@@ -35,8 +35,8 @@ export ACK_PAGER_COLOR='0;34'
 export LESS='-rI'
 export PAGER='less'
 
-if test -f "~/.pythonrc.py"; then
-  export PYTHONSTARTUP="~/.pythonrc.py"
+if test -f "$HOME/.pythonrc.py"; then
+  export PYTHONSTARTUP="$HOME/.pythonrc.py"
 fi
 
 clr () { # (number, text)

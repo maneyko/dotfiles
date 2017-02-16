@@ -7,23 +7,27 @@ if !empty(glob('~/.vim/bundle/Vundle.vim'))
   set rtp+=~/.vim/bundle/Vundle.vim
   call vundle#begin()
 
+  " core
   Plugin 'VundleVim/Vundle.vim'        " plugin manager
-  Plugin 'Valloric/YouCompleteMe'      " completion engine
-  Plugin 'davidhalter/jedi-vim'        " python completion
-  Plugin 'maneyko/vim-do'              " execute shell commands
+  Plugin 'mkarmona/colorsbox'          " color scheme
+  " Plugin 'Valloric/YouCompleteMe'      " completion engine
+  " Plugin 'davidhalter/jedi-vim'        " python completion
 
   " syntax
-  Plugin 'Glench/Vim-Jinja2-Syntax'    " jinja html templates
+  Plugin 'vim-scripts/AnsiEsc.vim'     " escape ANSI sequences
+  " Plugin 'Glench/Vim-Jinja2-Syntax'    " jinja html templates
   " Plugin 'digitaltoad/vim-pug'         " pug html templates
   " Plugin 'leafgarland/typescript-vim'  " typescript
-  Plugin 'vim-scripts/nginx.vim'       " nginx
-  Plugin 'chikamichi/mediawiki.vim'    " wikipedia source
+  " Plugin 'vim-scripts/nginx.vim'       " nginx
+  " Plugin 'chikamichi/mediawiki.vim'    " wikipedia source
 
   " misc
+  Plugin 'vim-utils/vim-man'           " `Man` command
   Plugin 'jiangmiao/auto-pairs'        " completes pairs
   Plugin 'ctrlpvim/ctrlp.vim'          " fuzzy file finder
   " Plugin 'scrooloose/nerdtree'         " filetree
   " Plugin 'scrooloose/syntastic'        " syntax linter
+  Plugin 'maneyko/vim-do'              " execute shell commands
 
   " filetype specific
   Plugin 'mattn/emmet-vim'             " html completion
@@ -39,10 +43,6 @@ if !empty(glob('~/.vim/bundle/Vundle.vim'))
   call vundle#end()
 endif
 filetype plugin indent on
-
-if !empty(glob('~/.vim/ftplugin/man.vim'))
-  source ~/.vim/ftplugin/man.vim
-endif
 
 if has('autocmd')
   source ~/.vim/src/autocmd.vim

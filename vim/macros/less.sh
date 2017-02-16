@@ -1,6 +1,9 @@
 #!/bin/sh
 # https://github.com/vim/vim/blob/master/runtime/macros/less.sh
 
+# TODO:
+#   Make this in to its own vim plugin to use with Vundle
+
 if test -t 1; then
   if test $# = 0; then
     if test -t 0; then
@@ -23,8 +26,8 @@ else
       echo "Missing filename" 1>&2
       exit
     fi
-    /usr/local/bin/less
+    cat
   else
-    /usr/local/bin/less "$@"
+    cat "$@"
   fi
 fi

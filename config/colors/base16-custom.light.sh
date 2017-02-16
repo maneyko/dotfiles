@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Base16 Custom - Shell color setup script
 # Chris Kempson (http://chriskempson.com)
 
@@ -97,30 +97,7 @@ else
 fi
 
 # clean up
-unset printf_template
-unset printf_template_var
-unset color00
-unset color01
-unset color02
-unset color03
-unset color04
-unset color05
-unset color06
-unset color07
-unset color08
-unset color09
-unset color10
-unset color11
-unset color12
-unset color13
-unset color14
-unset color15
-unset color16
-unset color17
-unset color18
-unset color19
-unset color20
-unset color21
-unset color_foreground
-unset color_background
-unset color_cursor
+vars=$(grep -o '[0-9A-Z_a-z]\+=' "$BASH_SOURCE")
+for v in $vars; do
+  unset ${v%=}
+done

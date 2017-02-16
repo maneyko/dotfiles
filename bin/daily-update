@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if test $MAC_OS
+if test $MACOS
 then
   sysbuild
   brew update
@@ -15,5 +15,5 @@ $HOME/.bin/pip-upgrade
 $HOME/.bin/pip-upgrade -3
 npm update -g
 npm upgrade -g
-test $MAC_OS && brew doctor
+test $MACOS && brew doctor
 . ~/.bashrc > /dev/null

@@ -21,7 +21,7 @@ if os.uname()[0] != 'Darwin':
 
 os.chdir(HOME)
 
-def parse_args(args=None):
+def parse_args(opts=None):
     parser = argparse.ArgumentParser(
             description=__doc__.format(DOT_RELPATH, EXCLUDES))
     parser.add_argument('-p', '--plugins',
@@ -30,7 +30,7 @@ def parse_args(args=None):
     parser.add_argument('-u', '--uninstall',
             action='store_true',
             help='remove symlinked dotfiles')
-    return parser.parse_args(args)
+    return parser.parse_args(opts)
 
 def backup(filepath):
     backups = os.path.join(DOT_RELPATH, BACKUP_DIR)

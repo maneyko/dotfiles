@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-# Managed by Homebrew (or Ubuntu)
+# Managed by Homebrew (or apt)
 no_update=(
   basemap
+  gdal
   numpy
   pillow
   pygame
@@ -16,9 +17,15 @@ cmd="python$pyversion -m pip"
 _a=${no_update[@]}
 no_grep=${_a// /\\|}
 
-$cmd list \
-  --outdated \
-  --format=legacy \
-  | grep -iv $no_grep \
-  | awk '{print $1}' \
-  | xargs $cmd install --upgrade
+packages="$(
+  $cmd list \
+    --outdated \
+    --format=legacy \
+    | grep -iv $no_grep \
+    | awk '{print $1}'
+)"
+
+for pkg in $packages
+do
+  test -n "$pkg" && $cmd install --upgrade "$pkg"
+done

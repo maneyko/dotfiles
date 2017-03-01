@@ -28,7 +28,7 @@ if test $HOME = '/Users/maneyko'; then
   export MANEYKO=true
 fi
 
-if test $TERM
+if test "$TERM"
 then  # Check if enough room to have first terminal instance greeting
   ncols=$(tput cols)
   nlines=$(tput lines)
@@ -42,9 +42,8 @@ then  # Check if enough room to have first terminal instance greeting
     printf "\n%s\n\n" "$(python -m this)"
     if test $TMUX
     then
-      if test \
-        $ncols -ge 181 \
-        -a $nlines -ge 48
+      if test $ncols -ge 181 \
+        && test $nlines -ge 48
       then  # Full screen on macOS
         tmux split-window -h
       fi

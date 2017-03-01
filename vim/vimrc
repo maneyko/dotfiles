@@ -3,22 +3,22 @@
 
 set nocompatible
 filetype off
-if !empty(glob('~/.vim/bundle/Vundle.vim'))
+if isdirectory(glob('~/.vim/bundle/Vundle.vim'))
   set rtp+=~/.vim/bundle/Vundle.vim
   call vundle#begin()
 
   " core
   Plugin 'VundleVim/Vundle.vim'        " plugin manager
   Plugin 'mkarmona/colorsbox'          " color scheme
-  " Plugin 'Valloric/YouCompleteMe'      " completion engine
-  " Plugin 'davidhalter/jedi-vim'        " python completion
+  Plugin 'Valloric/YouCompleteMe'      " completion engine
+  Plugin 'davidhalter/jedi-vim'        " python completion
 
   " syntax
   Plugin 'vim-scripts/AnsiEsc.vim'     " escape ANSI sequences
   " Plugin 'Glench/Vim-Jinja2-Syntax'    " jinja html templates
   " Plugin 'digitaltoad/vim-pug'         " pug html templates
-  " Plugin 'leafgarland/typescript-vim'  " typescript
-  " Plugin 'vim-scripts/nginx.vim'       " nginx
+  Plugin 'leafgarland/typescript-vim'  " typescript
+  Plugin 'vim-scripts/nginx.vim'       " nginx
   " Plugin 'chikamichi/mediawiki.vim'    " wikipedia source
 
   " misc
@@ -93,7 +93,9 @@ let $BASH_ENV='~/.bash/aliases.bash'
 " ======
 
 syntax on
-colorscheme colorsbox-stnight
+if isdirectory(glob('~/.vim/bundle/colorsbox'))
+  colorscheme colorsbox-stnight
+endif
 
 " make bg and fg colors same as terminal
 highlight Normal ctermbg=NONE

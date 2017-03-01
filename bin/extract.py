@@ -9,7 +9,7 @@ import subprocess
 
 DATA = [
     (['.tar.', '.tar', '.tbz2', '.tgz'],
-        'tar xvzf {!r}'),
+        'tar xvf {!r}'),
     (['.gz'],
         'gunzip {!r}'),
     (['.bz2'],

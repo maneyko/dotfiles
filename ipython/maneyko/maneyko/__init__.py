@@ -20,7 +20,7 @@ import subprocess
 
 
 def sh(cmd):
-    """Executes a shell command synchronously.
+    """Execute a shell command synchronously.
 
     Example
     -------

@@ -44,9 +44,10 @@ clr () { # (number, text)
 }
 
 border_color=241
-user_color=23
+user_color=196
 host_color=255
 host_text='OSX'
+pwd_color=228
 if test $(whoami) = 'root'; then
   user_color=220  # Yellow
 fi
@@ -56,7 +57,7 @@ export PS1="\
 `clr 250            '@'           `\
 `clr $host_color    "$host_text"  `\
 `clr $border_color  ']─|─['       `\
-`clr 67             '\\w'         `\
+`clr $pwd_color     '\\w'         `\
 `clr $border_color  ']'           `\
 \n\
 `clr $border_color  '└['          `\
@@ -66,7 +67,7 @@ export PS1="\
 
 export SHORT_PS1="\
 `clr $border_color   '['   `\
-`clr 67              '\\w' `\
+`clr $pwd_color      '\\w' `\
 `clr $border_color   ']'   `\
 \n\
 `clr 255             '\\$ ' `\

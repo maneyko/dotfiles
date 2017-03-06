@@ -138,8 +138,10 @@ def set_colors():
     set('-g default-terminal {!r}'.format(TERM))
     color_inactive = 19
     color_active = 183
-    set('-gw pane-border-style "fg=colour{:d}"'.format(color_inactive))
-    set('-gw pane-active-border-style "fg=colour{:d}"'.format(color_active))
+    if TMUX_VERSION > (1, 8):
+        set('-gw pane-border-style "fg=colour{:d}"'.format(color_inactive))
+        set('-gw pane-active-border-style "fg=colour{:d}"'.format(
+            color_active))
     set('-g status-bg black')
     set('-g status-fg white')
     set('-g status-left {!r}'.format(''))

@@ -1,10 +1,10 @@
 # Shell Initializations
 # =====================
 
-# Give ``C-s`` and ``C-q`` to readline. ``-`` disables it
+# Give <C-s> and <C-q> to readline. ``-`` disables it
 test "$TERM" != 'dumb' && stty -ixon
 
-# Disable ``C-d`` to quit session
+# Disable <C-d> to quit session
 set -o ignoreeof
 
 # Posix mode

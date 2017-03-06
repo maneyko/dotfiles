@@ -10,8 +10,8 @@ if isdirectory(glob('~/.vim/bundle/Vundle.vim'))
   " core
   Plugin 'VundleVim/Vundle.vim'        " plugin manager
   Plugin 'mkarmona/colorsbox'          " color scheme
-  Plugin 'Valloric/YouCompleteMe'      " completion engine
-  Plugin 'davidhalter/jedi-vim'        " python completion
+  " Plugin 'Valloric/YouCompleteMe'      " completion engine
+  " Plugin 'davidhalter/jedi-vim'        " python completion
 
   " syntax
   Plugin 'vim-scripts/AnsiEsc.vim'     " escape ANSI sequences

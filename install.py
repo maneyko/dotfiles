@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Symlinks all files in '{}/' to HOME directory,
+Symlinks all files in '{}/' (with a '.' prepended) to HOME directory,
 with the exceptions of {}.
 """
 

@@ -2,7 +2,9 @@
 # =====================
 
 # Give <C-s> and <C-q> to readline. ``-`` disables it
-test "$TERM" != 'dumb' && stty -ixon
+test "$TERM" != 'dumb' && {
+  stty -ixon
+}
 
 # Disable <C-d> to quit session
 set -o ignoreeof
@@ -24,9 +26,9 @@ elif which dircolors >/dev/null 2>&1; then
   eval $(dircolors -b ~/.bash/dircolors)
 fi
 
-if test $HOME = '/Users/maneyko'; then
+test $HOME = '/Users/maneyko' && {
   export MANEYKO=true
-fi
+}
 
 if test "$TERM" != 'dumb'
 then  # Check if enough room to have first terminal instance greeting

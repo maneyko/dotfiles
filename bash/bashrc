@@ -21,9 +21,9 @@ $HOME/local/share/man:\
 
 export PYTHONPATH="$HOME/.ipython/maneyko:$PYTHONPATH"
 
-if test $(uname) = 'Darwin'; then
+test $(uname) = 'Darwin' && {
   export MACOS=true
-fi
+}
 
 # Terminal Interface
 # ==================
@@ -34,9 +34,9 @@ export GREP_COLOR='0;34'
 export LESS='-rI'
 export PAGER='less'
 
-if test -f "$HOME/.pythonrc.py"; then
+test -f "$HOME/.pythonrc.py" && {
   export PYTHONSTARTUP="$HOME/.pythonrc.py"
-fi
+}
 
 clr () { # (number, text)
   esc="\033"
@@ -48,9 +48,9 @@ user_color=196
 host_color=255
 host_text='OSX'
 pwd_color=228
-if test $(whoami) = 'root'; then
+test $(whoami) = 'root' && {
   user_color=220  # Yellow
-fi
+}
 export PS1="\
 `clr $border_color  '┌─['         `\
 `clr $user_color    "$(whoami)"   `\
@@ -76,16 +76,16 @@ export SHORT_PS1="\
 # Sourcing
 # ========
 
-if test $MACOS; then
+test $MACOS && {
   for f in $HOME/.mac/*.bash; do
     source $f
   done
-fi
+}
 
 for f in $HOME/.bash/*.bash; do
   source $f
 done
 
-if test -f $HOME/.bashrc.local; then
+test -f $HOME/.bashrc.local && {
   source $HOME/.bashrc.local
-fi
+}

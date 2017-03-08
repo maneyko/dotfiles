@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if which "$@" >/dev/null 2>&1
+then
+  vim -c "execute 'Man ' . '$@'" \
+      -c "execute \"normal \<C-w>o\"" \
+      -c "silent! call ReadMode(1)" \
+      -c "set so=0 ft=man"
+else
+  /usr/bin/env man "$@"
+fi

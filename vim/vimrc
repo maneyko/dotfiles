@@ -11,11 +11,11 @@ if isdirectory(glob('~/.vim/bundle/Vundle.vim'))
   Plugin 'VundleVim/Vundle.vim'        " plugin manager
   Plugin 'mkarmona/colorsbox'          " color scheme
   " Plugin 'Valloric/YouCompleteMe'      " completion engine
-  " Plugin 'davidhalter/jedi-vim'        " python completion
+  Plugin 'davidhalter/jedi-vim'        " python completion
 
   " syntax
   Plugin 'vim-scripts/AnsiEsc.vim'     " escape ANSI sequences
-  " Plugin 'Glench/Vim-Jinja2-Syntax'    " jinja html templates
+  Plugin 'Glench/Vim-Jinja2-Syntax'    " jinja html templates
   " Plugin 'digitaltoad/vim-pug'         " pug html templates
   Plugin 'leafgarland/typescript-vim'  " typescript
   Plugin 'vim-scripts/nginx.vim'       " nginx

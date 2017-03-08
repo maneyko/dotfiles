@@ -1,6 +1,5 @@
 #!/bin/bash
 
-if test -f $HOME/.bashrc
-then
+test -f $HOME/.bashrc && {
   source $HOME/.bashrc
-fi
+}

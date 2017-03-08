@@ -1,9 +1,9 @@
 # First TTY Greeting
 # ==================
 
-if test $INTERACTIVE -a "$(tty | grep 001)"
+if test -n "$INTERACTIVE" -a "$(tty | grep 001)"
 then  # Check if enough room to have first terminal instance greeting
-  if test $MACOS \
+  if test -n "$MACOS" \
     && test $COLUMNS -ge 70 \
     && test $LINES -ge 20
   then

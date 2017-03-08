@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if test $MACOS
+if test $(uname) = 'Darwin'
 then
   PATH="\
 /usr/local/bin:\
@@ -23,5 +23,5 @@ $HOME/.bin/pip-upgrade
 $HOME/.bin/pip-upgrade -3
 npm update -g
 npm upgrade -g
-test $MACOS && brew doctor
-. ~/.bashrc > /dev/null
+test $(uname) = 'Darwin' && brew doctor
+. ~/.bashrc >/dev/null

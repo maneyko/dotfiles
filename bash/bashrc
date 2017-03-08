@@ -88,19 +88,19 @@ _expand() {
   return 0
 }
 
-test $INTERACTIVE && {
+test -n "$INTERACTIVE" && {
   stty -ixon
 }
 
-export COLORS=$HOME/.config/colors/base16-custom.dark.sh
-test "$TMUX" -a -f $COLORS && {
+COLORS=$HOME/.config/colors/base16-custom.dark.sh
+test -n "$TMUX" -a -f $COLORS && {
   source $COLORS
 }
 
 # Find and evaluate ``dircolors`` if exists on system
 _dircolors="$(type -P gdircolors dircolors | head -1)"
 test -n "$_dircolors" && {
-  eval $("$_dircolors" -b ~/.bash/dircolors)
+  eval $($_dircolors -b ~/.bash/dircolors)
 }
 
 
@@ -118,7 +118,7 @@ user_color=196
 host_color=255
 host_text='OSX'
 pwd_color=228
-test $(whoami) = 'root' && {
+test "$(whoami)" = 'root' && {
   user_color=220  # Yellow
 }
 PS1="\
@@ -189,7 +189,7 @@ for i in {2..8}; do
 done
 
 # Platform specific
-test $MACOS && {
+test -n "$MACOS" && {
   alias top='top -u'
   alias mcopy='pbcopy'
   alias mpaste='pbpaste'
@@ -204,7 +204,7 @@ test $MACOS && {
 # ---------------------------------------------------------------------
 
 # My module
-PYTHONPATH="$HOME/.ipython/maneyko:$PYTHONPATH"
+export PYTHONPATH="$HOME/.ipython/maneyko:$PYTHONPATH"
 
 test -f "$HOME/.pythonrc.py" && {
   PYTHONSTARTUP="$HOME/.pythonrc.py"

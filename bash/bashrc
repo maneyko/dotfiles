@@ -63,6 +63,7 @@ test "$UNAME" = 'Darwin' && {
 
 test -n "$(command -v vim)" && {
   EDITOR='vim'
+  alias vi='vim'
 } || {
   EDITOR='vi'
 }
@@ -147,10 +148,10 @@ SHORT_PS1="\
 # Aliases
 # ---------------------------------------------------------------------
 
-alias cp='cp -i'
+_cp="$(type -P gcp cp | head -1)"
+alias cp="$_cp -i"
 alias grep='grep -i --color=auto'
 alias mv='mv -i'
-alias vi='vim'
 
 # ``ls`` wrangling
 _ls='ls'
@@ -192,8 +193,6 @@ test $MACOS && {
   alias top='top -u'
   alias mcopy='pbcopy'
   alias mpaste='pbpaste'
-  alias wifi-name="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep -o ' SSID: .*' | sed 's/.*: //'"
-  alias wifi-pass='security find-generic-password -wa "$(wifi-name)"'
 } || {
   alias mcopy='xclip -selection c'
   alias mpaste='xclip -o'

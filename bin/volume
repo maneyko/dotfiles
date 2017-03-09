@@ -2,7 +2,7 @@
 
 test $(uname) != 'Darwin' && exit 1
 
-test "$1" = '-r' && {
+test -z "$1" && {
   /usr/bin/osascript -e 'output volume of (get volume settings)'
 }
 

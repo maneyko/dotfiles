@@ -83,11 +83,12 @@ test -z "$BASH_COMPLETION" && {
   done
 }
 
-# Disable tilde expansion
+# Override ``bash_completion`` and disable tilde expansion
 _expand() {
   return 0
 }
 
+# Reclaim <C-q> and <C-s>
 test -n "$INTERACTIVE" && {
   stty -ixon
 }
@@ -97,7 +98,7 @@ test -n "$TMUX" -a -f $COLORS && {
   source $COLORS
 }
 
-# Find and evaluate ``dircolors`` if exists on system
+# Find and evaluate ``dircolors`` if exists
 _dircolors="$(type -P gdircolors dircolors | head -1)"
 test -n "$_dircolors" && {
   eval $($_dircolors -b ~/.bash/dircolors)
@@ -154,6 +155,7 @@ alias grep='grep -i --color=auto'
 alias mv='mv -i'
 
 # ``ls`` wrangling
+# ----------------
 _ls='ls'
 test "$(command -v gls)" && {
   _ls='gls'
@@ -163,16 +165,16 @@ if $_ls --color ~/ >/dev/null 2>&1; then
 else
   BSD_LS=true
 fi
-if $GNU_LS; then
+if test -n "$GNU_LS"; then
   alias ls="$_ls --color=auto --group-directories-first"
   alias lsld="ls -AGhlI'*'"
   alias lsd="ls -AI'*'"
-elif $BSD_LS; then
+elif test -n "$BSD_LS"; then
   alias ls="$_ls -G"
 fi
 alias la='ls -A'
-alias ll='ls -hl'
-alias lla='ls -Ahl'
+alias ll='ls -Ghl'
+alias lla='ls -AGhl'
 
 
 # Mini functions

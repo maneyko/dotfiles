@@ -12,7 +12,7 @@ then
   while test $TMUX
   do
     tunes="$($HOME/.mac/tunes.scpt)"
-    if test "$tunes"
+    if test -n "$tunes"
     then
       text="#[fg=colour$TEXT_COLOR]$tunes"
       tmux set -g status-right "$text" || break

@@ -10,7 +10,9 @@ if isdirectory(glob('~/.vim/bundle/Vundle.vim'))
   " core
   Plugin 'VundleVim/Vundle.vim'        " plugin manager
   Plugin 'mkarmona/colorsbox'          " color scheme
-  " Plugin 'Valloric/YouCompleteMe'      " completion engine
+  if has('patch-7.4-346')
+    " Plugin 'Valloric/YouCompleteMe'    " completion engine
+  endif
   Plugin 'davidhalter/jedi-vim'        " python completion
 
   " syntax
@@ -92,7 +94,9 @@ let $BASH_ENV='~/.bash/aliases.bash'
 " colors
 " ======
 
-syntax on
+if !empty(glob($VIMRUNTIME . '/syntax/syntax.vim'))
+  syntax on
+endif
 if isdirectory(glob('~/.vim/bundle/colorsbox'))
   colorscheme colorsbox-stnight
 endif

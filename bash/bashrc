@@ -101,7 +101,7 @@ test -n "$TMUX" -a -f $COLORS && {
 # Find and evaluate ``dircolors`` if exists
 _dircolors="$(type -P gdircolors dircolors | head -1)"
 test -n "$_dircolors" && {
-  eval $($_dircolors -b ~/.bash/dircolors)
+  eval "$($_dircolors -b ~/.bash/dircolors)"
 }
 
 

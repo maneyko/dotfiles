@@ -1,6 +1,19 @@
 " vimrc
 " =====
+"
+" table of contents
+" -----------------
+"   * plugins
+"   * sets
+"   * colors
+"   * plugin options
+"   * functions
+"   * remaps
+"   * auto commands
 
+
+" plugins
+" -------
 set nocompatible
 filetype off
 if isdirectory(glob('~/.vim/bundle/Vundle.vim'))
@@ -46,14 +59,9 @@ if isdirectory(glob('~/.vim/bundle/Vundle.vim'))
 endif
 filetype plugin indent on
 
-if has('autocmd')
-  source ~/.vim/src/autocmd.vim
-endif
-source ~/.vim/src/fun.vim
 
-" set
-" ===
-
+" sets
+" ----
 set autoindent
 if has('patch-7.4-346')
   set breakindent
@@ -89,11 +97,10 @@ set tabstop=4
 set tildeop
 
 let g:netrw_dirhistmax=0  " no .netrwhist files
-let $BASH_ENV='~/.bash/aliases.bash'
+
 
 " colors
-" ======
-
+" ------
 if !empty(glob($VIMRUNTIME . '/syntax/syntax.vim'))
   syntax on
 endif
@@ -105,9 +112,123 @@ endif
 highlight Normal ctermbg=NONE
 highlight Normal ctermfg=NONE
 
-" remaps
-" ======
 
+" plugin options
+" --------------
+let g:user_emmet_leader_key = '<NUL>'  " equals '<C-space>,'
+let g:do_refresh_key = '<C-M>'
+let g:SuperTabDefaultCompletionType = 'context'  " contextual completion
+let g:SuperTabCrMapping = 1
+let g:SuperTabLongestHighlight = 1
+let g:vimpager = {}
+let g:less = {}
+let g:less.enabled = 0
+let g:less.scrolloff = 5
+
+let g:ycm_filetype_specific_completion_to_disable = {
+  \   'python': 1,
+\ }
+let g:ycm_add_preview_to_completeopt = 1
+let g:ycm_autoclose_preview_window_after_completion = 0
+let g:ycm_autoclose_preview_window_after_insertion = 1
+let g:ycm_confirm_extra_conf = 0
+" let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+let g:ycm_error_symbol = '??'
+let g:ycm_min_num_of_chars_for_completion = 1
+let g:ycm_seed_identifiers_with_syntax = 1
+let g:ycm_semantic_triggers = {
+  \   'python': ['re![a-zA-Z]+'],
+\ }
+let g:ycm_server_use_vim_stdout = 0
+let g:ycm_server_keep_logfiles = 1
+" ~/.vim/bundle/YouCompleteMe/python/ycm/client/completion_request.py 32j
+" let g:jedi#show_call_signatures = '0'
+" let g:jedi#show_call_signatures_delay = 1000
+
+
+" functions
+" ---------
+fun! ReadMode(readmode_togg)
+  " acts like ``less``
+  if a:readmode_togg==1
+    silent! call FlyMode(0)
+    silent! setlocal nomodifiable
+    silent! setlocal readonly
+    silent! setlocal nolist
+    silent! setlocal timeout timeoutlen=0 ttimeoutlen=0
+    silent! nnoremap <buffer> r :call ReadMode(0)<CR>
+    silent! nnoremap <buffer> q :q<CR>
+    silent! nnoremap <buffer> x :q!<CR>
+    silent! nnoremap <buffer> j <C-e>L0:file<CR>
+    silent! nnoremap <buffer> k <C-y>L0:file<CR>
+    silent! nnoremap <buffer> d <C-d>L0:file<CR>
+    silent! nnoremap <buffer> u <C-u>L0:file<CR>
+    silent! nnoremap <buffer> o 5<C-e>L0:file<CR>
+    silent! nnoremap <buffer> p 5<C-y>L0:file<CR>
+    if @% == ''
+      silent! nnoremap <buffer> q :q!<CR>
+    endif
+    let g:readmode_togg=0
+    echo 'Read Mode on'
+  else
+    silent! setlocal modifiable
+    silent! setlocal noreadonly
+    silent! setlocal timeout nottimeout timeoutlen=1000 ttimeoutlen=-1
+    silent! nunmap <buffer> r
+    silent! nunmap <buffer> q
+    silent! nunmap <buffer> x
+    silent! nunmap <buffer> j
+    silent! nunmap <buffer> k
+    silent! nunmap <buffer> u
+    silent! nunmap <buffer> d
+    silent! nunmap <buffer> o
+    silent! nunmap <buffer> p
+    silent! execute 'normal! M'
+    let g:readmode_togg=1
+    echo 'Read Mode off'
+  endif
+endfun
+let g:readmode_togg=1
+
+fun! FlyMode(flymode_togg)
+  " main function is setting so=999
+  if a:flymode_togg==1
+    silent! call ReadMode(0)
+    silent! setlocal so=999
+    " normal zz
+    let g:flymode_togg=0
+    echo 'Fly Mode on'
+  else
+    silent! setlocal so=1
+    let g:flymode_togg=1
+    echo 'Fly Mode off'
+  endif
+endfun
+let g:flymode_togg=1
+
+fun! TabFun(tb, expd)
+  " retabs file
+  execute 'setlocal tabstop='     . &l:tabstop
+  execute 'setlocal softtabstop=' . &l:softtabstop
+  execute 'setlocal shiftwidth='  . &l:shiftwidth
+  setlocal noexpandtab
+  %retab!
+  if a:expd==1
+    setlocal expandtab
+    echo 'expandtab'
+  else
+    setlocal noexpandtab
+    echo 'noexpandtab'
+  endif
+  execute 'setlocal tabstop='     . a:tb
+  execute 'setlocal softtabstop=' . a:tb
+  execute 'setlocal shiftwidth='  . a:tb
+  %retab!
+endfun
+
+
+" remaps
+" ------
 let g:mapleader = ','
 
 nnoremap <C-j>            <C-w>j
@@ -151,36 +272,29 @@ vnoremap &                :normal! &<CR>
 map <ScrollWheelUp>       <C-y>
 map <ScrollWheelDown>     <C-e>
 
-" plugins
-" =======
 
-let g:user_emmet_leader_key = '<NUL>'  " equals '<C-space>,'
-let g:do_refresh_key = '<C-M>'
-let g:SuperTabDefaultCompletionType = 'context'  " contextual completion
-let g:SuperTabCrMapping = 1
-let g:SuperTabLongestHighlight = 1
-let g:vimpager = {}
-let g:less = {}
-let g:less.enabled = 0
-let g:less.scrolloff = 5
-
-let g:ycm_filetype_specific_completion_to_disable = {
-  \   'python': 1,
-\ }
-let g:ycm_add_preview_to_completeopt = 1
-let g:ycm_autoclose_preview_window_after_completion = 0
-let g:ycm_autoclose_preview_window_after_insertion = 1
-let g:ycm_confirm_extra_conf = 0
-" let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
-let g:ycm_error_symbol = '??'
-let g:ycm_min_num_of_chars_for_completion = 1
-let g:ycm_seed_identifiers_with_syntax = 1
-let g:ycm_semantic_triggers = {
-  \   'python': ['re![a-zA-Z]+'],
-\ }
-let g:ycm_server_use_vim_stdout = 0
-let g:ycm_server_keep_logfiles = 1
-" ~/.vim/bundle/YouCompleteMe/python/ycm/client/completion_request.py 32j
-
-" let g:jedi#show_call_signatures = '0'
-" let g:jedi#show_call_signatures_delay = 1000
+" auto commands
+" -------------
+au BufLeave   *__doc__*,help silent! call ReadMode(0)
+au BufNewFile *__doc__*      silent! call ReadMode(1)
+au FileType   help           silent! call ReadMode(1)
+au BufNewFile *.sh,*.bash exe "normal! i#!/bin/bash\<CR>\<Esc>"
+au BufNewFile *.html      exe "normal! i<!DOCTYPE html>\<CR>\<Esc>"
+au BufNewFile *.node      exe "normal! i#!/usr/bin/env node\<CR>\<Esc>"
+au BufNewFile *.py        exe "normal! i#!/usr/bin/env python\<CR>\<Esc>"
+au BufNewFile *.pl        exe "normal! i#!/usr/bin/env perl\<CR>\<Esc>x"
+au BufRead *.ipynb        setlocal ft=json
+au BufRead,BufNewFile
+      \ /usr/local/etc/nginx/*,/usr/local/nginx/conf/*,/etc/nginx/*
+      \ setlocal ft=nginx
+au FileType   css,html,jinja,json,R,rst,sh,sql,tex,typescript,vim,yaml
+      \ setlocal ts=2 sw=2 sts=2
+au FileType rst,tex
+      \ setlocal spell spelllang=en_us colorcolumn=80 wrap
+au FileType tex
+      \ nnoremap <leader>c :DoQuietly echo >> /tmp/_listener<CR>
+au FileType   man         setlocal so=0
+au FileType   vim         setlocal keywordprg=:help
+au FileType   jinja       setlocal commentstring=<!--%s-->
+au FileType   nginx       setlocal commentstring=#\ %s
+au FileType   sql         setlocal commentstring=--%s

@@ -79,7 +79,6 @@ test -n "$(command -v vim)" && {
 export EDITOR
 
 GREP_COLOR='0;34'
-
 LESS='-rI'
 export PAGER='less'
 
@@ -120,7 +119,7 @@ test -n "$_dircolors" && {
 
 clr() {  # (number, text)
   esc="\033"
-  printf "\[$esc[38;5;%dm\]%s\[$esc[0m\]" "$1" "$2"
+  printf "\[${esc}[38;5;${1}m\]${2}\[${esc}[0m\]"
 }
 
 border_color=241
@@ -200,7 +199,7 @@ for i in {2..8}; do
 done
 
 # Platform specific
-test -n "$MACOS" && {
+test -n $MACOS && {
   alias top='top -u'
   alias mcopy='pbcopy'
   alias mpaste='pbpaste'

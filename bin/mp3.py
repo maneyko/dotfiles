@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+"""
+Edit metadata for '.mp3' or '.m4a' files
+"""
+
 import re
 import argparse
 
@@ -8,7 +12,7 @@ import mutagen.easyid3
 import mutagen.easymp4
 
 def parse_args(opts=None):
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('files',
             nargs='+',
             type=argparse.FileType('r'),
@@ -38,7 +42,7 @@ def load(fileobj):
 
 def pprint(tags):
     """Prints table of mutagen tags with keys as headers."""
-    keys = set( key for tag in tags for key in tag.keys() )
+    keys = set(key for tag in tags for key in tag.keys())
     d = {key: [] for key in sorted(keys)}
     for tag in tags:
         for key, value in tag.items():

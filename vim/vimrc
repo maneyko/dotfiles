@@ -24,7 +24,7 @@ if isdirectory(glob('~/.vim/bundle/Vundle.vim'))
   Plugin 'VundleVim/Vundle.vim'        " plugin manager
   Plugin 'mkarmona/colorsbox'          " color scheme
   if has('patch-7.4-346')
-    " Plugin 'Valloric/YouCompleteMe'    " completion engine
+    Plugin 'Valloric/YouCompleteMe'    " completion engine
   endif
   Plugin 'davidhalter/jedi-vim'        " python completion
 
@@ -298,3 +298,6 @@ au FileType   vim         setlocal keywordprg=:help
 au FileType   jinja       setlocal commentstring=<!--%s-->
 au FileType   nginx       setlocal commentstring=#\ %s
 au FileType   sql         setlocal commentstring=--%s
+
+
+" vim: ts=2 sw=2 sts=2 viewoptions-=options

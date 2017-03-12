@@ -1,5 +1,5 @@
 # First TTY Greeting
-# ==================
+# ------------------
 
 if test -n "$INTERACTIVE" -a "$(tty | grep 001)"
 then  # Check if enough room to have first terminal instance greeting

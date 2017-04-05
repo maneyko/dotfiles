@@ -8,6 +8,7 @@ import os
 import argparse
 import subprocess
 
+
 EXTENSIONS = [
     'bz2',
     'gz',
@@ -25,6 +26,7 @@ EXTENSIONS = [
     'Z',
 ]
 
+
 def parse_args(opts=None):
     parser = argparse.ArgumentParser(description=__doc__.format(EXTENSIONS))
     parser.add_argument('file',
@@ -39,11 +41,13 @@ def parse_args(opts=None):
         return parser.error('file {!r} does not exist!'.format(args.file))
     return args
 
+
 def main(args):
     args.file = args.file.rstrip('/')
     outfile = '{0.file}.tar.{0.extension}'.format(args)
     cmd = ['tar', '-a', '-cvf', outfile, args.file]
     subprocess.call(cmd)
+
 
 if __name__ == '__main__':
     args = parse_args()

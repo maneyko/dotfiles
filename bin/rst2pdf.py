@@ -8,6 +8,7 @@ import glob
 import argparse
 import subprocess
 
+
 def parse_args(opts=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('file', help='.rst file to convert')
@@ -15,6 +16,7 @@ def parse_args(opts=None):
             action='store_true',
             help='deletes latex file')
     return parser.parse_args(opts)
+
 
 def main(args):
     texfile = args.file + '.tex'
@@ -31,6 +33,7 @@ def main(args):
             os.remove(logfile)
     if args.delete:
         os.remove(texfile)
+
 
 if __name__ == '__main__':
     args = parse_args()

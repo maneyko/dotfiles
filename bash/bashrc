@@ -76,11 +76,13 @@ test -n "$(command -v vim)" && {
 } || {
   EDITOR='vi'
 }
-export EDITOR
 
 GREP_COLOR='0;34'
 LESS='-rI'
-export PAGER='less'
+PAGER='less'
+
+export EDITOR
+export PAGER
 
 test -z "$BASH_COMPLETION" && {
   for f in /usr/local/etc/bash_completion /etc/bash_completion; do
@@ -199,7 +201,7 @@ for i in {2..8}; do
 done
 
 # Platform specific
-test -n $MACOS && {
+test -n "$MACOS" && {
   alias top='top -u'
   alias mcopy='pbcopy'
   alias mpaste='pbpaste'

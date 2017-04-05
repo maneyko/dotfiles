@@ -7,6 +7,7 @@ import os
 import argparse
 import subprocess
 
+
 DATA = [
     (['.tar.', '.tar', '.tbz2', '.tgz'],
         'tar xvf {!r}'),
@@ -28,6 +29,7 @@ DATA = [
         'uncompress {!r} --stdout | pax -r')
 ]
 
+
 def parse_args(opts=None):
     all_exts = [ext for d in DATA for ext in d[0]]
     parser = argparse.ArgumentParser(description=__doc__.format(all_exts))
@@ -41,8 +43,10 @@ def parse_args(opts=None):
                 'file extension of {!r} not supported!'.format(args.file))
     return args
 
+
 def contains(extensions, filename):
     return any(ext in filename for ext in extensions)
+
 
 def extract(cmd, filename):
     command = cmd.format(filename)
@@ -53,11 +57,13 @@ def extract(cmd, filename):
     proc = subprocess.Popen([command], shell=True)
     return proc.communicate()
 
+
 def main(args):
     for extensions, cmd in DATA:
         if contains(extensions, args.file):
             extract(cmd, args.file)
             return
+
 
 if __name__ == '__main__':
     args = parse_args()

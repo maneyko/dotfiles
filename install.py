@@ -10,6 +10,7 @@ import argparse
 import subprocess
 from six.moves import input
 
+
 BACKUP_DIR = '_backups'
 HOME = os.environ['HOME']
 EXEC_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -20,6 +21,7 @@ if os.uname()[0] != 'Darwin':
     EXCLUDES.append('mac')
 
 os.chdir(HOME)
+
 
 def parse_args(opts=None):
     parser = argparse.ArgumentParser(
@@ -32,6 +34,7 @@ def parse_args(opts=None):
             help='remove symlinked dotfiles')
     return parser.parse_args(opts)
 
+
 def backup(filepath):
     backups = os.path.join(DOT_RELPATH, BACKUP_DIR)
     backup_base = os.path.basename(filepath.lstrip('.'))
@@ -43,6 +46,7 @@ def backup(filepath):
     if not os.path.exists(backups):
         os.mkdir(backups)
     os.rename(filepath, backup_dst)
+
 
 def main(args):
     for link_src in glob.iglob(os.path.join(DOT_RELPATH, '*')):
@@ -67,6 +71,7 @@ def main(args):
         if not os.path.exists(dest):
             subprocess.call(['git', 'clone', repo, dest])
         subprocess.call(['vim', '+PluginInstall', '+qall'])
+
 
 if __name__ == '__main__':
     args = parse_args()

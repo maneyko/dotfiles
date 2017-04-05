@@ -16,6 +16,7 @@ def parse_args(opts=None):
     parser.add_argument('url', help='link or html file')
     return parser.parse_args(opts)
 
+
 def html_contents(path):
     """Returns HTML text of a link or file."""
     if os.access(path, os.R_OK):
@@ -24,6 +25,7 @@ def html_contents(path):
     if path[:4] != 'http':
         path = 'http://' + path
     return urlopen(path).read().decode('utf-8')
+
 
 def get_hrefs(html_text):
     """Returns list of link paths from ``html_text``."""
@@ -39,11 +41,13 @@ def get_hrefs(html_text):
     parser.feed(html_text)
     return hrefs
 
+
 def main(args):
     text = html_contents(args.url)
     hrefs = get_hrefs(text)
     for href in hrefs:
         print(href)
+
 
 if __name__ == '__main__':
     args = parse_args()

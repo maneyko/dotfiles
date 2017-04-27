@@ -13,6 +13,7 @@ Example
 """
 
 import os
+import re
 import sys
 import time
 import contextlib
@@ -66,3 +67,31 @@ class Timer:
     def __exit__(self, *args):
         self.end = time.clock()
         self.interval = self.end - self.start
+
+
+def backup_path(filepath):
+    """
+    Add a number before the file extension if the file already exists.
+
+    Example
+    -------
+    >>> os.listdir('.')
+    ['myfile.py']
+    >>> backup_path('myfile.py')
+    'myfile.1.py'
+    >>> open('myfile.1.py', 'w').close()  # Create an empty file
+    >>> backup_path('myfile.py')
+    'myfile.2.py'
+    """
+    if not os.path.exists(filepath):
+        return filepath
+    pat = '(.[0-9]+)?.([A-Za-z]+$)'
+    m = re.search(pat, filepath)
+    number, extension = m.group(1, 2)
+    if number is None:
+        number = '.0'
+    n = int(number[1:])
+    name = re.sub(pat, r'.{}.\2'.format(n+1), filepath)
+    if os.path.exists(name):
+        return backup_path(name)
+    return name

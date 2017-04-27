@@ -13,18 +13,21 @@ import subprocess
 from maneyko import sh
 
 
-THIS_DIR = os.path.dirname(os.path.realpath(__file__))
-OUTPUT = os.path.join(THIS_DIR, '_tmux.conf')
+PWD = os.path.dirname(os.path.realpath(__file__))
+OUTPUT = os.path.join(PWD, '_tmux.conf')
 LINES = []
 
 env = os.environ
 TMUX_VERSION = tuple(map(int, sh('tmux -V').split()[-1].split('.')))
 
+
 def set(text):
     LINES.append('set ' + text)
 
+
 def bind_key(text):
     LINES.append('bind-key ' + text)
+
 
 def unbind_defaults():
     keys_text = sh('tmux list-keys')
@@ -37,6 +40,7 @@ def unbind_defaults():
         else:
             LINES.append('unbind-key {!r}'.format(key))
 
+
 def set_default_command():
     namespace = 'reattach-to-user-namespace'
     if sh('which ' + namespace):
@@ -45,12 +49,14 @@ def set_default_command():
         command = env['SHELL']
     set('-g default-command {!r}'.format(command))
 
+
 def set_prefix():
     if env['HOME'] == '/Users/maneyko':
         prefix = 'M-a'
     else:
         prefix = 'M-s'
     set('-g prefix {!r}'.format(prefix))
+
 
 def root_bindings():
     binds = {i: 'select-window -t :={:d}'.format(i) for i in range(10)}
@@ -63,11 +69,12 @@ def root_bindings():
         '[': 'copy-mode',
         ']': """run-shell
                 "reattach-to-user-namespace pbpaste
-                | tmux load-buffer -
-                && tmux paste-buffer" """.replace('\n', '')
+                 | tmux load-buffer -
+                 && tmux paste-buffer" """.replace('\n', '')
     })
     for key, value in binds.items():
         bind_key('-n "M-{}" {}'.format(key, value))
+
 
 def recursive_bindings():
     bind_key('-r h resize-pane -L')
@@ -78,6 +85,7 @@ def recursive_bindings():
     bind_key('-r Left  select-pane -L')
     bind_key('-r Right select-pane -R')
     bind_key('-r Up    select-pane -U')
+
 
 def regular_bindings():
     binds = {i: 'select-window -t :={:d}'.format(i) for i in range(10)}
@@ -114,14 +122,15 @@ def vi_bindings():
         'o': 'scroll-down',
         'p': 'scroll-up',
         'v': 'begin-selection',
-        'y': 'copy-pipe "{}"'.format(namespace_copy),
+        'y': 'copy-pipe-and-cancel "{}"'.format(namespace_copy),
         'Y': 'copy-end-of-line',
-        'Enter': 'copy-pipe "{}"'.format(namespace_copy),
+        'Enter': 'copy-pipe-and-cancel "{}"'.format(namespace_copy),
         'Down': 'scroll-down',
         'Up': 'scroll-up'
     }
     for key, value in binds.items():
-        bind_key('-t vi-copy {} {}'.format(key, value))
+        bind_key('-Tcopy-mode-vi {} send -X {}'.format(key, value))
+
 
 def set_preferences():
     set('-g renumber-windows on')  # Renumber windows when a window is closed
@@ -132,6 +141,7 @@ def set_preferences():
         set('-g mouse on')
     else:
         set('-g mouse-select-pane on')
+
 
 def set_colors():
     TERM = 'screen-256color'
@@ -146,6 +156,7 @@ def set_colors():
     set('-g status-fg white')
     set('-g status-left {!r}'.format(''))
     set('-g status-right {!r}'.format('#(. ~/.tmux/bar.sh)'))
+
 
 def functions():
     # Creates 4 panes with 2 main at the top and 2 smaller below then
@@ -188,11 +199,13 @@ def functions():
         "send-keys 'C-u'"
     ]))
 
+
 def write_file():
     with open(OUTPUT, 'w') as f:
         f.write('# This file was created by {}\n'.format(
                 os.path.realpath(__file__)))
         f.write('\n'.join(LINES))
+
 
 if __name__ == '__main__':
     unbind_defaults()

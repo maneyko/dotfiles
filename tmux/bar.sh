@@ -9,7 +9,7 @@ date_status() {
 
 if test $(uname) = 'Darwin'
 then
-  while test $TMUX
+  while test -n "$TMUX"
   do
     tunes="$($HOME/.mac/tunes.scpt)"
     if test -n "$tunes"

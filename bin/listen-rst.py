@@ -45,7 +45,8 @@ def main(args):
         if not os.path.isdir(html_dir):
             os.mkdir(html_dir)
         output = os.path.join(html_dir, args.file) + '.html'
-        command = 'rst2html.py {0} > {1}'.format(args.file, output)
+        command = 'rst2html.py {0} > {1} && printf "."'.format(
+                      args.file, output)
     listen(args.file, command)
 
 

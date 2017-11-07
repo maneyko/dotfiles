@@ -195,7 +195,7 @@ def functions():
         'copy-mode',
         'send-keys 0f',
         "send-keys 'Space'",
-        'send-keys lv$\hy',
+        'send-keys lv$hy',
         "send-keys 'C-u'"
     ]))
 

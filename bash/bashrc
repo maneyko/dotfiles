@@ -18,6 +18,8 @@ test -r /etc/bashrc && {
   source /etc/bashrc
 }
 
+
+set +e
 set -o ignoreeof
 set -o notify
 
@@ -85,7 +87,8 @@ export EDITOR
 export PAGER
 
 test -z "$BASH_COMPLETION" && {
-  for f in /usr/local/etc/bash_completion /etc/bash_completion; do
+  for f in /usr/local/share/bash-completion/bash_completion \
+           /etc/bash_completion; do
     test -f $f && {
       source $f
       break
@@ -132,7 +135,8 @@ pwd_color=228
 test "$(whoami)" = 'root' && {
   user_color=220  # Yellow
 }
-PS1="\
+
+LONG_PS1="\
 `clr $border_color  '┌─['         `\
 `clr $user_color    "$(whoami)"   `\
 `clr 250            '@'           `\
@@ -147,12 +151,20 @@ PS1="\
 "
 
 SHORT_PS1="\
-`clr $border_color  '['     `\
-`clr $pwd_color     '\\w'   `\
-`clr $border_color  ']'     `\
+`clr $border_color  '┌─['         `\
+`clr $user_color    "$(whoami)"   `\
+`clr 250            '@'           `\
+`clr $host_color    "$host_text"  `\
+`clr $border_color  ':'           `\
+`clr $pwd_color     '\\W'         `\
+`clr $border_color  ']'           `\
 \n\
-`clr 7              '\\$ '  `\
+`clr $border_color  '└['          `\
+`clr 7              '\\$'         `\
+`clr $border_color  ']› '         `\
 "
+
+export PS1="$LONG_PS1"
 
 
 # ---------------------------------------------------------------------
@@ -191,6 +203,7 @@ alias lla='ls -AGhl'
 alias bashrc='source ~/.bashrc'
 alias cls="clear && printf '\e[3J'"
 alias shortps1='export PS1=$SHORT_PS1'
+alias longps1='export PS1="$LONG_PS1"'
 alias rm-DS='find . -name .DS_Store -delete -print'
 alias hide='chflags hidden'
 alias nohide='chflags nohidden'

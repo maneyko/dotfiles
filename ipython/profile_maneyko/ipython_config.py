@@ -6,3 +6,5 @@ c.TerminalInteractiveShell.confirm_exit = False
 
 c.BaseIPythonApplication.profile = 'maneyko'
 c.InteractiveShell.colors = 'Linux'
+
+c.IPCompleter.use_jedi = False

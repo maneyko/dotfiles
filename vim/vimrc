@@ -24,17 +24,20 @@ if isdirectory(glob('~/.vim/bundle/Vundle.vim'))
   Plugin 'VundleVim/Vundle.vim'        " plugin manager
   Plugin 'mkarmona/colorsbox'          " color scheme
   if has('patch-7.4-346')
-    Plugin 'Valloric/YouCompleteMe'    " completion engine
+    " Plugin 'Valloric/YouCompleteMe'    " completion engine
   endif
   Plugin 'davidhalter/jedi-vim'        " python completion
 
   " syntax
   Plugin 'vim-scripts/AnsiEsc.vim'     " escape ANSI sequences
   Plugin 'Glench/Vim-Jinja2-Syntax'    " jinja html templates
-  " Plugin 'digitaltoad/vim-pug'         " pug html templates
   Plugin 'leafgarland/typescript-vim'  " typescript
   Plugin 'vim-scripts/nginx.vim'       " nginx
   " Plugin 'chikamichi/mediawiki.vim'    " wikipedia source
+  Plugin 'digitaltoad/vim-pug'         " pug
+  " Plugin 'isRuslan/vim-es6'
+  Plugin 'othree/yajs.vim'
+
 
   " misc
   Plugin 'vim-utils/vim-man'           " `Man` command
@@ -46,6 +49,7 @@ if isdirectory(glob('~/.vim/bundle/Vundle.vim'))
 
   " filetype specific
   Plugin 'mattn/emmet-vim'             " html completion
+  " Plugin 'vim-scripts/brainfuck-syntax'
 
   " tpope
   Plugin 'tpope/vim-commentary'        " commenting motions
@@ -94,7 +98,7 @@ set softtabstop=4
 set t_Co=256
 set tabstop=4
 set tildeop
-set wrap
+set nowrap
 
 let g:netrw_dirhistmax=0  " no .netrwhist files
 
@@ -297,17 +301,21 @@ au BufNewFile *.pl
       \ exe "normal! i#!/usr/bin/env perl\<CR>\<Esc>x"
 au BufRead *.ipynb
       \ setlocal ft=json
+au BufRead *.url
+      \ setlocal ft=dosini
 au BufRead,BufNewFile
       \ /usr/local/etc/nginx/*,
       \ /usr/local/nginx/conf/*,
       \ /etc/nginx/*
       \ setlocal ft=nginx
-au FileType css,html,jinja,json,R,rst,sh,sql,tex,typescript,vim,yaml
+au FileType css,html,javascript,jinja,json,pug,R,rst,sh,sql,tex,typescript,vim,yaml
       \ setlocal ts=2 sw=2 sts=2
+au FileType c
+      \ setlocal commentstring=//\ %s
 au FileType help
       \ silent! call ReadMode(1)
-au FileType rst,tex
-      \ setlocal spell spelllang=en_us colorcolumn=80 wrap
+au FileType tex
+      \ setlocal spell spelllang=en_us colorcolumn=80 wrap foldlevel=10
 au FileType tex
       \ nnoremap <leader>c :DoQuietly echo >> /tmp/_listener<CR>
 au FileType man

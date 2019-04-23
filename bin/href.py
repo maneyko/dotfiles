@@ -18,13 +18,13 @@ def parse_args(opts=None):
 
 
 def html_contents(path):
-    """Returns HTML text of a link or file."""
+    """Returns HTML bytes of a link or file."""
     if os.access(path, os.R_OK):
         with open(path) as html_file:
             return html_file.read()
     if path[:4] != 'http':
         path = 'http://' + path
-    return urlopen(path).read().decode('utf-8')
+    return urlopen(path).read()
 
 
 def get_hrefs(html_text):
@@ -38,13 +38,14 @@ def get_hrefs(html_text):
 
     HTMLParser.handle_starttag = handle_starttag
     parser = HTMLParser()
-    parser.feed(html_text)
+    text = html_text.replace(b'\xa0', b' ').decode('utf-8')
+    parser.feed(text)
     return hrefs
 
 
 def main(args):
-    text = html_contents(args.url)
-    hrefs = get_hrefs(text)
+    by = html_contents(args.url)
+    hrefs = get_hrefs(by)
     for href in hrefs:
         print(href)
 

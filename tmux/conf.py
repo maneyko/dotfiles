@@ -144,10 +144,11 @@ def set_preferences():
 
 
 def set_colors():
-    TERM = 'screen-256color'
+    TERM = 'xterm-256color'
     set('-g default-terminal {!r}'.format(TERM))
     color_inactive = 19
     color_active = 183
+    # color_active = 255
     if TMUX_VERSION > (1, 8):
         set('-gw pane-border-style "fg=colour{:d}"'.format(color_inactive))
         set('-gw pane-active-border-style "fg=colour{:d}"'.format(

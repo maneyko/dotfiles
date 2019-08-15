@@ -37,6 +37,7 @@ if isdirectory(glob('~/.vim/bundle/Vundle.vim'))
   Plugin 'digitaltoad/vim-pug'         " pug
   " Plugin 'isRuslan/vim-es6'
   Plugin 'othree/yajs.vim'
+  Plugin 'gisphm/vim-gitignore'        " .gitignore files
 
 
   " misc
@@ -45,7 +46,8 @@ if isdirectory(glob('~/.vim/bundle/Vundle.vim'))
   Plugin 'ctrlpvim/ctrlp.vim'          " fuzzy file finder
   " Plugin 'scrooloose/nerdtree'         " filetree
   " Plugin 'scrooloose/syntastic'        " syntax linter
-  Plugin 'maneyko/vim-do'              " execute shell commands
+  " Plugin 'joonty/vim-do.git'
+  " Plugin 'maneyko/vim-do'              " execute shell commands
 
   " filetype specific
   Plugin 'mattn/emmet-vim'             " html completion
@@ -305,29 +307,28 @@ au BufRead *.url
       \ setlocal ft=dosini
 au BufRead,BufNewFile
       \ /usr/local/etc/nginx/*,
-      \ /usr/local/nginx/conf/*,
-      \ /etc/nginx/*
+      \/usr/local/nginx/conf/*,
+      \/etc/nginx/*
       \ setlocal ft=nginx
-au FileType css,html,javascript,jinja,json,pug,R,rst,sh,sql,tex,typescript,vim,yaml
+au FileType css,html,javascript,jinja,json,php,pug,R,rst,sh,sql,tex,typescript,vim,yaml
       \ setlocal ts=2 sw=2 sts=2
-au FileType c
+au FileType c,cpp,php
       \ setlocal commentstring=//\ %s
 au FileType help
       \ silent! call ReadMode(1)
 au FileType tex
       \ setlocal spell spelllang=en_us colorcolumn=80 wrap foldlevel=10
-au FileType tex
-      \ nnoremap <leader>c :DoQuietly echo >> /tmp/_listener<CR>
+au FileType tex,cpp
+      \ nnoremap <leader>c :silent exec "!echo >> /tmp/_listener"<CR><C-l>
 au FileType man
       \ setlocal so=0
 au FileType vim
       \ setlocal keywordprg=:help
 au FileType jinja
       \ setlocal commentstring=<!--%s-->
-au FileType nginx
+au FileType apache,nginx
       \ setlocal commentstring=#\ %s
 au FileType sql
       \ setlocal commentstring=--%s
-
 
 " vim: ts=2 sw=2 sts=2 viewoptions-=options

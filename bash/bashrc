@@ -182,7 +182,7 @@ _ls='ls'
 test "$(command -v gls)" && {
   _ls='gls'
 }
-if $_ls --color ~/ >/dev/null 2>&1; then
+if $_ls --color / >/dev/null 2>&1; then
   GNU_LS=true
 else
   BSD_LS=true
@@ -197,6 +197,7 @@ fi
 alias la='ls -A'
 alias ll='ls -Ghl'
 alias lla='ls -AGhl'
+alias l='ll'
 
 
 # Mini functions

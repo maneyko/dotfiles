@@ -10,8 +10,8 @@ from PyPDF2 import PdfFileMerger
 def parse_args(opts=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('pdfs', help='PDFs (in order) to merge', nargs='+')
-    parser.add_argument('-o', '--output', default='result.pdf',
-        help='output PDF file (default: result.pdf)')
+    parser.add_argument('-o', '--output', default='merge-result.pdf',
+        help='output PDF file (default: merge-result.pdf)')
     return parser.parse_args(opts)
 
 def main(args):

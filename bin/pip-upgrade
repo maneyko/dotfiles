@@ -20,7 +20,6 @@ no_grep=${_a// /\\|}
 packages="$(
   $cmd list \
     --outdated \
-    --format=legacy \
     | grep -iv $no_grep \
     | awk '{print $1}'
 )"

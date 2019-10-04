@@ -38,7 +38,7 @@ if isdirectory(glob('~/.vim/bundle/Vundle.vim'))
   " Plugin 'isRuslan/vim-es6'
   Plugin 'othree/yajs.vim'
   Plugin 'gisphm/vim-gitignore'        " .gitignore files
-
+  Plugin 'alvan/vim-closetag'
 
   " misc
   Plugin 'vim-utils/vim-man'           " `Man` command
@@ -269,6 +269,7 @@ nnoremap yaf              :1,$y<CR>
 nnoremap zfs              :mkview<CR>
 nnoremap zfl              :loadview<CR>
 
+
 inoremap <C-a>            <C-o>^
 inoremap <C-d>            <C-o>x
 inoremap <C-e>            <C-o>$
@@ -301,6 +302,18 @@ au BufNewFile *.py
       \ exe "normal! i#!/usr/bin/env python\<CR>\<Esc>"
 au BufNewFile *.pl
       \ exe "normal! i#!/usr/bin/env perl\<CR>\<Esc>x"
+au BufNewFile *.html,*.php
+      \ exe "normal!"
+      \ . "i<!DOCTYPE html>\<CR>"
+      \ . "<html>\<CR>"
+      \ . "<head>\<CR>"
+      \ . "<title></title>\<CR>"
+      \ . "</head>\<CR>"
+      \ . "<body>\<CR>\<CR>"
+      \ . "</body>\<CR>"
+      \ . "</html>\<Esc>"
+      \ . "gg3j2f<"
+
 au BufRead *.ipynb
       \ setlocal ft=json
 au BufRead *.url
@@ -310,12 +323,16 @@ au BufRead,BufNewFile
       \/usr/local/nginx/conf/*,
       \/etc/nginx/*
       \ setlocal ft=nginx
-au FileType css,html,javascript,jinja,json,php,pug,R,rst,sh,sql,tex,typescript,vim,yaml
+au FileType css,html,javascript,
+      \jinja,json,php,pug,R,rst<
+      \sh,sql,tex,typescript,vim,yaml
       \ setlocal ts=2 sw=2 sts=2
 au FileType c,cpp,php
       \ setlocal commentstring=//\ %s
 au FileType help
       \ silent! call ReadMode(1)
+au FileType php
+      \ setlocal ft=html syn=php
 au FileType tex
       \ setlocal spell spelllang=en_us colorcolumn=80 wrap foldlevel=10
 au FileType tex,cpp

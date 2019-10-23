@@ -294,8 +294,6 @@ au BufNewFile *__doc__*
       \ silent! call ReadMode(1)
 au BufNewFile *.sh,*.bash
       \ exe "normal! i#!/bin/bash\<CR>\<Esc>"
-au BufNewFile *.html
-      \ exe "normal! i<!DOCTYPE html>\<CR>\<Esc>"
 au BufNewFile *.node
       \ exe "normal! i#!/usr/bin/env node\<CR>\<Esc>"
 au BufNewFile *.py
@@ -307,12 +305,14 @@ au BufNewFile *.html,*.php
       \ . "i<!DOCTYPE html>\<CR>"
       \ . "<html>\<CR>"
       \ . "<head>\<CR>"
+      \ . "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\<CR>"
+      \ . "<meta charset=\"utf-8\">\<CR>"
       \ . "<title></title>\<CR>"
       \ . "</head>\<CR>"
       \ . "<body>\<CR>\<CR>"
       \ . "</body>\<CR>"
       \ . "</html>\<Esc>"
-      \ . "gg3j2f<"
+      \ . "/title\<CR>f<\<C-l>"
 
 au BufRead *.ipynb
       \ setlocal ft=json

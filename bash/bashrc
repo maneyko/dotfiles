@@ -178,6 +178,8 @@ alias mv='mv -i'
 
 # ``ls`` wrangling
 # ----------------
+export TZ='America/Chicago'
+
 _ls='ls'
 test "$(command -v gls)" && {
   _ls='gls'
@@ -188,10 +190,12 @@ else
   BSD_LS=true
 fi
 if test -n "$GNU_LS"; then
-  alias ls="$_ls --color=auto --group-directories-first"
+  alias ls="$_ls --color=auto --group-directories-first --time-style +'%b %d %I:%M %p'"
   alias lsld="ls -AGhlI'*'"
   alias lsd="ls -AI'*'"
 elif test -n "$BSD_LS"; then
+  export CLICOLOR=1
+  export LSCOLORS='ExGxFxdaCxDaDahbadacec'
   alias ls="$_ls -G"
 fi
 alias la='ls -A'

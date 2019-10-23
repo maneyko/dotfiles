@@ -1,8 +1,10 @@
 #!/usr/bin/env python
+
 """
 Symlinks all files in '{}/' (with a '.' prepended) to HOME directory,
 with the exceptions of {}.
 """
+
 
 import os
 import glob
@@ -13,8 +15,8 @@ from six.moves import input
 
 BACKUP_DIR = '_backups'
 HOME = os.environ['HOME']
-EXEC_DIR = os.path.dirname(os.path.realpath(__file__))
-DOT_RELPATH = os.path.relpath(EXEC_DIR, HOME)
+__DIR__ = os.path.dirname(os.path.realpath(__file__))
+DOT_RELPATH = os.path.relpath(__DIR__, HOME)
 
 EXCLUDES = [os.path.basename(__file__), BACKUP_DIR, 'README']
 if os.uname()[0] != 'Darwin':
@@ -28,7 +30,7 @@ def parse_args(opts=None):
             description=__doc__.format(DOT_RELPATH, EXCLUDES))
     parser.add_argument('-p', '--plugins',
             action='store_true',
-            help='install vim plugins (using Vundle)')
+            help='do not install vim plugins')
     parser.add_argument('-u', '--uninstall',
             action='store_true',
             help='remove symlinked dotfiles')
@@ -65,7 +67,7 @@ def main(args):
                     continue
             os.symlink(link_src, link_dst)
             print('Linked: {!r:25s} -> {!r}'.format(link_src, link_dst))
-    if args.plugins:
+    if not args.plugins:
         repo = 'https://github.com/VundleVim/Vundle.vim'
         dest = os.path.join(HOME, '.vim/bundle/Vundle.vim')
         if not os.path.exists(dest):

@@ -34,6 +34,9 @@ def parse_args(opts=None):
     parser.add_argument('-u', '--uninstall',
             action='store_true',
             help='remove symlinked dotfiles')
+    parser.add_argument('-e', '--exlude',
+            nargs='+',
+            help='files or directories to exclude from symlinking')
     return parser.parse_args(opts)
 
 
@@ -51,6 +54,9 @@ def backup(filepath):
 
 
 def main(args):
+    if args.exlude:
+        for f in args.exclude:
+            EXCLUDES.append(os.path.basename(f))
     for link_src in glob.iglob(os.path.join(DOT_RELPATH, '*')):
         link_base = os.path.basename(link_src)
         if link_base in EXCLUDES:

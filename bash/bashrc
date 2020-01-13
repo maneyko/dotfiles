@@ -88,9 +88,10 @@ export PAGER
 
 test -z "$BASH_COMPLETION" && {
   for f in /usr/local/share/bash-completion/bash_completion \
+           /usr/local/etc/bash_completion \
            /etc/bash_completion; do
     test -f $f && {
-      source $f
+      . $f
       break
     }
   done
@@ -128,9 +129,9 @@ clr() {  # (number, text)
 }
 
 border_color=241
-user_color=196
-host_color=255
-host_text='OSX'
+user_color=154
+host_color=214
+host_text='integra'
 pwd_color=228
 test "$(whoami)" = 'root' && {
   user_color=220  # Yellow

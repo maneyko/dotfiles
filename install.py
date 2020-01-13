@@ -74,10 +74,8 @@ def main(args):
             os.symlink(link_src, link_dst)
             print('Linked: {!r:25s} -> {!r}'.format(link_src, link_dst))
     if not args.plugins:
-        repo = 'https://github.com/VundleVim/Vundle.vim'
-        dest = os.path.join(HOME, '.vim/bundle/Vundle.vim')
-        if not os.path.exists(dest):
-            subprocess.call(['git', 'clone', repo, dest])
+        subprocess.call(['curl', '-fLo', '~/.vim/autoload/plug.vim',
+            '--create-dirs', 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'])
         subprocess.call(['vim', '+PluginInstall', '+qall'])
 
 

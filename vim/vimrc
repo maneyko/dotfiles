@@ -11,60 +11,58 @@
 "   * remaps
 "   * auto commands
 
-
 " plugins
 " -------
 set nocompatible
 filetype off
-if isdirectory(glob('~/.vim/bundle/Vundle.vim'))
-  set rtp+=~/.vim/bundle/Vundle.vim
-  call vundle#begin()
 
+call plug#begin()
   " core
-  Plugin 'VundleVim/Vundle.vim'        " plugin manager
-  Plugin 'mkarmona/colorsbox'          " color scheme
+  Plug 'junegunn/vim-plug'
+  Plug 'mkarmona/colorsbox'          " color scheme
   if has('patch-7.4-346')
     " Plugin 'Valloric/YouCompleteMe'    " completion engine
   endif
-  Plugin 'davidhalter/jedi-vim'        " python completion
+  Plug 'davidhalter/jedi-vim'        " python completion
 
   " syntax
-  Plugin 'vim-scripts/AnsiEsc.vim'     " escape ANSI sequences
-  Plugin 'Glench/Vim-Jinja2-Syntax'    " jinja html templates
-  Plugin 'leafgarland/typescript-vim'  " typescript
-  Plugin 'vim-scripts/nginx.vim'       " nginx
-  " Plugin 'chikamichi/mediawiki.vim'    " wikipedia source
-  Plugin 'digitaltoad/vim-pug'         " pug
-  " Plugin 'isRuslan/vim-es6'
-  Plugin 'othree/yajs.vim'
-  Plugin 'gisphm/vim-gitignore'        " .gitignore files
-  Plugin 'alvan/vim-closetag'
+  Plug 'vim-scripts/AnsiEsc.vim'     " escape ANSI sequences
+  Plug 'Glench/Vim-Jinja2-Syntax'    " jinja html templates
+  Plug 'leafgarland/typescript-vim'  " typescript
+  Plug 'vim-scripts/nginx.vim'       " nginx
+  " Plug 'chikamichi/mediawiki.vim'    " wikipedia source
+  Plug 'digitaltoad/vim-pug'         " pug
+  " Plug 'isRuslan/vim-es6'
+  Plug 'othree/yajs.vim'
+  Plug 'gisphm/vim-gitignore'        " .gitignore files
+  Plug 'alvan/vim-closetag'
+  Plug 'martinda/Jenkinsfile-vim-syntax'
 
   " misc
-  Plugin 'vim-utils/vim-man'           " `Man` command
-  Plugin 'jiangmiao/auto-pairs'        " completes pairs
-  Plugin 'ctrlpvim/ctrlp.vim'          " fuzzy file finder
-  " Plugin 'scrooloose/nerdtree'         " filetree
-  " Plugin 'scrooloose/syntastic'        " syntax linter
-  " Plugin 'joonty/vim-do.git'
-  " Plugin 'maneyko/vim-do'              " execute shell commands
+  Plug 'vim-utils/vim-man'           " `Man` command
+  Plug 'jiangmiao/auto-pairs'        " completes pairs
+  Plug 'ctrlpvim/ctrlp.vim'          " fuzzy file finder
+  Plug 'scrooloose/nerdtree'         " filetree
+  " Plug 'scrooloose/syntastic'        " syntax linter
+  " Plug 'joonty/vim-do.git'
+  " Plug 'maneyko/vim-do'              " execute shell commands
 
   " filetype specific
-  Plugin 'mattn/emmet-vim'             " html completion
-  " Plugin 'vim-scripts/brainfuck-syntax'
+  Plug 'mattn/emmet-vim'             " html completion
+
+  Plug 'neoclide/coc.nvim'
 
   " tpope
-  Plugin 'tpope/vim-commentary'        " commenting motions
-  Plugin 'tpope/vim-endwise'           " closes functions (if and fi)
-  Plugin 'tpope/vim-fugitive'          " git integration
-  Plugin 'tpope/vim-repeat'            " '.' for plugins
-  Plugin 'tpope/vim-surround'          " surrounding motions
-  Plugin 'tpope/vim-unimpaired'        " bracket functions and more
+  Plug 'tpope/vim-commentary'        " commenting motions
+  Plug 'tpope/vim-endwise'           " closes functions (if and fi)
+  Plug 'tpope/vim-fugitive'          " git integration
+  Plug 'tpope/vim-rails'
+  Plug 'tpope/vim-repeat'            " '.' for plugins
+  Plug 'tpope/vim-surround'          " surrounding motions
+  Plug 'tpope/vim-unimpaired'        " bracket functions and more
 
-  call vundle#end()
-endif
+call plug#end()
 filetype plugin indent on
-
 
 " sets
 " ----
@@ -110,7 +108,7 @@ let g:netrw_dirhistmax=0  " no .netrwhist files
 if !empty(glob($VIMRUNTIME . '/syntax/syntax.vim'))
   syntax on
 endif
-if isdirectory(glob('~/.vim/bundle/colorsbox'))
+if isdirectory(glob('~/.vim/plugged/colorsbox'))
   colorscheme colorsbox-stnight
 endif
 
@@ -123,34 +121,13 @@ highlight Normal ctermfg=NONE
 " --------------
 let g:user_emmet_leader_key = '<NUL>'  " equals '<C-space>,'
 let g:do_refresh_key = '<C-M>'
-let g:SuperTabDefaultCompletionType = 'context'  " contextual completion
-let g:SuperTabCrMapping = 1
-let g:SuperTabLongestHighlight = 1
+" let g:SuperTabDefaultCompletionType = 'context'  " contextual completion
+" let g:SuperTabCrMapping = 1
+" let g:SuperTabLongestHighlight = 1
 let g:vimpager = {}
 let g:less = {}
 let g:less.enabled = 0
 let g:less.scrolloff = 5
-
-let g:ycm_filetype_specific_completion_to_disable = {
-  \   'python': 1,
-\ }
-let g:ycm_add_preview_to_completeopt = 1
-let g:ycm_autoclose_preview_window_after_completion = 0
-let g:ycm_autoclose_preview_window_after_insertion = 1
-let g:ycm_confirm_extra_conf = 0
-" let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
-let g:ycm_error_symbol = '??'
-let g:ycm_min_num_of_chars_for_completion = 1
-let g:ycm_seed_identifiers_with_syntax = 1
-let g:ycm_semantic_triggers = {
-  \   'python': ['re![a-zA-Z]+'],
-\ }
-let g:ycm_server_use_vim_stdout = 0
-let g:ycm_server_keep_logfiles = 1
-" ~/.vim/bundle/YouCompleteMe/python/ycm/client/completion_request.py 32j
-" let g:jedi#show_call_signatures = '0'
-" let g:jedi#show_call_signatures_delay = 1000
-
 
 " functions
 " ---------
@@ -324,7 +301,7 @@ au BufRead,BufNewFile
       \/etc/nginx/*
       \ setlocal ft=nginx
 au FileType css,html,javascript,
-      \jinja,json,php,pug,R,rst<
+      \jinja,json,php,pug,R,rst,
       \sh,sql,tex,typescript,vim,yaml
       \ setlocal ts=2 sw=2 sts=2
 au FileType c,cpp,php
@@ -347,5 +324,7 @@ au FileType apache,nginx
       \ setlocal commentstring=#\ %s
 au FileType sql
       \ setlocal commentstring=--%s
+au FileType haml
+      \ setlocal wrap
 
 " vim: ts=2 sw=2 sts=2 viewoptions-=options

@@ -174,7 +174,14 @@ export PS1="$LONG_PS1"
 
 _cp="$(type -P gcp cp | head -1)"
 alias cp="$_cp -i"
-alias grep='grep -i --color=auto'
+if test $(command -v ggrep); then
+  alias grep='ggrep -i --color=auto'
+else
+  alias grep='grep -i --color=auto'
+fi
+
+alias ag='ag --color-match "0;35"'
+
 alias mv='mv -i'
 
 # ``ls`` wrangling
@@ -213,6 +220,9 @@ alias longps1='export PS1="$LONG_PS1"'
 alias rm-DS='find . -name .DS_Store -delete -print'
 alias hide='chflags hidden'
 alias nohide='chflags nohidden'
+
+function mkdirpcd { mkdir -p "$1"; cd "$1"; }
+export -f mkdirpcd
 
 alias ..='cd ../'
 for i in {2..8}; do

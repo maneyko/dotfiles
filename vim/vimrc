@@ -43,6 +43,7 @@ call plug#begin()
   Plug 'jiangmiao/auto-pairs'        " completes pairs
   Plug 'ctrlpvim/ctrlp.vim'          " fuzzy file finder
   Plug 'scrooloose/nerdtree'         " filetree
+  Plug 'ervandew/supertab'
   " Plug 'scrooloose/syntastic'        " syntax linter
   " Plug 'joonty/vim-do.git'
   " Plug 'maneyko/vim-do'              " execute shell commands
@@ -121,9 +122,8 @@ highlight Normal ctermfg=NONE
 " --------------
 let g:user_emmet_leader_key = '<NUL>'  " equals '<C-space>,'
 let g:do_refresh_key = '<C-M>'
-" let g:SuperTabDefaultCompletionType = 'context'  " contextual completion
-" let g:SuperTabCrMapping = 1
-" let g:SuperTabLongestHighlight = 1
+let g:SuperTabCrMapping = 1
+let g:SuperTabDefaultCompletionType = "<c-n>"
 let g:vimpager = {}
 let g:less = {}
 let g:less.enabled = 0

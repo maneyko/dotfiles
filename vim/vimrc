@@ -11,6 +11,8 @@
 "   * remaps
 "   * auto commands
 
+set nocompatible
+
 " plugins
 " -------
 set nocompatible
@@ -20,38 +22,43 @@ call plug#begin()
   " core
   Plug 'junegunn/vim-plug'
   Plug 'mkarmona/colorsbox'          " color scheme
-  if has('patch-7.4-346')
-    " Plugin 'Valloric/YouCompleteMe'    " completion engine
-  endif
-  Plug 'davidhalter/jedi-vim'        " python completion
+  " Plug 'davidhalter/jedi-vim'        " python completion
 
   " syntax
   Plug 'vim-scripts/AnsiEsc.vim'     " escape ANSI sequences
-  Plug 'Glench/Vim-Jinja2-Syntax'    " jinja html templates
-  Plug 'leafgarland/typescript-vim'  " typescript
+  " Plug 'Glench/Vim-Jinja2-Syntax'    " jinja html templates
+  " Plug 'leafgarland/typescript-vim'  " typescript
   Plug 'vim-scripts/nginx.vim'       " nginx
   " Plug 'chikamichi/mediawiki.vim'    " wikipedia source
   Plug 'digitaltoad/vim-pug'         " pug
   " Plug 'isRuslan/vim-es6'
-  Plug 'othree/yajs.vim'
+  " Plug 'othree/yajs.vim'
   Plug 'gisphm/vim-gitignore'        " .gitignore files
   Plug 'alvan/vim-closetag'
   Plug 'martinda/Jenkinsfile-vim-syntax'
+  Plug 'vim-ruby/vim-ruby'
 
   " misc
   Plug 'vim-utils/vim-man'           " `Man` command
   Plug 'jiangmiao/auto-pairs'        " completes pairs
   Plug 'ctrlpvim/ctrlp.vim'          " fuzzy file finder
   Plug 'scrooloose/nerdtree'         " filetree
-  Plug 'ervandew/supertab'
+  Plug 'ryanoasis/vim-devicons'
+  Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+  " Plug 'ervandew/supertab'
   " Plug 'scrooloose/syntastic'        " syntax linter
   " Plug 'joonty/vim-do.git'
   " Plug 'maneyko/vim-do'              " execute shell commands
 
   " filetype specific
-  Plug 'mattn/emmet-vim'             " html completion
+  " Plug 'mattn/emmet-vim'             " html completion
 
-  Plug 'neoclide/coc.nvim'
+  Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
+  Plug 'autozimu/LanguageClient-neovim', {
+      \ 'branch': 'next',
+      \ 'do': 'bash install.sh',
+      \ }
+
 
   " tpope
   Plug 'tpope/vim-commentary'        " commenting motions
@@ -72,6 +79,7 @@ if has('patch-7.4-346')
   set breakindent
 endif
 set clipboard=unnamed
+set encoding=UTF-8
 set expandtab
 set hlsearch
 set ignorecase
@@ -122,12 +130,35 @@ highlight Normal ctermfg=NONE
 " --------------
 let g:user_emmet_leader_key = '<NUL>'  " equals '<C-space>,'
 let g:do_refresh_key = '<C-M>'
-let g:SuperTabCrMapping = 1
-let g:SuperTabDefaultCompletionType = "<c-n>"
+" let g:SuperTabCrMapping = 1
+" let g:SuperTabDefaultCompletionType = "<c-n>"
 let g:vimpager = {}
 let g:less = {}
 let g:less.enabled = 0
 let g:less.scrolloff = 5
+let NERDTreeShowHidden=1
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" let NERDTreeMapOpenInTab='<ENTER>'
+
+let g:ctrlp_prompt_mappings = {
+    \ 'AcceptSelection("e")': ['<2-LeftMouse>'],
+    \ 'AcceptSelection("t")': ['<cr>'],
+\ }
+let g:ctrlp_regexp = 1
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" let g:coc_global_extensions = ['coc-solargraph']
+
 
 " functions
 " ---------
@@ -220,9 +251,13 @@ endfun
 " ------
 let g:mapleader = ','
 
+nnoremap <C-h>            <C-w>h
 nnoremap <C-j>            <C-w>j
 nnoremap <C-k>            <C-w>k
-nnoremap <C-l>            :nohl<CR><C-l>
+nnoremap <C-l>            <C-w>l
+nnoremap <C-i>            gT
+nnoremap <C-o>            gt
+nnoremap <C-b>            :nohl<CR><C-l>
 nnoremap <C-n>            :set relativenumber!<CR>
 nnoremap <leader><leader> :w<CR>
 nnoremap <leader>f        :call FlyMode(flymode_togg)<CR>
@@ -237,8 +272,9 @@ nnoremap \e               :<C-U>call TabFun(v:count1*2,1)<CR>
 nnoremap \n               :<C-U>call TabFun(v:count1*2,0)<CR>
 nnoremap \r               :call ReadMode(readmode_togg)<CR>
 nnoremap \s               1z=
-nnoremap \w               :%s/\s\+$//<CR>:nohl<CR><C-l>
+nnoremap \w               :%s/\s\+$//<CR>:nohl<CR><C-b>
 nnoremap Q                <Esc>
+nnoremap K                :call CocActionAsync('jumpDefinition', 'tab drop')<CR>
 nnoremap U                <C-r>
 nnoremap Y                y$
 nnoremap daf              :1,$d<CR>
@@ -289,7 +325,7 @@ au BufNewFile *.html,*.php
       \ . "<body>\<CR>\<CR>"
       \ . "</body>\<CR>"
       \ . "</html>\<Esc>"
-      \ . "/title\<CR>f<\<C-l>"
+      \ . "/title\<CR>f<\<C-b>"
 
 au BufRead *.ipynb
       \ setlocal ft=json
@@ -300,6 +336,14 @@ au BufRead,BufNewFile
       \/usr/local/nginx/conf/*,
       \/etc/nginx/*
       \ setlocal ft=nginx
+
+au VimEnter *.rb,Rakefile NERDTree | wincmd w
+" au BufEnter *.rb,Rakefile exe "silent! CocDisable"
+" Configure ruby omni-completion to use the language client:
+autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1 
+autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
+autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
+" au FileType ruby setlocal omnifunc=LanguageClient#complete
 au FileType css,html,javascript,
       \jinja,json,php,pug,R,rst,
       \sh,sql,tex,typescript,vim,yaml
@@ -313,7 +357,7 @@ au FileType php
 au FileType tex
       \ setlocal spell spelllang=en_us colorcolumn=80 wrap foldlevel=10
 au FileType tex,cpp
-      \ nnoremap <leader>c :silent exec "!echo >> /tmp/_listener"<CR><C-l>
+      \ nnoremap <leader>c :silent exec "!echo >> /tmp/_listener"<CR><C-b>
 au FileType man
       \ setlocal so=0
 au FileType vim

@@ -128,6 +128,27 @@ clr() {  # (number, text)
   printf "\[${esc}[38;5;${1}m\]${2}\[${esc}[0m\]"
 }
 
+export PS1_NO_GIT=0
+
+branch_colon() {
+  if test $PS1_NO_GIT -eq 1; then
+    return
+  fi
+  branch=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
+  if test -n "$branch"; then
+    echo ':'
+  fi
+}
+
+parse_git_branch() {
+  if test $PS1_NO_GIT -eq 1; then
+    return
+  fi
+  branch=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
+  echo $branch
+}
+
+git_branch=$(parse_git_branch)
 border_color=241
 user_color=154
 host_color=214
@@ -138,17 +159,19 @@ test "$(whoami)" = 'root' && {
 }
 
 LONG_PS1="\
-`clr $border_color  '┌─['         `\
-`clr $user_color    "$(whoami)"   `\
-`clr 250            '@'           `\
-`clr $host_color    "$host_text"  `\
-`clr $border_color  ':'           `\
-`clr $pwd_color     '\\w'         `\
-`clr $border_color  ']'           `\
+`clr $border_color  '┌─['                  `\
+`clr $user_color    "$(whoami)"            `\
+`clr 250            '@'                    `\
+`clr $host_color    "$host_text"           `\
+`clr $border_color  ':'                    `\
+`clr $pwd_color     '\\w'                  `\
+`clr $border_color  '\$(branch_colon)'     `\
+`clr 207            '\$(parse_git_branch)' `\
+`clr $border_color  ']'                    `\
 \n\
-`clr $border_color  '└['          `\
-`clr 7              '\\$'         `\
-`clr $border_color  ']› '         `\
+`clr $border_color  '└['                   `\
+`clr 7              '\\$'                  `\
+`clr $border_color  ']› '                  `\
 "
 
 SHORT_PS1="\
@@ -199,7 +222,7 @@ else
 fi
 if test -n "$GNU_LS"; then
   alias ls="$_ls --color=auto --group-directories-first --time-style +'%b %d %I:%M %p'"
-  alias lsld="ls -AGhlI'*'"
+  alias lsld="ls -AhlI'*'"
   alias lsd="ls -AI'*'"
 elif test -n "$BSD_LS"; then
   export CLICOLOR=1
@@ -207,8 +230,8 @@ elif test -n "$BSD_LS"; then
   alias ls="$_ls -G"
 fi
 alias la='ls -A'
-alias ll='ls -Ghl'
-alias lla='ls -AGhl'
+alias ll='ls -hl'
+alias lla='ls -Ahl'
 alias l='ll'
 
 

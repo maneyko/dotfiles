@@ -26,6 +26,7 @@ call plug#begin()
 
   " syntax
   Plug 'vim-scripts/AnsiEsc.vim'     " escape ANSI sequences
+  Plug 'chrisbra/Colorizer'
   " Plug 'Glench/Vim-Jinja2-Syntax'    " jinja html templates
   " Plug 'leafgarland/typescript-vim'  " typescript
   Plug 'vim-scripts/nginx.vim'       " nginx
@@ -89,6 +90,7 @@ set list
 set listchars=tab:\ \ ,trail:⋅
 if has('mouse')
   set mouse=a
+  set ttymouse=xterm2
 endif
 if version >= 702
   au InsertLeave * set list
@@ -255,6 +257,8 @@ nnoremap <C-h>            <C-w>h
 nnoremap <C-j>            <C-w>j
 nnoremap <C-k>            <C-w>k
 nnoremap <C-l>            <C-w>l
+nnoremap <C-w>h           :vertical resize -5<CR>
+nnoremap <C-w>l           :vertical resize +5<CR>
 nnoremap <C-i>            gT
 nnoremap <C-o>            gt
 nnoremap <C-b>            :nohl<CR><C-l>
@@ -330,6 +334,8 @@ au BufNewFile *.html,*.php
 
 au BufRead *.ipynb
       \ setlocal ft=json
+au BufRead *
+      \ exe "ColorHighlight"
 au BufRead *.url
       \ setlocal ft=dosini
 au BufRead,BufNewFile

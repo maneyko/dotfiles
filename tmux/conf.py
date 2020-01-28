@@ -18,7 +18,7 @@ OUTPUT = os.path.join(PWD, '_tmux.conf')
 LINES = []
 
 env = os.environ
-TMUX_VERSION = tuple(map(int, sh('tmux -V').split()[-1].split('.')))
+TMUX_VERSION = tuple(map(int, re.sub('[a-z]', '', sh('tmux -V').split()[-1], re.I).split('.')))
 
 
 def set(text):

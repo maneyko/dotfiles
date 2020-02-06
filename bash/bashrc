@@ -3,8 +3,7 @@
 # Table of Contents
 # -----------------
 #   * System-wide
-#   * Interface
-#   * Prompt String 1
+#   * Interface #   * Prompt String 1
 #   * Aliases
 #   * Python
 #   * User Environment
@@ -80,7 +79,7 @@ test -n "$(command -v vim)" && {
 }
 
 GREP_COLOR='0;34'
-LESS='-rI'
+export LESS='-RX'
 PAGER='less'
 
 export EDITOR
@@ -139,6 +138,7 @@ branch_colon() {
     echo ':'
   fi
 }
+export -f branch_colon
 
 parse_git_branch() {
   if test $PS1_NO_GIT -eq 1; then
@@ -147,6 +147,7 @@ parse_git_branch() {
   branch=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
   echo $branch
 }
+export -f parse_git_branch
 
 git_branch=$(parse_git_branch)
 border_color=241
@@ -207,6 +208,11 @@ alias ag='ag --color-match "0;35"'
 
 alias mv='mv -i'
 
+function diff() {
+  /usr/local/bin/diff --color -u $@ | diff-so-fancy;
+}
+export -f diff
+
 # ``ls`` wrangling
 # ----------------
 export TZ='America/Chicago'
@@ -252,6 +258,8 @@ for i in {2..8}; do
   alias .$i='cd '"$(printf '../%.0s' `seq 1 $i`)"
 done
 
+alias whois='whois -h whois.arin.net'
+
 # Platform specific
 test -n "$MACOS" && {
   alias top='top -u'
@@ -268,7 +276,7 @@ test -n "$MACOS" && {
 # ---------------------------------------------------------------------
 
 # My module
-export PYTHONPATH="$HOME/.ipython/maneyko:$PYTHONPATH"
+# export PYTHONPATH="$HOME/.ipython/maneyko:$PYTHONPATH"
 
 test -f "$HOME/.pythonrc.py" && {
   PYTHONSTARTUP="$HOME/.pythonrc.py"

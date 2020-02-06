@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if test -z "$(command -v magick)"; then
+  echo 'imagemagick not installed'
+  echo 'Please install it'
+  exit 1
+fi
+
+magick "$@"

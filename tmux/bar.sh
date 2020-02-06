@@ -11,7 +11,7 @@ if test $(uname) = 'Darwin'
 then
   while test -n "$TMUX"
   do
-    tunes="$(osascript -l JavaScript ~/.mac/tunes.js)"
+    tunes="♫ $(osascript -l JavaScript ~/.mac/tunes.js)"
     if test -n "$tunes"
     then
       text="#[fg=colour$TEXT_COLOR]$tunes"

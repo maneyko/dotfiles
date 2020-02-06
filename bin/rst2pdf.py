@@ -5,12 +5,13 @@ Does a quick compilation of a '.rst' file to a '.pdf'.
 
 import os
 import glob
-import argparse
+from argparse import ArgumentParser, RawTextHelpFormatter
 import subprocess
 
 
 def parse_args(opts=None):
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = ArgumentParser(description=__doc__,
+                            formatter_class=RawTextHelpFormatter)
     parser.add_argument('file', help='.rst file to convert')
     parser.add_argument('-d', '--delete',
             action='store_true',

@@ -6,12 +6,13 @@ format. The default converts the file to HTML.
 
 from __future__ import print_function
 import os
-import argparse
+from argparse import ArgumentParser, RawTextHelpFormatter
 import subprocess
 
 
 def parse_args(opts=None):
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = ArgumentParser(description=__doc__,
+                            formatter_class=RawTextHelpFormatter)
     parser.add_argument('file', help='.rst file to listen for changes')
     parser.add_argument('-p', '--pdf',
             action='store_true',

@@ -4,7 +4,7 @@ Edit metadata for '.mp3' or '.m4a' files
 """
 
 import re
-import argparse
+from argparse import ArgumentParser, RawTextHelpFormatter
 
 import tabulate
 import mutagen.easyid3
@@ -12,7 +12,8 @@ import mutagen.easymp4
 
 
 def parse_args(opts=None):
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = ArgumentParser(description=__doc__,
+                            formatter_class=RawTextHelpFormatter)
     parser.add_argument('files',
             nargs='+',
             type=argparse.FileType('r'),

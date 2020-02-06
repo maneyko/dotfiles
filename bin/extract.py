@@ -4,7 +4,7 @@ Extracts a file of compression types {}.
 """
 
 import os
-import argparse
+from argparse import ArgumentParser, RawTextHelpFormatter
 import subprocess
 
 
@@ -32,7 +32,8 @@ DATA = [
 
 def parse_args(opts=None):
     all_exts = [ext for d in DATA for ext in d[0]]
-    parser = argparse.ArgumentParser(description=__doc__.format(all_exts))
+    parser = ArgumentParser(description=__doc__.format(all_exts),
+                            formatter_class=RawTextHelpFormatter)
     parser.add_argument('file', help='compressed file to extract')
     args = parser.parse_args(opts)
     if not os.path.isfile(args.file):

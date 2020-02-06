@@ -5,7 +5,7 @@ Available extensions are {}.
 """
 
 import os
-import argparse
+from argparse import ArgumentParser, RawTextHelpFormatter
 import subprocess
 
 
@@ -28,7 +28,8 @@ EXTENSIONS = [
 
 
 def parse_args(opts=None):
-    parser = argparse.ArgumentParser(description=__doc__.format(EXTENSIONS))
+    parser = ArgumentParser(description=__doc__.format(EXTENSIONS),
+                            formatter_class=RawTextHelpFormatter)
     parser.add_argument('file',
             help='file or directory to be compressed')
     parser.add_argument('-e', '--extension',

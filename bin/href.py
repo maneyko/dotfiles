@@ -5,14 +5,15 @@ file.
 """
 
 import os
-import argparse
+from argparse import ArgumentParser, RawTextHelpFormatter
 
 from six.moves.html_parser import HTMLParser
 from six.moves.urllib.request import urlopen
 
 
 def parse_args(opts=None):
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = ArgumentParser(description=__doc__,
+                            formatter_class=RawTextHelpFormatter)
     parser.add_argument('url', help='link or html file')
     return parser.parse_args(opts)
 

@@ -1,14 +1,20 @@
 #!/usr/bin/env python3
 
-"""Merge PDF files."""
+"""
+Merge PDF files.
+
+If running for first time, need to run::
+    python3 -m pip install py2pdf
+"""
 
 import os
-import argparse
+from argparse import ArgumentParser, RawTextHelpFormatter
 from PyPDF2 import PdfFileMerger
 
 
 def parse_args(opts=None):
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = ArgumentParser(description=__doc__,
+                            formatter_class=RawTextHelpFormatter)
     parser.add_argument('pdfs', help='PDFs (in order) to merge', nargs='+')
     parser.add_argument('-o', '--output', default='merge-result.pdf',
         help='output PDF file (default: merge-result.pdf)')

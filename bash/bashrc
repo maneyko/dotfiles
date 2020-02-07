@@ -204,6 +204,7 @@ else
   alias grep='grep -i --color=auto'
 fi
 
+# ag ignores files that are in project's .gitignore
 alias ag='ag --color-match "0;35"'
 
 alias mv='mv -i'

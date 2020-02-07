@@ -1,0 +1,72 @@
+#!/bin/bash
+
+POSITIONAL=()
+DEFAULT_PORT=8080
+
+
+clr() {  # (number, text)
+  esc="\033"
+  printf "${esc}[38;5;${1}m${2}${esc}[0m"
+}
+
+read -r -d '' help << EOT
+This script will run a simple http server from a script argument.
+
+Here is an example usage:
+
+  In echo.sh:
+
+    #!/bin/bash
+
+    cat << EOT
+    HTTP/1.1 200
+    Content-Type: text/plain
+
+    EOT
+
+    echo 'hello there!'
+
+Now run:
+  bash-http-server echo.sh
+
+From another terminal:
+  curl localhost:8080
+EOT
+
+while test $# -gt 0; do
+  key=$1
+  case $key in
+    -p|--port)
+      port=$2
+      shift  # past argument
+      shift  # past value
+      ;;
+    *)
+      POSITIONAL+=("$1")
+      shift
+      ;;
+  esac
+done
+
+script_name=${POSITIONAL[0]}
+
+: ${port=$DEFAULT_PORT}
+
+if test -z "$script_name" -o ! -f "$script_name"; then
+  clr 1 "Please provide a valid script to run\n"
+  echo "Here is the help:"
+  echo
+  echo "$help"
+  exit 1
+fi
+
+if test -z "$(ncat localhost $port < /dev/null 2>&1)"; then
+  clr 1 "Port $port is not open.\n"
+fi
+
+clr 2 "Running on port: $port\n"
+
+trap "exit 0" SIGINT SIGTERM
+while true; do
+  $script_name | ncat -l -p $port
+done

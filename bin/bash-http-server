@@ -62,11 +62,9 @@ done
 set -- "${POSITIONAL[@]}"  # Restore positional parameters
 
 if test -n "$print_help"; then
-  echo 0
   echo "$help"
   exit 0
 fi
-
 
 script_name=${POSITIONAL[0]}
 

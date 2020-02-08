@@ -44,7 +44,7 @@ while test $# -gt 0; do
   key=$1
   case $key in
     -h|--help)
-      unset print_help && print_help=true
+      print_help="true"
       shift  # past argument
       ;;
     -p|--port)
@@ -61,10 +61,12 @@ done
 
 set -- "${POSITIONAL[@]}"  # Restore positional parameters
 
-if test -n $print_help; then
+if test -n "$print_help"; then
+  echo 0
   echo "$help"
   exit 0
 fi
+
 
 script_name=${POSITIONAL[0]}
 

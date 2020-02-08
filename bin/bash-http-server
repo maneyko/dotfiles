@@ -9,11 +9,12 @@ clr() {  # (number, text)
   printf "${esc}[38;5;${1}m${2}${esc}[0m"
 }
 
+if test -z $(command -v nmap); then
+  clr 1 "You need to have nmap installed\n" && exit 1
+fi
+
 read -r -d '' help << EOT
 This script will run a simple http server from a script argument.
-`if test -z $(command -v nmap); then
-  clr 1 "You need to have nmap installed.\n"
-fi`
 $(clr 3 "Example usage:")
 $(clr 3 "--------------")
 
@@ -80,8 +81,7 @@ if test -z "$script_name" -o ! -f "$script_name"; then
 fi
 
 if ! test -x "$script_name"; then
-  clr 1 "'$script_name' needs to be executable.\n"
-  exit 1
+  clr 1 "'$script_name' needs to be executable.\n" && exit 1
 fi
 
 if test -z "$(ncat localhost $port < /dev/null 2>&1)"; then

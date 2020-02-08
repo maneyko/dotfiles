@@ -11,7 +11,9 @@ clr() {  # (number, text)
 
 read -r -d '' help << EOT
 This script will run a simple http server from a script argument.
-
+`if test -z $(command -v nmap); then
+  clr 1 "You need to have nmap installed.\n"
+fi`
 Here is an example usage:
 
   In echo.sh:
@@ -36,6 +38,10 @@ EOT
 while test $# -gt 0; do
   key=$1
   case $key in
+    -h|--help)
+      unset print_help && print_help=true
+      shift  # past argument
+      ;;
     -p|--port)
       port=$2
       shift  # past argument
@@ -48,12 +54,19 @@ while test $# -gt 0; do
   esac
 done
 
+set -- "${POSITIONAL[@]}"  # Restore positional parameters
+
+if test -n $print_help; then
+  echo "$help"
+  exit 0
+fi
+
 script_name=${POSITIONAL[0]}
 
 : ${port=$DEFAULT_PORT}
 
 if test -z "$script_name" -o ! -f "$script_name"; then
-  clr 1 "Please provide a valid script to run\n"
+  clr 1 "Please provide a valid script to run\n\n"
   echo "Here is the help:"
   echo
   echo "$help"

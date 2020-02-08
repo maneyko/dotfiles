@@ -22,21 +22,16 @@ call plug#begin()
   " core
   Plug 'junegunn/vim-plug'
   Plug 'mkarmona/colorsbox'          " color scheme
-  " Plug 'davidhalter/jedi-vim'        " python completion
 
   " syntax
-  " Plug 'Glench/Vim-Jinja2-Syntax'    " jinja html templates
-  " Plug 'leafgarland/typescript-vim'  " typescript
   Plug 'vim-scripts/nginx.vim'       " nginx
-  " Plug 'chikamichi/mediawiki.vim'    " wikipedia source
   Plug 'digitaltoad/vim-pug'         " pug
   " Plug 'isRuslan/vim-es6'
   " Plug 'othree/yajs.vim'
   Plug 'gisphm/vim-gitignore'        " .gitignore files
   Plug 'alvan/vim-closetag'
-  Plug 'martinda/Jenkinsfile-vim-syntax'
-  Plug 'vim-ruby/vim-ruby'
-  " Plug 'plasticboy/vim-markdown'
+  " Plug 'martinda/Jenkinsfile-vim-syntax'
+  " Plug 'vim-ruby/vim-ruby'
   Plug 'tpope/vim-markdown'
 
   " misc
@@ -46,10 +41,6 @@ call plug#begin()
   Plug 'scrooloose/nerdtree'         " filetree
   Plug 'ryanoasis/vim-devicons'
   Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-  " Plug 'ervandew/supertab'
-  " Plug 'scrooloose/syntastic'        " syntax linter
-  " Plug 'joonty/vim-do.git'
-  " Plug 'maneyko/vim-do'              " execute shell commands
 
   " filetype specific
   " Plug 'mattn/emmet-vim'             " html completion

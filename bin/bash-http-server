@@ -14,25 +14,30 @@ This script will run a simple http server from a script argument.
 `if test -z $(command -v nmap); then
   clr 1 "You need to have nmap installed.\n"
 fi`
-Here is an example usage:
+$(clr 3 "Example usage:")
+$(clr 3 "--------------")
 
-  In echo.sh:
+In echo.sh:
+--------------------
 
-    #!/bin/bash
+#!/bin/bash
 
-    cat << EOT
-    HTTP/1.1 200
-    Content-Type: text/plain
+cat << EOF
+HTTP/1.1 200
+Content-Type: text/plain
 
-    EOT
+EOF
 
-    echo 'hello there!'
+echo 'hello there!'
+
+--------------------
 
 Now run:
   bash-http-server echo.sh
 
 From another terminal:
   curl localhost:8080
+
 EOT
 
 while test $# -gt 0; do

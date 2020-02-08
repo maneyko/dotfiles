@@ -33,6 +33,7 @@ echo 'hello there!'
 --------------------
 
 Now run:
+  chmod +x echo.sh
   bash-http-server echo.sh
 
 From another terminal:
@@ -71,10 +72,15 @@ script_name=${POSITIONAL[0]}
 : ${port=$DEFAULT_PORT}
 
 if test -z "$script_name" -o ! -f "$script_name"; then
-  clr 1 "Please provide a valid script to run\n\n"
-  echo "Here is the help:"
+  clr 1 "Please provide a valid script to run\n"
+  clr 3 "Here is the help:\n"
   echo
   echo "$help"
+  exit 1
+fi
+
+if ! test -x "$script_name"; then
+  clr 1 "'$script_name' needs to be executable.\n"
   exit 1
 fi
 

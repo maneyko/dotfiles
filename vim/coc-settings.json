@@ -1,3 +1,5 @@
 {
-  "suggest.maxCompleteItemCount": 50
+  "suggest.maxCompleteItemCount": 50,
+  "python.linting.enabled": false,
+  "python.linting.pylintEnabled": false
 }

@@ -26,13 +26,10 @@ call plug#begin()
   " syntax
   Plug 'vim-scripts/nginx.vim'       " nginx
   Plug 'digitaltoad/vim-pug'         " pug
-  " Plug 'isRuslan/vim-es6'
-  " Plug 'othree/yajs.vim'
   Plug 'gisphm/vim-gitignore'        " .gitignore files
   Plug 'alvan/vim-closetag'
-  " Plug 'martinda/Jenkinsfile-vim-syntax'
-  " Plug 'vim-ruby/vim-ruby'
   Plug 'tpope/vim-markdown'
+  Plug 'phreax/vim-coffee-script'
 
   " misc
   Plug 'vim-utils/vim-man'           " `Man` command
@@ -342,7 +339,7 @@ autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
 autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
 autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
 " au FileType ruby setlocal omnifunc=LanguageClient#complete
-au FileType css,scss,html,javascript,
+au FileType coffee,css,scss,html,javascript,
       \jinja,json,php,pug,R,rst,
       \sh,sql,tex,typescript,vim,yaml
       \ setlocal ts=2 sw=2 sts=2

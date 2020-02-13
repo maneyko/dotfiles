@@ -36,10 +36,12 @@ call plug#begin()
   Plug 'jiangmiao/auto-pairs'        " completes pairs
   Plug 'ctrlpvim/ctrlp.vim'          " fuzzy file finder
   Plug 'scrooloose/nerdtree'         " filetree
+  Plug 'Xuyuanp/nerdtree-git-plugin'
   Plug 'ryanoasis/vim-devicons'
   Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
   Plug 'yegappan/mru'
   Plug 'vim-python/python-syntax'
+  Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 
   " filetype specific
   " Plug 'mattn/emmet-vim'             " html completion
@@ -80,7 +82,7 @@ set list
 set listchars=tab:\ \ ,trail:⋅
 if has('mouse')
   set mouse=a
-  set ttymouse=xterm2
+  " set ttymouse=xterm2
 endif
 if version >= 702
   au InsertLeave * set list
@@ -100,8 +102,10 @@ set t_Co=256
 set tabstop=4
 set tildeop
 set nowrap
+set laststatus=0 ruler
 
 let g:netrw_dirhistmax=0  " no .netrwhist files
+set guicursor=
 
 " colors
 " ------
@@ -128,6 +132,18 @@ let g:less = {}
 let g:less.enabled = 0
 let g:less.scrolloff = 5
 let NERDTreeShowHidden=1
+let g:NERDTreeIndicatorMapCustom = {
+\ "Modified"  : "✹",
+\ "Staged"    : "✚",
+\ "Untracked" : "✭",
+\ "Renamed"   : "➜",
+\ "Unmerged"  : "═",
+\ "Deleted"   : "✖",
+\ "Dirty"     : "✗",
+\ "Clean"     : "✔︎",
+\ 'Ignored'   : '☒',
+\ "Unknown"   : "?"
+\ }
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 " let NERDTreeMapOpenInTab='<ENTER>'
 
@@ -139,9 +155,7 @@ let g:ctrlp_regexp = 1
 let g:markdown_fenced_languages = ['bash=sh', 'python', 'ruby', 'html']
 let g:markdown_syntax_conceal = 0
 
-let g:python_highlight_all = 1
-let g:python_highlight_indent_errors = 0
-let g:python_highlight_space_errors = 0
+let g:semshi#error_sign = 0
 
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
@@ -296,7 +310,13 @@ vnoremap .                :normal! .<CR>
 vnoremap &                :normal! &<CR>
 
 map <ScrollWheelUp>       <C-y>
+map <2-ScrollWheelUp>     <C-y>
+map <3-ScrollWheelUp>     <C-y>
+map <4-ScrollWheelUp>     <C-y>
 map <ScrollWheelDown>     <C-e>
+map <2-ScrollWheelDown>   <C-e>
+map <3-ScrollWheelDown>   <C-e>
+map <4-ScrollWheelDown>   <C-e>
 
 
 " auto commands

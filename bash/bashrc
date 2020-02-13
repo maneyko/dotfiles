@@ -78,6 +78,11 @@ test -n "$(command -v vim)" && {
   EDITOR='vi'
 }
 
+test -n "$(command -v nvim)" && {
+  EDITOR=nvim
+  alias vi='nvim'
+}
+
 GREP_COLOR='0;34'
 export LESS='-RX'
 PAGER='less'

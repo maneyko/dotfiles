@@ -156,6 +156,8 @@ let g:markdown_fenced_languages = ['bash=sh', 'python', 'ruby', 'html']
 let g:markdown_syntax_conceal = 0
 
 let g:semshi#error_sign = 0
+let g:semshi#mark_selected_nodes = 0
+hi semshiUnresolved      ctermfg=226 guifg=#ffff00
 
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :

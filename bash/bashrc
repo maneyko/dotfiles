@@ -211,7 +211,7 @@ else
 fi
 
 # ag ignores files that are in project's .gitignore
-alias ag='ag --color-match "0;35"'
+alias ag='ag --color-match "0;35" --hidden'
 
 alias mv='mv -i'
 

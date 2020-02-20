@@ -262,7 +262,7 @@ nnoremap <leader>f        :call FlyMode(flymode_togg)<CR>
 nnoremap <leader>kq       :q!<CR>
 nnoremap <leader>n        :NERDTreeToggle<CR>
 nnoremap <leader>q        :q<CR>
-nnoremap <leader>r        :call ReadMode(readmode_togg)<CR>
+nnoremap <leader>r        <Plug>(coc-references)
 nnoremap <leader>m        :MRU<CR>
 nnoremap <leader>s        :setlocal spell! spelllang=en_us<CR>
 nnoremap <leader>kw       :w !sudo tee %<CR>

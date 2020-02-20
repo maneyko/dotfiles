@@ -30,6 +30,7 @@ call plug#begin()
   Plug 'alvan/vim-closetag'
   Plug 'tpope/vim-markdown'
   Plug 'phreax/vim-coffee-script'
+  Plug 'martinda/Jenkinsfile-vim-syntax'
 
   " misc
   Plug 'vim-utils/vim-man'           " `Man` command
@@ -157,7 +158,7 @@ let g:markdown_syntax_conceal = 0
 
 let g:semshi#error_sign = 0
 let g:semshi#mark_selected_nodes = 0
-hi semshiUnresolved      ctermfg=226 guifg=#ffff00
+let g:semshi#excluded_hl_groups = ['local', 'unresolved']
 
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
@@ -278,7 +279,7 @@ nnoremap <leader>f        :call FlyMode(flymode_togg)<CR>
 nnoremap <leader>kq       :q!<CR>
 nnoremap <leader>n        :NERDTreeToggle<CR>
 nnoremap <leader>q        :q<CR>
-nnoremap <leader>r        :call ReadMode(readmode_togg)<CR>
+nmap     <leader>r        <Plug>(coc-references)
 nnoremap <leader>m        :MRU<CR>
 nnoremap <leader>s        :setlocal spell! spelllang=en_us<CR>
 nnoremap <leader>kw       :w !sudo tee %<CR>

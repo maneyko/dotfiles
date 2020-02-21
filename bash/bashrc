@@ -112,8 +112,8 @@ test -n "$INTERACTIVE" && {
   stty -ixon
 }
 
-COLORS=$HOME/.config/colors/base16-custom.dark.sh
-test -n "$TMUX" -a -f $COLORS && {
+: ${COLORS=$HOME/.config/colors/base16-custom.dark.sh}
+test -n "$TMUX" -a -f $COLORS -a $(uname) != 'Linux' && {
   source $COLORS
 }
 
@@ -129,6 +129,12 @@ test -n "$_dircolors" && {
 # ---------------------------------------------------------------------
 
 clr() {  # (number, text)
+  esc="\033"
+  printf "${esc}[38;5;${1}m${2}${esc}[0m"
+}
+export -f clr
+
+pclr() {  # (number, text)
   esc="\033"
   printf "\[${esc}[38;5;${1}m\]${2}\[${esc}[0m\]"
 }
@@ -155,7 +161,6 @@ parse_git_branch() {
 }
 export -f parse_git_branch
 
-git_branch=$(parse_git_branch)
 border_color=241
 user_color=154
 host_color=214
@@ -166,19 +171,19 @@ test "$(whoami)" = 'root' && {
 }
 
 LONG_PS1="\
-`clr $border_color  '┌─['                  `\
-`clr $user_color    "$(whoami)"            `\
-`clr 250            '@'                    `\
-`clr $host_color    "$host_text"           `\
-`clr $border_color  ':'                    `\
-`clr $pwd_color     '\\w'                  `\
-`clr $border_color  '\$(branch_colon)'     `\
-`clr 207            '\$(parse_git_branch)' `\
-`clr $border_color  ']'                    `\
+`pclr $border_color  '┌─['                  `\
+`pclr $user_color    "$(whoami)"            `\
+`pclr 250            '@'                    `\
+`pclr $host_color    "$host_text"           `\
+`pclr $border_color  ':'                    `\
+`pclr $pwd_color     '\\w'                  `\
+`pclr $border_color  '\$(branch_colon)'     `\
+`pclr 207            '\$(parse_git_branch)' `\
+`pclr $border_color  ']'                    `\
 \n\
-`clr $border_color  '└['                   `\
-`clr 7              '\\$'                  `\
-`clr $border_color  ']› '                  `\
+`pclr $border_color  '└['                   `\
+`pclr 7              '\\$'                  `\
+`pclr $border_color  ']› '                  `\
 "
 
 SHORT_PS1="\

@@ -2,5 +2,14 @@
 __pycache__/
 _backups/
 *.sqlite
-vim/bundle/
+vim/plugged/
+vim/autoload/
+config/coc/
+config/nvim/plugged/
+config/configstore/
+ipython/maneyko/build/
+ipython/maneyko/dist/
+ipython/maneyko/maneyko.egg-info/
+ipython/profile_default/
 _tmux.conf
+tmux/_tmux.conf.bak

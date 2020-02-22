@@ -306,3 +306,5 @@ test -f $HOME/.bash/greeting.bash && {
 test -f $HOME/.bashrc.local && {
   source $HOME/.bashrc.local
 }
+
+# vim: ft=sh

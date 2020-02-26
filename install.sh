@@ -52,12 +52,12 @@ for f in "$__DIR__"/*
 do
   fbase="$(basename "$f")"
   dotf=."${fbase}"
+  home_dotf="${HOME}/${dotf}"
 
   test -n "$(echo "${EXCEPTIONS[@]}" | grep "$fbase")" && continue
 
   if test -n "$uninstall_opt"
   then
-    home_dotf="${HOME}/${dotf}"
     test -L "$home_dotf" && rm -v "$home_dotf"
     continue
   fi

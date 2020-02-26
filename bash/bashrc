@@ -299,6 +299,10 @@ test -f "$HOME/.pythonrc.py" && {
 # User Environment
 # ---------------------------------------------------------------------
 
+test -s "$HOME/.rvm/scripts/rvm" && {
+  source "$HOME/.rvm/scripts/rvm"  # Load RVM into a shell session *as a function*
+}
+
 test -f $HOME/.bash/greeting.bash && {
   source $HOME/.bash/greeting.bash
 }

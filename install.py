@@ -18,7 +18,7 @@ HOME = os.environ['HOME']
 __DIR__ = os.path.dirname(os.path.realpath(__file__))
 DOT_RELPATH = os.path.relpath(__DIR__, HOME)
 
-EXCLUDES = [os.path.basename(__file__), BACKUP_DIR, 'README']
+EXCLUDES = [os.path.basename(__file__), BACKUP_DIR, 'README', 'install.sh']
 if os.uname()[0] != 'Darwin':
     EXCLUDES.append('mac')
 

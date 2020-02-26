@@ -113,7 +113,7 @@ set guicursor=
 if !empty(glob($VIMRUNTIME . '/syntax/syntax.vim'))
   syntax on
 endif
-if isdirectory(glob('~/.vim/plugged/colorsbox'))
+if isdirectory(glob('~/.config/nvim/plugged/colorsbox'))
   colorscheme colorsbox-stnight
 endif
 

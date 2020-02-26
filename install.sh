@@ -17,8 +17,9 @@ Usage:  ~/.dotfiles/install.sh [OPTIONS]
 
 Options:
 
-  $(clr 3 "-h, --help")           Print this help
-  $(clr 3 "-u, --uninstall")      Uninstall maneyko's dotfiles
+  $(clr 3 "-h, --help")            Print this help
+  $(clr 3 "-p, --no-plugins")      Don't install vim plugins
+  $(clr 3 "-u, --uninstall")       Uninstall maneyko's dotfiles
 EOT
 
 POSITIONAL=()
@@ -28,6 +29,10 @@ do
   case $key in
     -h|--help)
       print_help="true"
+      shift  # past argument
+      ;;
+    -p|--no-plugins)
+      no_plugins="true"
       shift  # past argument
       ;;
     -u|--uninstall)
@@ -78,12 +83,15 @@ do
     ln -vs "${__DIR__}/${fbase}" "$home_dotf"
   fi
 
-  curl -fLo $HOME/.vim/autoload/plug.vim \
-    --create-dirs \
-    'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim \
-    --create-dirs \
+  if test -z "$no_plugins"
+  then
+    curl -fLo $HOME/.vim/autoload/plug.vim \
+      --create-dirs \
       'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  vim +PlugInstall +qall
-  test -n "$(command -v nvim)" && nvim +PlugInstall +qall
+    curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim \
+      --create-dirs \
+        'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    vim +PlugInstall +qall
+    test -n "$(command -v nvim)" && nvim +PlugInstall +qall
+  fi
 done

@@ -76,7 +76,13 @@ def main(args):
     if not args.plugins:
         subprocess.call(['curl', '-fLo', '~/.vim/autoload/plug.vim',
             '--create-dirs', 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'])
-        subprocess.call(['vim', '+PluginInstall', '+qall'])
+        subprocess.call(['vim', '+PlugInstall', '+qall'])
+        rc = subprocess.call(['which', 'nvim'])
+        if rc == 0:
+            subprocess.call(['curl', '-fLo', '~/.local/share/nvim/site/autoload/plug.vim',
+                '--create-dirs', 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'])
+            subprocess.call(['nvim', '+PlugInstall', '+qall'])
+
 
 
 if __name__ == '__main__':

@@ -77,4 +77,13 @@ do
 
     ln -vs "${__DIR__}/${fbase}" "$home_dotf"
   fi
+
+  curl -fLo $HOME/.vim/autoload/plug.vim \
+    --create-dirs \
+    'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim \
+    --create-dirs \
+      'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  vim +PlugInstall +qall
+  test -n "$(command -v nvim)" && nvim +PlugInstall +qall
 done

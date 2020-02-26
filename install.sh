@@ -10,7 +10,7 @@ EXCEPTIONS=('_backups' 'README' 'install.py' 'install.sh')
 exceptions_str="${EXCEPTIONS[@]}"
 
 read -r -d '' helptext << EOT
-Symlinks all files in ~/.dotfiles (with a '.' prepended) to HOME directory,
+Symlinks all files in ~/.dotfiles/ (with a '.' prepended) to HOME directory,
 with the exceptions of '${exceptions_str// /, }'
 
 Usage:  ~/.dotfiles/install.sh [OPTIONS]
@@ -41,6 +41,12 @@ do
   esac
 done
 set -- "${POSITIONAL[@]}"  # Restore positional parameters
+
+if test -n "$print_help"
+then
+  echo "$helptext"
+  exit 0
+fi
 
 for f in "$__DIR__"/*
 do

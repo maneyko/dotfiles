@@ -129,15 +129,18 @@ test -n "$_dircolors" && {
 # ---------------------------------------------------------------------
 
 clr() {  # (number, text)
-  esc="\033"
-  printf "${esc}[38;5;${1}m${2}${esc}[0m"
+  printf "\033[38;5;${1}m${2}\033[0m"
 }
 export -f clr
 
 pclr() {  # (number, text)
-  esc="\033"
-  printf "\[${esc}[38;5;${1}m\]${2}\[${esc}[0m\]"
+  printf "\[\033[38;5;${1}m\]${2}\[\033[0m\]"
 }
+
+clr24() {  # ("r;g;b", text)
+  printf "\033[38;2;${1}m${2}\033[0m"
+}
+export -f clr24
 
 export PS1_NO_GIT=0
 
@@ -298,6 +301,9 @@ test -f "$HOME/.pythonrc.py" && {
 # ---------------------------------------------------------------------
 # User Environment
 # ---------------------------------------------------------------------
+
+export HISTSIZE=50000
+export HISTTIMEFORMAT="%h %d %H:%M:%S "
 
 test -s "$HOME/.rvm/scripts/rvm" && {
   source "$HOME/.rvm/scripts/rvm"  # Load RVM into a shell session *as a function*

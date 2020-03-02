@@ -283,7 +283,7 @@ nmap     <leader>r        <Plug>(coc-references)
 nnoremap <leader>m        :MRU<CR>
 nnoremap <leader>s        :setlocal spell! spelllang=en_us<CR>
 nnoremap <leader>kw       :w !sudo tee %<CR>
-nnoremap <space>          <C-d>
+" nnoremap <space>          <C-d>
 nnoremap \a               :<C-U>call AlignRow(v:count1)<CR>
 nnoremap \e               :<C-U>call TabFun(v:count1*2,1)<CR>
 nnoremap \n               :<C-U>call TabFun(v:count1*2,0)<CR>

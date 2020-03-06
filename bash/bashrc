@@ -61,8 +61,10 @@ GREP_COLOR='0;34'
 export LESS='-RX'
 export PAGER='less'
 
-completions=(ag aws brew docker git hub npm tmux)
+completions=(ag aws bash brew bundler coreutils docker find git hub man nmap npm perl postgres rails rake sh ssh tmux)
 completion_dirs=(/usr/local/etc/bash_completion.d)
+
+test -f /usr/local/etc/bash_completion && source /usr/local/etc/bash_completion
 
 test -z "$BASH_COMPLETION" && {
   for comp_d in "${completion_dirs[@]}"; do

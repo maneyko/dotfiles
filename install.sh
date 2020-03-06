@@ -47,34 +47,30 @@ do
 done
 set -- "${POSITIONAL[@]}"  # Restore positional parameters
 
-if test -n "$print_help"
-then
+if test -n "$print_help"; then
   echo "$helptext"
   exit 0
 fi
 
-for f in "$__DIR__"/*
-do
+for f in "$__DIR__"/*; do
+
   fbase="$(basename "$f")"
   dotf=."${fbase}"
   home_dotf="${HOME}/${dotf}"
 
   test -n "$(echo "${EXCEPTIONS[@]}" | grep "$fbase")" && continue
 
-  if test -n "$uninstall_opt"
-  then
+  if test -n "$uninstall_opt"; then
     test -L "$home_dotf" && rm -v "$home_dotf"
     continue
   fi
 
-  if test -e "$home_dotf"
-  then
+  if test -e "$home_dotf"; then
 
     printf "$home_dotf exists, move to ${__DIR__}/_backups/${dotf}? [Y/n] "
     read res
 
-    if test -z "$res" -o "$res" = 'Y' -o "$res" = 'y'
-    then
+    if test -z "$res" -o "$res" = 'Y' -o "$res" = 'y'; then
       mv "$home_dotf" "${__DIR__}/_backups/"
     else
       continue
@@ -82,21 +78,20 @@ do
 
     ln -vs "${__DIR__}/${fbase}" "$home_dotf"
   fi
-
-  if test -z "$no_plugins"
-  then
-    curl -fLo $HOME/.vim/autoload/plug.vim \
-      --create-dirs \
-      'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-    vim +PlugInstall +qall
-    if test -n "$(command -v nvim)"
-    then
-      curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim \
-        --create-dirs \
-          'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-      python3 -m pip install pynvim --upgrade
-      nvim +PlugInstall +qall
-      nvim +UpdateRemotePlugins +qall
-    fi
-  fi
 done
+
+if test -z "$no_plugins"; then
+  curl -fLo $HOME/.vim/autoload/plug.vim \
+    --create-dirs \
+    'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  vim +PlugInstall +qall
+
+  if test -n "$(command -v nvim)"; then
+    curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim \
+      --create-dirs \
+        'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    python3 -m pip install pynvim --upgrade
+    nvim +PlugInstall +qall
+    nvim +UpdateRemotePlugins +qall
+  fi
+fi

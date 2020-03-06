@@ -22,8 +22,6 @@ shopt -s no_empty_cmd_completion >/dev/null 2>&1
 
 umask 0022
 
-UNAME="$(uname)"
-
 
 # Paths
 # -----
@@ -56,20 +54,8 @@ case "$-" in
   *) unset INTERACTIVE ;;
 esac
 
-test "$(command -v vim)" && {
-  EDITOR='vim'
-  alias vi='vim'
-} || {
-  EDITOR='vi'
-}
-
-test "$(command -v nvim)" && {
-  EDITOR='nvim'
-  alias vim='nvim'
-  alias vi='nvim'
-}
-
-export EDITOR
+_vim="$(command -v nvim vim vi | head -1)"
+export EDITOR="$_vim"
 
 GREP_COLOR='0;34'
 export LESS='-RX'
@@ -100,13 +86,13 @@ test "$INTERACTIVE" && {
 }
 
 COLORS=$HOME/.config/colors/base16-custom.dark.sh
-test "$TMUX" -a -f "$COLORS" -a $UNAME != 'Linux' && {
+test "$TMUX" -a -f "$COLORS" -a $(uname) != 'Linux' && {
   source $COLORS
 }
 
 # Find and evaluate ``dircolors`` if exists
 _dircolors="$(command -v gdircolors dircolors | head -1)"
-test "$_dircolors" && {
+test "$_dircolors" -a -f ~/.bash/dircolors && {
   eval "$($_dircolors -b ~/.bash/dircolors)"
 }
 
@@ -142,9 +128,8 @@ branch_colon() {
 export -f branch_colon
 
 parse_git_branch() {
-  if test $PS1_NO_GIT -eq 1; then
-    return
-  fi
+  test $PS1_NO_GIT -eq 1 && return
+
   branch=$(git branch 2> /dev/null | awk '/^\*/ {print $2}')
   echo $branch
 }
@@ -199,11 +184,8 @@ export PS1="$LONG_PS1"
 _cp="$(command -v gcp cp | head -1)"
 alias cp="$_cp -i"
 
-test "$(command -v ggrep)" && {
-  alias grep='ggrep -i --color=auto'
-} || {
-  alias grep='grep -i --color=auto'
-}
+_grep="$(command -v ggrep grep | head -1)"
+alias grep="$_grep -i --color=auto"
 
 # ag ignores files that are in project's .gitignore
 alias ag='ag --color-match "0;35" --hidden'
@@ -222,14 +204,11 @@ export -f diff
 # `ls` wrangling
 # ----------------
 
-_ls='ls'
-test "$(command -v gls)" && {
-  _ls='gls'
-}
+_ls="$(command -v gls ls | head -1)"
 if $_ls --color / >/dev/null 2>&1; then
   GNU_LS=true
 fi
-if test -n "$GNU_LS"; then
+if test "$GNU_LS"; then
   alias ls="$_ls --color=auto --group-directories-first --time-style +'%b %d %I:%M %p'"
   alias lsld="ls -AhlI'*'"
   alias lsd="ls -AI'*'"
@@ -264,7 +243,7 @@ done
 alias whois='whois -h whois.arin.net'
 
 # Platform specific
-test $UNAME = 'Darwin' && {
+test $(uname) = 'Darwin' && {
   alias top='top -u'
   alias mcopy='pbcopy'
   alias mpaste='pbpaste'

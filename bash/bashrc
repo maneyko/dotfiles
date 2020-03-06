@@ -56,6 +56,8 @@ esac
 
 _vim="$(command -v nvim vim vi | head -1)"
 export EDITOR="$_vim"
+alias vi="$_vim"
+alias vim="$_vim"
 
 GREP_COLOR='0;34'
 export LESS='-RX'
@@ -190,7 +192,7 @@ _grep="$(command -v ggrep grep | head -1)"
 alias grep="$_grep -i --color=auto"
 
 # ag ignores files that are in project's .gitignore
-alias ag='ag --color-match "0;35" --hidden'
+alias ag='ag --color-match "0;35"'
 
 alias mv='mv -i'
 

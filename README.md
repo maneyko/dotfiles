@@ -9,6 +9,6 @@ Installation
 
 ```bash
 git clone https://github.com/maneyko/dotfiles ~/.dotfiles
-~/.dotfiles/install.py
+~/.dotfiles/install.sh
 ```
 

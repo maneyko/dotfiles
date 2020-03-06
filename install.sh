@@ -6,7 +6,7 @@ clr() {  # (number, text)
 
 __DIR__="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-EXCEPTIONS=('_backups' 'README' 'install.py' 'install.sh')
+EXCEPTIONS=('_backups' 'README' 'install.sh')
 exceptions_str="${EXCEPTIONS[@]}"
 
 read -r -d '' helptext << EOT
@@ -94,7 +94,9 @@ do
       curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim \
         --create-dirs \
           'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+      python3 -m pip install pynvim --upgrade
       nvim +PlugInstall +qall
+      nvim +UpdateRemotePlugins +qall
     fi
   fi
 done

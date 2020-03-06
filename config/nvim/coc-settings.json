@@ -1,5 +1,4 @@
 {
-  "suggest.maxCompleteItemCount": 50,
   "python.linting.enabled": false,
   "python.linting.pylintEnabled": false,
   "solargraph.hover": true,

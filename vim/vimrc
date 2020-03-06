@@ -336,6 +336,8 @@ au BufRead,BufNewFile
       \/usr/local/nginx/conf/*,
       \/etc/nginx/*
       \ setlocal ft=nginx
+au BufRead */etc/aliases
+      \ setlocal ft=sh
 
 " au VimEnter *.rb,Rakefile NERDTree | wincmd w
 " au BufEnter *.rb,Rakefile exe "silent! CocDisable"

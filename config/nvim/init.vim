@@ -43,6 +43,7 @@ call plug#begin()
   Plug 'yegappan/mru'
   Plug 'vim-python/python-syntax'
   Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
+  Plug 'mileszs/ack.vim'
 
   " filetype specific
   " Plug 'mattn/emmet-vim'             " html completion
@@ -170,6 +171,11 @@ function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep --smart-case'
+endif
+cnoreabbrev ag Ack
 
 " let g:coc_global_extensions = ['coc-solargraph']
 
@@ -359,11 +365,13 @@ au BufRead,BufNewFile
       \/usr/local/nginx/conf/*,
       \/etc/nginx/*
       \ setlocal ft=nginx
+au BufRead */etc/aliases
+      \ setlocal ft=sh
 
 " au VimEnter *.rb,Rakefile NERDTree | wincmd w
 " au BufEnter *.rb,Rakefile exe "silent! CocDisable"
 " Configure ruby omni-completion to use the language client:
-autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1 
+autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
 autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
 autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
 " au FileType ruby setlocal omnifunc=LanguageClient#complete

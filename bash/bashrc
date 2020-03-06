@@ -136,9 +136,9 @@ parse_git_branch() {
 export -f parse_git_branch
 
 border_color=241
-user_color=196
-host_color=255
-host_text='OSX'
+user_color=154
+host_color=214
+host_text='integra'
 pwd_color=228
 test "$(whoami)" = 'root' && {
   user_color=220  # Yellow

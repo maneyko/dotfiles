@@ -1,13 +1,5 @@
 #!/bin/bash
 
-# Table of Contents
-# -----------------
-#   * System-wide
-#   * Interface #   * Prompt String 1
-#   * Aliases
-#   * Python
-#   * User Environment
-
 
 # ---------------------------------------------------------------------
 # System-wide
@@ -16,7 +8,6 @@
 test -r /etc/bashrc && {
   source /etc/bashrc
 }
-
 
 set +e
 set -o ignoreeof
@@ -31,7 +22,7 @@ shopt -s no_empty_cmd_completion >/dev/null 2>&1
 
 umask 0022
 
-: ${UNAME=$(uname)}
+UNAME="$(uname)"
 
 
 # Paths
@@ -65,61 +56,57 @@ case "$-" in
   *) unset INTERACTIVE ;;
 esac
 
-test "$UNAME" = 'Darwin' && {
-  MACOS=true
-} || {
-  unset MACOS
-}
-
-test -n "$(command -v vim)" && {
+test "$(command -v vim)" && {
   EDITOR='vim'
   alias vi='vim'
 } || {
   EDITOR='vi'
 }
 
-test -n "$(command -v nvim)" && {
-  EDITOR=nvim
+test "$(command -v nvim)" && {
+  EDITOR='nvim'
   alias vim='nvim'
   alias vi='nvim'
 }
 
+export EDITOR
+
 GREP_COLOR='0;34'
 export LESS='-RX'
-PAGER='less'
+export PAGER='less'
 
-export EDITOR
-export PAGER
+completions=(ag aws brew docker git hub npm tmux)
+completion_dirs=(/usr/local/etc/bash_completion.d)
 
 test -z "$BASH_COMPLETION" && {
-  for f in /usr/local/share/bash-completion/bash_completion \
-           /usr/local/etc/bash_completion \
-           /etc/bash_completion; do
-    test -f $f && {
-      . $f
-      break
-    }
+  for comp_d in "${completion_dirs[@]}"; do
+    test ! -d "$comp_d" && continue
+    for prog in "${completions[@]}"; do
+      for comp_f in $(ls $comp_d/${prog}* 2>/dev/null); do
+        source "$comp_f"
+      done
+    done
   done
 }
 
-# Override ``bash_completion`` and disable tilde expansion
+# Override `bash_completion` and disable tilde expansion
 _expand() {
   return 0
 }
 
 # Reclaim <C-q> and <C-s>
-test -n "$INTERACTIVE" && {
+test "$INTERACTIVE" && {
   stty -ixon
 }
 
-: ${COLORS=$HOME/.config/colors/base16-custom.dark.sh}
-test -n "$TMUX" -a -f $COLORS -a $(uname) != 'Linux' && {
+COLORS=$HOME/.config/colors/base16-custom.dark.sh
+test "$TMUX" -a -f "$COLORS" -a $UNAME != 'Linux' && {
   source $COLORS
 }
 
 # Find and evaluate ``dircolors`` if exists
-_dircolors="$(type -P gdircolors dircolors | head -1)"
-test -n "$_dircolors" && {
+_dircolors="$(command -v gdircolors dircolors | head -1)"
+test "$_dircolors" && {
   eval "$($_dircolors -b ~/.bash/dircolors)"
 }
 
@@ -133,25 +120,24 @@ clr() {  # (number, text)
 }
 export -f clr
 
-pclr() {  # (number, text)
-  printf "\[\033[38;5;${1}m\]${2}\[\033[0m\]"
-}
-
 clr24() {  # ("r;g;b", text)
   printf "\033[38;2;${1}m${2}\033[0m"
 }
 export -f clr24
 
+pclr() {  # (number, text)
+  printf "\[\033[38;5;${1}m\]${2}\[\033[0m\]"
+}
+
 export PS1_NO_GIT=0
 
 branch_colon() {
-  if test $PS1_NO_GIT -eq 1; then
-    return
-  fi
-  branch=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
-  if test -n "$branch"; then
+  test $PS1_NO_GIT -eq 1 && return
+
+  branch=$(git branch 2> /dev/null | awk '/^\*/ {print $2}')
+  test "$branch" && {
     echo ':'
-  fi
+  }
 }
 export -f branch_colon
 
@@ -159,15 +145,15 @@ parse_git_branch() {
   if test $PS1_NO_GIT -eq 1; then
     return
   fi
-  branch=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
+  branch=$(git branch 2> /dev/null | awk '/^\*/ {print $2}')
   echo $branch
 }
 export -f parse_git_branch
 
 border_color=241
-user_color=154
-host_color=214
-host_text='integra'
+user_color=196
+host_color=255
+host_text='OSX'
 pwd_color=228
 test "$(whoami)" = 'root' && {
   user_color=220  # Yellow
@@ -210,13 +196,14 @@ export PS1="$LONG_PS1"
 # Aliases
 # ---------------------------------------------------------------------
 
-_cp="$(type -P gcp cp | head -1)"
+_cp="$(command -v gcp cp | head -1)"
 alias cp="$_cp -i"
-if test $(command -v ggrep); then
+
+test "$(command -v ggrep)" && {
   alias grep='ggrep -i --color=auto'
-else
+} || {
   alias grep='grep -i --color=auto'
-fi
+}
 
 # ag ignores files that are in project's .gitignore
 alias ag='ag --color-match "0;35" --hidden'
@@ -224,13 +211,16 @@ alias ag='ag --color-match "0;35" --hidden'
 alias mv='mv -i'
 
 function diff() {
-  /usr/local/bin/diff --color -u $@ | diff-so-fancy;
+  test -f /usr/local/etc/diff -a -n "$(command -v diff-so-fancy)" && {
+    /usr/local/bin/diff --color -u "$@" | diff-so-fancy
+  } || {
+    /usr/bin/env diff "$@"
+  }
 }
 export -f diff
 
-# ``ls`` wrangling
+# `ls` wrangling
 # ----------------
-export TZ='America/Chicago'
 
 _ls='ls'
 test "$(command -v gls)" && {
@@ -238,14 +228,12 @@ test "$(command -v gls)" && {
 }
 if $_ls --color / >/dev/null 2>&1; then
   GNU_LS=true
-else
-  BSD_LS=true
 fi
 if test -n "$GNU_LS"; then
   alias ls="$_ls --color=auto --group-directories-first --time-style +'%b %d %I:%M %p'"
   alias lsld="ls -AhlI'*'"
   alias lsd="ls -AI'*'"
-elif test -n "$BSD_LS"; then
+else
   export CLICOLOR=1
   export LSCOLORS='ExGxFxdaCxDaDahbadacec'
   alias ls="$_ls -G"
@@ -276,7 +264,7 @@ done
 alias whois='whois -h whois.arin.net'
 
 # Platform specific
-test -n "$MACOS" && {
+test $UNAME = 'Darwin' && {
   alias top='top -u'
   alias mcopy='pbcopy'
   alias mpaste='pbpaste'
@@ -302,6 +290,7 @@ test -f "$HOME/.pythonrc.py" && {
 # User Environment
 # ---------------------------------------------------------------------
 
+export TZ='America/Chicago'
 export HISTSIZE=50000
 export HISTTIMEFORMAT="%h %d %H:%M:%S "
 

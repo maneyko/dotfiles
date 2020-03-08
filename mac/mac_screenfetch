@@ -4,15 +4,27 @@ function clr () { # (number, text)
   printf "\033[38;5;${1}m${2}\033[0m"
 }
 
-SPHardwareDataType="$(system_profiler SPHardwareDataType)"
-SPDisplaysDataType="$(system_profiler SPDisplaysDataType)"
+sp_hardware_file=$HOME/.dotfiles/mac/SPHardwareDataType.txt
+sp_displays_file=$HOME/.dotfiles/mac/SPDisplaysDataType.txt
+
+if test -f $sp_hardware_file; then
+  SPHardwareDataType="$(cat $sp_hardware_file)"
+else
+  SPHardwareDataType="$(system_profiler SPHardwareDataType | tee $sp_hardware_file)"
+fi
+
+if test -f $sp_displays_file; then
+  SPDisplaysDataType="$(cat $sp_displays_file)"
+else
+  SPDisplaysDataType="$(system_profiler SPDisplaysDataType | tee $sp_displays_file)"
+fi
 
 user=$USER
 sw=$(sw_vers | perl -lane 'print "@F[1..$#F]"' | tr '\n' ' ')
 k_arch=$(uname -m)
 k_os="$(sysctl -n kern.ostype) $(sysctl -n kern.osrelease)"
-hw=$(echo "$SPHardwareDataType" \
-       | perl -ne 'print $1 if /(MacBookPro[0-9]+,[0-9]+)/')
+hw=$(perl -ne 'print $1 if /(MacBookPro[0-9]+,[0-9]+)/' \
+       <<< "$SPHardwareDataType")
 shell=${SHELL//*\/}
 sh_v=${BASH_VERSION%\(*}
 font="$(jq -r '."Normal Font"' ~/.dotfiles/config/iterm/maneyko.json)"
@@ -31,17 +43,16 @@ nbin=$(
 vim_v=$($EDITOR --version \
           | perl -ne 'print $& if /[0-9]+\.[0-9]+(\.[0-9]+)?/ && $.==1')
 
-res=$(echo "$SPDisplaysDataType" \
-        | perl -ne 'print "$1" if /Resolution: (.*)/')
+res=$(perl -ne 'print "$1" if /Resolution: (.*)/' \
+        <<< "$SPDisplaysDataType")
 
 cpu=$(sysctl -n machdep.cpu.brand_string \
         | perl -pe 's/[(R)(TM)]//g')
 
-gpu=$(echo "$SPDisplaysDataType" \
-        | awk -F ': ' '/Chipset/ {print $2; exit}')
+gpu=$(awk -F ': ' '/Chipset/ {print $2; exit}' \
+        <<< "$SPDisplaysDataType")
 
-ram=$(echo "$SPHardwareDataType" \
-        | awk -F ': ' '/Memory/ {print $2; exit}')
+ram=$(awk -F ': ' '/Memory/ {print $2; exit}' <<< "$SPHardwareDataType")
 
 cat << EOT
 
@@ -63,3 +74,9 @@ $(clr 4 "      :ooooooooooooooooooo+.      "; clr 6 'RAM:'       ) $ram
 $(clr 4 "       ':+oo+/:-..-:/+o+/-")
 
 EOT
+
+# clean up
+vars=$(perl -ne 'print "$1\n" if /([0-9A-Za-z]+)=/' "$BASH_SOURCE")
+for v in $vars; do
+  unset $v
+done

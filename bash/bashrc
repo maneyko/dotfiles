@@ -54,7 +54,7 @@ case "$-" in
   *) unset INTERACTIVE ;;
 esac
 
-_vim="$(command -v nvim vim vi | head -1)"
+_vim="$(type -P nvim vim vi | head -1)"
 export EDITOR="$_vim"
 alias vi="$_vim"
 alias vim="$_vim"
@@ -95,7 +95,7 @@ test "$TMUX" -a -f "$COLORS" -a $(uname) != 'Linux' && {
 }
 
 # Find and evaluate ``dircolors`` if exists
-_dircolors="$(command -v gdircolors dircolors | head -1)"
+_dircolors="$(type -P gdircolors dircolors | head -1)"
 test "$_dircolors" -a -f ~/.dotfiles/bash/dircolors && {
   eval "$($_dircolors -b ~/.dotfiles/bash/dircolors)"
 }
@@ -181,10 +181,10 @@ export PS1="$LONG_PS1"
 # Aliases
 # ---------------------------------------------------------------------
 
-_cp="$(command -v gcp cp | head -1)"
+_cp="$(type -P gcp cp | head -1)"
 alias cp="$_cp -i"
 
-_grep="$(command -v ggrep grep | head -1)"
+_grep="$(type -P ggrep grep | head -1)"
 alias grep="$_grep -i --color=auto"
 
 # ag ignores files that are in project's .gitignore
@@ -204,7 +204,7 @@ export -f diff
 # `ls` wrangling
 # ----------------
 
-_ls="$(command -v gls ls | head -1)"
+_ls="$(type -P gls ls | head -1)"
 if $_ls --color / >/dev/null 2>&1; then
   GNU_LS=true
 fi

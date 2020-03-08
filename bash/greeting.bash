@@ -3,18 +3,14 @@
 # First TTY Greeting
 # ------------------
 
-if test -n "$INTERACTIVE" -a "$(tty | grep 001)"
-then  # Check if enough room to have first terminal instance greeting
+if test -n "$INTERACTIVE" -a "$(tty | perl -ne 'print if /00[1-3]/')"; then
   if test $(uname) = 'Darwin' \
     -a $COLUMNS -ge 70 \
-    -a $LINES   -ge 20
-  then
-    python -m this
-    if test -n "$TMUX"
-    then
+    -a $LINES   -ge 20; then
+    $HOME/.dotfiles/mac/mac_screenfetch
+    if test -n "$TMUX"; then
       if test $COLUMNS -ge 181 \
-        -a    $LINES   -ge 48
-      then  # Full screen on macOS
+        -a    $LINES   -ge 48; then
         tmux split-window -h
       fi
     fi

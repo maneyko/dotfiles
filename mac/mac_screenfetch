@@ -4,57 +4,62 @@ function clr () { # (number, text)
   printf "\033[38;5;${1}m${2}\033[0m"
 }
 
+SPHardwareDataType="$(system_profiler SPHardwareDataType)"
+SPDisplaysDataType="$(system_profiler SPDisplaysDataType)"
+
 user=$USER
 sw=$(sw_vers | perl -lane 'print "@F[1..$#F]"' | tr '\n' ' ')
 k_arch=$(uname -m)
 k_os="$(sysctl -n kern.ostype) $(sysctl -n kern.osrelease)"
-hw=$(test `which guname 2>/dev/null` && guname -i)
+hw=$(echo "$SPHardwareDataType" \
+       | perl -ne 'print $1 if /(MacBookPro[0-9]+,[0-9]+)/')
 shell=${SHELL//*\/}
 sh_v=${BASH_VERSION%\(*}
-font="Inconsolata 14pt"
+font="$(jq -r '."Normal Font"' ~/.dotfiles/config/iterm/maneyko.json)"
 
 npack=$(
   d=(/usr/local/opt/* /usr/local/Caskroom/*)
   echo ${#d[@]}
 )
 nbin=$(
-  p=(${PATH//:/ })
-    for d in ${p[@]}; do
+    for d in ${PATH//:/ }; do
       s+=($d/*)
     done
     echo ${#s[@]}
 )
 
 vim_v=$($EDITOR --version \
-  | grep -om2 '[0-9]\.[0-9]\|[0-9]\+\-[0-9]\+' \
-  | gsed ':a; N; $!ba; s/\n[0-9]\+\-/\./g')
+          | perl -ne 'print $& if /[0-9]+\.[0-9]+(\.[0-9]+)?/ && $.==1')
 
-res=$(system_profiler SPDisplaysDataType \
-  | grep -o '[0-9]\+ x [0-9]\+')
+res=$(echo "$SPDisplaysDataType" \
+        | perl -ne 'print "$1" if /Resolution: (.*)/')
 
 cpu=$(sysctl -n machdep.cpu.brand_string \
-  | sed 's/([^()]*)//g; s/CPU //')
+        | perl -pe 's/[(R)(TM)]//g')
 
-gpu=$(system_profiler SPDisplaysDataType | grep Chipset | sed 's/.*: //')
-ram=$(system_profiler SPHardwareDataType | grep Memory | sed 's/.*: //')
+gpu=$(echo "$SPDisplaysDataType" \
+        | awk -F ': ' '/Chipset/ {print $2; exit}')
 
-printf "\
+ram=$(echo "$SPHardwareDataType" \
+        | awk -F ': ' '/Memory/ {print $2; exit}')
+
+cat << EOT
 
 $(clr 2 "                  -/+:.           ")
 $(clr 2 "                 :++++.           ")
-$(clr 2 "                /+++/.            "; clr 6 'Username:') $user
-$(clr 2 "        .:-::- .+/:-''.::-        "; clr 6 'OS:') $sw
-$(clr 2 "     .:/++++++/::::/++++++/:'     "; clr 6 'Kernel:') $k_arch $k_os
-$(clr 3 "   .:///////////////////////:'    "; clr 6 'Hardware:') $hw
-$(clr 3 "   ////////////////////////'      "; clr 6 'Shell:') $shell $sh_v
-$(clr 1 "  -+++++++++++++++++++++++'       "; clr 6 'Packages:') $npack
-$(clr 1 "  /++++++++++++++++++++++/        "; clr 6 'Binaries:') $nbin
-$(clr 1 "  /sssssssssssssssssssssss.       "; clr 6 '$EDITOR:') $EDITOR $vim_v
+$(clr 2 "                /+++/.            "; clr 6 'Username:'  ) $user
+$(clr 2 "        .:-::- .+/:-''.::-        "; clr 6 'OS:'        ) $sw
+$(clr 2 "     .:/++++++/::::/++++++/:'     "; clr 6 'Kernel:'    ) $k_arch $k_os
+$(clr 3 "   .:///////////////////////:'    "; clr 6 'Hardware:'  ) $hw
+$(clr 3 "   ////////////////////////'      "; clr 6 'Shell:'     ) $shell $sh_v
+$(clr 1 "  -+++++++++++++++++++++++'       "; clr 6 'Packages:'  ) $npack
+$(clr 1 "  /++++++++++++++++++++++/        "; clr 6 'Binaries:'  ) $nbin
+$(clr 1 "  /sssssssssssssssssssssss.       "; clr 6 '$EDITOR:'   ) $EDITOR $vim_v
 $(clr 1 "  :ssssssssssssssssssssssss-      "; clr 6 'Resolution:') $res
-$(clr 5 "   osssssssssssssssssssssssso/'   "; clr 6 'Font:') $font
-$(clr 5 "   'syyyyyyyyyyyyyyyyyyyyyyyy+'   "; clr 6 'CPU:') $cpu
-$(clr 4 "    'ossssssssssssssssssssss/     "; clr 6 'GPU:') $gpu
-$(clr 4 "      :ooooooooooooooooooo+.      "; clr 6 'RAM:') $ram
+$(clr 5 "   osssssssssssssssssssssssso/'   "; clr 6 'Font:'      ) $font
+$(clr 5 "   'syyyyyyyyyyyyyyyyyyyyyyyy+'   "; clr 6 'CPU:'       ) $cpu
+$(clr 4 "    'ossssssssssssssssssssss/     "; clr 6 'GPU:'       ) $gpu
+$(clr 4 "      :ooooooooooooooooooo+.      "; clr 6 'RAM:'       ) $ram
 $(clr 4 "       ':+oo+/:-..-:/+o+/-")
 
-"
+EOT

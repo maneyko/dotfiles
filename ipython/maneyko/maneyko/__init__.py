@@ -3,7 +3,7 @@ Personal module for frequently used tools.
 
 Include in PYTHONPATH::
 
-    export PYTHONPATH="$HOME/.ipython/maneyko:$PYTHONPATH"
+    export PYTHONPATH="$HOME/.dotfiles/ipython/maneyko:$PYTHONPATH"
 
 Example
 -------

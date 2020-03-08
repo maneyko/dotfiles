@@ -5,6 +5,6 @@ test $(uname) != 'Darwin' && exit 1
 name_cmd="/System/Library/PrivateFrameworks/Apple80211.framework\
 /Versions/Current/Resources/airport -I"
 
-wifi_name="$($name_cmd | grep -o ' SSID: .*' | sed 's/.*: //')"
+wifi_name="$($name_cmd | awk '/ SSID:/ {print $2}')"
 
 security find-generic-password -wa "$wifi_name"

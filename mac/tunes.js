@@ -1,3 +1,5 @@
+#!/usr/bin/env osascript -l JavaScript
+
 let output = "";
 if (Application("Music").running()) {
     const track = Application("Music").currentTrack;
@@ -11,4 +13,5 @@ if (Application("Music").running()) {
     output = `${title} ⋅ ${artist}`.substr(0, 100);
 }
 
-output;
+if (output)
+    output;

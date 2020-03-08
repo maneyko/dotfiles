@@ -96,8 +96,8 @@ test "$TMUX" -a -f "$COLORS" -a $(uname) != 'Linux' && {
 
 # Find and evaluate ``dircolors`` if exists
 _dircolors="$(command -v gdircolors dircolors | head -1)"
-test "$_dircolors" -a -f ~/.bash/dircolors && {
-  eval "$($_dircolors -b ~/.bash/dircolors)"
+test "$_dircolors" -a -f ~/.dotfiles/bash/dircolors && {
+  eval "$($_dircolors -b ~/.dotfiles/bash/dircolors)"
 }
 
 
@@ -123,18 +123,14 @@ export PS1_NO_GIT=0
 
 branch_colon() {
   test $PS1_NO_GIT -eq 1 && return
-
-  branch=$(git branch 2> /dev/null | awk '/^\*/ {print $2}')
-  test "$branch" && {
-    echo ':'
-  }
+  git branch >/dev/null 2>&1 && echo ':'
 }
 export -f branch_colon
 
 parse_git_branch() {
   test $PS1_NO_GIT -eq 1 && return
 
-  branch=$(git branch 2> /dev/null | awk '/^\*/ {print $2}')
+  branch=$(git branch 2>/dev/null | awk '/^\*/ {print $2}')
   echo $branch
 }
 export -f parse_git_branch
@@ -262,7 +258,7 @@ test $(uname) = 'Darwin' && {
 # ---------------------------------------------------------------------
 
 # My module
-# export PYTHONPATH="$HOME/.ipython/maneyko:$PYTHONPATH"
+# export PYTHONPATH="$HOME/.dotfiles/ipython/maneyko:$PYTHONPATH"
 
 test -f "$HOME/.pythonrc.py" && {
   PYTHONSTARTUP="$HOME/.pythonrc.py"
@@ -281,8 +277,8 @@ test -s "$HOME/.rvm/scripts/rvm" && {
   source "$HOME/.rvm/scripts/rvm"  # Load RVM into a shell session *as a function*
 }
 
-test -f $HOME/.bash/greeting.bash && {
-  source $HOME/.bash/greeting.bash
+test -f $HOME/.dotfiles/bash/greeting.bash && {
+  source $HOME/.dotfiles/bash/greeting.bash
 }
 
 test -f $HOME/.bashrc.local && {

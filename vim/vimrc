@@ -108,7 +108,7 @@ let g:netrw_dirhistmax=0  " no .netrwhist files
 if !empty(glob($VIMRUNTIME . '/syntax/syntax.vim'))
   syntax on
 endif
-if isdirectory(glob('~/.vim/plugged/colorsbox'))
+if isdirectory(glob('~/.dotfiles/vim/plugged/colorsbox'))
   colorscheme colorsbox-stnight
 endif
 

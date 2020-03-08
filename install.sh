@@ -6,20 +6,30 @@ clr() {  # (number, text)
 
 __DIR__="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-EXCEPTIONS=('_backups' 'README' 'install.sh')
-exceptions_str="${EXCEPTIONS[@]}"
+FILES_TO_LINK=(
+bash_profile
+bashrc
+inputrc
+nvimrc
+tmux.conf
+vimrc
+bin
+config
+)
+
+files_str="${FILES_TO_LINK[@]}"
 
 read -r -d '' helptext << EOT
-Symlinks all files in ~/.dotfiles/ (with a '.' prepended) to HOME directory,
-with the exceptions of '${exceptions_str// /, }'
+Symlinks [$(echo "${FILES_TO_LINK[@]}" | perl -pe "s/(\S+)/'\1',/g; s/.\$//s")]
+in ~/.dotfiles/ (with a '.' prepended) to HOME directory.
 
 Usage:  ~/.dotfiles/install.sh [OPTIONS]
 
 Options:
 
-  $(clr 3 "-h, --help")            Print this help
-  $(clr 3 "-p, --no-plugins")      Don't install vim plugins
-  $(clr 3 "-u, --uninstall")       Uninstall maneyko's dotfiles
+  $(clr 3 '-h, --help')            Print this help
+  $(clr 3 '-p, --no-plugins')      Don't install vim plugins
+  $(clr 3 '-u, --uninstall')       Uninstall maneyko's dotfiles
 EOT
 
 POSITIONAL=()
@@ -52,13 +62,11 @@ if test -n "$print_help"; then
   exit 0
 fi
 
-for f in "$__DIR__"/*; do
+for f in "${FILES_TO_LINK[@]}"; do
 
   fbase="$(basename "$f")"
   dotf=."${fbase}"
   home_dotf="${HOME}/${dotf}"
-
-  test -n "$(echo "${EXCEPTIONS[@]}" | grep "$fbase")" && continue
 
   if test -n "$uninstall_opt"; then
     test -L "$home_dotf" && rm -v "$home_dotf"
@@ -81,7 +89,7 @@ for f in "$__DIR__"/*; do
 done
 
 if test -z "$no_plugins"; then
-  curl -fLo $HOME/.vim/autoload/plug.vim \
+  curl -fLo $HOME/.dotfiles/vim/autoload/plug.vim \
     --create-dirs \
     'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   vim +PlugInstall +qall

@@ -252,7 +252,6 @@ test $(uname) = 'Darwin' && {
   alias mpaste='xclip -o'
 }
 
-
 # ---------------------------------------------------------------------
 # Python
 # ---------------------------------------------------------------------
@@ -277,6 +276,10 @@ test -s "$HOME/.rvm/scripts/rvm" && {
   source "$HOME/.rvm/scripts/rvm"  # Load RVM into a shell session *as a function*
 }
 
+test -s "/usr/local/opt/nvm/nvm.sh" && {
+  source "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+}
+
 test -f $HOME/.dotfiles/bash/greeting.bash && {
   source $HOME/.dotfiles/bash/greeting.bash
 }
@@ -284,5 +287,14 @@ test -f $HOME/.dotfiles/bash/greeting.bash && {
 test -f $HOME/.bashrc.local && {
   source $HOME/.bashrc.local
 }
+
+if test -n "$(type -P tmux)"; then
+  read -r TMUX_MAJOR \
+          TMUX_MINOR <<< $(tmux -V \
+                             | perl -ne 'print "$1 $2" if /([0-9]+)\.([0-9]+)/')
+  export TMUX_MAJOR
+  export TMUX_MINOR
+fi
+
 
 # vim: ft=sh

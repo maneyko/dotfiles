@@ -15,6 +15,7 @@ tmux.conf
 vimrc
 bin
 config
+vim
 )
 
 files_str="${FILES_TO_LINK[@]}"
@@ -26,11 +27,11 @@ in ~/.dotfiles/ (with a '.' prepended) to HOME directory.
 Usage:  ~/.dotfiles/install.sh [OPTIONS]
 
 Options:
-
-  $(clr 3 '-h, --help')            Print this help
-  $(clr 3 '-p, --no-plugins')      Don't install vim plugins
-  $(clr 3 '-u, --uninstall')       Uninstall maneyko's dotfiles
+  $(clr 3 '-h, --help')             Print this help
+  $(clr 3 '-f, --vim-full')         Install all vim plugins (~100M)
+  $(clr 3 '-u, --uninstall')        Uninstall maneyko's dotfiles
 EOT
+
 
 POSITIONAL=()
 while test $# -gt 0
@@ -41,8 +42,8 @@ do
       print_help="true"
       shift  # past argument
       ;;
-    -p|--no-plugins)
-      no_plugins="true"
+    -f|--vim-full)
+      vim_full="true"
       shift  # past argument
       ;;
     -u|--uninstall)
@@ -88,18 +89,38 @@ for f in "${FILES_TO_LINK[@]}"; do
   fi
 done
 
-if test -z "$no_plugins"; then
-  curl -fLo $HOME/.dotfiles/vim/autoload/plug.vim \
+vim_path="$(type -P nvim vim vi | head -1)"
+vim="$(basename $vim_path)"
+
+if test "$vim" = 'nvim'; then
+  curl -fLo $HOME/.vim/autoload/plug.vim \
     --create-dirs \
     'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  vim +PlugInstall +qall
+else
+  curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim \
+    --create-dirs \
+      'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+fi
 
-  if test -n "$(command -v nvim)"; then
-    curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim \
-      --create-dirs \
-        'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-    python3 -m pip install pynvim --upgrade
-    nvim +PlugInstall +qall
-    nvim +UpdateRemotePlugins +qall
+if test -z "$vim_full"; then
+  if test "$vim" = 'nvim'; then
+    perl -i -pe 's/minimal_vimrc = ([\d]+)/minimal_vimrc = 1/g' $HOME/.nvimrc
+  else
+    perl -i -pe 's/minimal_vimrc = ([\d]+)/minimal_vimrc = 1/g' $HOME/.vimrc
   fi
+fi
+
+if test -n "$vim_full"; then
+  if test "$vim" = 'nvim'; then
+    python3 -m pip install pynvim --upgrade
+  fi
+fi
+
+$vim +PlugInstall +qall
+
+if test "$vim" = 'nvim'; then
+  $vim +UpdateRemotePlugins +qall
+  rm ~/.config/nvim/plugged/vim-plug/.git/objects/pack/*.pack
+else
+  rm ~/.vim/plugged/vim-plug/.git/objects/pack/*.pack
 fi

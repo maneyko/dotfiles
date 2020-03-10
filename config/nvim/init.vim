@@ -11,6 +11,8 @@
 "   * remaps
 "   * auto commands
 
+let g:minimal_vimrc = 0
+
 set nocompatible
 
 " plugins

@@ -25,43 +25,46 @@ call plug#begin()
   Plug 'junegunn/vim-plug'
   Plug 'mkarmona/colorsbox'          " color scheme
 
+  if minimal_vimrc == 0
+    Plug 'phreax/vim-coffee-script'
+    Plug 'vim-scripts/nginx.vim'       " nginx
+    Plug 'digitaltoad/vim-pug'         " pug
+    Plug 'gisphm/vim-gitignore'        " .gitignore files
+    Plug 'tpope/vim-markdown'
+    Plug 'martinda/Jenkinsfile-vim-syntax'
+    " Plug 'mattn/emmet-vim'             " html completion
+    Plug 'vim-utils/vim-man'           " `Man` command
+    Plug 'ctrlpvim/ctrlp.vim'          " fuzzy file finder
+    Plug 'scrooloose/nerdtree'         " filetree
+    Plug 'Xuyuanp/nerdtree-git-plugin'
+    Plug 'ryanoasis/vim-devicons'
+    Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+    Plug 'yegappan/mru'
+    Plug 'vim-python/python-syntax'
+    Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
+    Plug 'mileszs/ack.vim'
+
+
+    Plug 'tpope/vim-fugitive'          " git integration
+    Plug 'tpope/vim-rails'
+
+    Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
+    Plug 'autozimu/LanguageClient-neovim', {
+        \ 'branch': 'next',
+        \ 'do': 'bash install.sh',
+        \ }
+
+  endif
+
   " syntax
-  Plug 'vim-scripts/nginx.vim'       " nginx
-  Plug 'digitaltoad/vim-pug'         " pug
-  Plug 'gisphm/vim-gitignore'        " .gitignore files
   Plug 'alvan/vim-closetag'
-  Plug 'tpope/vim-markdown'
-  Plug 'phreax/vim-coffee-script'
-  Plug 'martinda/Jenkinsfile-vim-syntax'
 
   " misc
-  Plug 'vim-utils/vim-man'           " `Man` command
   Plug 'jiangmiao/auto-pairs'        " completes pairs
-  Plug 'ctrlpvim/ctrlp.vim'          " fuzzy file finder
-  Plug 'scrooloose/nerdtree'         " filetree
-  Plug 'Xuyuanp/nerdtree-git-plugin'
-  Plug 'ryanoasis/vim-devicons'
-  Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-  Plug 'yegappan/mru'
-  Plug 'vim-python/python-syntax'
-  Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
-  Plug 'mileszs/ack.vim'
-
-  " filetype specific
-  " Plug 'mattn/emmet-vim'             " html completion
-
-  Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
-  Plug 'autozimu/LanguageClient-neovim', {
-      \ 'branch': 'next',
-      \ 'do': 'bash install.sh',
-      \ }
-
 
   " tpope
   Plug 'tpope/vim-commentary'        " commenting motions
   Plug 'tpope/vim-endwise'           " closes functions (if and fi)
-  Plug 'tpope/vim-fugitive'          " git integration
-  Plug 'tpope/vim-rails'
   Plug 'tpope/vim-repeat'            " '.' for plugins
   Plug 'tpope/vim-surround'          " surrounding motions
   Plug 'tpope/vim-unimpaired'        " bracket functions and more

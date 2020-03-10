@@ -1,4 +1,8 @@
 # ~/.inputrc
+#
+# bind -V  # for 'set' options
+# bind -p  # for keys
+
 
 set completion-ignore-case on
 set expand-tilde off
@@ -8,16 +12,25 @@ set mark-symlinked-directories on
 # colored tab completion
 set colored-stats on
 
-# bind -V  # for 'set' options
-# bind -p  # for keys
+# -------------------------------------------------------------------
 
-"\eOD": backward-char
-"\eOC": forward-char
+# Map arrow keys and <delete> key
+"\e[1;3D": backward-word
+"\e[1;3C": forward-word
+"\e\b":    backward-kill-word
 
-# # Move forward to start of next word with space before
+"\eOD":    backward-char
+"\eOC":    forward-char
+
+"\C-h":   unix-filename-rubout
+
+# Move forward to start of next word with space before
 "\C-f":            "\C-]\ \eOC"
+
 # Move backward to start of previous word with space before
 "\C-b":            "\eOD\e\C-]\ \eOC"
 
+# Delete word before (seperated by whitespace)
 "\C-j":            "\eOC\C-]\ \eOC\C-w"
+
 

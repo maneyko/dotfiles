@@ -192,15 +192,6 @@ alias ag='ag --color-match "0;35"'
 
 alias mv='mv -i'
 
-function diff() {
-  test -f /usr/local/etc/diff -a -n "$(command -v diff-so-fancy)" && {
-    /usr/local/bin/diff --color -u "$@" | diff-so-fancy
-  } || {
-    /usr/bin/env diff "$@"
-  }
-}
-export -f diff
-
 # `ls` wrangling
 # ----------------
 

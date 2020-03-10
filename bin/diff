@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if test -f /usr/local/bin/diff -a -n "$(command -v diff-so-fancy)"; then
+  /usr/local/bin/diff --color -u "$@" | diff-so-fancy
+else
+  /usr/bin/env diff "$@"
+fi

@@ -1,5 +1,5 @@
-" vimrc
-" =====
+" nvimrc
+" ======
 "
 " table of contents
 " -----------------
@@ -299,7 +299,7 @@ nnoremap \e               :<C-U>call TabFun(v:count1*2,1)<CR>
 nnoremap \n               :<C-U>call TabFun(v:count1*2,0)<CR>
 nnoremap \r               :call ReadMode(readmode_togg)<CR>
 nnoremap \s               1z=
-nnoremap \w               :%s/\s\+$//<CR>:nohl<CR><C-b>
+nnoremap \w               :%s/\s\+$//<CR>:nohl<CR><C-l>
 nnoremap Q                <Esc>
 nnoremap K                :call CocActionAsync('jumpDefinition', 'tab drop')<CR>
 nnoremap U                <C-r>

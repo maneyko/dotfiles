@@ -76,11 +76,11 @@ for f in "${FILES_TO_LINK[@]}"; do
 
   if test -e "$home_dotf"; then
 
-    printf "$home_dotf exists, move to ${__DIR__}/_backups/${dotf}? [Y/n] "
+    printf "$home_dotf exists, move to ${__DIR__}/_backups/${fbase}? [Y/n] "
     read res
 
     if test -z "$res" -o "$res" = 'Y' -o "$res" = 'y'; then
-      mv "$home_dotf" "${__DIR__}/_backups/"
+      mv "$home_dotf" "${__DIR__}/_backups/${fbase}"
     else
       continue
     fi

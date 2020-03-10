@@ -89,6 +89,8 @@ for f in "${FILES_TO_LINK[@]}"; do
   ln -vs "${__DIR__}/${fbase}" "$home_dotf"
 done
 
+test -n "$uninstall_opt" && exit 0
+
 vim_path="$(type -P nvim vim vi | head -1)"
 vim="$(basename $vim_path)"
 

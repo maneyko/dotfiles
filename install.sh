@@ -85,8 +85,8 @@ for f in "${FILES_TO_LINK[@]}"; do
       continue
     fi
 
-    ln -vs "${__DIR__}/${fbase}" "$home_dotf"
   fi
+  ln -vs "${__DIR__}/${fbase}" "$home_dotf"
 done
 
 vim_path="$(type -P nvim vim vi | head -1)"

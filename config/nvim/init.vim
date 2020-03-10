@@ -175,7 +175,6 @@ endfunction
 if executable('ag')
   let g:ackprg = 'ag --vimgrep --smart-case'
 endif
-cnoreabbrev ag Ack
 
 " let g:coc_global_extensions = ['coc-solargraph']
 

@@ -1,3 +1,4 @@
+# ~/.inputrc
 
 set completion-ignore-case on
 set expand-tilde off
@@ -7,17 +8,16 @@ set mark-symlinked-directories on
 # colored tab completion
 set colored-stats on
 
-# https://cnswww.cns.cwru.edu/php/chet/readline/readline.html
-# bind -V | less  # for 'set' options
-# bind -p | less  # for keys
-#
+# bind -V  # for 'set' options
+# bind -p  # for keys
+
 "\eOD": backward-char
 "\eOC": forward-char
 
-# 'M-F12' calls pwd
-"\e[24~":          "pwd\n"
-# Move forward to start of next word with space before
+# # Move forward to start of next word with space before
 "\C-f":            "\C-]\ \eOC"
 # Move backward to start of previous word with space before
 "\C-b":            "\eOD\e\C-]\ \eOC"
-# "\e\C-l":          "cls\n"
+
+"\C-j":            "\eOC\C-]\ \eOC\C-w"
+

@@ -289,12 +289,7 @@ test -f $HOME/.bashrc.local && {
 }
 
 if test -n "$(type -P tmux)"; then
-  read -r TMUX_MAJOR \
-          TMUX_MINOR <<< $(tmux -V \
-                             | perl -ne 'print "$1 $2" if /([0-9]+)\.([0-9]+)/')
-  export TMUX_MAJOR
-  export TMUX_MINOR
+  export TMUX_VERSION=$(tmux -V | perl -ne 'printf("%d.%02d",$1,$2) if /([\d]+)\.([\d]+)/')
 fi
-
 
 # vim: ft=sh

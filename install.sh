@@ -4,6 +4,11 @@ clr() {  # (number, text)
   printf "\033[38;5;${1}m${2}\033[0m"
 }
 
+if ! test -d "$HOME/.dotfiles/"; then
+  clr 1 'Directory ~/.dotfiles/ does not exist! Please move repo to that location.'
+  exit 1
+fi
+
 __DIR__="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 FILES_TO_LINK=(
@@ -63,29 +68,30 @@ if test -n "$print_help"; then
   exit 0
 fi
 
+cd
+
 for f in "${FILES_TO_LINK[@]}"; do
 
-  dotf=".${f}"
-  home_dotf="${HOME}/${dotf}"
+  dotf=".$f"
 
   if test -n "$uninstall_opt"; then
-    test -L "$home_dotf" && rm -v "$home_dotf"
+    test -L "$dotf" && rm -v "$dotf"
     continue
   fi
 
-  if test -e "$home_dotf"; then
+  if test -e "$dotf"; then
 
-    printf "$home_dotf exists, move to ${__DIR__}/_backups/${f}? [Y/n] "
+    printf "$dotf exists, move to ~/.dotfiles/_backups/${f}? [Y/n] "
     read res
 
     if test -z "$res" -o "$res" = 'Y' -o "$res" = 'y'; then
-      mv "$home_dotf" "${__DIR__}/_backups/${f}"
+      mv "$dotf" "$__DIR__/_backups/$f"
     else
       continue
     fi
 
   fi
-  ln -vs "${__DIR__}/${f}" "$home_dotf"
+  ln -vs ".dotfiles/$f" "$dotf"
 done
 
 test -n "$uninstall_opt" && exit 0

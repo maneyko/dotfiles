@@ -4,12 +4,13 @@ clr() {  # (number, text)
   printf "\033[38;5;${1}m${2}\033[0m"
 }
 
-if ! test -d "$HOME/.dotfiles/"; then
-  clr 1 'Directory ~/.dotfiles/ does not exist! Please move repo to that location.'
-  exit 1
-fi
-
 __DIR__="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+if test "$__DIR__" != "$HOME/.dotfiles" -a ! -d "$HOME/.dotfiles"; then
+  clr 2 "Moving repo to ~/.dotfiles\n"
+  cd
+  mv "$__DIR__" "$HOME/.dotfiles"
+fi
 
 FILES_TO_LINK=(
 bash_profile

@@ -17,6 +17,7 @@ shopt -s cdspell                 >/dev/null 2>&1
 shopt -s checkjobs               >/dev/null 2>&1
 shopt -s expand_aliases          >/dev/null 2>&1
 shopt -s extglob                 >/dev/null 2>&1
+shopt -s histappend              >/dev/null 2>&1
 shopt -s hostcomplete            >/dev/null 2>&1
 shopt -s no_empty_cmd_completion >/dev/null 2>&1
 
@@ -28,14 +29,18 @@ umask 0022
 
 PATH="\
 $PATH:\
-$HOME/local/bin:\
-$HOME/.bin:\
 /usr/local/bin:\
 /usr/local/sbin:\
 /usr/bin:\
 /usr/sbin:\
 /bin:\
-/sbin:\
+/sbin\
+"
+
+PATH="\
+$HOME/local/bin:\
+$HOME/.bin:\
+$PATH\
 "
 
 MANPATH="\
@@ -250,11 +255,11 @@ test $(uname) = 'Darwin' && {
 # ---------------------------------------------------------------------
 
 # My module
-# export PYTHONPATH="$HOME/.dotfiles/ipython/maneyko:$PYTHONPATH"
+export PYTHONPATH="$HOME/.dotfiles/ipython/maneyko:$PYTHONPATH"
 
-test -f "$HOME/.pythonrc.py" && {
-  PYTHONSTARTUP="$HOME/.pythonrc.py"
-}
+# test -f "$HOME/.pythonrc.py" && {
+#   PYTHONSTARTUP="$HOME/.pythonrc.py"
+# }
 
 
 # ---------------------------------------------------------------------
@@ -262,8 +267,9 @@ test -f "$HOME/.pythonrc.py" && {
 # ---------------------------------------------------------------------
 
 export TZ='America/Chicago'
+export HISTFILE="$HOME/.bash_history"
 export HISTSIZE=50000
-export HISTTIMEFORMAT="%h %d %H:%M:%S "
+export HISTTIMEFORMAT="%F %T: "
 
 rvms=(
 /usr/local/rvm/scripts/rvm

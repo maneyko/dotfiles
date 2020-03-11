@@ -65,8 +65,7 @@ fi
 
 for f in "${FILES_TO_LINK[@]}"; do
 
-  fbase="$(basename "$f")"
-  dotf=."${fbase}"
+  dotf=".${f}"
   home_dotf="${HOME}/${dotf}"
 
   if test -n "$uninstall_opt"; then
@@ -76,17 +75,17 @@ for f in "${FILES_TO_LINK[@]}"; do
 
   if test -e "$home_dotf"; then
 
-    printf "$home_dotf exists, move to ${__DIR__}/_backups/${fbase}? [Y/n] "
+    printf "$home_dotf exists, move to ${__DIR__}/_backups/${f}? [Y/n] "
     read res
 
     if test -z "$res" -o "$res" = 'Y' -o "$res" = 'y'; then
-      mv "$home_dotf" "${__DIR__}/_backups/${fbase}"
+      mv "$home_dotf" "${__DIR__}/_backups/${f}"
     else
       continue
     fi
 
   fi
-  ln -vs "${__DIR__}/${fbase}" "$home_dotf"
+  ln -vs "${__DIR__}/${f}" "$home_dotf"
 done
 
 test -n "$uninstall_opt" && exit 0
@@ -99,7 +98,7 @@ if test "$vim" = 'nvim'; then
     --create-dirs \
       'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   if test -z "$vim_full"; then
-    perl -i -pe 's/minimal_vimrc = ([\d]+)/minimal_vimrc = 1/g' $HOME/.nvimrc
+    perl -i -pe 's/minimal_vimrc = ([\d]+)/minimal_vimrc = 1/g' $HOME/.dotfiles/config/nvim/init.vim
   else
     python3 -m pip install pynvim --upgrade
   fi
@@ -108,7 +107,7 @@ else
     --create-dirs \
     'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   if test -z "$vim_full"; then
-    perl -i -pe 's/minimal_vimrc = ([\d]+)/minimal_vimrc = 1/g' $HOME/.vimrc
+    perl -i -pe 's/minimal_vimrc = ([\d]+)/minimal_vimrc = 1/g' $HOME/.dotfiles/vim/vimrc
   fi
 fi
 

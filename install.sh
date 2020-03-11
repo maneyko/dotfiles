@@ -115,7 +115,7 @@ $vim +PlugInstall +qall
 
 if test "$vim" = 'nvim'; then
   $vim +UpdateRemotePlugins +qall
-  rm ~/.config/nvim/plugged/vim-plug/.git/objects/pack/*.pack
+  rm -f ~/.config/nvim/plugged/vim-plug/.git/objects/pack/*.pack  2>/dev/null
 else
-  rm ~/.vim/plugged/vim-plug/.git/objects/pack/*.pack
+  rm -f ~/.vim/plugged/vim-plug/.git/objects/pack/*.pack          2>/dev/null
 fi

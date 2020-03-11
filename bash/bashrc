@@ -27,6 +27,7 @@ umask 0022
 # -----
 
 PATH="\
+$PATH:\
 $HOME/local/bin:\
 $HOME/.bin:\
 /usr/local/bin:\
@@ -38,6 +39,7 @@ $HOME/.bin:\
 "
 
 MANPATH="\
+$MANPATH:\
 $HOME/local/share/man:\
 /usr/local/share/man:\
 /usr/local/man:\
@@ -263,9 +265,17 @@ export TZ='America/Chicago'
 export HISTSIZE=50000
 export HISTTIMEFORMAT="%h %d %H:%M:%S "
 
-test -s "$HOME/.rvm/scripts/rvm" && {
-  source "$HOME/.rvm/scripts/rvm"  # Load RVM into a shell session *as a function*
-}
+rvms=(
+/usr/local/rvm/scripts/rvm
+$HOME/.rvm/scripts/rvm
+)
+
+for f in ${rvms[@]}; do
+  if test -s $f; then
+    source $f  # Load RVM into a shell session *as a function*
+    break
+  fi
+done
 
 test -s "/usr/local/opt/nvm/nvm.sh" && {
   source "/usr/local/opt/nvm/nvm.sh"  # This loads nvm

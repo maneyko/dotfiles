@@ -1,17 +1,17 @@
 #!/usr/bin/env osascript -l JavaScript
 
-let output = "";
-if (Application("Music").running()) {
-    const track = Application("Music").currentTrack;
+var music_apps = ["Spotify", "Music"];
+var output = "";
+
+for (var i = 0; i < music_apps.length; i++) {
+  var app = music_apps[i];
+  if (Application(app).running()) {
+    const track = Application(app).currentTrack;
     const artist = track.artist();
     const title = track.name();
     output = `${title} ⋅ ${artist}`.substr(0, 50);
-} else if (Application("Spotify").running()) {
-    const track = Application("Spotify").currentTrack;
-    const artist = track.artist();
-    const title = track.name();
-    output = `${title} ⋅ ${artist}`.substr(0, 100);
+    break;
+  }
 }
 
-if (output)
-    output;
+output;

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+while true; do
+  printf "\r$(date +'%a %b %d %Y %I:%M:%S %p') "
+  sleep 1
+done

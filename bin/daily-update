@@ -1,7 +1,6 @@
 #!/bin/bash
 
-if test $(uname) = 'Darwin'
-then
+if test $(uname) = 'Darwin'; then
   PATH="\
 /usr/local/bin:\
 /usr/local/sbin:\
@@ -15,13 +14,19 @@ then
   brew update
   brew upgrade
 else
-  apt-get update
-  apt-get dist-upgrade
+  apt-get -y update
+  apt-get -y upgrade
+  apt-get -y dist-upgrade
 fi
 
 $HOME/.bin/pip-upgrade
 $HOME/.bin/pip-upgrade -3
-npm update -g
-npm upgrade -g
+
+if test -n "$(command -v npm)"; then
+  npm update -g
+  npm upgrade -g
+fi
+
 test $(uname) = 'Darwin' && brew doctor
-. ~/.bashrc >/dev/null
+
+. ~/.bashrc

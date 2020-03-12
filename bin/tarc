@@ -1,55 +1,41 @@
-#!/usr/bin/env python
-"""
-Executes a tar compression of a directory or file.
-Available extensions are {}.
-"""
-
-import os
-from argparse import ArgumentParser, RawTextHelpFormatter
-import subprocess
+#!/bin/bash
 
 
-EXTENSIONS = [
-    'bz2',
-    'gz',
-    'lz',
-    'lzo',
-    'lzma',
-    'taz',
-    'taZ',
-    'tbz',
-    'tbz2',
-    'tgz',
-    'tlz',
-    'tz2',
-    'xz',
-    'Z',
-]
+EXTENSIONS=(
+bz2
+gz
+lz
+lzo
+lzma
+taz
+taZ
+tbz
+tbz2
+tgz
+tlz
+tz2
+xz
+Z
+)
 
+ext='gz'
 
-def parse_args(opts=None):
-    parser = ArgumentParser(description=__doc__.format(EXTENSIONS),
-                            formatter_class=RawTextHelpFormatter)
-    parser.add_argument('file',
-            help='file or directory to be compressed')
-    parser.add_argument('-e', '--extension',
-            default='gz',
-            help='tar compressed extension (defaults to %(default)r)')
-    args = parser.parse_args(opts)
-    if args.extension not in EXTENSIONS:
-        return parser.error('extension must be in {}'.format(EXTENSIONS))
-    if not os.path.exists(args.file):
-        return parser.error('file {!r} does not exist!'.format(args.file))
-    return args
+POSITIONAL=()
+while test $# -gt 0; do
+  key=$1
+  case $key in
+    -e)
+      ext="$2"
+      shift
+      shift
+      ;;
+    *)
+    POSITIONAL+=("$1")
+    shift ;;
+  esac
+done
+set -- "${POSITIONAL}"
 
+f="${POSITIONAL[0]}"
 
-def main(args):
-    args.file = args.file.rstrip('/')
-    outfile = '{0.file}.tar.{0.extension}'.format(args)
-    cmd = ['tar', '-a', '-cvf', outfile, args.file]
-    subprocess.call(cmd)
-
-
-if __name__ == '__main__':
-    args = parse_args()
-    main(args)
+tar -a -cvf "${f%/}.tar.${ext}" "$f"

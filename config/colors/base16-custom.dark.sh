@@ -83,13 +83,13 @@ printf $printf_template 21 $color21
 # foreground / background / cursor color
 if [ -n "$ITERM_SESSION_ID" ]; then
   # iTerm2 proprietary escape codes
-  printf $printf_template_custom Pg d8d8d8 # forground
-  printf $printf_template_custom Ph 000000 # background
-  printf $printf_template_custom Pi d8d8d8 # bold color
-  printf $printf_template_custom Pj 383838 # selection color
-  printf $printf_template_custom Pk d8d8d8 # selected text color
-  printf $printf_template_custom Pl d8d8d8 # cursor
-  printf $printf_template_custom Pm 000000 # cursor text
+  printf $printf_template_custom Pg ${color_foreground//\/} # forground
+  printf $printf_template_custom Ph ${color_background//\/} # background
+  printf $printf_template_custom Pi ${color_foreground//\/} # bold color
+  printf $printf_template_custom Pj ${color19//\/}          # selection color
+  printf $printf_template_custom Pk ${color_foreground//\/} # selected text color
+  printf $printf_template_custom Pl ${color_foreground//\/} # cursor
+  printf $printf_template_custom Pm ${color_background//\/} # cursor text
 else
   printf $printf_template_var 10 $color_foreground
   printf $printf_template_var 11 $color_background

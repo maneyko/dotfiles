@@ -18,24 +18,21 @@ xz
 Z
 )
 
-ext='gz'
+if test "$1" = '-h' -o "$1" = '--help'; then
+  cat << EOT
+This script will compress a file using tar.
+The available extensions are [$(echo "${EXTENSIONS[@]}" | perl -pe "s/(\S+)/'\1',/g;s/.\$//s")]
 
-POSITIONAL=()
-while test $# -gt 0; do
-  key=$1
-  case $key in
-    -e)
-      ext="$2"
-      shift
-      shift
-      ;;
-    *)
-    POSITIONAL+=("$1")
-    shift ;;
-  esac
-done
-set -- "${POSITIONAL}"
+To pass an extension do \`tarc myproject/ --lzma\`
+EOT
+  exit 0
+fi
 
-f="${POSITIONAL[0]}"
+ext="$(echo "$@" | perl -ne 'print $1 if /--(\S+)/')"
+if test -z "$ext"; then
+  ext='gz'
+fi
+
+f="$(echo "$@" | perl -pe 's/--\S+//g; s/^\s+|\s+$//g')"
 
 tar -a -cvf "${f%/}.tar.${ext}" "$f"

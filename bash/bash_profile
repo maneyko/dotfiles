@@ -1,5 +1,6 @@
 #!/bin/bash
 
-test -f $HOME/.bashrc && {
+
+if test -f $HOME/.bashrc -a -z "$COLORS"; then
   source $HOME/.bashrc
-}
+fi

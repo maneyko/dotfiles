@@ -1,19 +1,17 @@
 #!/bin/bash
 
-TEXT_COLOR=19
+
+TEXT_COLOR="$(perl -ne 'print $1 if /pane-border-style/ && /fg=colour([\d]+)/' ~/.tmux.conf)"
 
 date_status() {
   text="#[fg=colour$TEXT_COLOR]#(date +'%a %b %d %Y')"
   tmux set -g status-right "$text" || break
 }
 
-if test $(uname) = 'Darwin'
-then
-  while test -n "$TMUX"
-  do
-    tunes="$(osascript -l JavaScript ~/.dotfiles/mac/tunes.js)"
-    if test -n "$tunes"
-    then
+if test $(uname) = 'Darwin'; then
+  while test -n "$TMUX"; do
+    tunes="$(~/.dotfiles/mac/tunes.js)"
+    if test -n "$tunes"; then
       text="#[fg=colour$TEXT_COLOR]♫ $tunes"
       tmux set -g status-right "$text" || break
     else
@@ -24,4 +22,5 @@ then
 else
   date_status
 fi
+
 exit 0

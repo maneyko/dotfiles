@@ -77,6 +77,10 @@ test "$INTERACTIVE" && {
   stty -ixon
 }
 
+if test -n "$(type -P tmux)"; then
+  export TMUX_VERSION=$(tmux -V | perl -ne 'printf("%d.%02d",$1,$2) if /([\d]+)\.([\d]+)/')
+fi
+
 # My module
 export PYTHONPATH="$HOME/.dotfiles/ipython/maneyko:$PYTHONPATH"
 
@@ -115,7 +119,7 @@ _expand() {
 # ---------------------------------------------------------------------
 
 COLORS=$HOME/.config/colors/base16-custom.dark.sh
-test "$TMUX" -a -f "$COLORS" -a $(uname) != 'Linux' && {
+test "$TMUX" -a -f "$COLORS" -a $(uname) = 'Darwin' && {
   source $COLORS
 }
 

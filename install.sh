@@ -104,18 +104,19 @@ if test "$vim" = 'nvim'; then
   curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim \
     --create-dirs \
       'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  if test -z "$vim_full"; then
-    perl -i -pe 's/minimal_vimrc = ([\d]+)/minimal_vimrc = 1/g' $HOME/.dotfiles/config/nvim/init.vim
-  else
+  vim_config=$HOME/.dotfiles/config/nvim/init.vim
+  if test -n "$vim_full"; then
     python3 -m pip install pynvim --upgrade
   fi
 else
   curl -fLo $HOME/.vim/autoload/plug.vim \
     --create-dirs \
     'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  if test -z "$vim_full"; then
-    perl -i -pe 's/minimal_vimrc = ([\d]+)/minimal_vimrc = 1/g' $HOME/.dotfiles/vim/vimrc
-  fi
+  vim_config=$HOME/.dotfiles/config/nvim/init.vim
+fi
+
+if test -z "$vim_full"; then
+  perl -i -pe 's/minimal_vimrc = ([\d]+)/minimal_vimrc = 1/g' $vim_config
 fi
 
 $vim +PlugInstall +qall

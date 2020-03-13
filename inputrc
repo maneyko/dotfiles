@@ -15,22 +15,22 @@ set colored-stats on
 # -------------------------------------------------------------------
 
 # Map arrow keys and <delete> key
-"\e[1;3D": backward-word
-"\e[1;3C": forward-word
-"\e\b":    backward-kill-word
+"\e[1;3D":  backward-word
+"\e[1;3C":  forward-word
+"\e\b":     backward-kill-word
 
-"\eOD":    backward-char
-"\eOC":    forward-char
+"\eOD":     backward-char
+"\eOC":     forward-char
 
-"\C-h":   unix-filename-rubout
+"\C-h":     unix-filename-rubout
 
 # Move forward to start of next word with space before
-"\C-f":            "\C-]\ \eOC"
+"\C-f":     "\C-]\ \eOC"
 
 # Move backward to start of previous word with space before
-"\C-b":            "\eOD\e\C-]\ \eOC"
+"\C-b":     "\eOD\e\C-]\ \eOC"
 
 # Delete word before (seperated by whitespace)
-"\C-j":            "\eOC\C-]\ \eOC\C-w"
+"\C-j":     "\eOC\C-]\ \eOC\C-w"
 
 

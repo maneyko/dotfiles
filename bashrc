@@ -80,7 +80,8 @@ test "$INTERACTIVE" && {
 }
 
 test -n "$(type -P tmux)" && {
-  export TMUX_VERSION=$(tmux -V | perl -ne 'printf("%d.%02d",$1,$2) if /([\d]+)\.([\d]+)/')
+  export TMUX_VERSION=$(tmux -V \
+    | perl -ne 'printf("%d.%02d",$1,$2) if /([\d]+)\.([\d]+)/')
 }
 
 # My module
@@ -97,7 +98,9 @@ completions=(ag aws bash brew bundler coreutils docker find git hub man nmap
              npm perl postgres rails rake sh ssh tmux)
 completion_dirs=(/usr/local/etc/bash_completion.d)
 
-test -f /usr/local/etc/bash_completion && source /usr/local/etc/bash_completion
+test -f /usr/local/etc/bash_completion && {
+  source /usr/local/etc/bash_completion
+}
 
 test -z "$BASH_COMPLETION" && {
   for comp_d in "${completion_dirs[@]}"; do
@@ -231,7 +234,8 @@ if $_ls --color / >/dev/null 2>&1; then
   GNU_LS=true
 fi
 if test "$GNU_LS"; then
-  alias ls="$_ls --color=auto --group-directories-first --time-style +'%b %d %I:%M %p'"
+  alias ls="$_ls --color=auto --group-directories-first \
+                 --time-style +'%b %d %I:%M %p'"
   alias lsld="ls -AhlI'*'"
   alias lsd="ls -AI'*'"
 else
@@ -277,7 +281,7 @@ test $(uname) = 'Darwin' && {
 }
 
 
-# User Customization
+# First TTY Greeting
 # ------------------
 if test -n "$INTERACTIVE" \
         -a -n "$(tty | grep '00[1-2]')" \

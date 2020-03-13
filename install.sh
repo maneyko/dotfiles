@@ -6,11 +6,11 @@ clr() {  # (number, text)
 
 __DIR__="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-if test "$__DIR__" != "$HOME/.dotfiles" -a ! -d "$HOME/.dotfiles"; then
+test "$__DIR__" != "$HOME/.dotfiles" -a ! -d "$HOME/.dotfiles" && {
   clr 2 "Moving repo to ~/.dotfiles\n"
   cd
   mv "$__DIR__" "$HOME/.dotfiles"
-fi
+}
 
 FILES_TO_LINK=(
 bash_profile
@@ -64,28 +64,28 @@ do
 done
 set -- "${POSITIONAL[@]}"  # Restore positional parameters
 
-if test -n "$print_help"; then
+test -n "$print_help" && {
   echo "$helptext"
   exit 0
-fi
+}
 
 cd
 
 for f in "${FILES_TO_LINK[@]}"; do
   dotf=".$f"
-  if test -n "$uninstall_opt"; then
+  test -n "$uninstall_opt" && {
     test -L "$dotf" && rm -v "$dotf"
     continue
-  fi
-  if test -e "$dotf"; then
-    printf "$dotf exists, move to ~/.dotfiles/_backups/${f}? [Y/n] "
+  }
+  test -e "$dotf" && {
+    printf "~/$dotf exists, move to ~/.dotfiles/_backups/${f}? [Y/n] "
     read res
-    if test -z "$res" -o "$res" = 'Y' -o "$res" = 'y'; then
+    test -z "$res" -o "$res" = 'Y' -o "$res" = 'y' && {
       mv -v "$dotf" "$__DIR__/_backups/$f"
-    else
+    } || {
       continue
-    fi
-  fi
+    }
+  }
   ln -vs ".dotfiles/$f" "$dotf"
 done
 
@@ -94,30 +94,30 @@ test -n "$uninstall_opt" && exit 0
 vim_path="$(type -P nvim vim vi | head -1)"
 vim="$(basename $vim_path)"
 
-if test "$vim" = 'nvim'; then
+test "$vim" = 'nvim' && {
   curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim \
     --create-dirs \
       'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   vim_config=$HOME/.dotfiles/config/nvim/init.vim
-  if test -n "$vim_full"; then
+  test -n "$vim_full" && {
     python3 -m pip install pynvim --upgrade
-  fi
-else
+  }
+} || {
   curl -fLo $HOME/.vim/autoload/plug.vim \
     --create-dirs \
     'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   vim_config=$HOME/.dotfiles/config/nvim/init.vim
-fi
+}
 
-if test -z "$vim_full"; then
+test -z "$vim_full" && {
   perl -i -pe 's/minimal_vimrc = ([\d]+)/minimal_vimrc = 1/g' $vim_config
-fi
+}
 
 $vim +PlugInstall +qall
 
-if test "$vim" = 'nvim'; then
+test "$vim" = 'nvim' && {
   $vim +UpdateRemotePlugins +qall
   rm -f ~/.config/nvim/plugged/vim-plug/.git/objects/pack/*.pack  2>/dev/null
-else
+} || {
   rm -f ~/.vim/plugged/vim-plug/.git/objects/pack/*.pack          2>/dev/null
-fi
+}

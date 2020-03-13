@@ -18,8 +18,12 @@ fi
 
 fbase="$(echo "$f" | perl -a -F'\.' -lne 'print join(".", @F[0..$#F-2])')"
 
-while test -f "${fbase}.${num}.${ext}"; do
+if test -n "$fbase"; then
+  fbase=".${fbase}"
+fi
+
+while test -f "${fbase}${num}.${ext}"; do
   num=$(echo "$num + 1" | bc)
 done
 
-cp -v "$f" "${fbase}.${num}.${ext}"
+cp -v "$f" "${fbase}${num}.${ext}"

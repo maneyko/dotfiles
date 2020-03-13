@@ -5,6 +5,8 @@
 # Shell Defaults
 # ---------------------------------------------------------------------
 
+test -n "$COLORS" && return
+
 test -r /etc/bashrc && {
   source /etc/bashrc
 }
@@ -58,7 +60,7 @@ export EDITOR="$_vim"
 alias vi="$_vim"
 alias vim="$_vim"
 
-export GREP_COLOR='0;34'
+export GREP_COLOR='0;31'
 export LESS='-RX'
 export PAGER='less'
 
@@ -77,9 +79,9 @@ test "$INTERACTIVE" && {
   stty -ixon
 }
 
-if test -n "$(type -P tmux)"; then
+test -n "$(type -P tmux)" && {
   export TMUX_VERSION=$(tmux -V | perl -ne 'printf("%d.%02d",$1,$2) if /([\d]+)\.([\d]+)/')
-fi
+}
 
 # My module
 export PYTHONPATH="$HOME/.dotfiles/ipython/maneyko:$PYTHONPATH"
@@ -160,16 +162,16 @@ test "$(whoami)" = 'root' && {
   user_color=220  # Yellow
 }
 
-if test -n "$(uname -n | grep 'peter-ubuntu')"; then
+test -n "$(uname -n | grep 'peter-ubuntu')" && {
   host_color=124
   host_text='barry'
-elif test -n "$(uname -n | grep 'staging')"; then
+} || test -n "$(uname -n | grep 'staging')" && {
   host_color=27
   host_text='staging1'
-elif test "$(uname -n)" = 'Peters-MacBook-Pro.local'; then
+} || test "$(uname -n)" = 'Peters-MacBook-Pro.local' && {
   host_color=214
   host_text='integra'
-fi
+}
 
 LONG_PS1="\
 `pclr $border_color  '┌─['                  `\
@@ -268,12 +270,14 @@ test $(uname) = 'Darwin' && {
   alias mcopy='pbcopy'
   alias mpaste='pbpaste'
 } || {
+  test -n "$(command -v xclip)" && {
   alias mcopy='xclip -selection c'
   alias mpaste='xclip -o'
+  }
 }
 
 
-# First TTY Greeting
+# User Customization
 # ------------------
 if test -n "$INTERACTIVE" \
         -a -n "$(tty | grep '00[1-2]')" \

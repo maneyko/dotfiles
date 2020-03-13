@@ -21,13 +21,13 @@ tmux.conf
 vimrc
 bin
 config
+ipython
 vim
 )
 
-files_str="${FILES_TO_LINK[@]}"
-
 read -r -d '' helptext << EOT
-Symlinks [$(echo "${FILES_TO_LINK[@]}" | perl -pe "s/(\S+)/'\1',/g; s/.\$//s")]
+Symlinks [$(echo "${FILES_TO_LINK[@]}" \
+              | perl -pe "s/(\S+)/'\1',/g; s/.\$//s")]
 in ~/.dotfiles/ (with a '.' prepended) to HOME directory.
 
 Usage:  ~/.dotfiles/install.sh [OPTIONS]
@@ -72,25 +72,19 @@ fi
 cd
 
 for f in "${FILES_TO_LINK[@]}"; do
-
   dotf=".$f"
-
   if test -n "$uninstall_opt"; then
     test -L "$dotf" && rm -v "$dotf"
     continue
   fi
-
   if test -e "$dotf"; then
-
     printf "$dotf exists, move to ~/.dotfiles/_backups/${f}? [Y/n] "
     read res
-
     if test -z "$res" -o "$res" = 'Y' -o "$res" = 'y'; then
-      mv "$dotf" "$__DIR__/_backups/$f"
+      mv -v "$dotf" "$__DIR__/_backups/$f"
     else
       continue
     fi
-
   fi
   ln -vs ".dotfiles/$f" "$dotf"
 done

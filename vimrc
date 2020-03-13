@@ -252,8 +252,8 @@ nnoremap <C-h>            <C-w>h
 nnoremap <C-j>            <C-w>j
 nnoremap <C-k>            <C-w>k
 nnoremap <C-l>            <C-w>l
-nnoremap <C-w>h           :vertical resize -5<CR>
-nnoremap <C-w>l           :vertical resize +5<CR>
+nnoremap <C-w>l           :vertical resize -5<CR>
+nnoremap <C-w>h           :vertical resize +5<CR>
 nnoremap <C-i>            gT
 nnoremap <C-o>            gt
 nnoremap <C-b>            :nohl<CR><C-l>

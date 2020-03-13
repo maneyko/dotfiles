@@ -12,7 +12,7 @@ if test $(uname) = 'Darwin'; then
   while test -n "$TMUX"; do
     tunes="$(~/.dotfiles/mac/tunes.js)"
     if test -n "$tunes"; then
-      text="#[fg=colour$TEXT_COLOR]♫ $tunes"
+      text="#[fg=colour$TEXT_COLOR]$tunes"
       tmux set -g status-right "$text" || break
     else
       date_status

@@ -10,7 +10,7 @@ Should work on most UNIX operating systems.
 Installation
 ------------
 
-```bash
+```sh
 git clone https://github.com/maneyko/dotfiles
 
 ./dotfiles/install.sh

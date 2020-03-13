@@ -25,22 +25,27 @@ call plug#begin()
 
   if minimal_vimrc == 0
     Plug 'phreax/vim-coffee-script'
-    Plug 'digitaltoad/vim-pug'         " pug
-    Plug 'tpope/vim-markdown'
-    Plug 'gisphm/vim-gitignore'        " .gitignore files
-    Plug 'tpope/vim-fugitive'          " git integration
-    Plug 'tpope/vim-rails'
-    Plug 'vim-python/python-syntax'
-    Plug 'vim-utils/vim-man'           " `Man` command
     Plug 'vim-scripts/nginx.vim'       " nginx
-
+    Plug 'digitaltoad/vim-pug'         " pug
+    Plug 'gisphm/vim-gitignore'        " .gitignore files
+    Plug 'tpope/vim-markdown'
+    Plug 'martinda/Jenkinsfile-vim-syntax'
+    " Plug 'mattn/emmet-vim'             " html completion
+    Plug 'vim-utils/vim-man'           " `Man` command
+    Plug 'ctrlpvim/ctrlp.vim'          " fuzzy file finder
     Plug 'scrooloose/nerdtree'         " filetree
+    Plug 'Xuyuanp/nerdtree-git-plugin'
     Plug 'ryanoasis/vim-devicons'
     Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-    Plug 'ctrlpvim/ctrlp.vim'          " fuzzy file finder
     Plug 'yegappan/mru'
+    Plug 'vim-python/python-syntax'
+    " Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
+    Plug 'mileszs/ack.vim'
 
-    " Plug 'mattn/emmet-vim'             " html completion
+
+    Plug 'tpope/vim-fugitive'          " git integration
+    Plug 'tpope/vim-rails'
+
     Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
     Plug 'autozimu/LanguageClient-neovim', {
         \ 'branch': 'next',
@@ -129,6 +134,18 @@ let g:less = {}
 let g:less.enabled = 0
 let g:less.scrolloff = 5
 let NERDTreeShowHidden=1
+let g:NERDTreeIndicatorMapCustom = {
+\ "Modified"  : "✹",
+\ "Staged"    : "✚",
+\ "Untracked" : "✭",
+\ "Renamed"   : "➜",
+\ "Unmerged"  : "═",
+\ "Deleted"   : "✖",
+\ "Dirty"     : "✗",
+\ "Clean"     : "✔︎",
+\ 'Ignored'   : '☒',
+\ "Unknown"   : "?"
+\ }
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 " let NERDTreeMapOpenInTab='<ENTER>'
 
@@ -139,10 +156,6 @@ let g:ctrlp_prompt_mappings = {
 let g:ctrlp_regexp = 1
 let g:markdown_fenced_languages = ['bash=sh', 'python', 'ruby', 'html']
 let g:markdown_syntax_conceal = 0
-
-let g:python_highlight_all = 1
-let g:python_highlight_indent_errors = 0
-let g:python_highlight_space_errors = 0
 
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
@@ -252,8 +265,8 @@ nnoremap <C-h>            <C-w>h
 nnoremap <C-j>            <C-w>j
 nnoremap <C-k>            <C-w>k
 nnoremap <C-l>            <C-w>l
-nnoremap <C-w>l           :vertical resize -5<CR>
-nnoremap <C-w>h           :vertical resize +5<CR>
+nnoremap <C-w>h           :vertical resize -5<CR>
+nnoremap <C-w>l           :vertical resize +5<CR>
 nnoremap <C-i>            gT
 nnoremap <C-o>            gt
 nnoremap <C-b>            :nohl<CR><C-l>
@@ -267,7 +280,7 @@ nnoremap <leader>r        <Plug>(coc-references)
 nnoremap <leader>m        :MRU<CR>
 nnoremap <leader>s        :setlocal spell! spelllang=en_us<CR>
 nnoremap <leader>kw       :w !sudo tee %<CR>
-nnoremap <space>          <C-d>
+" nnoremap <space>          <C-d>
 nnoremap \a               :<C-U>call AlignRow(v:count1)<CR>
 nnoremap \e               :<C-U>call TabFun(v:count1*2,1)<CR>
 nnoremap \n               :<C-U>call TabFun(v:count1*2,0)<CR>
@@ -343,7 +356,7 @@ au BufRead */etc/aliases
 " au VimEnter *.rb,Rakefile NERDTree | wincmd w
 " au BufEnter *.rb,Rakefile exe "silent! CocDisable"
 " Configure ruby omni-completion to use the language client:
-autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1 
+autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1
 autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
 autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
 " au FileType ruby setlocal omnifunc=LanguageClient#complete

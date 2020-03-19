@@ -10,7 +10,7 @@ if test -d "$HOME/.vim/plugged/vim-man" \
       -c "silent! call ReadMode(1)" \
       -c "set so=0 ft=man"
 else
-  man_cmd="$(which -a man | tail 1)"
+  man_cmd="$(which -a man | tail -1)"
   $man_cmd "$args"
 fi
 

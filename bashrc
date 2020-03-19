@@ -272,16 +272,16 @@ done
 alias whois='whois -h whois.arin.net'
 
 # Platform specific
-test $(uname) = 'Darwin' && {
+if test $(uname) = 'Darwin'; then
   alias top='top -u'
   alias mcopy='pbcopy'
   alias mpaste='pbpaste'
-} || {
-  test -n "$(command -v xclip)" && {
-  alias mcopy='xclip -selection c'
-  alias mpaste='xclip -o'
-  }
-}
+else
+  if test -n "$(command -v xclip)"; then
+    alias mcopy='xclip -selection c'
+    alias mpaste='xclip -o'
+  fi
+fi
 
 
 # First TTY Greeting

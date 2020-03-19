@@ -12,6 +12,8 @@ test "$__DIR__" != "$HOME/.dotfiles" -a ! -d "$HOME/.dotfiles" && {
   mv "$__DIR__" "$HOME/.dotfiles"
 }
 
+__DIR__="$HOME/.dotfiles"
+
 FILES_TO_LINK=(
 bash_profile
 bashrc

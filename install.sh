@@ -73,19 +73,19 @@ cd
 
 for f in "${FILES_TO_LINK[@]}"; do
   dotf=".$f"
-  test -n "$uninstall_opt" && {
+  if test -n "$uninstall_opt"; then
     test -L "$dotf" && rm -v "$dotf"
     continue
-  }
-  test -e "$dotf" && {
+  fi
+  if test -e "$dotf"; then
     printf "~/$dotf exists, move to ~/.dotfiles/_backups/${f}? [Y/n] "
     read res
-    test -z "$res" -o "$res" = 'Y' -o "$res" = 'y' && {
+    if test -z "$res" -o "$res" = 'Y' -o "$res" = 'y'; then
       mv -v "$dotf" "$__DIR__/_backups/$f"
-    } || {
+    else
       continue
-    }
-  }
+    fi
+  fi
   ln -vs ".dotfiles/$f" "$dotf"
 done
 
@@ -94,20 +94,20 @@ test -n "$uninstall_opt" && exit 0
 vim_path="$(type -P nvim vim vi | head -1)"
 vim="$(basename $vim_path)"
 
-test "$vim" = 'nvim' && {
+if test "$vim" = 'nvim'; then
   curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim \
     --create-dirs \
       'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   vim_config=$HOME/.dotfiles/config/nvim/init.vim
-  test -n "$vim_full" && {
+  if test -n "$vim_full"; then
     python3 -m pip install pynvim --upgrade
-  }
-} || {
+  fi
+else
   curl -fLo $HOME/.vim/autoload/plug.vim \
     --create-dirs \
     'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   vim_config=$HOME/.dotfiles/config/nvim/init.vim
-}
+fi
 
 test -z "$vim_full" && {
   perl -i -pe 's/minimal_vimrc = ([\d]+)/minimal_vimrc = 1/g' $vim_config

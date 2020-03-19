@@ -2,7 +2,15 @@
 
 args="$@"
 
-vim -c "execute 'Man ' . '$args'" \
-    -c "execute \"normal \<C-w>o\"" \
-    -c "silent! call ReadMode(1)" \
-    -c "set so=0 ft=man"
+if test -d "$HOME/.vim/plugged/vim-man" \
+        -a -n "$(grep 'vim-man' $HOME/.vimrc)" \
+        -a -z "$(grep 'minimal_vimrc = 1' $HOME/.vimrc)"; then
+  vim -c "execute 'Man ' . '$args'" \
+      -c "execute \"normal \<C-w>o\"" \
+      -c "silent! call ReadMode(1)" \
+      -c "set so=0 ft=man"
+else
+  man_cmd="$(which -a man | tail 1)"
+  $man_cmd "$args"
+fi
+

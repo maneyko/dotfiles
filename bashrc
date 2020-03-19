@@ -60,7 +60,7 @@ export EDITOR="$_vim"
 alias vi="$_vim"
 alias vim="$_vim"
 
-export GREP_COLOR='0;31'
+export GREP_COLOR='1;31'
 export LESS='-RX'
 export PAGER='less'
 
@@ -94,8 +94,8 @@ export PYTHONPATH="$HOME/.dotfiles/ipython/maneyko:$PYTHONPATH"
 
 # Bash Completion
 # ---------------
-completions=(ag aws bash brew bundler coreutils docker find git hub man nmap
-             npm perl postgres rails rake sh ssh tmux)
+completions=(ag aws bash brew bundler coreutils docker docker-compose find git
+             hub man nmap npm perl postgres rails rake sh ssh tmux)
 completion_dirs=(/usr/local/etc/bash_completion.d)
 
 test -f /usr/local/etc/bash_completion && {
@@ -153,7 +153,7 @@ export -f branch_colon
 parse_git_branch() {
   test $PS1_NO_GIT -eq 1 && return
 
-  branch=$(git branch 2>/dev/null | awk '/^\*/ {print $2}')
+  branch=$(git branch 2>/dev/null | perl -ne 'print $1 if /^\* (.*)/')
   echo $branch
 }
 export -f parse_git_branch
@@ -249,7 +249,8 @@ alias lla='ls -Ahl'
 alias l='ll'
 
 
-# Mini functions
+
+# Aliases
 alias bashrc='source ~/.bashrc'
 alias cls="clear && printf '\e[3J'"
 alias shortps1='export PS1=$SHORT_PS1'
@@ -257,6 +258,8 @@ alias longps1='export PS1="$LONG_PS1"'
 alias rm-DS='find . -name .DS_Store -delete -print'
 alias hide='chflags hidden'
 alias nohide='chflags nohidden'
+alias nowrap='tput rmam'
+alias rewrap='tput smam'
 
 function mkdirpcd { mkdir -p "$1"; cd "$1"; }
 export -f mkdirpcd

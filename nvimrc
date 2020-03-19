@@ -31,14 +31,13 @@ call plug#begin()
     Plug 'tpope/vim-markdown'
     Plug 'martinda/Jenkinsfile-vim-syntax'
     " Plug 'mattn/emmet-vim'             " html completion
-    Plug 'vim-utils/vim-man'           " `Man` command
     Plug 'ctrlpvim/ctrlp.vim'          " fuzzy file finder
     Plug 'scrooloose/nerdtree'         " filetree
     Plug 'Xuyuanp/nerdtree-git-plugin'
     Plug 'ryanoasis/vim-devicons'
     Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
     Plug 'yegappan/mru'
-    Plug 'vim-python/python-syntax'
+    " Plug 'vim-python/python-syntax'
     Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
     Plug 'mileszs/ack.vim'
 

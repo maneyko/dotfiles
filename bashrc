@@ -286,12 +286,13 @@ fi
 
 # First TTY Greeting
 # ------------------
-if test -n "$INTERACTIVE" \
-        -a -n "$(tty | grep '00[1-2]')" \
-        -a $(uname) = 'Darwin' \
-        -a $COLUMNS -ge 70 \
-        -a $LINES   -ge 20; then
-  source $HOME/.dotfiles/mac/mac_screenfetch
+if test -n "$INTERACTIVE"; then
+  if test -n "$(tty | grep '00[1-2]')" \
+          -a $(uname) = 'Darwin' \
+          -a $COLUMNS -ge 70 \
+          -a $LINES   -ge 20; then
+    source $HOME/.dotfiles/mac/mac_screenfetch
+  fi
   if test -n "$TMUX"; then
     if test $COLUMNS -ge 181 \
       -a    $LINES   -ge 48; then

@@ -89,6 +89,7 @@ for f in "${FILES_TO_LINK[@]}"; do
     fi
   fi
   ln -vs ".dotfiles/$f" "$dotf"
+  echo
 done
 
 test -n "$uninstall_opt" && exit 0
@@ -117,9 +118,9 @@ test -z "$vim_full" && {
 
 $vim +PlugInstall +qall
 
-test "$vim" = 'nvim' && {
+if test "$vim" = 'nvim'; then
   $vim +UpdateRemotePlugins +qall
   rm -f ~/.config/nvim/plugged/vim-plug/.git/objects/pack/*.pack  2>/dev/null
-} || {
+else
   rm -f ~/.vim/plugged/vim-plug/.git/objects/pack/*.pack          2>/dev/null
-}
+fi

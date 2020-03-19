@@ -165,16 +165,16 @@ test "$(whoami)" = 'root' && {
   user_color=220  # Yellow
 }
 
-test -n "$(uname -n | grep 'peter-ubuntu')" && {
+if test -n "$(uname -n | grep 'peter-ubuntu')"; then
   host_color=124
   host_text='barry'
-} || test -n "$(uname -n | grep 'staging')" && {
+elif test -n "$(uname -n | grep 'staging')"; then
   host_color=27
   host_text='staging1'
-} || test "$(uname -n)" = 'Peters-MacBook-Pro.local' && {
+else
   host_color=214
   host_text='integra'
-}
+fi
 
 LONG_PS1="\
 `pclr $border_color  '┌─['                  `\

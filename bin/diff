@@ -1,7 +1,9 @@
 #!/bin/bash
 
+sys_diff="$(which -a diff | tail -1)"
+
 if test -f /usr/local/bin/diff -a -n "$(command -v diff-so-fancy)"; then
   /usr/local/bin/diff --color -u "$@" | diff-so-fancy
 else
-  /usr/bin/env diff "$@"
+  $sys_diff "$@"
 fi

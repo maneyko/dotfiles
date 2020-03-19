@@ -22,6 +22,13 @@ call plug#begin()
   " core
   Plug 'junegunn/vim-plug'
   Plug 'mkarmona/colorsbox'          " color scheme
+  Plug 'alvan/vim-closetag'
+  Plug 'jiangmiao/auto-pairs'        " completes pairs
+  Plug 'tpope/vim-commentary'        " commenting motions
+  Plug 'tpope/vim-endwise'           " closes functions (if and fi)
+  Plug 'tpope/vim-repeat'            " '.' for plugins
+  Plug 'tpope/vim-surround'          " surrounding motions
+  Plug 'tpope/vim-unimpaired'        " bracket functions and more
 
   if minimal_vimrc == 0
     Plug 'phreax/vim-coffee-script'
@@ -50,21 +57,7 @@ call plug#begin()
         \ 'branch': 'next',
         \ 'do': 'bash install.sh',
         \ }
-
   endif
-
-  " syntax
-  Plug 'alvan/vim-closetag'
-
-  " misc
-  Plug 'jiangmiao/auto-pairs'        " completes pairs
-
-  " tpope
-  Plug 'tpope/vim-commentary'        " commenting motions
-  Plug 'tpope/vim-endwise'           " closes functions (if and fi)
-  Plug 'tpope/vim-repeat'            " '.' for plugins
-  Plug 'tpope/vim-surround'          " surrounding motions
-  Plug 'tpope/vim-unimpaired'        " bracket functions and more
 
 call plug#end()
 filetype plugin indent on

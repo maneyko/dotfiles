@@ -171,9 +171,13 @@ if test -n "$(uname -n | grep 'peter-ubuntu')"; then
 elif test -n "$(uname -n | grep 'staging')"; then
   host_color=27
   host_text='staging1'
-else
+elif test $(uname -n) = 'Peters-MacBook-Pro.local'; then
   host_color=214
   host_text='integra'
+else
+  host_color=147
+  host_text="$(uname -n)"
+  user_color=196
 fi
 
 LONG_PS1="\

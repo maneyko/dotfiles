@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 def ctext(n, text):
     return """
@@ -9,4 +9,7 @@ def ctext(n, text):
     """.replace(' ', '').replace('\n', '').format(text, bg=n, esc='\033')
 
 for i in range(256):
-    print('{:03d} {}'.format(i, ctext(i, '=' * 7)))
+    print(f' {i:03d} ', end='')
+    print('{}'.format(ctext(i, '='*7)), end='')
+    if (i+1) % 8 == 0:
+        print()

@@ -80,6 +80,7 @@ for f in "${FILES_TO_LINK[@]}"; do
     continue
   fi
   if test -e "$dotf"; then
+    echo
     printf "~/$dotf exists, move to ~/.dotfiles/_backups/${f}? [Y/n] "
     read res
     if test -z "$res" -o "$res" = 'Y' -o "$res" = 'y'; then
@@ -89,7 +90,6 @@ for f in "${FILES_TO_LINK[@]}"; do
     fi
   fi
   ln -vs ".dotfiles/$f" "$dotf"
-  echo
 done
 
 test -n "$uninstall_opt" && exit 0

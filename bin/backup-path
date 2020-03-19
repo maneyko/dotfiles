@@ -1,29 +1,27 @@
 #!/bin/bash
 
 
-if test ! -f "$1"; then
-  echo "'$1' is not a valid file!"
+f="$1"
+
+if test ! -f "$f"; then
+  echo "'$f' is not a valid file!"
   exit 1
 fi
 
-f="$1"
+ext="${f##*.}"
+fbase="${f%.*}"
+num=1
 
-read -r num ext <<< $(echo "$f" \
-                        | perl -ne 'print "$1 $2" if /\.?([\d]+)?\.([\w]+)$/')
-if test -z "$ext"; then
-  ext="$num"
-  cp -v "$f" "${f%$ext}1.$ext"
-  exit 0
-fi
+test -n "$(echo "$fbase" | perl -ne 'print if /[^a-zA-Z][\d]+$/')" && {
+  num="${fbase##*.}"
+  fbase="${fbase%.*}"
+}
 
-fbase="$(echo "$f" | perl -a -F'\.' -lne 'print join(".", @F[0..$#F-2])')"
+f_dest="${fbase}.$num.$ext"
 
-if test -n "$fbase"; then
-  fbase=".${fbase}"
-fi
-
-while test -f "${fbase}${num}.${ext}"; do
+while test -f "$f_dest"; do
   num=$(echo "$num + 1" | bc)
+  f_dest="${fbase}.${num}.${ext}"
 done
 
-cp -v "$f" "${fbase}${num}.${ext}"
+cp -v "$f" "$f_dest"

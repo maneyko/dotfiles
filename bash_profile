@@ -1,6 +1,6 @@
 #!/bin/bash
 
-test -z "$COLORS" && return
+test -n "$COLORS" && return
 
 test -f $HOME/.bashrc && {
   source $HOME/.bashrc

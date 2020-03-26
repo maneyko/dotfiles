@@ -5,7 +5,7 @@
 # Shell Defaults
 # ---------------------------------------------------------------------
 
-test -n "$COLORS" && return
+test -n "$BASHRC_LOADED" && return
 
 test -r /etc/bashrc && {
   source /etc/bashrc
@@ -125,9 +125,9 @@ _expand() {
 # COLORS and PS1
 # ---------------------------------------------------------------------
 
-COLORS=$HOME/.config/colors/base16-custom.dark.sh
-test "$TMUX" -a -f "$COLORS" -a $(uname) = 'Darwin' && {
-  source $COLORS
+TERM_COLORS=$HOME/.config/colors/base16-custom.dark.sh
+test "$TMUX" -a -f "$TERM_COLORS" -a $(uname) = 'Darwin' && {
+  source $TERM_COLORS
 }
 
 clr() {  # (number, text)
@@ -336,3 +336,5 @@ test -s "/usr/local/opt/nvm/nvm.sh" && {
 test -f $HOME/.bashrc.local && {
   source $HOME/.bashrc.local
 }
+
+export BASHRC_LOADED=1

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-test -n "$COLORS" && return
+test -n "$BASHRC_LOADED" && return
 
 test -f $HOME/.bashrc && {
   source $HOME/.bashrc

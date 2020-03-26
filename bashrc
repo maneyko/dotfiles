@@ -337,4 +337,4 @@ test -f $HOME/.bashrc.local && {
   source $HOME/.bashrc.local
 }
 
-export BASHRC_LOADED=1
+BASHRC_LOADED=1

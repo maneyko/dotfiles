@@ -6,14 +6,6 @@ clr() {  # (number, text)
 
 __DIR__="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-test "$__DIR__" != "$HOME/.dotfiles" -a ! -d "$HOME/.dotfiles" && {
-  clr 3 "Moving repo to ~/.dotfiles\n"
-  cd
-  mv "$__DIR__" "$HOME/.dotfiles"
-}
-
-__DIR__="$HOME/.dotfiles"
-
 FILES_TO_LINK=(
 bash_profile
 bashrc
@@ -71,6 +63,14 @@ test -n "$print_help" && {
   exit 0
 }
 
+test "$__DIR__" != "$HOME/.dotfiles" -a ! -d "$HOME/.dotfiles" && {
+  clr 3 "Moving repo to ~/.dotfiles\n"
+  cd
+  mv "$__DIR__" "$HOME/.dotfiles"
+}
+
+__DIR__="$HOME/.dotfiles"
+
 cd
 
 for f in "${FILES_TO_LINK[@]}"; do
@@ -101,7 +101,7 @@ if test "$vim" = 'nvim'; then
   curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim \
     --create-dirs \
       'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  vim_config=$HOME/.dotfiles/config/nvim/init.vim
+  vim_config=$HOME/.dotfiles/nvimrc
   if test -n "$vim_full"; then
     python3 -m pip install pynvim --upgrade
   fi
@@ -109,7 +109,7 @@ else
   curl -fLo $HOME/.vim/autoload/plug.vim \
     --create-dirs \
     'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  vim_config=$HOME/.dotfiles/config/nvim/init.vim
+  vim_config=$HOME/.dotfiles/vimrc
 fi
 
 test -z "$vim_full" && {

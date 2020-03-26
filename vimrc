@@ -29,6 +29,7 @@ call plug#begin()
   Plug 'tpope/vim-repeat'            " '.' for plugins
   Plug 'tpope/vim-surround'          " surrounding motions
   Plug 'tpope/vim-unimpaired'        " bracket functions and more
+  Plug 'vim-utils/vim-man'           " `Man` command
 
   if minimal_vimrc == 0
     Plug 'phreax/vim-coffee-script'
@@ -38,7 +39,6 @@ call plug#begin()
     Plug 'tpope/vim-markdown'
     Plug 'martinda/Jenkinsfile-vim-syntax'
     " Plug 'mattn/emmet-vim'             " html completion
-    Plug 'vim-utils/vim-man'           " `Man` command
     Plug 'ctrlpvim/ctrlp.vim'          " fuzzy file finder
     Plug 'scrooloose/nerdtree'         " filetree
     Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -58,8 +58,8 @@ call plug#begin()
         \ 'do': 'bash install.sh',
         \ }
   endif
-
 call plug#end()
+
 filetype plugin indent on
 
 " sets

@@ -173,6 +173,7 @@ if test -n "$(uname -n | grep 'peter-ubuntu')"; then
 elif test -n "$(uname -n | grep 'staging')"; then
   host_color=27
   host_text='staging1'
+  RAILS_ENV=staging
 elif test $(uname -n) = 'Peters-MacBook-Pro.local'; then
   host_color=214
   host_text='integra'

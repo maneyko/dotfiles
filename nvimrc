@@ -48,7 +48,6 @@ call plug#begin()
     Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
     Plug 'mileszs/ack.vim'
 
-
     Plug 'tpope/vim-fugitive'          " git integration
     Plug 'tpope/vim-rails'
 
@@ -58,8 +57,8 @@ call plug#begin()
         \ 'do': 'bash install.sh',
         \ }
   endif
-
 call plug#end()
+
 filetype plugin indent on
 
 " sets

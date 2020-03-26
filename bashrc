@@ -74,6 +74,8 @@ case "$-" in
   *) unset INTERACTIVE ;;
 esac
 
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
 # Reclaim <C-q> and <C-s>
 test "$INTERACTIVE" && {
   stty -ixon
@@ -321,6 +323,11 @@ for f in ${rvms[@]}; do
     break
   fi
 done
+
+test $(uname) = 'Darwin' && {
+  cd ..
+  cd - >/dev/null
+}
 
 test -s "/usr/local/opt/nvm/nvm.sh" && {
   source "/usr/local/opt/nvm/nvm.sh"  # This loads nvm

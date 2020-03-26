@@ -7,7 +7,7 @@ clr() {  # (number, text)
 __DIR__="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 test "$__DIR__" != "$HOME/.dotfiles" -a ! -d "$HOME/.dotfiles" && {
-  clr 2 "Moving repo to ~/.dotfiles\n"
+  clr 3 "Moving repo to ~/.dotfiles\n"
   cd
   mv "$__DIR__" "$HOME/.dotfiles"
 }

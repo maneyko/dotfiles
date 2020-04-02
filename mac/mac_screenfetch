@@ -27,7 +27,7 @@ hw=$(perl -ne 'print $1 if /(Mac[bB]ookPro[0-9]+,[0-9]+)/' \
        <<< "$SPHardwareDataType")
 shell=${SHELL//*\/}
 sh_v=${BASH_VERSION%\(*}
-font="$(jq -r '."Normal Font"' ~/.dotfiles/config/iterm/maneyko.json)"
+font="$(defaults read com.googlecode.iTerm2 "New Bookmarks" | awk -F'"' '/Normal Font/ {print $4; exit}')"
 
 npack=$(
   d=(/usr/local/opt/* /usr/local/Caskroom/*)

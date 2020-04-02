@@ -294,11 +294,11 @@ fi
 # First TTY Greeting
 # ------------------
 if test -n "$INTERACTIVE"; then
-  if test -n "$(tty | grep '00[1-2]')" \
-          -a $(uname) = 'Darwin' \
+  if test -n "$(tty | grep '00[4-9]')" \
+          -a -n "$(command -v neofetch)" \
           -a $COLUMNS -ge 70 \
           -a $LINES   -ge 20; then
-    source $HOME/.dotfiles/mac/mac_screenfetch
+    neofetch
   fi
   if test -n "$TMUX"; then
     if test $COLUMNS -ge 181 \

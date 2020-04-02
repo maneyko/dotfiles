@@ -294,7 +294,7 @@ fi
 # First TTY Greeting
 # ------------------
 if test -n "$INTERACTIVE"; then
-  if test -n "$(tty | grep '00[4-9]')" \
+  if test -n "$(tty | grep '[1-4]$')" \
           -a -n "$(command -v neofetch)" \
           -a $COLUMNS -ge 70 \
           -a $LINES   -ge 20; then

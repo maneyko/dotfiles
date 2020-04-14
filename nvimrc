@@ -329,6 +329,10 @@ map <4-ScrollWheelDown>   <C-e>
 "       \ silent! call ReadMode(1)
 au BufNewFile *.sh,*.bash
       \ exe "normal! i#!/bin/bash\<CR>\<Esc>"
+au BufNewFile *.rb
+      \ exe "normal! iclass " .
+      \ substitute(substitute(expand('%:t')[:-4], '\(\%(\<\l\+\)\%(_\)\@=\)\|_\(\l\)', '\u\1\2', "g"),'^.','\u&','')
+      \ . "\<CR>\<CR>end\<Esc>ggj"
 au BufNewFile *.node
       \ exe "normal! i#!/usr/bin/env node\<CR>\<Esc>"
 au BufNewFile *.py

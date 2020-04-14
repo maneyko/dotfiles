@@ -258,7 +258,7 @@ alias l='ll'
 
 
 # Aliases
-alias bashrc='source ~/.bashrc'
+alias bashrc='BASHRC_LOADED="" source ~/.bashrc'
 alias cls="clear && printf '\e[3J'"
 alias shortps1='export PS1=$SHORT_PS1'
 alias longps1='export PS1="$LONG_PS1"'
@@ -333,6 +333,11 @@ test $(uname) = 'Darwin' && {
 test -s "/usr/local/opt/nvm/nvm.sh" && {
   source "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
 }
+
+export GOPATH=$HOME/golang
+export GOROOT=/usr/local/opt/go/libexec
+export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:$GOROOT/bin
 
 test -f $HOME/.bashrc.local && {
   source $HOME/.bashrc.local

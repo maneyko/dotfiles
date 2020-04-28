@@ -8,8 +8,9 @@ def ctext(n, text):
         {esc}[39;49m
     """.replace(' ', '').replace('\n', '').format(text, bg=n, esc='\033')
 
-for i in range(256):
-    print(f' {i:03d} ', end='')
-    print('{}'.format(ctext(i, '='*7)), end='')
-    if (i+1) % 8 == 0:
-        print()
+for i in range(32):
+    for j in range(8):
+        num = i + 32*j
+        print(f' {num:03d} ', end='')
+        print('{}'.format(ctext(num, '='*7)), end='')
+    print()

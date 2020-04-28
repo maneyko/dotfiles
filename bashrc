@@ -155,33 +155,40 @@ export -f branch_colon
 parse_git_branch() {
   test $PS1_NO_GIT -eq 1 && return
 
-  branch=$(git branch 2>/dev/null | perl -ne 'print $1 if /^\* (.*)/')
-  echo $branch
+  git rev-parse --abbrev-ref HEAD 2>/dev/null
 }
 export -f parse_git_branch
 
 border_color=241
 user_color=154
 pwd_color=228
-test "$(whoami)" = 'root' && {
-  user_color=220  # Yellow
-}
 
-if test -n "$(uname -n | grep 'peter-ubuntu')"; then
+nodename="$(uname -n)"
+
+if [[ $nodename =~ peter-ubuntu ]]; then
   host_color=124
   host_text='barry'
-elif test -n "$(uname -n | grep 'staging')"; then
+elif [[ $nodename =~ staging ]]; then
   host_color=27
   host_text='staging1'
   RAILS_ENV=staging
-elif test $(uname -n) = 'Peters-MacBook-Pro.local'; then
+elif [[ $nodename =~ Peters-MacBook-Pro.local ]]; then
   host_color=214
   host_text='integra'
+elif [[ $nodename =~ ubuntu.*nyc.*- ]]; then
+  host_color=26
+  host_text='DigitalOcean'
+elif [[ $nodename =~ 4352.*1.*ces.*\.com ]]; then
+  :
 else
   host_color=147
-  host_text="$(uname -n)"
+  host_text="$nodename"
   user_color=196
 fi
+
+test "$(whoami)" = 'root' && {
+  user_color=220  # Yellow
+}
 
 LONG_PS1="\
 `pclr $border_color  '┌─['                  `\

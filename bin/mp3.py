@@ -4,6 +4,7 @@ Edit metadata for '.mp3' or '.m4a' files
 """
 
 import re
+import argparse
 from argparse import ArgumentParser, RawTextHelpFormatter
 
 import tabulate

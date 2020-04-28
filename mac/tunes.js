@@ -14,4 +14,4 @@ for (var i = 0; i < music_apps.length; i++) {
   }
 }
 
-output.substr(0, 40);
+output.substr(0, 38);

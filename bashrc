@@ -178,8 +178,6 @@ elif [[ $nodename =~ Peters-MacBook-Pro.local ]]; then
 elif [[ $nodename =~ ubuntu.*nyc.*- ]]; then
   host_color=26
   host_text='DigitalOcean'
-elif [[ $nodename =~ 4352.*1.*ces.*\.com ]]; then
-  :
 else
   host_color=147
   host_text="$nodename"

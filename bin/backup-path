@@ -10,7 +10,11 @@ fi
 
 ext="${f##*.}"
 fbase="${f%.*}"
-num=1
+if test $(uname) = 'Darwin'; then
+  num=1
+else
+  num="01"
+fi
 
 test -n "$(echo "$fbase" | perl -ne 'print if /[^a-zA-Z][\d]+$/')" && {
   num="${fbase##*.}"
@@ -21,7 +25,12 @@ f_dest="${fbase}.$num.$ext"
 
 while test -f "$f_dest"; do
   num=$(echo "$num + 1" | bc)
-  f_dest="${fbase}.${num}.${ext}"
+  if test $(uname) = 'Darwin'; then
+    f_dest="${fbase}.${num}.${ext}"
+  else
+    f_dest=$(printf "${fbase}.%02d.${ext}" $num)
+  fi
 done
 
-cp -v "$f" "$f_dest"
+echo "$f_dest"
+cp "$f" "$f_dest"

@@ -21,6 +21,9 @@ set colored-stats on
 "\e[1;3C":  forward-word
 "\e\b":     backward-kill-word
 
+"\e\e[D":   backward-word
+"\e\e[C":   forward-word
+
 "\eOD":     backward-char
 "\eOC":     forward-char
 

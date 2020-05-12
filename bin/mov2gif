@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Need to install ffmpeg and gifsicle
+# => brew install ffmpeg
+# => brew install gifsicle
+
+mov="$1"
+gif="$2"
+
+: ${gif:="mov2git-output.gif"}
+
+echo "$gif"
+
+ffmpeg -i "$mov" \
+       -pix_fmt rgb8 \
+       -r 24 \
+       "$gif"
+gifsicle -O3 "$gif" \
+       -o "$gif"

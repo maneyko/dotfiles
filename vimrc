@@ -370,7 +370,7 @@ au FileType c,cpp,php
 au FileType markdown
       \ syn match markdownError "\w\@<=\w\@="
 au FileType php
-      \ setlocal ft=html syn=php
+      \ setlocal syn=php
 au FileType tex
       \ setlocal spell spelllang=en_us colorcolumn=80 wrap foldlevel=10
 au FileType tex,cpp

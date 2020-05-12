@@ -25,6 +25,9 @@ shopt -s no_empty_cmd_completion >/dev/null 2>&1
 
 umask 0022
 
+test -s "$HOME/.bashrc.local.preload" && {
+  source "$HOME/.bashrc.local.preload"
+}
 
 # ---------------------------------------------------------------------
 # Environment Variables
@@ -155,34 +158,17 @@ export -f branch_colon
 parse_git_branch() {
   test $PS1_NO_GIT -eq 1 && return
 
-  git rev-parse --abbrev-ref HEAD 2>/dev/null
+  git branch 2>/dev/null | grep '*' | sed 's/^\* //'
 }
 export -f parse_git_branch
 
 border_color=241
 user_color=154
 pwd_color=228
-
 nodename="$(uname -n)"
-
-if [[ $nodename =~ peter-ubuntu ]]; then
-  host_color=124
-  host_text='barry'
-elif [[ $nodename =~ staging ]]; then
-  host_color=27
-  host_text='staging1'
-  RAILS_ENV=staging
-elif [[ $nodename =~ Peters-MacBook-Pro.local ]]; then
-  host_color=214
-  host_text='integra'
-elif [[ $nodename =~ ubuntu.*nyc.*- ]]; then
-  host_color=26
-  host_text='DigitalOcean'
-else
-  host_color=147
-  host_text="$nodename"
-  user_color=196
-fi
+: ${host_color:=147}
+: ${host_text:="$nodename"}
+: ${user_color:=196}
 
 test "$(whoami)" = 'root' && {
   user_color=220  # Yellow

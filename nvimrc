@@ -51,6 +51,8 @@ call plug#begin()
     Plug 'tpope/vim-fugitive'          " git integration
     Plug 'tpope/vim-rails'
 
+    Plug 'chikamichi/mediawiki.vim'
+
     Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
     Plug 'autozimu/LanguageClient-neovim', {
         \ 'branch': 'next',

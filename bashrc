@@ -84,10 +84,10 @@ test "$INTERACTIVE" && {
   stty -ixon
 }
 
-test -n "$(type -P tmux)" && {
+if test -n "$(type -P tmux)"; then
   export TMUX_VERSION=$(tmux -V \
     | perl -ne 'printf("%d.%02d",$1,$2) if /([\d]+)\.([\d]+)/')
-}
+fi
 
 # My module
 export PYTHONPATH="$HOME/.dotfiles/ipython/maneyko:$PYTHONPATH"

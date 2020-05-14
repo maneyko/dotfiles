@@ -1,9 +1,7 @@
 #!/bin/bash
 
 
-TEXT_COLOR="$(
-perl -ne 'print "$1\n" if /pane-border-style/ && /fg=colour([\d]+)/' \
-  ~/.tmux.conf | tail -1)"
+TEXT_COLOR="19"
 
 date_status() {
   text="#[fg=colour$TEXT_COLOR]#(date +'%a %b %d %Y')"

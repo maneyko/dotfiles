@@ -366,6 +366,8 @@ au BufRead,BufNewFile
       \ setlocal ft=nginx
 au BufRead */etc/aliases
       \ setlocal ft=sh
+au BufRead */app/assets/templates/*
+      \ setlocal wrap
 
 " au VimEnter *.rb,Rakefile NERDTree | wincmd w
 " au BufEnter *.rb,Rakefile exe "silent! CocDisable"

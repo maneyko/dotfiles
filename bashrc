@@ -325,11 +325,6 @@ test -s "/usr/local/opt/nvm/nvm.sh" && {
   source "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
 }
 
-export GOPATH=$HOME/golang
-export GOROOT=/usr/local/opt/go/libexec
-export PATH=$PATH:$GOPATH/bin
-export PATH=$PATH:$GOROOT/bin
-
 test -f $HOME/.bashrc.local && {
   source $HOME/.bashrc.local
 }

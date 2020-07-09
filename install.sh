@@ -22,8 +22,8 @@ Symlinks [$(echo "${FILES_TO_LINK[@]}" | perl -pe "s/(\S+)/'\1',/g; s/.\$//s")]
 in ~/.dotfiles/ (with a '.' prepended) to \$HOME directory.
 EOT
 
-arg_optional "[uninstall] [u] [Uninstall maneyko's dotfiles]"
-arg_optional "[vim-full]  [f] [Install all vim plugins (~100Mb)]"
+arg_boolean "[uninstall] [u] [Uninstall maneyko's dotfiles]"
+arg_boolean "[vim-full]  [f] [Install all vim plugins (~100Mb)]"
 arg_help     "[$helptext]"
 parse_args
 

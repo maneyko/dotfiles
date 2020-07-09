@@ -1,29 +1,74 @@
 #!/bin/bash
 
-cp -v "$f" "$f_dest"
+source "$(dirname "$0")/argparse.sh"
 
-f="$1"
+RETRIES_DEFAULT=100
 
-if test ! -f "$f"; then
-  echo "'$f' is not a valid file!"
-  exit 1
-fi
+arg_positional "[file] [Filename to use to create a backup path.]"
+arg_boolean    "[copy] [c] [Copy the specified file to the backup destination.]"
+arg_optional   "[retries] [-r] [Number of times to try a higher backup path number. Default: $RETRIES_DEFAULT]"
+arg_help       "[Create a backup path for a file.]"
+parse_args
 
-ext="${f##*.}"
-fbase="${f%.*}"
-num="01"
+_backup_path() {
+  arg="$1"
+  src_dir="$(dirname "$arg")/"
+  f="$(basename "$arg")"
+  f_dest=""
 
-test -n "$(echo "$fbase" | perl -ne 'print if /[^a-zA-Z][\d]+$/')" && {
-  num="${fbase##*.}"
-  fbase="${fbase%.*}"
+  if test "$src_dir" == "./"; then
+    src_dir=""
+  fi
+
+  DOTF=''
+  if test "${f:0:1}" == "."; then
+    DOTF=1
+    f="${f:1}"
+  fi
+
+  ext="${f##*.}"
+  fbase="${f%.*}"
+
+  if test "$fbase" == "$ext"; then
+    f_dest="$fbase.1"
+  fi
+
+  fbase_ext="${fbase##*.}"
+
+  if test -z "$f_dest"; then
+    if ! test $(expr "$fbase_ext" : "^[0-9]*$") == "0"; then
+      num="$(echo "$fbase_ext + 1" | bc)"
+      f_dest="${fbase%.*}.${num}.${ext}"
+    elif ! test $(expr "$ext" : "^[0-9]*$") == "0"; then
+      num="$(echo "$ext + 1" | bc)"
+      f_dest="${fbase}.${num}"
+    elif test $(expr "$ext" : "^[0-9]*$") == "0"; then
+      f_dest="${fbase}.1.${ext}"
+    fi
+  fi
+  _backup_path_result="$f_dest"
 }
 
-f_dest="${fbase}.$num.$ext"
+: ${ARG_RETRIES:=$RETRIES_DEFAULT}
 
-while test -f "$f_dest"; do
-  num=$(echo "$num + 1" | bc)
-  f_dest=$(printf "${fbase}.%02d.${ext}" $num)
+_backup_path "$ARG_FILE"
+
+i=0
+while test -f "$_backup_path_result"; do
+  _backup_path "$_backup_path_result"
+  i=$((i + 1))
+  test $i -ge $ARG_RETRIES && break
 done
 
-echo "$f_dest"
-cp "$f" "$f_dest"
+f_dest="$_backup_path_result"
+
+if test -n "$f_dest"; then
+  test -n "$DOTF" && f_dest=".${f_dest}"
+  if test -n "$ARG_COPY"; then
+    cp -v "$ARG_FILE" "${src_dir}${f_dest}"
+  else
+    echo "${src_dir}${f_dest}"
+  fi
+else
+  echo "ERR: could not create backup path for '$f_dest'"
+fi

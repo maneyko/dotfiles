@@ -92,7 +92,17 @@ for f in "${FILES_TO_LINK[@]}"; do
   ln -vs ".dotfiles/$f" "$dotf"
 done
 
-test -n "$uninstall_opt" && exit 0
+if test -n "$uninstall_opt"; then
+  backups="$__DIR__/_backups/*"
+  # Check if directory is not empty
+  if test ! "$(printf "${backups[0]}")" == "$(printf $backups)"; then
+    echo "There is something in '$__DIR__/_backups'"
+    echo "I will move it for you so you don't lose it."
+    mv -v "$__DIR__/_backups" "$HOME/.dotfiles.bak"
+  fi
+
+  exit 0
+fi
 
 vim_path="$(type -P nvim vim vi | head -1)"
 vim="$(basename $vim_path)"

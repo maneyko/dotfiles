@@ -292,11 +292,9 @@ fi
 # Specific Environment
 # ---------------------------------------------------------------------
 
-if test -n "$TMUX"; then
-  # Necessary environment variable for ~/.tmux.conf
-  export TMUX_VERSION=$(tmux -V \
-    | perl -ne 'printf("%d.%02d",$1,$2) if /([\d]+)\.([\d]+)/')
-fi
+# Necessary environment variable for ~/.tmux.conf
+export TMUX_VERSION=$(tmux -V \
+  | perl -ne 'printf("%d.%02d",$1,$2) if /([\d]+)\.([\d]+)/')
 
 rvms=(
 /usr/local/rvm/scripts/rvm

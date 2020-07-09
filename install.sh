@@ -93,17 +93,18 @@ for f in "${FILES_TO_LINK[@]}"; do
 done
 
 if test -n "$uninstall_opt"; then
-  backups="$__DIR__/_backups/*"
   # Check if directory is not empty
-  if test ! "$(printf "${backups[0]}")" == "$(printf $backups)"; then
-    echo
+  if test -n "$(\ls "$__DIR__/_backups")"; then
     cat << EOT
 
 There is something in '$__DIR__/_backups'
-I will move it for you so you do not lose it.
+I will move it back to your \$HOME directory so you do not lose it.
 
 EOT
-    mv -v "$__DIR__/_backups" "$HOME/.dotfiles.bak"
+    for f in $__DIR__/_backups/*; do
+      base="$(basename "$f")"
+      mv -v $__DIR__/_backups/"$f" $HOME/."$f"
+    done
   fi
 
   exit 0

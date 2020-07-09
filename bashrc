@@ -316,17 +316,41 @@ for f in ${rvms[@]}; do
   fi
 done
 
+# Helps initialize RVM in new terminal
 test $(uname) = 'Darwin' && {
   cd ..
   cd - >/dev/null
 }
 
-test -s "/usr/local/opt/nvm/nvm.sh" && {
-  source "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+if test -n "$(command -v pyenv)"; then
+  eval "$(pyenv init -)"
+fi
+
+NVM_DIR="/usr/local/opt/nvm"
+
+test -s "$NVM_DIR/nvm.sh" && {
+  \. "$NVM_DIR/nvm.sh"  # This loads nvm
 }
+
+if test -n "$(command -v nvm)"; then
+  cd_type="$(type cd)"
+  if test -z "${cd_type//*is a function$'\n'*/}"; then
+    sys_cd="$(declare -f cd | tail -n +2)"
+  elif test -z "${cd_type//*is aliased to*/}"; then
+    sys_cd="$(type cd | perl -ne 'print substr($1,0,-1) if /\`(.*)/')"
+  else
+    sys_cd=""
+  fi
+
+  cd () {
+    eval "$sys_cd"
+    test -s .nvmrc && nvm use
+  }
+fi
 
 test -f $HOME/.bashrc.local && {
   source $HOME/.bashrc.local
 }
+
 
 BASHRC_LOADED=1

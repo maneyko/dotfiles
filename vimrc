@@ -31,7 +31,7 @@ call plug#begin()
   Plug 'tpope/vim-unimpaired'        " bracket functions and more
   Plug 'vim-utils/vim-man'           " `Man` command
 
-  if minimal_vimrc == 0
+  if !minimal_vimrc
     Plug 'phreax/vim-coffee-script'
     Plug 'vim-scripts/nginx.vim'       " nginx
     Plug 'digitaltoad/vim-pug'         " pug
@@ -76,7 +76,7 @@ set ignorecase
 set incsearch
 set linebreak
 set list
-set listchars=tab:\ \ ,trail:⋅
+set listchars=tab:>-,trail:⋅
 if has('mouse')
   set mouse=a
   set ttymouse=xterm2
@@ -245,7 +245,7 @@ endfun
 
 fun! AlignRow(tw_)
   for i in range(1, a:tw_)
-    execute "normal! 080lF\<space>r\<cr>"
+    execute "normal! 0100lF\<space>r\<cr>"
   endfor
 endfun
 

@@ -30,14 +30,14 @@ call plug#begin()
   Plug 'tpope/vim-surround'          " surrounding motions
   Plug 'tpope/vim-unimpaired'        " bracket functions and more
 
-  if minimal_vimrc == 0
+  if !minimal_vimrc
     Plug 'phreax/vim-coffee-script'
     Plug 'vim-scripts/nginx.vim'       " nginx
     Plug 'digitaltoad/vim-pug'         " pug
     Plug 'gisphm/vim-gitignore'        " .gitignore files
     Plug 'tpope/vim-markdown'
     Plug 'martinda/Jenkinsfile-vim-syntax'
-    " Plug 'mattn/emmet-vim'             " html completion
+    Plug 'mattn/emmet-vim'             " html completion
     Plug 'ctrlpvim/ctrlp.vim'          " fuzzy file finder
     Plug 'scrooloose/nerdtree'         " filetree
     Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -47,6 +47,7 @@ call plug#begin()
     " Plug 'vim-python/python-syntax'
     Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
     Plug 'mileszs/ack.vim'
+    " Plug 'Numkil/ag.nvim'
 
     Plug 'tpope/vim-fugitive'          " git integration
     Plug 'tpope/vim-rails'
@@ -77,7 +78,7 @@ set ignorecase
 set incsearch
 set linebreak
 set list
-set listchars=tab:\ \ ,trail:⋅
+set listchars=tab:>-,trail:⋅
 if has('mouse')
   set mouse=a
   " set ttymouse=xterm2
@@ -121,7 +122,7 @@ highlight Normal ctermfg=NONE
 
 " plugin options
 " --------------
-let g:user_emmet_leader_key = '<NUL>'  " equals '<C-space>,'
+let g:user_emmet_leader_key = '<C-space>'
 let g:do_refresh_key = '<C-M>'
 " let g:SuperTabCrMapping = 1
 " let g:SuperTabDefaultCompletionType = "<c-n>"
@@ -171,6 +172,14 @@ endfunction
 if executable('ag')
   let g:ackprg = 'ag --vimgrep --smart-case'
 endif
+
+let g:ack_mappings = {
+      \ "t": "<C-W><CR><C-W>j<C-W>c<C-W>T<C-l>",
+      \ "T": "<C-W><CR><C-W>j<C-W>c<C-W>TgT<C-W>j<C-l>" }
+" let g:ack_qhandler = "botright copen"
+" let g:ackpreview = 0
+
+hi QuickFixLine ctermfg=Yellow ctermbg=NONE cterm=bold
 
 " let g:coc_global_extensions = ['coc-solargraph']
 
@@ -256,7 +265,7 @@ endfun
 
 fun! AlignRow(tw_)
   for i in range(1, a:tw_)
-    execute "normal! 080lF\<space>r\<cr>"
+    execute "normal! 0100lf\<space>r\<cr>"
   endfor
 endfun
 
@@ -276,6 +285,7 @@ nnoremap <C-o>            gt
 nnoremap <C-b>            :nohl<CR><C-l>
 nnoremap <C-n>            :set relativenumber!<CR>
 nnoremap <leader><leader> :w<CR>
+nnoremap <leader>a        :Ack!<space>
 nnoremap <leader>f        :call FlyMode(flymode_togg)<CR>
 nnoremap <leader>kq       :q!<CR>
 nnoremap <leader>n        :NERDTreeToggle<CR>

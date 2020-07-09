@@ -3,7 +3,7 @@
 sys_rspec="$(which -a rspec | tail -1)"
 
 if test -f bin/bundle; then
-  ./bin/bundle exec rspec "$@"
+  ./bin/bundle exec rspec $@
 else
-  $sys_rspec "$@"
+  $sys_rspec $@
 fi

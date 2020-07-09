@@ -103,7 +103,7 @@ I will move it back to your \$HOME directory so you do not lose it.
 EOT
     for f in $__DIR__/_backups/*; do
       base="$(basename "$f")"
-      mv -v $__DIR__/_backups/"$f" $HOME/."$f"
+      mv -v $__DIR__/_backups/"$base" $HOME/."$base"
     done
   fi
 

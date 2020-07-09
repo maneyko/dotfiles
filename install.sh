@@ -96,8 +96,13 @@ if test -n "$uninstall_opt"; then
   backups="$__DIR__/_backups/*"
   # Check if directory is not empty
   if test ! "$(printf "${backups[0]}")" == "$(printf $backups)"; then
-    echo "There is something in '$__DIR__/_backups'"
-    echo "I will move it for you so you don't lose it."
+    echo
+    cat << EOT
+
+There is something in '$__DIR__/_backups'
+I will move it for you so you do not lose it.
+
+EOT
     mv -v "$__DIR__/_backups" "$HOME/.dotfiles.bak"
   fi
 

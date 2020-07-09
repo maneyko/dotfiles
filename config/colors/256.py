@@ -11,6 +11,6 @@ def ctext(n, text):
 for i in range(32):
     for j in range(8):
         num = i + 32*j
-        print(f' {num:03d} ', end='')
+        print(' {0:03d} '.format(num), end='')
         print('{}'.format(ctext(num, '='*7)), end='')
     print()

@@ -84,11 +84,6 @@ test "$INTERACTIVE" && {
   stty -ixon
 }
 
-if test -n "$(type -P tmux)"; then
-  export TMUX_VERSION=$(tmux -V \
-    | perl -ne 'printf("%d.%02d",$1,$2) if /([\d]+)\.([\d]+)/')
-fi
-
 # My module
 export PYTHONPATH="$HOME/.dotfiles/ipython/maneyko:$PYTHONPATH"
 
@@ -99,24 +94,18 @@ export PYTHONPATH="$HOME/.dotfiles/ipython/maneyko:$PYTHONPATH"
 
 # Bash Completion
 # ---------------
-completions=(ag aws bash brew bundler coreutils docker docker-compose find git
-             hub man nmap npm perl postgres rails rake sh ssh tmux)
-completion_dirs=(/usr/local/etc/bash_completion.d)
 
-test -f /usr/local/etc/bash_completion && {
-  source /usr/local/etc/bash_completion
-}
+completion_sources=(
+/etc/bash_completion
+/usr/local/etc/bash_completion
+)
 
-test -z "$BASH_COMPLETION" && {
-  for comp_d in "${completion_dirs[@]}"; do
-    test ! -d "$comp_d" && continue
-    for prog in "${completions[@]}"; do
-      for comp_f in $(ls $comp_d/${prog}* 2>/dev/null); do
-        source "$comp_f"
-      done
-    done
-  done
-}
+for f in ${completion_sources[@]}; do
+  if test -f "$f"; then
+    : ${bash_completion:="$f"}
+    source "$bash_completion"
+  fi
+done
 
 # Override `bash_completion` and disable tilde expansion
 _expand() {
@@ -128,9 +117,9 @@ _expand() {
 # COLORS and PS1
 # ---------------------------------------------------------------------
 
-TERM_COLORS=$HOME/.config/colors/base16-custom.dark.sh
+TERM_COLORS="$HOME/.config/colors/base16-custom.dark.sh"
 test "$TMUX" -a -f "$TERM_COLORS" -a $(uname) = 'Darwin' && {
-  source $TERM_COLORS
+  source "$TERM_COLORS"
 }
 
 clr() {  # (number, text)
@@ -157,18 +146,18 @@ export -f branch_colon
 
 parse_git_branch() {
   test $PS1_NO_GIT -eq 1 && return
-
-  git branch 2>/dev/null | grep '*' | sed 's/^\* //'
+  t1="$(git branch 2>/dev/null)"
+  t2="${t1##*\* }"
+  printf "${t2%%$'\n'*}"
 }
 export -f parse_git_branch
 
-border_color=241
-user_color=154
-pwd_color=228
 nodename="$(uname -n)"
-: ${host_color:=147}
+border_color=241
+pwd_color=228
 : ${host_text:="$nodename"}
 : ${user_color:=196}
+: ${host_color:=147}
 
 test "$(whoami)" = 'root' && {
   user_color=220  # Yellow
@@ -211,7 +200,7 @@ export PS1="$LONG_PS1"
 # Aliases
 # ---------------------------------------------------------------------
 
-# Find and evaluate ``dircolors`` if exists
+# Find and evaluate `dircolors` if exists
 _dircolors="$(type -P gdircolors dircolors | head -1)"
 test "$_dircolors" -a -f $HOME/.dotfiles/bash/dircolors && {
   eval "$($_dircolors -b $HOME/.dotfiles/bash/dircolors)"
@@ -232,8 +221,7 @@ if $_ls --color / >/dev/null 2>&1; then
   GNU_LS=true
 fi
 if test "$GNU_LS"; then
-  alias ls="$_ls --color=auto --group-directories-first \
-                 --time-style +'%b %d %I:%M %p'"
+  alias ls="$_ls --color=auto --group-directories-first --time-style +'%b %d %I:%M %p'"
   alias lsld="ls -AhlI'*'"
   alias lsd="ls -AI'*'"
 else
@@ -241,11 +229,11 @@ else
   export LSCOLORS='ExGxFxdaCxDaDahbadacec'
   alias ls="$_ls -G"
 fi
+alias l='ls -hl'
+alias ll='l'
 alias la='ls -A'
-alias ll='ls -hl'
 alias lla='ls -Ahl'
-alias l='ll'
-
+test "$GNU_LS" && alias ll="l --time-style +'%b %d %Y %I:%M %p'"
 
 
 # Aliases
@@ -304,14 +292,20 @@ fi
 # Specific Environment
 # ---------------------------------------------------------------------
 
+if test -n "$TMUX"; then
+  # Necessary environment variable for ~/.tmux.conf
+  export TMUX_VERSION=$(tmux -V \
+    | perl -ne 'printf("%d.%02d",$1,$2) if /([\d]+)\.([\d]+)/')
+fi
+
 rvms=(
 /usr/local/rvm/scripts/rvm
 $HOME/.rvm/scripts/rvm
 )
 
 for f in ${rvms[@]}; do
-  if test -s $f; then
-    source $f  # Load RVM into a shell session *as a function*
+  if test -s "$f"; then
+    source "$f"  # Load RVM into a shell session *as a function*
     break
   fi
 done

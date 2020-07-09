@@ -1,8 +1,6 @@
 #!/bin/bash
 
-clr() {  # (number, text)
-  printf "\033[38;5;${1}m${2}\033[0m"
-}
+source "$(dirname "$0")/bin/argparse.sh"
 
 __DIR__="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
@@ -20,48 +18,14 @@ vim
 )
 
 read -r -d '' helptext << EOT
-Symlinks [$(echo "${FILES_TO_LINK[@]}" \
-              | perl -pe "s/(\S+)/'\1',/g; s/.\$//s")]
-in ~/.dotfiles/ (with a '.' prepended) to HOME directory.
-
-Usage:  ~/.dotfiles/install.sh [OPTIONS]
-
-Options:
-  $(clr 3 '-h, --help')             Print this help
-  $(clr 3 '-f, --vim-full')         Install all vim plugins (~100M)
-  $(clr 3 '-u, --uninstall')        Uninstall maneyko's dotfiles
+Symlinks [$(echo "${FILES_TO_LINK[@]}" | perl -pe "s/(\S+)/'\1',/g; s/.\$//s")]
+in ~/.dotfiles/ (with a '.' prepended) to \$HOME directory.
 EOT
 
-
-POSITIONAL=()
-while test $# -gt 0
-do
-  key=$1
-  case $key in
-    -h|--help)
-      print_help="true"
-      shift  # past argument
-      ;;
-    -f|--vim-full)
-      vim_full="true"
-      shift  # past argument
-      ;;
-    -u|--uninstall)
-      uninstall_opt="true"
-      shift  # past argument
-      ;;
-    *)
-      POSITIONAL+=("$1")
-      shift
-      ;;
-  esac
-done
-set -- "${POSITIONAL[@]}"  # Restore positional parameters
-
-test -n "$print_help" && {
-  echo "$helptext"
-  exit 0
-}
+arg_optional "[uninstall] [u] [Uninstall maneyko's dotfiles]"
+arg_optional "[vim-full]  [f] [Install all vim plugins (~100Mb)]"
+arg_help     "[$helptext]"
+parse_args
 
 test "$__DIR__" != "$HOME/.dotfiles" -a ! -d "$HOME/.dotfiles" && {
   clr 3 "Moving repo to ~/.dotfiles\n"
@@ -75,7 +39,7 @@ cd
 
 for f in "${FILES_TO_LINK[@]}"; do
   dotf=".$f"
-  if test -n "$uninstall_opt"; then
+  if test -n "$ARG_UNINSTALL"; then
     test -L "$dotf" && rm -v "$dotf"
     continue
   fi
@@ -92,7 +56,7 @@ for f in "${FILES_TO_LINK[@]}"; do
   ln -vs ".dotfiles/$f" "$dotf"
 done
 
-if test -n "$uninstall_opt"; then
+if test -n "$ARG_UNINSTALL"; then
   # Check if directory is not empty
   if test -n "$(\ls "$__DIR__/_backups")"; then
     cat << EOT
@@ -103,7 +67,17 @@ I will move it back to your \$HOME directory so you do not lose it.
 EOT
     for f in $__DIR__/_backups/*; do
       base="$(basename "$f")"
-      mv -v $__DIR__/_backups/"$base" $HOME/."$base"
+      dest=$HOME/."$base"
+      if test -f "$dest" -o -z "$(echo "${FILES_TO_LINK[@]}" | grep "$base")"; then
+        mkdir -p $__DIR__/.dotfiles.bak
+        f_dest=$__DIR__/.dotfiles.bak/"$base"
+        if test -f "$f_dest"; then
+          f_dest="$(HOME/.dotfiles/bin/backup-path $__DIR__/.dotfiles.bak/"$base")"
+        fi
+        mv -v "$f" "$f_dest"
+      else
+        mv -v $__DIR__/_backups/"$base" $HOME/."$base"
+      fi
     done
   fi
 
@@ -118,7 +92,7 @@ if test "$vim" = 'nvim'; then
     --create-dirs \
       'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   vim_config=$HOME/.dotfiles/nvimrc
-  if test -n "$vim_full"; then
+  if test -n "$ARG_VIM_FULL"; then
     python3 -m pip install pynvim --upgrade
   fi
 else
@@ -128,7 +102,7 @@ else
   vim_config=$HOME/.dotfiles/vimrc
 fi
 
-test -z "$vim_full" && {
+test -z "$ARG_VIM_FULL" && {
   perl -i -pe 's/minimal_vimrc = ([\d]+)/minimal_vimrc = 1/g' $vim_config
 }
 

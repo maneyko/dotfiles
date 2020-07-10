@@ -69,10 +69,10 @@ EOT
       base="$(basename "$f")"
       dest=$HOME/."$base"
       if test -f "$dest" -o -z "$(echo "${FILES_TO_LINK[@]}" | grep "$base")"; then
-        mkdir -p $__DIR__/.dotfiles.bak
-        f_dest=$__DIR__/.dotfiles.bak/"$base"
+        mkdir -p $HOME/.dotfiles.bak
+        f_dest=$HOME/.dotfiles.bak/"$base"
         if test -f "$f_dest"; then
-          f_dest="$(HOME/.dotfiles/bin/backup-path $__DIR__/.dotfiles.bak/"$base")"
+          f_dest="$($HOME/.dotfiles/bin/backup-path $HOME/.dotfiles.bak/"$base")"
         fi
         mv -v "$f" "$f_dest"
       else

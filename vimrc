@@ -38,7 +38,7 @@ call plug#begin()
     Plug 'gisphm/vim-gitignore'        " .gitignore files
     Plug 'tpope/vim-markdown'
     Plug 'martinda/Jenkinsfile-vim-syntax'
-    " Plug 'mattn/emmet-vim'             " html completion
+    Plug 'mattn/emmet-vim'             " html completion
     Plug 'ctrlpvim/ctrlp.vim'          " fuzzy file finder
     Plug 'scrooloose/nerdtree'         " filetree
     Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -161,7 +161,14 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" let g:coc_global_extensions = ['coc-solargraph']
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep --smart-case'
+endif
+
+let g:ack_mappings = {
+      \ "t": "<C-W><CR><C-W>j<C-W>c<C-W>T<C-l>",
+      \ "<cr>": "<C-W><CR><C-W>j<C-W>c<C-W>T<C-l>",
+      \ "T": "<C-W><CR><C-W>j<C-W>c<C-W>TgT<C-W>j<C-l>" }
 
 " functions
 " ---------
@@ -265,6 +272,7 @@ nnoremap <C-o>            gt
 nnoremap <C-b>            :nohl<CR><C-l>
 nnoremap <C-n>            :set relativenumber!<CR>
 nnoremap <leader><leader> :w<CR>
+nnoremap <leader>a        :Ack!<space>
 nnoremap <leader>f        :call FlyMode(flymode_togg)<CR>
 nnoremap <leader>kq       :q!<CR>
 nnoremap <leader>n        :NERDTreeToggle<CR>
@@ -391,5 +399,9 @@ au FileType sql
       \ setlocal commentstring=--%s
 au FileType haml
       \ setlocal wrap
+
+if filereadable(expand("$HOME/.vimrc.local"))
+  source $HOME/.vimrc.local
+endif
 
 " vim: ts=2 sw=2 sts=2 viewoptions-=options

@@ -47,7 +47,6 @@ call plug#begin()
     " Plug 'vim-python/python-syntax'
     Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
     Plug 'mileszs/ack.vim'
-    " Plug 'Numkil/ag.nvim'
 
     Plug 'tpope/vim-fugitive'          " git integration
     Plug 'tpope/vim-rails'
@@ -175,6 +174,7 @@ endif
 
 let g:ack_mappings = {
       \ "t": "<C-W><CR><C-W>j<C-W>c<C-W>T<C-l>",
+      \ "<cr>": "<C-W><CR><C-W>j<C-W>c<C-W>T<C-l>",
       \ "T": "<C-W><CR><C-W>j<C-W>c<C-W>TgT<C-W>j<C-l>" }
 " let g:ack_qhandler = "botright copen"
 " let g:ackpreview = 0
@@ -376,8 +376,6 @@ au BufRead,BufNewFile
       \ setlocal ft=nginx
 au BufRead */etc/aliases
       \ setlocal ft=sh
-au BufRead */app/assets/templates/*
-      \ setlocal wrap
 
 " au VimEnter *.rb,Rakefile NERDTree | wincmd w
 " au BufEnter *.rb,Rakefile exe "silent! CocDisable"
@@ -420,5 +418,9 @@ au FileType sql
       \ setlocal commentstring=--%s
 au FileType haml
       \ setlocal wrap
+
+if filereadable(expand("$HOME/.vimrc.local"))
+  source $HOME/.vimrc.local
+endif
 
 " vim: ts=2 sw=2 sts=2 viewoptions-=options

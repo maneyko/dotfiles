@@ -71,11 +71,13 @@ clr() {  # (number, text)
 
 parse_arg1() {
   t1="${1%%\]*}"
+  t2="${1#*\]}"
+  wo_arg1="[${t2#*\[}"
   parse_arg1_result="${t1#*\[}"
 }
 
 parse_arg2() {
-  t1="${1#*[ ]}"
+  t1="${1#*\]}"
   parse_arg1 "$t1"
   parse_arg2_result="$parse_arg1_result"
 }
@@ -90,8 +92,8 @@ parse_arg3() {
 arg_positional() {
   parse_arg1 "$1"
   arg_name="$parse_arg1_result"
-  parse_arg3 "$1"
-  arg_desc="$parse_arg3_result"
+  t1="${wo_arg1#*\[}"
+  arg_desc="${t1%\]*}"
   POSITIONAL_NAMES+=($arg_name)
   POSITIONAL_DESCRIPTIONS+=("$arg_desc")
 }
@@ -102,10 +104,10 @@ arg_positional() {
 arg_optional() {
   parse_arg1 "$1"
   arg_name="$parse_arg1_result"
-  parse_arg2 "$1"
-  arg_flag="$parse_arg2_result"
-  parse_arg3 "$1"
-  arg_desc="$parse_arg3_result"
+  parse_arg1 "$wo_arg1"
+  arg_flag="$parse_arg1_result"
+  t1="${wo_arg1#*\[}"
+  arg_desc="${t1%\]*}"
   OPTIONAL_NAMES+=($arg_name)
   OPTIONAL_FLAGS+=($arg_flag)
   OPTIONAL_DESCRIPTIONS+=("$arg_desc")
@@ -117,10 +119,10 @@ arg_optional() {
 arg_boolean() {
   parse_arg1 "$1"
   arg_name="$parse_arg1_result"
-  parse_arg2 "$1"
-  arg_flag="$parse_arg2_result"
-  parse_arg3 "$1"
-  arg_desc="$parse_arg3_result"
+  parse_arg1 "$wo_arg1"
+  arg_flag="$parse_arg1_result"
+  t1="${wo_arg1#*\[}"
+  arg_desc="${t1%\]*}"
   BOOLEAN_NAMES+=($arg_name)
   BOOLEAN_FLAGS+=($arg_flag)
   BOOLEAN_DESCRIPTIONS+=("$arg_desc")
@@ -222,7 +224,15 @@ print_help() {
     i=0
     for p_name in "${POSITIONAL_NAMES[@]}"; do
       p_disp="$(clr 3 "$p_name")"
-      printf "  %-37s ${POSITIONAL_DESCRIPTIONS[$i]}\n" "$p_disp"
+      j=0
+      printf "${POSITIONAL_DESCRIPTIONS[$i]}\n" | while read line; do
+        if test $j -eq 0; then
+          printf "  %-37s ${line}\n" "$p_disp"
+        else
+          printf "  %-24s ${line}\n"
+        fi
+        j=$(($j+1))
+      done
       i=$(($i+1))
     done
   fi
@@ -233,14 +243,30 @@ print_help() {
     for bool_name in "${BOOLEAN_NAMES[@]}"; do
       flag_disp="$(clr 3 "-${BOOLEAN_FLAGS[$i]}")"
       name_disp="$(clr 3 "--$bool_name")"
-      printf "  %-50s ${BOOLEAN_DESCRIPTIONS[$i]}\n" "$flag_disp, $name_disp"
+      j=0
+      printf "${BOOLEAN_DESCRIPTIONS[$i]}\n" | while read line; do
+        if test $j -eq 0; then
+          printf "  %-50s ${line}\n" "$flag_disp, $name_disp"
+        else
+          printf "  %-24s ${line}\n"
+        fi
+        j=$(($j+1))
+      done
       i=$(($i+1))
     done
     i=0
     for opt_name in "${OPTIONAL_NAMES[@]}"; do
       flag_disp="$(clr 3 "-${OPTIONAL_FLAGS[$i]}")"
       name_disp="$(clr 3 "--$opt_name")"
-      printf "  %-50s ${OPTIONAL_DESCRIPTIONS[$i]}\n" "$flag_disp, $name_disp"
+      j=0
+      printf "${OPTIONAL_DESCRIPTIONS[$i]}\n" | while read line; do
+        if test $j -eq 0; then
+          printf "  %-50s ${line}\n" "$flag_disp, $name_disp"
+        else
+          printf "  %-24s ${line}\n"
+        fi
+        j=$(($j+1))
+      done
       i=$(($i+1))
     done
   fi

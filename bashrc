@@ -23,7 +23,7 @@ shopt -s histappend              >/dev/null 2>&1
 shopt -s hostcomplete            >/dev/null 2>&1
 shopt -s no_empty_cmd_completion >/dev/null 2>&1
 
-umask 0022
+umask 0002
 
 test -s "$HOME/.bashrc.local.preload" && {
   source "$HOME/.bashrc.local.preload"
@@ -246,6 +246,7 @@ alias hide='chflags hidden'
 alias nohide='chflags nohidden'
 alias nowrap='tput rmam'
 alias rewrap='tput smam'
+alias git-root='cd "$(git rev-parse --show-toplevel 2>/dev/null || echo ".")"'
 
 function mkdirpcd { mkdir -p "$1"; cd "$1"; }
 export -f mkdirpcd
@@ -293,8 +294,10 @@ fi
 # ---------------------------------------------------------------------
 
 # Necessary environment variable for ~/.tmux.conf
-export TMUX_VERSION=$(tmux -V \
-  | perl -ne 'printf("%d.%02d",$1,$2) if /([\d]+)\.([\d]+)/')
+if test -n "$(command -v tmux)"; then
+  export TMUX_VERSION=$(tmux -V \
+    | perl -ne 'printf("%d.%02d",$1,$2) if /([\d]+)\.([\d]+)/')
+fi
 
 rvms=(
 /usr/local/rvm/scripts/rvm

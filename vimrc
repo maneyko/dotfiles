@@ -1,5 +1,5 @@
-" nvimrc
-" ======
+" vimrc
+" =====
 "
 " Table of Contents
 " -----------------
@@ -34,7 +34,7 @@ set list
 set listchars=tab:>-,trail:⋅
 if has('mouse')
   set mouse=a
-  if has('vim')
+  if !has('nvim')
     set ttymouse=xterm2
   endif
 endif
@@ -79,7 +79,7 @@ Plug 'tpope/vim-endwise'           " closes functions (if and fi)
 Plug 'tpope/vim-repeat'            " '.' for plugins
 Plug 'tpope/vim-surround'          " surrounding motions
 Plug 'tpope/vim-unimpaired'        " bracket functions and more
-if has('vim')
+if !has('nvim')
   Plug 'vim-utils/vim-man'
 endif
 
@@ -98,18 +98,18 @@ if !minimal_vimrc
   Plug 'ryanoasis/vim-devicons'
   Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
     let NERDTreeShowHidden=1
-    let g:NERDTreeIndicatorMapCustom = {
-    \ "Modified"  : "✹",
-    \ "Staged"    : "✚",
-    \ "Untracked" : "✭",
-    \ "Renamed"   : "➜",
-    \ "Unmerged"  : "═",
-    \ "Deleted"   : "✖",
-    \ "Dirty"     : "✗",
-    \ "Clean"     : "✔︎",
-    \ 'Ignored'   : '☒',
-    \ "Unknown"   : "?"
-    \ }
+    let g:NERDTreeGitStatusIndicatorMapCustom = {
+      \ "Modified"  : "✹",
+      \ "Staged"    : "✚",
+      \ "Untracked" : "✭",
+      \ "Renamed"   : "➜",
+      \ "Unmerged"  : "═",
+      \ "Deleted"   : "✖",
+      \ "Dirty"     : "✗",
+      \ "Clean"     : "✔︎",
+      \ 'Ignored'   : '☒',
+      \ "Unknown"   : "?"
+      \ }
     autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
     " let NERDTreeMapOpenInTab='<ENTER>'
 
@@ -179,6 +179,9 @@ if !minimal_vimrc
     Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
   else
     Plug 'neoclide/coc.nvim'
+  endif
+  if !has('patch-8.0-1453')
+    let g:coc_disable_startup_warning = 1
   endif
     inoremap <silent><expr> <TAB>
           \ pumvisible() ? "\<C-n>" :

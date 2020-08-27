@@ -180,17 +180,17 @@ LONG_PS1="\
 "
 
 SHORT_PS1="\
-`clr $border_color  '┌─['         `\
-`clr $user_color    "$(whoami)"   `\
-`clr 250            '@'           `\
-`clr $host_color    "$host_text"  `\
-`clr $border_color  ':'           `\
-`clr $pwd_color     '\\W'         `\
-`clr $border_color  ']'           `\
+`pclr $border_color  '┌─['         `\
+`pclr $user_color    "$(whoami)"   `\
+`pclr 250            '@'           `\
+`pclr $host_color    "$host_text"  `\
+`pclr $border_color  ':'           `\
+`pclr $pwd_color     '\\W'         `\
+`pclr $border_color  ']'           `\
 \n\
-`clr $border_color  '└['          `\
-`clr 7              '\\$'         `\
-`clr $border_color  ']› '         `\
+`pclr $border_color  '└['          `\
+`pclr 7              '\\$'         `\
+`pclr $border_color  ']› '         `\
 "
 
 export PS1="$LONG_PS1"
@@ -222,8 +222,6 @@ if $_ls --color / >/dev/null 2>&1; then
 fi
 if test "$GNU_LS"; then
   alias ls="$_ls --color=auto --group-directories-first --time-style +'%b %d %I:%M %p'"
-  alias lsld="ls -AhlI'*'"
-  alias lsd="ls -AI'*'"
 else
   export CLICOLOR=1
   export LSCOLORS='ExGxFxdaCxDaDahbadacec'
@@ -233,13 +231,17 @@ alias l='ls -hl'
 alias ll='l'
 alias la='ls -A'
 alias lla='ls -Ahl'
-test "$GNU_LS" && alias ll="l --time-style +'%b %d %Y %I:%M %p'"
+if test "$GNU_LS"; then
+  alias ll="l --time-style +'%b %d %Y %I:%M %p'"
+  alias lsld="ll -AI'*'"
+  alias lsd="ls -AI'*'"
+fi
 
 
 # Aliases
 alias bashrc='BASHRC_LOADED="" source ~/.bashrc'
 alias cls="clear && printf '\e[3J'"
-alias shortps1='export PS1=$SHORT_PS1'
+alias shortps1='export PS1="$SHORT_PS1"'
 alias longps1='export PS1="$LONG_PS1"'
 alias rm-DS='find . -name .DS_Store -delete -print'
 alias hide='chflags hidden'
@@ -326,22 +328,6 @@ NVM_DIR="/usr/local/opt/nvm"
 test -s "$NVM_DIR/nvm.sh" && {
   \. "$NVM_DIR/nvm.sh"  # This loads nvm
 }
-
-if test -n "$(command -v nvm)"; then
-  cd_type="$(type cd)"
-  if test -z "${cd_type//*is a function$'\n'*/}"; then
-    sys_cd="$(declare -f cd | tail -n +2)"
-  elif test -z "${cd_type//*is aliased to*/}"; then
-    sys_cd="$(type cd | perl -ne 'print substr($1,0,-1) if /\`(.*)/')"
-  else
-    sys_cd=""
-  fi
-
-  cd () {
-    eval "$sys_cd"
-    test -s .nvmrc && nvm use
-  }
-fi
 
 test -f $HOME/.bashrc.local && {
   source $HOME/.bashrc.local

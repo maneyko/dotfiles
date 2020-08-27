@@ -1,69 +1,24 @@
-" vimrc
-" =====
+" nvimrc
+" ======
 "
-" table of contents
+" Table of Contents
 " -----------------
-"   * plugins
-"   * sets
-"   * colors
-"   * plugin options
-"   * functions
-"   * remaps
-"   * auto commands
+"   * Sets
+"   * Plugins
+"   * Functions
+"   * Remaps
+"   * Auto Commands
+"   * Colors
 
 let g:minimal_vimrc = 0
 
-" plugins
-" -------
 set nocompatible
 filetype off
 
 call plug#begin()
-  " core
-  Plug 'junegunn/vim-plug'
-  Plug 'mkarmona/colorsbox'          " color scheme
-  Plug 'alvan/vim-closetag'
-  Plug 'jiangmiao/auto-pairs'        " completes pairs
-  Plug 'tpope/vim-commentary'        " commenting motions
-  Plug 'tpope/vim-endwise'           " closes functions (if and fi)
-  Plug 'tpope/vim-repeat'            " '.' for plugins
-  Plug 'tpope/vim-surround'          " surrounding motions
-  Plug 'tpope/vim-unimpaired'        " bracket functions and more
-  Plug 'vim-utils/vim-man'           " `Man` command
 
-  if !minimal_vimrc
-    Plug 'phreax/vim-coffee-script'
-    Plug 'vim-scripts/nginx.vim'       " nginx
-    Plug 'digitaltoad/vim-pug'         " pug
-    Plug 'gisphm/vim-gitignore'        " .gitignore files
-    Plug 'tpope/vim-markdown'
-    Plug 'martinda/Jenkinsfile-vim-syntax'
-    Plug 'mattn/emmet-vim'             " html completion
-    Plug 'ctrlpvim/ctrlp.vim'          " fuzzy file finder
-    Plug 'scrooloose/nerdtree'         " filetree
-    Plug 'Xuyuanp/nerdtree-git-plugin'
-    Plug 'ryanoasis/vim-devicons'
-    Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-    Plug 'yegappan/mru'
-    Plug 'vim-python/python-syntax'
-    " Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
-    Plug 'mileszs/ack.vim'
-
-    Plug 'tpope/vim-fugitive'          " git integration
-    Plug 'tpope/vim-rails'
-
-    Plug 'neoclide/coc.nvim'
-    Plug 'autozimu/LanguageClient-neovim', {
-        \ 'branch': 'next',
-        \ 'do': 'bash install.sh',
-        \ }
-  endif
-call plug#end()
-
-filetype plugin indent on
-
-" sets
-" ----
+" Sets
+" ====
 set autoindent
 if has('patch-7.4-346')
   set breakindent
@@ -79,7 +34,9 @@ set list
 set listchars=tab:>-,trail:⋅
 if has('mouse')
   set mouse=a
-  set ttymouse=xterm2
+  if has('vim')
+    set ttymouse=xterm2
+  endif
 endif
 if version >= 702
   au InsertLeave * set list
@@ -102,76 +59,162 @@ set nowrap
 
 let g:netrw_dirhistmax=0  " no .netrwhist files
 
-" colors
-" ------
-if !empty(glob($VIMRUNTIME . '/syntax/syntax.vim'))
-  syntax on
-endif
-if isdirectory(glob('~/.dotfiles/vim/plugged/colorsbox'))
-  colorscheme colorsbox-stnight
+if has('nvim')
+  set guicursor=
+  set laststatus=0
+  set ruler
 endif
 
-" make bg and fg colors same as terminal
-highlight Normal ctermbg=NONE
-highlight Normal ctermfg=NONE
-
-
-" plugin options
-" --------------
-let g:user_emmet_leader_key = '<NUL>'  " equals '<C-space>,'
-let g:do_refresh_key = '<C-M>'
-" let g:SuperTabCrMapping = 1
-" let g:SuperTabDefaultCompletionType = "<c-n>"
-let g:vimpager = {}
-let g:less = {}
-let g:less.enabled = 0
-let g:less.scrolloff = 5
-let NERDTreeShowHidden=1
-let g:NERDTreeIndicatorMapCustom = {
-\ "Modified"  : "✹",
-\ "Staged"    : "✚",
-\ "Untracked" : "✭",
-\ "Renamed"   : "➜",
-\ "Unmerged"  : "═",
-\ "Deleted"   : "✖",
-\ "Dirty"     : "✗",
-\ "Clean"     : "✔︎",
-\ 'Ignored'   : '☒',
-\ "Unknown"   : "?"
-\ }
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-" let NERDTreeMapOpenInTab='<ENTER>'
-
-let g:ctrlp_prompt_mappings = {
-    \ 'AcceptSelection("e")': ['<2-LeftMouse>'],
-    \ 'AcceptSelection("t")': ['<cr>'],
-\ }
-let g:ctrlp_regexp = 1
-let g:markdown_fenced_languages = ['bash=sh', 'python', 'ruby', 'html']
-let g:markdown_syntax_conceal = 0
-
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-if executable('ag')
-  let g:ackprg = 'ag --vimgrep --smart-case'
+" Plugins
+" =======
+"
+" Core
+" ----
+Plug 'junegunn/vim-plug'
+Plug 'mkarmona/colorsbox'          " color scheme
+Plug 'alvan/vim-closetag'
+Plug 'jiangmiao/auto-pairs'        " completes pairs
+Plug 'tpope/vim-commentary'        " commenting motions
+Plug 'tpope/vim-endwise'           " closes functions (if and fi)
+Plug 'tpope/vim-repeat'            " '.' for plugins
+Plug 'tpope/vim-surround'          " surrounding motions
+Plug 'tpope/vim-unimpaired'        " bracket functions and more
+if has('vim')
+  Plug 'vim-utils/vim-man'
 endif
 
-let g:ack_mappings = {
-      \ "t": "<C-W><CR><C-W>j<C-W>c<C-W>T<C-l>",
-      \ "<cr>": "<C-W><CR><C-W>j<C-W>c<C-W>T<C-l>",
-      \ "T": "<C-W><CR><C-W>j<C-W>c<C-W>TgT<C-W>j<C-l>" }
+if !minimal_vimrc
+  " Navigation
+  " ----------
+  Plug 'ctrlpvim/ctrlp.vim'          " fuzzy file finder
+    let g:ctrlp_prompt_mappings = {
+        \ 'AcceptSelection("e")': ['<2-LeftMouse>'],
+        \ 'AcceptSelection("t")': ['<cr>'],
+    \ }
+    let g:ctrlp_regexp = 1
 
-" functions
-" ---------
+  Plug 'scrooloose/nerdtree'         " filetree
+  Plug 'Xuyuanp/nerdtree-git-plugin'
+  Plug 'ryanoasis/vim-devicons'
+  Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+    let NERDTreeShowHidden=1
+    let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "✹",
+    \ "Staged"    : "✚",
+    \ "Untracked" : "✭",
+    \ "Renamed"   : "➜",
+    \ "Unmerged"  : "═",
+    \ "Deleted"   : "✖",
+    \ "Dirty"     : "✗",
+    \ "Clean"     : "✔︎",
+    \ 'Ignored'   : '☒',
+    \ "Unknown"   : "?"
+    \ }
+    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+    " let NERDTreeMapOpenInTab='<ENTER>'
+
+  Plug 'yegappan/mru'
+
+  Plug 'mileszs/ack.vim'
+    if executable('ag')
+      let g:ackprg = 'ag --vimgrep --smart-case'
+    endif
+
+    let g:ack_mappings = {
+          \ "t": "<C-W><CR><C-W>j<C-W>c<C-W>T<C-l>",
+          \ "<cr>": "<C-W><CR><C-W>j<C-W>c<C-W>T<C-l>",
+          \ "T": "<C-W><CR><C-W>j<C-W>c<C-W>TgT<C-W>j<C-l>" }
+
+  " Syntax
+  " ------
+  Plug 'martinda/Jenkinsfile-vim-syntax'
+  Plug 'phreax/vim-coffee-script'
+  Plug 'vim-scripts/nginx.vim'       " nginx
+  Plug 'gisphm/vim-gitignore'        " .gitignore files
+  if has('nvim')
+    Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
+      let g:semshi#error_sign = 0
+      let g:semshi#mark_selected_nodes = 0
+      let g:semshi#excluded_hl_groups = ['local', 'unresolved']
+  else
+    Plug 'vim-python/python-syntax'
+  endif
+
+  Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
+    let g:semshi#error_sign = 0
+    let g:semshi#mark_selected_nodes = 0
+    let g:semshi#excluded_hl_groups = ['local', 'unresolved']
+
+  Plug 'tpope/vim-markdown'
+    let g:markdown_fenced_languages = ['bash=sh', 'python', 'ruby', 'html']
+    let g:markdown_syntax_conceal = 0
+
+  Plug 'tpope/vim-rails'
+    let g:rails_projections = {
+          \ "spec/support/*.rb": {
+          \   "rubyMacro": [
+          \     "before", "after", "around", "background", "setup", "teardown", "context", "describe",
+          \     "feature", "shared_context", "shared_examples", "shared_examples_for",
+          \     "let", "subject", "it", "example", "specify", "scenario", "include_examples", "include_context",
+          \     "it_should_behave_like", "it_behaves_like"
+          \   ],
+          \   "rubyAction": [
+          \     "expect", "is_expected", "expect_any_instance_of", "allow", "allow_any_instance_of",
+          \     "stub_const", "hide_const"
+          \   ],
+          \   "rubyHelper": [
+          \     "described_class", "double", "instance_double", "class_double", "object_double",
+          \     "spy", "instance_spy", "class_spy", "object_spy"
+          \    ]
+          \ } }
+
+  " Completion
+  " ----------
+  Plug 'autozimu/LanguageClient-neovim', {
+      \ 'branch': 'next',
+      \ 'do': 'bash install.sh',
+      \ }
+
+  if has('nvim')
+    Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
+  else
+    Plug 'neoclide/coc.nvim'
+  endif
+    inoremap <silent><expr> <TAB>
+          \ pumvisible() ? "\<C-n>" :
+          \ <SID>check_back_space() ? "\<TAB>" :
+          \ coc#refresh()
+    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+    function! s:check_back_space() abort
+      let col = col('.') - 1
+      return !col || getline('.')[col - 1]  =~# '\s'
+    endfunction
+    " let g:coc_global_extensions = ['coc-solargraph']
+
+  " Miscellaneous
+  " -------------
+  Plug 'tpope/vim-fugitive'          " git integration
+  Plug 'mattn/emmet-vim'             " html completion
+    if has('nvim')
+      let g:user_emmet_leader_key = '<NUL>'
+    else
+      let g:user_emmet_leader_key = '<C-space>'
+    endif
+
+  " Disabled
+  " --------
+  " let g:do_refresh_key = '<C-M>'
+  " let g:SuperTabCrMapping = 1
+  " let g:SuperTabDefaultCompletionType = "<c-n>"
+  " let g:vimpager = {}
+  " let g:less = {}
+  " let g:less.enabled = 0
+  " let g:less.scrolloff = 5
+endif
+
+" Functions
+" =========
 fun! ReadMode(readmode_togg)
   " acts like ``less``
   if a:readmode_togg==1
@@ -252,14 +295,16 @@ endfun
 
 fun! AlignRow(tw_)
   for i in range(1, a:tw_)
-    execute "normal! 0100lF\<space>r\<cr>"
+    execute "normal! 0100lf\<space>r\<cr>"
   endfor
 endfun
 
 
-" remaps
-" ------
+" Remaps
+" ======
 let g:mapleader = ','
+
+cnoremap <C-A>            <C-b>
 
 nnoremap <C-h>            <C-w>h
 nnoremap <C-j>            <C-w>j
@@ -277,7 +322,7 @@ nnoremap <leader>f        :call FlyMode(flymode_togg)<CR>
 nnoremap <leader>kq       :q!<CR>
 nnoremap <leader>n        :NERDTreeToggle<CR>
 nnoremap <leader>q        :q<CR>
-nnoremap <leader>r        <Plug>(coc-references)
+nmap     <leader>r        <Plug>(coc-references)
 nnoremap <leader>m        :MRU<CR>
 nnoremap <leader>s        :setlocal spell! spelllang=en_us<CR>
 nnoremap <leader>kw       :w !sudo tee %<CR>
@@ -297,7 +342,6 @@ nnoremap yaf              :1,$y<CR>
 nnoremap zfs              :mkview<CR>
 nnoremap zfl              :loadview<CR>
 
-
 inoremap <C-a>            <C-o>^
 inoremap <C-d>            <C-o>x
 inoremap <C-e>            <C-o>$
@@ -312,10 +356,17 @@ vnoremap &                :normal! &<CR>
 
 map <ScrollWheelUp>       <C-y>
 map <ScrollWheelDown>     <C-e>
+if has('nvim')
+  map <2-ScrollWheelUp>     <C-y>
+  map <3-ScrollWheelUp>     <C-y>
+  map <4-ScrollWheelUp>     <C-y>
+  map <2-ScrollWheelDown>   <C-e>
+  map <3-ScrollWheelDown>   <C-e>
+  map <4-ScrollWheelDown>   <C-e>
+endif
 
-
-" auto commands
-" -------------
+" Auto Commands
+" =============
 " au BufLeave *__doc__*,help
 "       \ silent! call ReadMode(0)
 " au BufNewFile *__doc__*
@@ -378,7 +429,7 @@ au FileType c,cpp,php
 au FileType markdown
       \ syn match markdownError "\w\@<=\w\@="
 au FileType php
-      \ setlocal syn=php
+      \ setlocal ft=html syn=php
 au FileType tex
       \ setlocal spell spelllang=en_us colorcolumn=80 wrap foldlevel=10
 au FileType tex,cpp
@@ -400,8 +451,39 @@ au FileType sql
 au FileType haml
       \ setlocal wrap
 
+" Colors
+" ======
+call plug#end()
+
+filetype plugin indent on
+
+if !empty(glob($VIMRUNTIME . '/syntax/syntax.vim'))
+  syntax on
+endif
+
+if has('nvim')
+  let config_dir = '~/.dotfiles/config/nvim'
+else
+  let config_dir = '~/.dotfiles/vim/'
+endif
+
+if isdirectory(glob(config_dir . '/plugged/colorsbox'))
+  colorscheme colorsbox-stnight
+endif
+
+" Make text yellow for ack.vim
+if has('nvim')
+  highlight QuickFixLine ctermfg=Yellow ctermbg=NONE cterm=bold
+endif
+
+" Make bg and fg colors same as terminal
+highlight Normal ctermbg=NONE
+highlight Normal ctermfg=NONE
+
+
 if filereadable(expand("$HOME/.vimrc.local"))
   source $HOME/.vimrc.local
 endif
+
 
 " vim: ts=2 sw=2 sts=2 viewoptions-=options

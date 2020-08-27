@@ -88,12 +88,14 @@ vim_path="$(type -P nvim vim vi | head -1)"
 vim="$(basename $vim_path)"
 
 if test "$vim" = 'nvim'; then
-  plugin_dir="$HOME/.local/share/nvim/site"
+  vim_plug_dir="$HOME/.local/share/nvim/site"
+  vim_config_dir="$HOME/.config/nvim"
 else
-  plugin_dir="$HOME/.vim"
+  vim_plug_dir="$HOME/.vim"
+  vim_config_dir="$HOME/.vim"
 fi
 
-curl -fLo "$plugin_dir/autoload/plug.vim" \
+curl -fLo "$vim_plug_dir/autoload/plug.vim" \
   --create-dirs \
     'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 
@@ -102,14 +104,13 @@ if test -n "$ARG_VIM_FULL" -a "$vim" = 'nvim'; then
 fi
 
 if test -z "$ARG_VIM_FULL"; then
-  perl -i -pe 's/minimal_vimrc = ([\d]+)/minimal_vimrc = 1/g' $HOME/.vim/vimrc
+  perl -i -pe 's/minimal_vimrc = ([\d]+)/minimal_vimrc = 1/g' $HOME/.dotfiles/vimrc
 fi
 
 $vim +PlugInstall +qall
 
 if test "$vim" = 'nvim'; then
   $vim +UpdateRemotePlugins +qall
-  rm -f ~/.config/nvim/plugged/vim-plug/.git/objects/pack/*.pack  2>/dev/null
-else
-  rm -f ~/.vim/plugged/vim-plug/.git/objects/pack/*.pack          2>/dev/null
 fi
+
+rm -f "$vim_config_dir/plugged/vim-plug/.git/objects/pack/*.pack"  2>/dev/null

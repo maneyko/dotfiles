@@ -42,6 +42,7 @@ if version >= 702
   au InsertLeave * set list
   au InsertEnter * set nolist
 endif
+set nowildmenu
 set number
 set numberwidth=3
 set ruler
@@ -62,7 +63,6 @@ let g:netrw_dirhistmax=0  " no .netrwhist files
 if has('nvim')
   set guicursor=
   set laststatus=0
-  set ruler
 endif
 
 " Plugins
@@ -175,25 +175,27 @@ if !minimal_vimrc
       \ 'do': 'bash install.sh',
       \ }
 
-  if has('nvim')
-    Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
-  else
-    Plug 'neoclide/coc.nvim'
-  endif
-  if !has('patch-8.0-1453')
-    let g:coc_disable_startup_warning = 1
-  endif
-    inoremap <silent><expr> <TAB>
-          \ pumvisible() ? "\<C-n>" :
-          \ <SID>check_back_space() ? "\<TAB>" :
-          \ coc#refresh()
-    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+  if executable('node')
+    if has('nvim')
+      Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
+    else
+      Plug 'neoclide/coc.nvim'
+    endif
+    if !has('patch-8.0-1453')
+      let g:coc_disable_startup_warning = 1
+    endif
+      inoremap <silent><expr> <TAB>
+            \ pumvisible() ? "\<C-n>" :
+            \ <SID>check_back_space() ? "\<TAB>" :
+            \ coc#refresh()
+      inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-    function! s:check_back_space() abort
-      let col = col('.') - 1
-      return !col || getline('.')[col - 1]  =~# '\s'
-    endfunction
-    " let g:coc_global_extensions = ['coc-solargraph']
+      function! s:check_back_space() abort
+        let col = col('.') - 1
+        return !col || getline('.')[col - 1]  =~# '\s'
+      endfunction
+      " let g:coc_global_extensions = ['coc-solargraph']
+  endif
 
   " Miscellaneous
   " -------------

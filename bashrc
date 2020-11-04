@@ -69,7 +69,7 @@ export PAGER='less'
 
 export TZ='America/Chicago'
 export HISTFILE="$HOME/.bash_history"
-export HISTSIZE=50000
+export HISTSIZE=200000
 export HISTTIMEFORMAT="%F %T: "
 
 case "$-" in
@@ -79,9 +79,12 @@ esac
 
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
-# Reclaim <C-q> and <C-s>
+# Reclaim <C-q>, <C-s>, and <C-z>
 test "$INTERACTIVE" && {
-  stty -ixon
+  controls=(start stop susp)
+  for control in ${controls[@]}; do
+    stty $control 'undef'
+  done
 }
 
 # My module
@@ -96,14 +99,15 @@ export PYTHONPATH="$HOME/.dotfiles/ipython/maneyko:$PYTHONPATH"
 # ---------------
 
 completion_sources=(
-/etc/bash_completion
 /usr/local/etc/bash_completion
+/etc/bash_completion
 )
 
 for f in ${completion_sources[@]}; do
   if test -f "$f"; then
     : ${bash_completion:="$f"}
     source "$bash_completion"
+    break
   fi
 done
 
@@ -275,7 +279,7 @@ fi
 
 # First TTY Greeting
 # ------------------
-if test -n "$INTERACTIVE"; then
+if test -n "$INTERACTIVE" -a $(uname) = 'Darwin'; then
   if test -n "$(tty | grep '[1-4]$')" \
           -a -n "$(command -v neofetch)" \
           -a $COLUMNS -ge 70 \

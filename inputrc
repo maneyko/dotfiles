@@ -38,4 +38,4 @@ set colored-stats on
 # Delete word before (seperated by whitespace)
 "\C-j":     "\eOC\C-]\ \eOC\C-w"
 
-
+"\C-z":     undo

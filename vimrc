@@ -111,7 +111,7 @@ if !minimal_vimrc
       \ "Unknown"   : "?"
       \ }
     autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-    " let NERDTreeMapOpenInTab='<ENTER>'
+    " let NERDTreeMapOpenInTab='<ENTER>'  " As a consequence, this disables 't' as the new tab opener :/
 
   Plug 'yegappan/mru'
 
@@ -130,6 +130,7 @@ if !minimal_vimrc
   Plug 'martinda/Jenkinsfile-vim-syntax'
   Plug 'phreax/vim-coffee-script'
   Plug 'vim-scripts/nginx.vim'       " nginx
+  Plug 'digitaltoad/vim-pug'
   Plug 'gisphm/vim-gitignore'        " .gitignore files
   if has('nvim')
     Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
@@ -140,13 +141,8 @@ if !minimal_vimrc
     Plug 'vim-python/python-syntax'
   endif
 
-  Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
-    let g:semshi#error_sign = 0
-    let g:semshi#mark_selected_nodes = 0
-    let g:semshi#excluded_hl_groups = ['local', 'unresolved']
-
   Plug 'tpope/vim-markdown'
-    let g:markdown_fenced_languages = ['bash=sh', 'python', 'ruby', 'html']
+    let g:markdown_fenced_languages = ['bash=sh', 'html', 'python', 'ruby', 'yaml']
     let g:markdown_syntax_conceal = 0
 
   Plug 'tpope/vim-rails'
@@ -202,9 +198,9 @@ if !minimal_vimrc
   Plug 'tpope/vim-fugitive'          " git integration
   Plug 'mattn/emmet-vim'             " html completion
     if has('nvim')
-      let g:user_emmet_leader_key = '<NUL>'
-    else
       let g:user_emmet_leader_key = '<C-space>'
+    else
+      let g:user_emmet_leader_key = '<NUL>'
     endif
 
   " Disabled
@@ -382,6 +378,10 @@ au BufNewFile *.rb
       \ exe "normal! iclass " .
       \ substitute(substitute(expand('%:t')[:-4], '\(\%(\<\l\+\)\%(_\)\@=\)\|_\(\l\)', '\u\1\2', "g"),'^.','\u&','')
       \ . "\<CR>\<CR>end\<Esc>ggj"
+au BufNewFile *_spec.rb
+      \ exe "normal! ggcGRSpec.describe " .
+      \ substitute(substitute(expand('%:t')[:-9], '\(\%(\<\l\+\)\%(_\)\@=\)\|_\(\l\)', '\u\1\2', "g"),'^.','\u&','')
+      \ . " do\<CR>\<CR>end\<Esc>ggj"
 au BufNewFile *.node
       \ exe "normal! i#!/usr/bin/env node\<CR>\<Esc>"
 au BufNewFile *.py
@@ -406,6 +406,10 @@ au BufRead *.ipynb
       \ setlocal ft=json
 au BufRead *.url
       \ setlocal ft=dosini
+au BufRead Dockerfile*
+      \ setlocal ft=dockerfile
+au BufRead *.simplecov
+      \ setlocal ft=ruby
 au BufRead,BufNewFile
       \ /usr/local/etc/nginx/*,
       \/usr/local/nginx/conf/*,

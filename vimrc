@@ -413,7 +413,8 @@ au BufRead *.simplecov
 au BufRead,BufNewFile
       \ /usr/local/etc/nginx/*,
       \/usr/local/nginx/conf/*,
-      \/etc/nginx/*
+      \/etc/nginx/*,
+      \*nginx.conf
       \ setlocal ft=nginx
 au BufRead */etc/aliases
       \ setlocal ft=sh

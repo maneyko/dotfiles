@@ -24,7 +24,7 @@ EOT
 
 arg_boolean "[uninstall] [u] [Uninstall maneyko's dotfiles]"
 arg_boolean "[vim-full]  [f] [Install all vim plugins (~100Mb)]"
-arg_help     "[$helptext]"
+arg_help    "[$helptext]"
 parse_args
 
 test "$__DIR__" != "$HOME/.dotfiles" -a ! -d "$HOME/.dotfiles" && {

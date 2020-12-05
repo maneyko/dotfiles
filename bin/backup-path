@@ -4,9 +4,9 @@ source "$(dirname "$0")/argparse.sh"
 
 RETRIES_DEFAULT=100
 
-arg_positional "[file] [Filename to use to create a backup path.]"
-arg_boolean    "[copy] [c] [Copy the specified file to the backup destination.]"
-arg_optional   "[retries] [-r] [Number of times to try a higher backup path number. Default: $RETRIES_DEFAULT]"
+arg_positional "[file]        [Filename to use to create a backup path.]"
+arg_boolean    "[copy]    [c] [Copy the specified file to the backup destination.]"
+arg_optional   "[retries] [r] [Number of times to try a higher backup path number. Default: $RETRIES_DEFAULT]"
 arg_help       "[Create a backup path for a file.]"
 parse_args
 

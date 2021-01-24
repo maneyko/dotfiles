@@ -9,7 +9,7 @@ for (var i = 0; i < music_apps.length; i++) {
     const track = Application(app).currentTrack;
     const artist = track.artist();
     const title = track.name();
-    output = `♫ ${title} ⋅ ${artist}`;
+    output = `♫  ${title} ⋅ ${artist}`;
     break;
   }
 }

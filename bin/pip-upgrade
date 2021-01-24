@@ -10,6 +10,7 @@ no_update=(
   scipy
 )
 
+test "$1" = '-2' && pyversion=2
 test "$1" = '-3' && pyversion=3
 
 python_pip="python$pyversion -m pip"

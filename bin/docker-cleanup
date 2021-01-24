@@ -1,0 +1,8 @@
+#!/bin/bash
+
+docker images | awk '/^<none>/ && (/months ago/ || /weeks ago/ || /days ago/ || /\s[0-9][0-9]\shours ago/) {print $3}' \
+  | xargs docker rmi
+
+docker images -q -f 'dangling=true' | xargs docker rmi
+
+docker volume ls -qf 'dangling=true' | xargs docker volume rm

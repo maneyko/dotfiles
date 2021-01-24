@@ -73,6 +73,8 @@ endif
 Plug 'junegunn/vim-plug'
 Plug 'mkarmona/colorsbox'          " color scheme
 Plug 'alvan/vim-closetag'
+let g:closetag_filenames = '*.html,*.xhtml,*.xml'
+
 Plug 'jiangmiao/auto-pairs'        " completes pairs
 Plug 'tpope/vim-commentary'        " commenting motions
 Plug 'tpope/vim-endwise'           " closes functions (if and fi)
@@ -125,6 +127,12 @@ if !minimal_vimrc
           \ "<cr>": "<C-W><CR><C-W>j<C-W>c<C-W>T<C-l>",
           \ "T": "<C-W><CR><C-W>j<C-W>c<C-W>TgT<C-W>j<C-l>" }
 
+  " Functional
+  " ----------
+  Plug 'junegunn/vim-easy-align'
+    xmap ga <Plug>(EasyAlign)
+    nmap ga <Plug>(EasyAlign)
+
   " Syntax
   " ------
   Plug 'martinda/Jenkinsfile-vim-syntax'
@@ -145,24 +153,31 @@ if !minimal_vimrc
     let g:markdown_fenced_languages = ['bash=sh', 'html', 'python', 'ruby', 'yaml']
     let g:markdown_syntax_conceal = 0
 
+  Plug 'tpope/vim-projectionist'
+  Plug 'tpope/vim-rake'
+
   Plug 'tpope/vim-rails'
+    let rails_projections = {
+      \  "rubyMacro": [
+      \    "before", "after", "around", "background", "setup", "teardown", "context", "describe",
+      \    "feature", "shared_context", "shared_examples", "shared_examples_for",
+      \    "let", "subject", "it", "example", "specify", "scenario", "include_examples", "include_context",
+      \    "it_should_behave_like", "it_behaves_like"
+      \  ],
+      \  "rubyAction": [
+      \    "expect", "is_expected", "expect_any_instance_of", "allow", "allow_any_instance_of",
+      \    "stub_const", "hide_const"
+      \  ],
+      \  "rubyHelper": [
+      \    "described_class", "double", "instance_double", "class_double", "object_double",
+      \    "spy", "instance_spy", "class_spy", "object_spy", "anything", "page"
+      \   ]
+      \ }
+
     let g:rails_projections = {
-          \ "spec/support/*.rb": {
-          \   "rubyMacro": [
-          \     "before", "after", "around", "background", "setup", "teardown", "context", "describe",
-          \     "feature", "shared_context", "shared_examples", "shared_examples_for",
-          \     "let", "subject", "it", "example", "specify", "scenario", "include_examples", "include_context",
-          \     "it_should_behave_like", "it_behaves_like"
-          \   ],
-          \   "rubyAction": [
-          \     "expect", "is_expected", "expect_any_instance_of", "allow", "allow_any_instance_of",
-          \     "stub_const", "hide_const"
-          \   ],
-          \   "rubyHelper": [
-          \     "described_class", "double", "instance_double", "class_double", "object_double",
-          \     "spy", "instance_spy", "class_spy", "object_spy"
-          \    ]
-          \ } }
+    \   "*_spec.rb": rails_projections,
+    \   "spec/support/*.rb": rails_projections
+    \ }
 
   " Completion
   " ----------
@@ -322,11 +337,13 @@ nnoremap <leader>a        :Ack!<space>
 nnoremap <leader>f        :call FlyMode(flymode_togg)<CR>
 nnoremap <leader>kq       :q!<CR>
 nnoremap <leader>n        :NERDTreeToggle<CR>
+nnoremap <leader>ps       :%s/\<and\>\\|\<as\>\\|\<by\>\\|\<count\>\\|\<false\>\\|\<from\>\\|\<group\>\\|\<in\>\\|\<join\>\\|\<left\>\\|\<null\>\\|\<on\>\\|\<or\>\\|\<order\>\\|\<right\>\\|\<select\>\\|\<sum\>\\|\<true\>\\|\<update\>\\|\<where\>\\|\<with\>/\U&/ge<esc>
 nnoremap <leader>q        :q<CR>
 nmap     <leader>r        <Plug>(coc-references)
 nnoremap <leader>m        :MRU<CR>
 nnoremap <leader>s        :setlocal spell! spelllang=en_us<CR>
 nnoremap <leader>kw       :w !sudo tee %<CR>
+nnoremap <leader>w        :%s/\r\+$//g<CR>
 " nnoremap <space>          <C-d>
 nnoremap \a               :<C-U>call AlignRow(v:count1)<CR>
 nnoremap \e               :<C-U>call TabFun(v:count1*2,1)<CR>
@@ -404,6 +421,8 @@ au BufNewFile *.html,*.php
 
 au BufRead *.ipynb
       \ setlocal ft=json
+au BufRead pom.xml
+      \ setlocal sw=2 ts=2 sts=2
 au BufRead *.url
       \ setlocal ft=dosini
 au BufRead Dockerfile*

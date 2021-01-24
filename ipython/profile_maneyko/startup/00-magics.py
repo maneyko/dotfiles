@@ -12,7 +12,7 @@ import atexit
 from IPython import get_ipython
 from IPython.core.magic import register_line_magic
 
-from maneyko import suppress_stdout
+from maneyko import *
 
 HOME = os.environ['HOME']
 ipython = get_ipython()

@@ -6,6 +6,8 @@ _backups/
 
 config/coc/
 config/hub
+config/jgit/
+config/neofetch/
 config/nvim/plugged/
 config/configstore/
 
@@ -13,6 +15,8 @@ ipython/maneyko/build/
 ipython/maneyko/dist/
 ipython/maneyko/maneyko.egg-info/
 ipython/profile_default/
+ipython/profile_maneyko/logs/
+ipython/profile_maneyko/startup/README
 
 mac/SP*.txt
 

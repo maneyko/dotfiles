@@ -58,7 +58,7 @@ done
 
 if test -n "$ARG_UNINSTALL"; then
   # Check if directory is not empty
-  if test -n "$(\ls "$__DIR__/_backups")"; then
+  if test -n "$(\ls "$__DIR__/_backups" 2>/dev/null)"; then
     cat << EOT
 
 There is something in '$__DIR__/_backups'

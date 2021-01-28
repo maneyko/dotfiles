@@ -150,7 +150,7 @@ if !minimal_vimrc
   endif
 
   Plug 'tpope/vim-markdown'
-    let g:markdown_fenced_languages = ['bash=sh', 'html', 'python', 'ruby', 'yaml']
+    let g:markdown_fenced_languages = ['bash=sh', 'html', 'python', 'ruby', 'sql', 'yaml']
     let g:markdown_syntax_conceal = 0
 
   Plug 'tpope/vim-projectionist'
@@ -343,9 +343,9 @@ nmap     <leader>r        <Plug>(coc-references)
 nnoremap <leader>m        :MRU<CR>
 nnoremap <leader>s        :setlocal spell! spelllang=en_us<CR>
 nnoremap <leader>kw       :w !sudo tee %<CR>
-nnoremap <leader>w        :%s/\r\+$//g<CR>
 " nnoremap <space>          <C-d>
 nnoremap \a               :<C-U>call AlignRow(v:count1)<CR>
+nnoremap \d               :%s/\r\+$//g<CR>
 nnoremap \e               :<C-U>call TabFun(v:count1*2,1)<CR>
 nnoremap \n               :<C-U>call TabFun(v:count1*2,0)<CR>
 nnoremap \r               :call ReadMode(readmode_togg)<CR>

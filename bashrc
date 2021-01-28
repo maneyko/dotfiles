@@ -45,6 +45,7 @@ $PATH:\
 
 PATH="\
 $HOME/local/bin:\
+$HOME/.bin.local:\
 $HOME/.bin:\
 $PATH\
 "

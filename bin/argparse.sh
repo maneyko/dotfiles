@@ -63,10 +63,25 @@ OPTIONAL_NAMES=()
 OPTIONAL_FLAGS=()
 OPTIONAL_DESCRIPTIONS=()
 
+ARRAY_NAMES=()
+ARRAY_FLAGS=()
+ARRAY_DESCRIPTIONS=()
+
 HELP_DESCRIPTION=
 
-clr() {  # (number, text)
+# Color print.
+#
+# @param number [Integer]
+# @param text   [String]
+cprint() {
   printf "\033[38;5;${1}m${2}\033[0m"
+}
+
+# Bold print.
+#
+# @param text [String]
+bprint() {
+  printf "\033[1m$1\033[0m"
 }
 
 parse_arg1() {
@@ -74,17 +89,6 @@ parse_arg1() {
   t2="${1#*\]}"
   wo_arg1="[${t2#*\[}"
   parse_arg1_result="${t1#*\[}"
-}
-
-parse_arg2() {
-  t1="${1#*\]}"
-  parse_arg1 "$t1"
-  parse_arg2_result="$parse_arg1_result"
-}
-
-parse_arg3() {
-  t1="${1##*\[}"
-  parse_arg3_result="${t1%\]}"
 }
 
 # @param arg_name
@@ -128,6 +132,20 @@ arg_boolean() {
   BOOLEAN_DESCRIPTIONS+=("$arg_desc")
 }
 
+arg_array() {
+  parse_arg1 "$1"
+  arg_name="$parse_arg1_result"
+  parse_arg1 "$wo_arg1"
+  arg_flag="$parse_arg1_result"
+  t1="${wo_arg1#*\[}"
+  arg_desc="${t1%\]*}"
+  ARRAY_NAMES+=($arg_name)
+  name_upper="$(echo $arg_name | tr '/a-z-/' '/A-Z_/')"
+  eval "$(printf "ARG_$name_upper=()")"
+  ARRAY_FLAGS+=($arg_flag)
+  ARRAY_DESCRIPTIONS+=("$arg_desc")
+}
+
 # @param arg_description
 arg_help() {
   t1="${1#*\[}"
@@ -148,12 +166,63 @@ parse_args2() {
     key=$1
     found=
     i=0
+    for opt_name in "${BOOLEAN_NAMES[@]}"; do
+      opt_flag="${BOOLEAN_FLAGS[$i]}"
+      case $key in
+        -$opt_flag*)
+          name_upper="$(echo $opt_name | tr '/a-z-/' '/A-Z_/')"
+          eval "$(printf "ARG_$name_upper=true")"
+          found=1
+          if test "$key" != "-$opt_flag"; then
+            additional_opts="${key##-${opt_flag}}"
+            j=0
+            for flag in ${BOOLEAN_FLAGS[@]}; do
+              inner_opt_name="${BOOLEAN_NAMES[$j]}"
+              if test -z "${additional_opts##*$flag*}"; then
+                name_upper="$(echo $inner_opt_name | tr '/a-z-/' '/A-Z_/')"
+                eval "$(printf "ARG_$name_upper=true")"
+              fi
+            j=$(($j+1))
+            done
+            j=0
+            for flag in ${OPTIONAL_FLAGS[@]}; do
+              inner_opt_name="${OPTIONAL_NAMES[$j]}"
+              if test -z "${additional_opts##*$flag*}"; then
+                value="${additional_opts##*$flag}"
+                name_upper="$(echo $inner_opt_name | tr '/a-z-/' '/A-Z_/')"
+                eval "$(printf "ARG_$name_upper='${value}'")"
+              fi
+            j=$(($j+1))
+            done
+            j=0
+            for flag in ${ARRAY_FLAGS[@]}; do
+              inner_opt_name="${ARRAY_NAMES[$j]}"
+              if test -z "${additional_opts##*$flag*}"; then
+                value="${additional_opts##*$flag}"
+                name_upper="$(echo $inner_opt_name | tr '/a-z-/' '/A-Z_/')"
+                eval "$(printf "ARG_$name_upper+=('${value}')")"
+              fi
+            j=$(($j+1))
+            done
+          fi
+          shift
+          ;;
+        --$opt_name)
+          name_upper="$(echo $opt_name | tr '/a-z-/' '/A-Z_/')"
+          eval "$(printf "ARG_$name_upper=true")"
+          found=1
+          shift
+          ;;
+
+      esac
+      i=$(($i+1))
+    done
+    i=0
     for opt_name in "${OPTIONAL_NAMES[@]}"; do
       opt_flag="${OPTIONAL_FLAGS[$i]}"
-      i=$(($i+1))
       case $key in
         -$opt_flag*|--$opt_name)
-          name_upper="$(echo $opt_name | tr '/a-z/' '/A-Z/' | tr '-' '_')"
+          name_upper="$(echo $opt_name | tr '/a-z-/' '/A-Z_/')"
           if [[ $key =~ ^-$opt_flag ]]; then
             if [[ $key == -$opt_flag ]]; then
               val="$2"
@@ -166,23 +235,35 @@ parse_args2() {
             val="$2"
             shift; shift
           fi
-          eval "$(printf "ARG_$name_upper=\"$val\"")"
+          eval "$(printf "ARG_$name_upper='${val}'")"
           found=1
           ;;
       esac
+      i=$(($i+1))
     done
     i=0
-    for opt_name in "${BOOLEAN_NAMES[@]}"; do
-      opt_flag="${BOOLEAN_FLAGS[$i]}"
-      i=$(($i+1))
+    for opt_name in "${ARRAY_NAMES[@]}"; do
+      opt_flag="${ARRAY_FLAGS[$i]}"
       case $key in
-        -$opt_flag|--$opt_name)
-          name_upper="$(echo $opt_name | tr '/a-z/' '/A-Z/' | tr '-' '_')"
-          eval "$(printf "ARG_$name_upper=true")"
+        -$opt_flag*|--$opt_name)
+          name_upper="$(echo $opt_name | tr '/a-z-/' '/A-Z_/')"
+          if [[ $key =~ ^-$opt_flag ]]; then
+            if [[ $key == -$opt_flag ]]; then
+              val="$2"
+              shift; shift
+            else
+              val="${key/-"$opt_flag"}"
+              shift
+            fi
+          else
+            val="$2"
+            shift; shift
+          fi
+          eval "$(printf "ARG_$name_upper+=('${val}')")"
           found=1
-          shift
           ;;
       esac
+      i=$(($i+1))
     done
     if test -z "$found"; then
       POSITIONAL+=("$1")
@@ -193,8 +274,10 @@ parse_args2() {
 
   i=0
   for name in "${POSITIONAL_NAMES[@]}"; do
-    name_upper="$(echo $name | tr '/a-z/' '/A-Z/' | tr '-' '_')"
-    eval "$(printf "ARG_$name_upper=${POSITIONAL[$i]}")"
+    arg_i="${POSITIONAL[$i]}"
+    test -z "$arg_i" && continue
+    name_upper="$(echo $name | tr '/a-z-/' '/A-Z_/')"
+    eval "$(printf "ARG_$name_upper='$arg_i'")"
     i=$(($i+1))
   done
 
@@ -205,7 +288,8 @@ parse_args2() {
 }
 
 print_help() {
-  printf "usage:  `basename $MAIN_FILE` "
+  bprint "usage:"
+  printf "  `basename $MAIN_FILE` "
   for p_name in "${POSITIONAL_NAMES[@]}"; do
     printf "[$p_name] "
   done
@@ -218,12 +302,18 @@ print_help() {
     printf "[-$opt_flag $opt_name] "
     i=$(($i+1))
   done
+  i=0
+  for opt_name in "${ARRAY_NAMES[@]}"; do
+    opt_flag="${ARRAY_FLAGS[$i]}"
+    printf "[-$opt_flag $opt_name -$opt_flag ...] "
+    i=$(($i+1))
+  done
   printf "\n\n$HELP_DESCRIPTION\n\n"
   if test -n "${POSITIONAL_NAMES}"; then
     printf "positional arguments:\n"
     i=0
     for p_name in "${POSITIONAL_NAMES[@]}"; do
-      p_disp="$(clr 3 "$p_name")"
+      p_disp="$(cprint 3 "$p_name")"
       j=0
       printf "${POSITIONAL_DESCRIPTIONS[$i]}\n" | while read line; do
         if test $j -eq 0; then
@@ -236,15 +326,15 @@ print_help() {
       i=$(($i+1))
     done
   fi
-  if test -n "${OPTIONAL_NAMES}" -o -n "${BOOLEAN_NAMES}"; then
+  if test -n "${OPTIONAL_NAMES}" -o -n "${BOOLEAN_NAMES}" -o -n "${ARRAY_NAMES}"; then
     test -n "${POSITIONAL_NAMES}" && printf "\n"
     printf "optional arguments:\n"
     i=0
-    for bool_name in "${BOOLEAN_NAMES[@]}"; do
-      flag_disp="$(clr 3 "-${BOOLEAN_FLAGS[$i]}")"
-      name_disp="$(clr 3 "--$bool_name")"
+    for opt_name in "${ARRAY_NAMES[@]}"; do
+      flag_disp="$(cprint 3 "-${ARRAY_FLAGS[$i]}")"
+      name_disp="$(cprint 3 "--$opt_name")"
       j=0
-      printf "${BOOLEAN_DESCRIPTIONS[$i]}\n" | while read line; do
+      printf "${ARRAY_DESCRIPTIONS[$i]}\n" | while read line; do
         if test $j -eq 0; then
           printf "  %-50s ${line}\n" "$flag_disp, $name_disp"
         else
@@ -256,10 +346,25 @@ print_help() {
     done
     i=0
     for opt_name in "${OPTIONAL_NAMES[@]}"; do
-      flag_disp="$(clr 3 "-${OPTIONAL_FLAGS[$i]}")"
-      name_disp="$(clr 3 "--$opt_name")"
+      flag_disp="$(cprint 3 "-${OPTIONAL_FLAGS[$i]}")"
+      name_disp="$(cprint 3 "--$opt_name")"
       j=0
       printf "${OPTIONAL_DESCRIPTIONS[$i]}\n" | while read line; do
+        if test $j -eq 0; then
+          printf "  %-50s ${line}\n" "$flag_disp, $name_disp"
+        else
+          printf "  %-24s ${line}\n"
+        fi
+        j=$(($j+1))
+      done
+      i=$(($i+1))
+    done
+    i=0
+    for bool_name in "${BOOLEAN_NAMES[@]}"; do
+      flag_disp="$(cprint 3 "-${BOOLEAN_FLAGS[$i]}")"
+      name_disp="$(cprint 3 "--$bool_name")"
+      j=0
+      printf "${BOOLEAN_DESCRIPTIONS[$i]}\n" | while read line; do
         if test $j -eq 0; then
           printf "  %-50s ${line}\n" "$flag_disp, $name_disp"
         else

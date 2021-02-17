@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if $(uname) != 'Darwin'; then
+  echo 'Can only run on MacOS.'
+  exit 1
+fi
+
+sips -f format png "$1" --out "${1}.png"

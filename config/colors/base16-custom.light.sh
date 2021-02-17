@@ -29,28 +29,29 @@ color18="28/28/28" # Base 01
 color19="38/38/38" # Base 02
 color20="b8/b8/b8" # Base 04
 color21="e8/e8/e8" # Base 06
-color_foreground="38/38/38" # Base 02
+color_foreground="f2/f2/f2" # Base 02
 color_background="f8/f8/f8" # Base 07
 color_cursor="38/38/38" # Base 02
+esc="\033"
 
 if [ -n "$TMUX" ]; then
   # tell tmux to pass the escape sequences through
   # (Source: http://permalink.gmane.org/gmane.comp.terminal-emulators.tmux.user/1324)
-  printf_template="\033Ptmux;\033\033]4;%d;rgb:%s\007\033\\"
-  printf_template_var="\033Ptmux;\033\033]%d;rgb:%s\007\033\\"
-  printf_template_custom="\033Ptmux;\033\033]%s%s\007\033\\"
+  printf_template="${esc}Ptmux;${esc}${esc}]4;%d;rgb:%s\007${esc}\\"
+  printf_template_var="${esc}Ptmux;${esc}${esc}]%d;rgb:%s\007${esc}\\"
+  printf_template_custom="${esc}Ptmux;${esc}${esc}]%s%s\007${esc}\\"
 elif [ "${TERM%%-*}" = "screen" ]; then
   # GNU screen (screen, screen-256color, screen-256color-bce)
-  printf_template="\033P\033]4;%d;rgb:%s\007\033\\"
-  printf_template_var="\033P\033]%d;rgb:%s\007\033\\"
-  printf_template_custom="\033P\033]%s%s\007\033\\"
+  printf_template="${esc}P${esc}]4;%d;rgb:%s\007${esc}\\"
+  printf_template_var="${esc}P${esc}]%d;rgb:%s\007${esc}\\"
+  printf_template_custom="${esc}P${esc}]%s%s\007${esc}\\"
 elif [[ $- != *i* ]]; then
   # non-interactive
   alias printf=/bin/false
 else
-  printf_template="\033]4;%d;rgb:%s\033\\"
-  printf_template_var="\033]%d;rgb:%s\033\\"
-  printf_template_custom="\033]%s%s\033\\"
+  printf_template="${esc}]4;%d;rgb:%s${esc}\\"
+  printf_template_var="${esc}]%d;rgb:%s${esc}\\"
+  printf_template_custom="${esc}]%s%s${esc}\\"
 fi
 
 # 16 color space
@@ -82,14 +83,14 @@ printf $printf_template 21 $color21
 # foreground / background / cursor color
 if [ -n "$ITERM_SESSION_ID" ]; then
   # iTerm2 proprietary escape codes
-  whitecol="002b36"
-  printf $printf_template_custom Pg f2f2f2 # forground
-  printf $printf_template_custom Ph $whitecol # background
-  printf $printf_template_custom Pi f2f2f2 # bold color
-  printf $printf_template_custom Pj d8d8d8 # selection color
-  printf $printf_template_custom Pk f2f2f2 # selected text color
-  printf $printf_template_custom Pl f2f2f2 # cursor
-  printf $printf_template_custom Pm f8f8f8 # cursor text
+  whitecol="001c26"
+  printf $printf_template_custom Pg ${color_foreground//\/} # forground
+  printf $printf_template_custom Ph $whitecol               # background
+  printf $printf_template_custom Pi ${color_foreground//\/} # bold color
+  printf $printf_template_custom Pj ${color19//\/}          # selection color
+  printf $printf_template_custom Pk ${color_foreground//\/} # selected text color
+  printf $printf_template_custom Pl ${color_foreground//\/} # cursor
+  printf $printf_template_custom Pm ${color_background//\/} # cursor text
 else
   printf $printf_template_var 10 $color_foreground
   printf $printf_template_var 11 $color_background

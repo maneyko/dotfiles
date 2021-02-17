@@ -140,14 +140,7 @@ if !minimal_vimrc
   Plug 'vim-scripts/nginx.vim'       " nginx
   Plug 'digitaltoad/vim-pug'
   Plug 'gisphm/vim-gitignore'        " .gitignore files
-  if has('nvim')
-    Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
-      let g:semshi#error_sign = 0
-      let g:semshi#mark_selected_nodes = 0
-      let g:semshi#excluded_hl_groups = ['local', 'unresolved']
-  else
-    Plug 'vim-python/python-syntax'
-  endif
+  Plug 'vim-python/python-syntax'
 
   Plug 'tpope/vim-markdown'
     let g:markdown_fenced_languages = ['bash=sh', 'html', 'python', 'ruby', 'sql', 'yaml']
@@ -371,6 +364,8 @@ inoremap jk               <Esc>
 
 vnoremap .                :normal! .<CR>
 vnoremap &                :normal! &<CR>
+vnoremap \y               "ly
+vnoremap \p               "lp
 
 map <ScrollWheelUp>       <C-y>
 map <ScrollWheelDown>     <C-e>

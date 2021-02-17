@@ -281,7 +281,7 @@ fi
 # First TTY Greeting
 # ------------------
 if test -n "$INTERACTIVE" -a $(uname) = 'Darwin'; then
-  if test -n "$(tty | grep '0[1-4]$')" \
+  if test -n "$(tty | grep '0[1-2]$')" \
           -a -n "$(command -v neofetch)" \
           -a $COLUMNS -ge 70 \
           -a $LINES   -ge 20; then

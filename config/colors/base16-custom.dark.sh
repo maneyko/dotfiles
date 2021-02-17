@@ -42,16 +42,16 @@ if [ -n "$TMUX" ]; then
   printf_template_custom="${esc}Ptmux;${esc}${esc}]%s%s\007${esc}\\"
 elif [ "${TERM%%-*}" = "screen" ]; then
   # GNU screen (screen, screen-256color, screen-256color-bce)
-  printf_template=          "${esc}P${esc}]4;%d;rgb:%s\007${esc}\\"
-  printf_template_var=      "${esc}P${esc}]%d;rgb:%s\007${esc}\\"
-  printf_template_custom=   "${esc}P${esc}]%s%s\007${esc}\\"
+  printf_template="${esc}P${esc}]4;%d;rgb:%s\007${esc}\\"
+  printf_template_var="${esc}P${esc}]%d;rgb:%s\007${esc}\\"
+  printf_template_custom="${esc}P${esc}]%s%s\007${esc}\\"
 elif [[ $- != *i* ]]; then
   # non-interactive
   alias printf=/bin/false
 else
-  printf_template=          "${esc}]4;%d;rgb:%s${esc}\\"
-  printf_template_var=      "${esc}]%d;rgb:%s${esc}\\"
-  printf_template_custom=   "${esc}]%s%s${esc}\\"
+  printf_template="${esc}]4;%d;rgb:%s${esc}\\"
+  printf_template_var="${esc}]%d;rgb:%s${esc}\\"
+  printf_template_custom="${esc}]%s%s${esc}\\"
 fi
 
 # 16 color space

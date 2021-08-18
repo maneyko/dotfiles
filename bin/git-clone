@@ -1,3 +1,22 @@
 #!/bin/bash
 
-git clone https://github.com/$@
+source "argparse.sh"
+
+arg_positional "[repo-path]     [The Git repo to clone.]"
+arg_boolean    "[web]       [w] [Use HTTP protocol.]"
+arg_help                       "[Clone a repo from Github]"
+parse_args
+
+args_after_first=${POSITIONAL[@]:1}
+
+if [[ $arg1 != *github.com* ]]; then
+  if [[ -n $ARG_WEB ]]; then
+    remote_url="https://github.com/$ARG_REPO_PATH"
+  else
+    remote_url="git@github.com:$ARG_REPO_PATH"
+  fi
+fi
+
+echo "Using URL: $remote_url"
+
+git clone ${remote_url%/} $args_after_first

@@ -139,11 +139,17 @@ if !minimal_vimrc
   Plug 'phreax/vim-coffee-script'
   Plug 'vim-scripts/nginx.vim'       " nginx
   Plug 'digitaltoad/vim-pug'
+  Plug 'jbmorgado/vim-pine-script'
   Plug 'gisphm/vim-gitignore'        " .gitignore files
-  Plug 'vim-python/python-syntax'
+  " Plug 'vim-python/python-syntax'
+
+  Plug 'yuezk/vim-js'
+  Plug 'maxmellon/vim-jsx-pretty'
+
+  Plug 'tomlion/vim-solidity'
 
   Plug 'tpope/vim-markdown'
-    let g:markdown_fenced_languages = ['bash=sh', 'html', 'python', 'ruby', 'sql', 'yaml']
+    let g:markdown_fenced_languages = ['bash=sh', 'html', 'python', 'ruby', 'sql', 'yaml', 'perl', 'diff']
     let g:markdown_syntax_conceal = 0
 
   Plug 'tpope/vim-projectionist'
@@ -430,7 +436,9 @@ au BufRead,BufNewFile
       \/etc/nginx/*,
       \*nginx.conf
       \ setlocal ft=nginx
-au BufRead */etc/aliases
+au BufRead
+      \ */etc/aliases/,
+      \*.env*
       \ setlocal ft=sh
 
 " au VimEnter *.rb,Rakefile NERDTree | wincmd w
@@ -446,7 +454,7 @@ au FileType coffee,css,scss,html,javascript,
       \ setlocal ts=2 sw=2 sts=2
 au FileType sql
       \ setlocal ts=4 sw=4 sts=4
-au FileType c,cpp,php
+au FileType c,cpp,php,psl
       \ setlocal commentstring=//\ %s
 " au FileType help
 "       \ silent! call ReadMode(1)

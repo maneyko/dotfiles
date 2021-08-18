@@ -5,9 +5,9 @@
 # Shell Defaults
 # ---------------------------------------------------------------------
 
-test -n "$BASHRC_LOADED" && return
+[[ -n $BASHRC_LOADED ]] && return
 
-test -r /etc/bashrc && {
+[[ -r /etc/bashrc ]] && {
   source /etc/bashrc
 }
 
@@ -25,7 +25,7 @@ shopt -s no_empty_cmd_completion >/dev/null 2>&1
 
 umask 0002
 
-test -s "$HOME/.bashrc.local.preload" && {
+[[ -s $HOME/.bashrc.local.preload ]] && {
   source "$HOME/.bashrc.local.preload"
 }
 
@@ -81,7 +81,7 @@ esac
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
 # Reclaim <C-q>, <C-s>, and <C-z>
-test "$INTERACTIVE" && {
+[[ -n $INTERACTIVE ]] && {
   controls=(start stop susp)
   for control in ${controls[@]}; do
     stty $control 'undef'
@@ -91,7 +91,7 @@ test "$INTERACTIVE" && {
 # My module
 export PYTHONPATH="$HOME/.dotfiles/ipython/maneyko:$PYTHONPATH"
 
-# test -f "$HOME/.pythonrc.py" && {
+# [[ -f $HOME/.pythonrc.py ]] && {
 #   PYTHONSTARTUP="$HOME/.pythonrc.py"
 # }
 
@@ -105,7 +105,7 @@ completion_sources=(
 )
 
 for f in ${completion_sources[@]}; do
-  if test -f "$f"; then
+  if [[ -f $f ]]; then
     : ${bash_completion:="$f"}
     source "$bash_completion"
     break
@@ -123,14 +123,26 @@ _expand() {
 # ---------------------------------------------------------------------
 
 TERM_COLORS="$HOME/.config/colors/base16-custom.dark.sh"
-test "$TMUX" -a -f "$TERM_COLORS" -a $(uname) = 'Darwin' && {
+[[ $TMUX && -f $TERM_COLORS && $(uname) == Darwin ]] && {
   source "$TERM_COLORS"
 }
 
-clr() {  # (number, text)
+# Color print.
+#
+# @param number [Integer]
+# @param text   [String]
+cprint() {
   printf "\033[38;5;${1}m${2}\033[0m"
 }
-export -f clr
+export -f cprint
+
+# Bold print.
+#
+# @param text [String]
+bprint() {
+  printf "\033[1m$1\033[0m"
+}
+export -f bprint
 
 clr24() {  # ("r;g;b", text)
   printf "\033[38;2;${1}m${2}\033[0m"
@@ -144,18 +156,22 @@ pclr() {  # (number, text)
 export PS1_NO_GIT=0
 
 branch_colon() {
-  test $PS1_NO_GIT -eq 1 && return
+  [[ $PS1_NO_GIT -eq 1 ]] && return
   git branch >/dev/null 2>&1 && echo ':'
 }
 export -f branch_colon
 
 parse_git_branch() {
-  test $PS1_NO_GIT -eq 1 && return
+  [[ $PS1_NO_GIT -eq 1 ]] && return
   t1="$(git branch 2>/dev/null)"
   t2="${t1##*\* }"
   printf "${t2%%$'\n'*}"
 }
 export -f parse_git_branch
+
+date_command() {
+  date +'%A %B %d, %Y @ %I:%M:%S %p'
+}
 
 nodename="$(uname -n)"
 border_color=241
@@ -164,13 +180,17 @@ pwd_color=228
 : ${user_color:=196}
 : ${host_color:=147}
 
-test "$(whoami)" = 'root' && {
+[[ $(whoami) == root ]] && {
   user_color=220  # Yellow
 }
 
+# \n\
+# `pclr $border_color  '\$(date_command)' `\
+# \n\
 LONG_PS1="\
 `pclr $border_color  '┌─['                  `\
 `pclr $user_color    "$(whoami)"            `\
+`pclr $border_color  ':'                    `\
 `pclr 250            '@'                    `\
 `pclr $host_color    "$host_text"           `\
 `pclr $border_color  ':'                    `\
@@ -207,7 +227,7 @@ export PS1="$LONG_PS1"
 
 # Find and evaluate `dircolors` if exists
 _dircolors="$(type -P gdircolors dircolors | head -1)"
-test "$_dircolors" -a -f $HOME/.dotfiles/bash/dircolors && {
+[[ -n $_dircolors && -f $HOME/.dotfiles/bash/dircolors ]] && {
   eval "$($_dircolors -b $HOME/.dotfiles/bash/dircolors)"
 }
 
@@ -225,7 +245,7 @@ _ls="$(type -P gls ls | head -1)"
 if $_ls --color / >/dev/null 2>&1; then
   GNU_LS=true
 fi
-if test "$GNU_LS"; then
+if [[ -n $GNU_LS ]]; then
   alias ls="$_ls --color=auto --group-directories-first --time-style +'%b %d %I:%M %p'"
 else
   export CLICOLOR=1
@@ -236,7 +256,7 @@ alias l='ls -hl'
 alias ll='l'
 alias la='ls -A'
 alias lla='ls -Ahl'
-if test "$GNU_LS"; then
+if [[ -n $GNU_LS ]]; then
   alias ll="l --time-style +'%b %d %Y %I:%M %p'"
   alias lsld="ll -AI'*'"
   alias lsd="ls -AI'*'"
@@ -266,12 +286,12 @@ done
 alias whois='whois -h whois.arin.net'
 
 # Platform specific
-if test $(uname) = 'Darwin'; then
+if [[ $(uname) == Darwin ]]; then
   alias top='top -u'
   alias mcopy='pbcopy'
   alias mpaste='pbpaste'
 else
-  if test -n "$(command -v xclip)"; then
+  if [[ -n $(command -v xclip) ]]; then
     alias mcopy='xclip -selection c'
     alias mpaste='xclip -o'
   fi
@@ -280,11 +300,13 @@ fi
 
 # First TTY Greeting
 # ------------------
-if test -n "$INTERACTIVE" -a $(uname) = 'Darwin'; then
-  if test -n "$(tty | grep '0[1-2]$')" \
-          -a -n "$(command -v neofetch)" \
-          -a $COLUMNS -ge 70 \
-          -a $LINES   -ge 20; then
+if [[ -n $INTERACTIVE && $(uname) == Darwin ]]; then
+  if [[
+    -n $(tty | grep '0[1-2]$') &&
+    -n $(command -v neofetch) &&
+    $COLUMNS -ge 70 &&
+    $LINES   -ge 20
+  ]]; then
     neofetch
   fi
 fi
@@ -295,7 +317,7 @@ fi
 # ---------------------------------------------------------------------
 
 # Necessary environment variable for ~/.tmux.conf
-if test -n "$(command -v tmux)"; then
+if [[ -n $(command -v tmux) ]]; then
   export TMUX_VERSION=$(tmux -V \
     | perl -ne 'printf("%d.%02d",$1,$2) if /([\d]+)\.([\d]+)/')
 fi
@@ -306,31 +328,33 @@ $HOME/.rvm/scripts/rvm
 )
 
 for f in ${rvms[@]}; do
-  if test -s "$f"; then
+  if [[ -s $f ]]; then
     source "$f"  # Load RVM into a shell session *as a function*
     break
   fi
 done
 
 # Helps initialize RVM in new terminal
-test $(uname) = 'Darwin' && {
+[[ $(uname) == Darwin ]] && {
   cd ..
   cd - >/dev/null
 }
 
-if test -n "$(command -v pyenv)"; then
-  eval "$(pyenv init -)"
+# NOTE: Comment out if not using pyenv
+if [[ -n $(command -v pyenv) ]]; then
+  export PYENV_ROOT="$HOME/.pyenv"
+  export PATH="$PYENV_ROOT/bin:$PATH"
+  eval "$(pyenv init --path)"
 fi
 
 NVM_DIR="/usr/local/opt/nvm"
 
-test -s "$NVM_DIR/nvm.sh" && {
+[[ -s $NVM_DIR/nvm.sh ]] && {
   \. "$NVM_DIR/nvm.sh"  # This loads nvm
 }
 
-test -f $HOME/.bashrc.local && {
+[[ -f $HOME/.bashrc.local ]] && {
   source $HOME/.bashrc.local
 }
-
 
 BASHRC_LOADED=1

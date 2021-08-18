@@ -1,0 +1,17 @@
+#!/bin/bash
+
+source "argparse.sh"
+
+arg_boolean "[repair] [r] [Repair the files that do not end with a newline.]"
+arg_help    '[Find files that do not end with a newline.]'
+
+parse_args
+
+if [[ -n $ARG_REPAIR ]]; then
+  "$0" \
+    | xargs -I{} sh -c "echo 'Fixing: {}'; echo >> '{}'"
+else
+  find * -type f -print0 \
+    | perl -0 -ne 'chomp; $lastchar=`tail -c1 "$_"`; print "$_\n" if $lastchar ne "\n" && $_ !~ /keep$/'
+fi
+

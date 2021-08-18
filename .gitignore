@@ -2,10 +2,12 @@
 *.sqlite
 
 __pycache__/
+*.pyc
 _backups/
 
 config/coc/
 config/hub
+config/iterm2
 config/jgit/
 config/neofetch/
 config/nvim/plugged/

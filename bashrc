@@ -6,6 +6,7 @@
 # ---------------------------------------------------------------------
 
 [[ -n $BASHRC_LOADED ]] && return
+BASHRC_LOADED=1
 
 [[ -r /etc/bashrc ]] && {
   source /etc/bashrc
@@ -60,7 +61,7 @@ $HOME/local/share/man:\
 
 export UNAME_N="${UNAME_N:="$(uname -n)"}"
 export UNAME_S="${UNAME_S:="$(uname -s)"}"
-# export TTY="${TTY:="$(tty)"}"
+export TTY="${TTY:="$(tty)"}"
 
 
 _vim="$(type -P nvim vim vi | head -1)"
@@ -365,5 +366,3 @@ fi
 [[ -f $HOME/.bashrc.local ]] && {
   source $HOME/.bashrc.local
 }
-
-BASHRC_LOADED=1

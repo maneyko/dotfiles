@@ -13,6 +13,8 @@ bin
 config
 ipython
 vim
+psqlrc
+psqlrc.d
 )
 
 read -r -d '' helptext << EOT

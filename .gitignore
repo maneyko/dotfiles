@@ -1,6 +1,8 @@
 *.*.swp
 *.sqlite
 
+*.local
+
 __pycache__/
 *.pyc
 _backups/

@@ -1,0 +1,23 @@
+#!/bin/bash
+
+source "argparse.sh"
+
+arg_help       "[Track a PID in Rails logs using a perl regular expression.]"
+arg_optional   "[pattern] [p] [Perl regex pattern to start tracking.]"
+arg_positional "[file]        [File to parse.]"
+parse_args
+
+for f in ${POSITIONAL[@]}; do
+  $__DIR__/zzcat "$f" | perl -ne "
+  my %pids = ();
+  if ($ARG_PATTERN) {
+      \$pid = /^I,.*?(#\d+)\]/ && \$1;
+      \$pids[\"\$pid\"] = 1;
+  };
+  if ((\$pid = /^.*?(#\d+)\]/ && \$1) && \$pids[\"\$pid\"] eq 1) {
+      print;
+      if (/INFO -- : Completed/) {
+          delete(\$pids[\"\$pid\"]);
+      };
+  };"
+done

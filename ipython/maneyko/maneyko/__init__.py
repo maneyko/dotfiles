@@ -33,6 +33,11 @@ def sh(cmd):
     out, err = proc.communicate()
     return out.decode('utf-8').strip()
 
+def cls():
+    """Clear command output history and clear screen."""
+    print("\033c")
+    print("\033[3J")
+
 @contextlib.contextmanager
 def suppress_stdout():
     """Suppress stdout when exeuting command.

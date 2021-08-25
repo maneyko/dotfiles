@@ -1,0 +1,18 @@
+#!/bin/bash
+
+source "argparse.sh"
+
+arg_help       "[Run command with environment variables from files.]"
+arg_array      "[file] [f] [Load environment variables from file(s).]"
+arg_positional "[command]  [The command to execute.]"
+parse_args
+
+# https://github.com/bashup/dotenv
+
+set -o allexport
+for f in ${ARG_FILE[@]}; do
+  source "$f"
+done
+set +o allexport
+
+eval "${POSITIONAL[@]}"

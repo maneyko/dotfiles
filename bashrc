@@ -58,6 +58,10 @@ $HOME/local/share/man:\
 /usr/share/man\
 "
 
+export UNAME_N="${UNAME_N:="$(uname -n)"}"
+export UNAME_S="${UNAME_S:="$(uname -s)"}"
+# export TTY="${TTY:="$(tty)"}"
+
 
 _vim="$(type -P nvim vim vi | head -1)"
 export EDITOR="$_vim"
@@ -65,7 +69,7 @@ alias vi="$_vim"
 alias vim="$_vim"
 
 export GREP_COLOR='1;31'
-export LESS='-RX'
+export LESS='-RX -j5'
 export PAGER='less'
 
 export TZ='America/Chicago'
@@ -107,6 +111,7 @@ completion_sources=(
 for f in ${completion_sources[@]}; do
   if [[ -f $f ]]; then
     : ${bash_completion:="$f"}
+    # NOTE: This takes ~0.3 seconds
     source "$bash_completion"
     break
   fi
@@ -123,9 +128,17 @@ _expand() {
 # ---------------------------------------------------------------------
 
 TERM_COLORS="$HOME/.config/colors/base16-custom.dark.sh"
-[[ $TMUX && -f $TERM_COLORS && $(uname) == Darwin ]] && {
+[[ $TMUX && -s $TERM_COLORS && $UNAME_S == Darwin ]] && {
   source "$TERM_COLORS"
 }
+
+# Bold print.
+#
+# @param text [String]
+bprint() {
+  printf "\033[1m$1\033[0m"
+}
+export -f bprint
 
 # Color print.
 #
@@ -135,14 +148,6 @@ cprint() {
   printf "\033[38;5;${1}m${2}\033[0m"
 }
 export -f cprint
-
-# Bold print.
-#
-# @param text [String]
-bprint() {
-  printf "\033[1m$1\033[0m"
-}
-export -f bprint
 
 clr24() {  # ("r;g;b", text)
   printf "\033[38;2;${1}m${2}\033[0m"
@@ -173,14 +178,13 @@ date_command() {
   date +'%A %B %d, %Y @ %I:%M:%S %p'
 }
 
-nodename="$(uname -n)"
 border_color=241
 pwd_color=228
-: ${host_text:="$nodename"}
+: ${host_text:="$UNAME_N"}
 : ${user_color:=196}
 : ${host_color:=147}
 
-[[ $(whoami) == root ]] && {
+[[ $USER == root ]] && {
   user_color=220  # Yellow
 }
 
@@ -189,7 +193,7 @@ pwd_color=228
 # \n\
 LONG_PS1="\
 `pclr $border_color  '┌─['                  `\
-`pclr $user_color    "$(whoami)"            `\
+`pclr $user_color    "$USER"                `\
 `pclr $border_color  ':'                    `\
 `pclr 250            '@'                    `\
 `pclr $host_color    "$host_text"           `\
@@ -206,7 +210,7 @@ LONG_PS1="\
 
 SHORT_PS1="\
 `pclr $border_color  '┌─['         `\
-`pclr $user_color    "$(whoami)"   `\
+`pclr $user_color    "$USER"       `\
 `pclr 250            '@'           `\
 `pclr $host_color    "$host_text"  `\
 `pclr $border_color  ':'           `\
@@ -242,7 +246,7 @@ alias ag='ag --color-match "0;35"'
 alias mv='mv -i'
 
 _ls="$(type -P gls ls | head -1)"
-if $_ls --color / >/dev/null 2>&1; then
+if { $_ls --version | \grep GNU ; } >/dev/null 2>&1; then
   GNU_LS=true
 fi
 if [[ -n $GNU_LS ]]; then
@@ -286,7 +290,7 @@ done
 alias whois='whois -h whois.arin.net'
 
 # Platform specific
-if [[ $(uname) == Darwin ]]; then
+if [[ $UNAME_S == Darwin ]]; then
   alias top='top -u'
   alias mcopy='pbcopy'
   alias mpaste='pbpaste'
@@ -300,9 +304,9 @@ fi
 
 # First TTY Greeting
 # ------------------
-if [[ -n $INTERACTIVE && $(uname) == Darwin ]]; then
+if [[ -n $INTERACTIVE && $UNAME_S == Darwin ]]; then
   if [[
-    -n $(tty | grep '0[1-2]$') &&
+    $TTY =~ .*0[1-2]$ &&
     -n $(command -v neofetch) &&
     $COLUMNS -ge 70 &&
     $LINES   -ge 20
@@ -329,29 +333,34 @@ $HOME/.rvm/scripts/rvm
 
 for f in ${rvms[@]}; do
   if [[ -s $f ]]; then
+    # This takes ~0.15 seconds
     source "$f"  # Load RVM into a shell session *as a function*
     break
   fi
 done
 
 # Helps initialize RVM in new terminal
-[[ $(uname) == Darwin ]] && {
-  cd ..
-  cd - >/dev/null
-}
+if [[ $UNAME_S == Darwin ]]; then
+  _origin_pwd="$PWD"
+  cd ../
+  cd "$_origin_pwd"
+fi
 
-# NOTE: Comment out if not using pyenv
-if [[ -n $(command -v pyenv) ]]; then
+if [[ -n "$(command -v pyenv)" ]]; then
   export PYENV_ROOT="$HOME/.pyenv"
   export PATH="$PYENV_ROOT/bin:$PATH"
+  # NOTE: This takes ~0.05 seconds
   eval "$(pyenv init --path)"
 fi
 
 NVM_DIR="/usr/local/opt/nvm"
 
-[[ -s $NVM_DIR/nvm.sh ]] && {
-  \. "$NVM_DIR/nvm.sh"  # This loads nvm
-}
+if [[ -n $USING_NVM ]]; then
+  [[ -s $NVM_DIR/nvm.sh ]] && {
+    # NOTE: This takes ~0.5 seconds
+    \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  }
+fi
 
 [[ -f $HOME/.bashrc.local ]] && {
   source $HOME/.bashrc.local

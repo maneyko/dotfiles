@@ -241,6 +241,7 @@ fun! ReadMode(readmode_togg)
     silent! nnoremap <buffer> r :call ReadMode(0)<CR>
     silent! nnoremap <buffer> q :q<CR>
     silent! nnoremap <buffer> x :q!<CR>
+    silent! nnoremap <buffer> g gg
     silent! nnoremap <buffer> j <C-e>L0:file<CR>
     silent! nnoremap <buffer> k <C-y>L0:file<CR>
     silent! nnoremap <buffer> d <C-d>L0:file<CR>
@@ -259,6 +260,7 @@ fun! ReadMode(readmode_togg)
     silent! nunmap <buffer> r
     silent! nunmap <buffer> q
     silent! nunmap <buffer> x
+    silent! nunmap <buffer> g
     silent! nunmap <buffer> j
     silent! nunmap <buffer> k
     silent! nunmap <buffer> u

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if ! command -v zcat >/dev/null 2>&1; then
+  echo "ERROR: Cannot find 'zcat' executable."
+  exit 1
+fi
+
+for f in "$@"; do
+  # if [[ $f =~ .*\..*z([:alnum:]+)? ]]; then
+  cat "$f" | zcat 2>/dev/null || cat "$f"
+  # else
+  #   cat "$f"
+  # fi
+done

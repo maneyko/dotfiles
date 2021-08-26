@@ -1,17 +1,33 @@
 #!/bin/bash
 
-source "argparse.sh"
+source 'argparse.sh'
 
-arg_boolean "[repair] [r] [Repair the files that do not end with a newline.]"
-arg_help    '[Find files that do not end with a newline.]'
+ARG_IGNORE_PATTERN="1 eq 1"
+
+arg_boolean  '[repair]         [r] [Repair the files that do not end with a newline.]'
+arg_optional '[ignore-pattern] [p] [Ignore file names matching this Perl regular expression.]'
+arg_help     '[Find files that do not end with a newline.]'
 
 parse_args
 
+read -r -d '' perl_script << 'EOT'
+chomp;
+$lastchar=`tail -c1 "$_"`;
+if (
+  ($lastchar ne "\n") &&
+  (! /\b(git)?keep$/) &&
+  (<ARG_IGNORE_PATTERN>)
+) {
+  print "$_\n";
+};
+EOT
+
+perl_script="${perl_script//<ARG_IGNORE_PATTERN\>/$ARG_IGNORE_PATTERN}"
+
 if [[ -n $ARG_REPAIR ]]; then
-  "$0" \
+  "$0" --ignore-pattern="$ARG_IGNORE_PATTERN" \
     | xargs -I{} sh -c "echo 'Fixing: {}'; echo >> '{}'"
 else
-  find * -type f -print0 \
-    | perl -0 -ne 'chomp; $lastchar=`tail -c1 "$_"`; print "$_\n" if $lastchar ne "\n" && $_ !~ /keep$/'
+  find * -type f -print0 | perl -n0e "$perl_script"
 fi
 

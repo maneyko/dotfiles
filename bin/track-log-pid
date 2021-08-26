@@ -2,22 +2,61 @@
 
 source "argparse.sh"
 
-arg_help       "[Track a PID in Rails logs using a perl regular expression.]"
+read -r -d '' helptxt << EOT
+Track a PID in Rails logs using a perl regular expression.
+Let's say you want to track all logs for requests that go to the path '/96db175ae031f1c07899889a5ed233cf',
+in the below example this corresponds to PID 1259963. A leading 'x' denotes that the line will be printed.
+
+ x  I, [2021-08-25T00:08:02.564148 #1259963]  INFO -- : [49431ea9-ed46-466c-9884-19ff251ef85f] Started GET "/96db175ae031f1c07899889a5ed233cf" for 127.0.0.1 at 2021-08-25 00:08:02 -0500
+ x  I, [2021-08-25T00:08:02.565107 #1259963]  INFO -- : [49431ea9-ed46-466c-9884-19ff251ef85f] Processing by ApplicationController#special_path as */*
+ o  I, [2021-08-25T00:06:02.215456 #1259965]  INFO -- : [f1cf1c9f-4869-4b9c-a76c-0596e3d14d41] Started GET "/dcfaa9cd5a45437b889f903d8d8e8a8f" for 127.0.0.1 at 2021-08-25 00:06:02 -0500
+ x  I, [2021-08-25T00:08:04.796952 #1259963]  INFO -- : [49431ea9-ed46-466c-9884-19ff251ef85f] Completed 200 OK in 2232ms (Views: 0.3ms | ActiveRecord: 2.4ms)
+
+This script may be run against compressed files and may receive input from STDIN.
+Example:
+    tail -f log/production.log | track-log-pid -p 'm{GET "/96db175ae031f1c07899889a5ed233cf}'
+EOT
+
 arg_optional   "[pattern] [p] [Perl regex pattern to start tracking.]"
+arg_boolean    "[follow]  [f] [Follow the log.]"
 arg_positional "[file]        [File to parse.]"
+arg_help "[\n$helptxt]"
 parse_args
 
-for f in ${POSITIONAL[@]}; do
-  $__DIR__/zzcat "$f" | perl -ne "
+read -r -d '' perl_script << 'EOT'
+  use Time::Local;
   my %pids = ();
-  if ($ARG_PATTERN) {
-      \$pid = /^I,.*?(#\d+)\]/ && \$1;
-      \$pids[\"\$pid\"] = 1;
+  $pat = q/I,\s+\[(?<timestamp>\d+-\d+-\d+T\d+:\d+:\d+).*?#(?<pid>\d+)\]\s+INFO/;
+  /$pat/;
+  $pid = $+{pid}, $timestamp = $+{timestamp};
+  if (<ARG_PATTERN>) {
+    my ($year, $mon, $mday, $hour, $min, $sec) = split(/[-:T]+/, $timestamp);
+    $ts = timelocal($sec, $min, $hour, $mday, $mon - 1, $year);
+    $pids["$pid"] = $ts;
   };
-  if ((\$pid = /^.*?(#\d+)\]/ && \$1) && \$pids[\"\$pid\"] eq 1) {
-      print;
-      if (/INFO -- : Completed/) {
-          delete(\$pids[\"\$pid\"]);
-      };
-  };"
-done
+  if ($t0 = $pids["$pid"]) {
+    print;
+    if (/${pat}.*?Completed.*?in\s+\d+ms/) {
+      delete($pids["$pid"]);
+    };
+    my ($year, $mon, $mday, $hour, $min, $sec) = split(/[-:T]+/, $timestamp);
+    $t1 = timelocal($sec, $min, $hour, $mday, $mon - 1, $year);
+    if ($t1 > ($t0 + 90)) {
+      delete($pids["$pid"]);
+    };
+  };
+EOT
+
+
+perl_script="${perl_script//<ARG_PATTERN\>/$ARG_PATTERN}"
+
+if [[ ${#POSITIONAL[@]} -eq 0 ]]; then
+  cat | perl -ne "$perl_script"
+elif [[ ${#POSITIONAL[@]} -eq 1 && -n $ARG_FOLLOW ]]; then
+  cat "${POSITIONAL[@]}" | perl -ne "$perl_script"
+  tail -f -n0 "${POSITIONAL[@]}" | perl -ne "$perl_script"
+else
+  for f in ${POSITIONAL[@]}; do
+    $__DIR__/zzcat "$f" | perl -ne "$perl_script"
+  done
+fi

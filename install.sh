@@ -15,6 +15,7 @@ ipython
 vim
 psqlrc
 psqlrc.d
+irbrc
 )
 
 read -r -d '' helptext << EOT

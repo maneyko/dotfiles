@@ -23,6 +23,12 @@ rescue LoadError => error
   error
 end
 
+puts <<-EOT
+#{RUBY_DESCRIPTION}
+
+EOT
+
+require "etc"
 require "fileutils"
 require "pp"
 try_require "awesome_print"
@@ -36,8 +42,10 @@ try_require("hirb") do
   Hirb.enable
 end
 
-UNAME = %x{uname}.chomp.freeze
-HOME  = Dir.home.freeze
+HOME = Dir.home.freeze
+USER = Etc.getlogin.freeze
+
+UNAME = %x{uname -a}.chomp.freeze
 
 if defined?(Rails)
   if Rails.env.development? || Rails.env.test?
@@ -53,8 +61,32 @@ def bprint(text)
   print "\033[1m#{text}\033[0m"
 end
 
-def cprint(color256, text)
-  print "\033[38;5;#{color256}m#{text}\033[0m"
+def cprint_q(color256, text)
+  "\033[38;5;#{color256}m#{text}\033[0m"
+end
+
+def cprint(*args)
+  print cprint_q(*args)
+end
+
+try_block do
+  IRB.conf[:PROMPT][:CUSTOM] = {
+    PROMPT_I:    "[#{cprint_q 2, "%03n"}]: ",
+    PROMPT_S:    "[#{cprint_q 2, "%03n%l"}]: ",
+    PROMPT_C:    "[#{cprint_q 2, "%03n"}]: ",
+    PROMPT_N:    "[#{cprint_q 2, "%03n?"}]: ",
+
+    RETURN:      " => %s \n",
+    AUTO_INDENT: true
+  }
+  IRB.conf[:PROMPT_MODE] = :CUSTOM
+end
+
+at_exit do
+  try_block do
+    line_no = IRB.CurrentContext.io.instance_variable_get(:@line_no) + 1
+    puts("[#{cprint_q 1, "%03d" % line_no}]:")
+  end
 end
 
 # Re-implementation of `silence_stream` that was removed in Rails 5 due to it not being threadsafe.
@@ -112,7 +144,7 @@ def omethods(obj, pprint = true)
   diff = obj.public_send(:methods) - Object.methods
   if pprint
     cmd = defined?(AwesomePrint) ? :ap : :pp
-    public_send(cmd, diff)
+    __send__(cmd, diff)
   end
 end
 

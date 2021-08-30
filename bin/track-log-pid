@@ -13,11 +13,15 @@ in the below example this corresponds to PID 1259963. A leading 'x' denotes that
  x  I, [2021-08-25T00:08:04.796952 #1259963]  INFO -- : [49431ea9-ed46-466c-9884-19ff251ef85f] Completed 200 OK in 2232ms (Views: 0.3ms | ActiveRecord: 2.4ms)
 
 This script may be run against compressed files and may receive input from STDIN.
+
 Example:
     tail -f log/production.log | track-log-pid -p 'm{GET "/96db175ae031f1c07899889a5ed233cf}'
 EOT
 
-arg_optional   "[pattern] [p] [Perl regex pattern to start tracking.]"
+ARG_TIMEOUT=90
+
+arg_optional   "[pattern] [p] [Perl regex pattern to start tracking (required)]"
+arg_optional   "[timeout] [t] [Stop tracking the PID after this many seconds. Default: '$ARG_TIMEOUT']"
 arg_boolean    "[follow]  [f] [Follow the log.]"
 arg_positional "[file]        [File to parse.]"
 arg_help "[\n$helptxt]"
@@ -41,14 +45,21 @@ read -r -d '' perl_script << 'EOT'
     };
     my ($year, $mon, $mday, $hour, $min, $sec) = split(/[-:T]+/, $timestamp);
     $t1 = timelocal($sec, $min, $hour, $mday, $mon - 1, $year);
-    if ($t1 > ($t0 + 90)) {
+    if ($t1 > ($t0 + <ARG_TIMEOUT>)) {
       delete($pids["$pid"]);
     };
   };
 EOT
 
+if [[ -z $ARG_PATTERN ]]; then
+  cprint 1 "ERROR"
+  echo ": Must provide '-p' flag. See help menu for details."
+  exit 1
+fi
+
 
 perl_script="${perl_script//<ARG_PATTERN\>/$ARG_PATTERN}"
+perl_script="${perl_script//<ARG_TIMEOUT\>/$ARG_TIMEOUT}"
 
 if [[ ${#POSITIONAL[@]} -eq 0 ]]; then
   cat | perl -ne "$perl_script"

@@ -347,13 +347,6 @@ if [[ $UNAME_S == Darwin ]]; then
   cd "$_origin_pwd"
 fi
 
-if [[ -n "$(command -v pyenv)" ]]; then
-  export PYENV_ROOT="$HOME/.pyenv"
-  export PATH="$PYENV_ROOT/bin:$PATH"
-  # NOTE: This takes ~0.05 seconds
-  eval "$(pyenv init --path)"
-fi
-
 NVM_DIR="/usr/local/opt/nvm"
 
 if [[ -n $USING_NVM ]]; then

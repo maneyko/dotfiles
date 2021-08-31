@@ -18,18 +18,27 @@ psqlrc.d
 irbrc
 )
 
+files_help_format=""
+
+for f in ${FILES_TO_LINK[@]}; do
+  printf -v 'var' "%-30s => %s" "${0%/*}/$f" "\$HOME/.$f"
+  files_help_format="$files_help_format\n    $var"
+done
+
 read -r -d '' helptext << EOT
-Symlinks [$(echo "${FILES_TO_LINK[@]}" | perl -pe "s/(\S+)/'\1',/g; s/.\$//s")]
-in ~/.dotfiles/ (with a '.' prepended) to \$HOME directory.
+Symlinks the following files in \$HOME/.dotfiles to \$HOME directory (with a '.' prepended):
+$files_help_format
+
+If the file already exists, a prompt will ask if you'd like to move it to dotfiles/_backups
 EOT
 
 arg_boolean "[uninstall] [u] [Uninstall maneyko's dotfiles]"
 arg_boolean "[vim-full]  [f] [Install all vim plugins (~100Mb)]"
-arg_help    "[$helptext]"
+arg_help    "[\n$helptext]"
 parse_args
 
 if [[ $__DIR__ != $HOME/.dotfiles && ! -d $HOME/.dotfiles ]]; then
-  cprint 3 "Moving repo to ~/.dotfiles\n"
+  cprint 3 "Moving repo to \$HOME/.dotfiles\n"
   cd
   mv "$__DIR__" "$HOME/.dotfiles"
 fi
@@ -70,16 +79,15 @@ EOT
     for f in $__DIR__/_backups/*; do
       base="$(basename "$f")"
       dest=$HOME/."$base"
-      if [[ -f $dest || -z "$(echo "${FILES_TO_LINK[@]}" | grep "$base")" ]]; then
-        mkdir -p $HOME/.dotfiles.bak
-        f_dest=$HOME/.dotfiles.bak/"$base"
-        if [[ -f $f_dest ]]; then
-          f_dest="$($HOME/.dotfiles/bin/backup-path $HOME/.dotfiles.bak/"$base")"
-        fi
-        mv -v "$f" "$f_dest"
-      else
-        mv -v $__DIR__/_backups/"$base" $HOME/."$base"
+      if [[ -f $dest ]]; then
+        echo "File '$dest' exists. Won't overwrite it."
+        continue
+      elif [[ -z "$(echo "${FILES_TO_LINK[@]}" | grep "^$base\$")" ]]
+        echo "File '$dest' is not part of maneyko/dotfiles. Won't touch it."
+        continue
       fi
+
+      mv -v $__DIR__/_backups/"$base" $HOME/."$base"
     done
   fi
 

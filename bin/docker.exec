@@ -1,0 +1,58 @@
+#!/bin/bash
+
+source "argparse.sh"
+
+ARG_COMMAND='bash'
+
+read -d '' helptxt << EOT
+This script is a wrapper around this command:
+
+    docker exec -it {app_name} {command}
+
+Example in arbitrary directory:
+    ${0##*/} my_repo rails c
+    # => executes 'rails c' in my_repo container
+
+Example in my_repo git directory:
+    ${0##*/}
+    # => puts you in bash shell in my_repo container
+EOT
+
+arg_positional "[container-pattern] [\
+Pattern matching container to exec in to. This is an 'awk' regular expression.
+Default is current git repo name (if in a git directory).\
+]"
+arg_positional "[command]           [Command to run in docker container (default: '$ARG_COMMAND')]"
+arg_optional   "[flags] [f]         [Additional flags to docker exec -it]"
+arg_help       "[\n$helptxt]"
+parse_args
+
+# If there are more positional arguments than the 'command' argument, use those instead.
+if [[ -n ${POSITIONAL[@]:1} ]]; then
+  ARG_COMMAND="${POSITIONAL[@]:1}"
+fi
+
+: ${ARG_CONTAINER_PATTERN:="$(basename -s .git "$(git config --get remote.origin.url)")"}
+
+read container_id container_name <<< "$(
+  docker container ls \
+    --format "table {{.ID}} {{.Names}}" \
+    -f 'status=created' -f 'status=restarting' -f 'status=running' -f 'status=paused' \
+    | awk "\$2 ~ /$ARG_CONTAINER_PATTERN/ {print; exit}"
+)"
+
+if [[ -z $container_id ]]; then
+  cat << EOT
+$(cprint 1 ERR): Could not find a container matching '$ARG_CONTAINER_PATTERN'.
+EOT
+  exit 1
+fi
+
+cat << EOT
+$(cprint 3 INFO): Name: $container_name, ID: $container_id
+
+docker exec $ARG_FLAGS -it $container_id $ARG_COMMAND
+
+EOT
+
+docker exec $ARG_FLAGS -it $container_id $ARG_COMMAND

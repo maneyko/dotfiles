@@ -49,6 +49,7 @@ for file_basename in "${FILES_TO_LINK[@]}"; do
     printf "~/$dotf exists, move to ~/.dotfiles/_backups/${file_basename}? [Y/n] "
     read res
     if [[ -z $res || $res = 'Y' || $reg = 'y' ]]; then
+      mkdir -p "$__DIR__/_backups/"
       mv -v "$dotf" "$__DIR__/_backups/$file_basename"
     else
       continue

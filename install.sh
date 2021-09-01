@@ -82,7 +82,7 @@ EOT
       if [[ -f $dest ]]; then
         echo "File '$dest' exists. Won't overwrite it."
         continue
-      elif [[ -z "$(echo "${FILES_TO_LINK[@]}" | grep "^$base\$")" ]]
+      elif [[ -z "$(echo "${FILES_TO_LINK[@]}" | grep "^$base\$")" ]]; then
         echo "File '$dest' is not part of maneyko/dotfiles. Won't touch it."
         continue
       fi

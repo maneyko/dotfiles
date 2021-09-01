@@ -28,7 +28,7 @@ arg_help       "[\n$helptxt]"
 parse_args
 
 # If there are more positional arguments than the 'command' argument, use those instead.
-if [[ -n ${POSITIONAL[@]:1} ]]; then
+if [[ ${#POSITIONAL[@]} -gt 1 ]]; then
   ARG_COMMAND="${POSITIONAL[@]:1}"
 fi
 

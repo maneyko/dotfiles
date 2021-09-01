@@ -20,15 +20,20 @@ EOT
 
 ARG_TIMEOUT=90
 
-arg_optional   "[pattern] [p] [Perl regex pattern to start tracking (required)]"
-arg_optional   "[timeout] [t] [Stop tracking the PID after this many seconds. Default: '$ARG_TIMEOUT']"
-arg_boolean    "[follow]  [f] [Follow the log.]"
+arg_boolean    "[no-color] [n] [Do not print color output for regex matches.]"
+arg_optional   "[pattern]  [p] [Perl regex pattern to start tracking (required)]"
+arg_optional   "[timeout]  [t] [Stop tracking the PID after this many seconds. Default: '$ARG_TIMEOUT']"
+arg_boolean    "[follow]   [f] [Follow the log.]"
 arg_positional "[file]        [File to parse.]"
 arg_help "[\n$helptxt]"
 parse_args
 
 read -r -d '' perl_script << 'EOT'
   use Time::Local;
+  BEGIN {
+    $RED   = "\e[31m";
+    $RESET = "\e[0m";
+  }
   my %pids = ();
   $pat = q/I,\s+\[(?<timestamp>\d+-\d+-\d+T\d+:\d+:\d+).*?#(?<pid>\d+)\]\s+INFO/;
   /$pat/;
@@ -37,8 +42,26 @@ read -r -d '' perl_script << 'EOT'
     my ($year, $mon, $mday, $hour, $min, $sec) = split(/[-:T]+/, $timestamp);
     $ts = timelocal($sec, $min, $hour, $mday, $mon - 1, $year);
     $pids["$pid"] = $ts;
-  };
-  if ($t0 = $pids["$pid"]) {
+    if ($1 && ! <ARG_NO_COLOR>) {
+      print substr($_, 0, $-[1]);
+      $print_str = "$_";
+      $stop_num = @+;
+      for (my $i = 1; $i < $stop_num; $i++) {
+        $begin2 = $+[$i];
+        $len2 = $-[$i+1] - $begin2;
+        $capture = substr($print_str, $-[$i], $+[$i] - $-[$i]);
+        $capture =~ s/$capture/$RED$capture$RESET/g;
+        print $capture;
+        if (($i + 1) ne $stop_num) {
+          $non_capture = substr($print_str, $begin2, $len2);
+          print $non_capture;
+        }
+      }
+      print substr($_, $+[$#-]);
+    } else {
+      print;
+    }
+  } elsif ($t0 = $pids["$pid"]) {
     print;
     if (/${pat}.*?Completed.*?in\s+\d+ms/) {
       delete($pids["$pid"]);
@@ -57,9 +80,22 @@ if [[ -z $ARG_PATTERN ]]; then
   exit 1
 fi
 
+if [[ -n $ARG_NO_COLOR ]]; then
+  ARG_NO_COLOR=1
+else
+  ARG_NO_COLOR=0
+fi
+
+func::zzcat() {
+  cat "$1" | zcat 2>/dev/null || cat "$1"
+}
+
 
 perl_script="${perl_script//<ARG_PATTERN\>/$ARG_PATTERN}"
 perl_script="${perl_script//<ARG_TIMEOUT\>/$ARG_TIMEOUT}"
+perl_script="${perl_script//<ARG_NO_COLOR\>/$ARG_NO_COLOR}"
+
+echo "$perl_script"
 
 if [[ ${#POSITIONAL[@]} -eq 0 ]]; then
   cat | perl -ne "$perl_script"
@@ -68,6 +104,6 @@ elif [[ ${#POSITIONAL[@]} -eq 1 && -n $ARG_FOLLOW ]]; then
   tail -f -n0 "${POSITIONAL[@]}" | perl -ne "$perl_script"
 else
   for f in ${POSITIONAL[@]}; do
-    $__DIR__/zzcat "$f" | perl -ne "$perl_script"
+    func::zzcat "$f" | perl -ne "$perl_script"
   done
 fi

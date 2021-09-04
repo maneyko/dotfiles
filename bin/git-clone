@@ -17,6 +17,5 @@ if [[ $arg1 != *github.com* ]]; then
   fi
 fi
 
-echo "Using URL: $remote_url"
-
+set -x
 git clone ${remote_url%/} $args_after_first

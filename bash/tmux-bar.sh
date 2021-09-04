@@ -8,10 +8,10 @@ date_status() {
   tmux set -g status-right "$text" || break
 }
 
-if test $(uname) = 'Darwin'; then
-  while test -n "$TMUX"; do
+if [[ $UNAME_S == Darwin ]]; then
+  while [[ -n $TMUX ]]; do
     tunes="$(~/.dotfiles/mac/tunes.js)"
-    if test -n "$tunes"; then
+    if [[ -n $tunes ]]; then
       text="#[fg=colour$TEXT_COLOR]$tunes"
       tmux set -g status-right "$text" || break
     else

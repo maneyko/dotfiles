@@ -1,11 +1,13 @@
 #!/bin/bash
 
-test $(uname) != 'Darwin' && exit 1
+if [[ -z $USING_MAC_OS ]]; then
+  echo 'ERROR: Not using MacOS'
+  exit 1
+fi
 
-if test -z "$1"
-then
+if [[ -z $1 ]]; then
   /usr/bin/osascript -e 'output volume of (get volume settings)'
 else
-  volume=${1//[!0-9]}
+  volume="${1//[!0-9]}"
   /usr/bin/osascript -e "set volume output volume $volume"
 fi

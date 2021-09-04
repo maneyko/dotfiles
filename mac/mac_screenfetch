@@ -7,13 +7,13 @@ function clr () { # (number, text)
 sp_hardware_file=$HOME/.dotfiles/mac/SPHardwareDataType.txt
 sp_displays_file=$HOME/.dotfiles/mac/SPDisplaysDataType.txt
 
-if test -f $sp_hardware_file; then
+if [[ -f $sp_hardware_file ]]; then
   SPHardwareDataType="$(cat $sp_hardware_file)"
 else
   SPHardwareDataType="$(system_profiler SPHardwareDataType | tee $sp_hardware_file)"
 fi
 
-if test -f $sp_displays_file; then
+if [[ -f $sp_displays_file ]]; then
   SPDisplaysDataType="$(cat $sp_displays_file)"
 else
   SPDisplaysDataType="$(system_profiler SPDisplaysDataType | tee $sp_displays_file)"

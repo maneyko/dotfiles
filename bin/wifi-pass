@@ -1,11 +1,13 @@
 #!/bin/bash
 
-test $(uname) != 'Darwin' && exit 1
+if [[ $(uname) != Darwin ]]; then
+  echo 'Can only run on MacOS'
+  exit 1
+fi
 
-name_cmd="\
-/System/Library/PrivateFrameworks/Apple80211.framework\
-/Versions/Current/Resources/airport -I"
-
-wifi_name="$($name_cmd | perl -ne 'print $1 if /\bSSID: (.*)$/')"
+wifi_name="$(
+  /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I \
+    | perl -ne 'print $1 if /\bSSID: (.*)$/'
+)"
 
 security find-generic-password -wa "$wifi_name"

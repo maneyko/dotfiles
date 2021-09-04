@@ -9,8 +9,8 @@ arg_optional   "[port] [p] [The port to use. Default: $DEFAULT_PORT]"
 
 read -r -d '' helptext << EOT
 This script will run a simple http server from a script argument.
-$(clr 3 "Example usage:")
-$(clr 3 "--------------")
+$(cprint 3 "Example usage:")
+$(cprint 3 "--------------")
 
 In echo.sh:
 --------------------
@@ -41,27 +41,22 @@ parse_args
 
 : ${ARG_PORT:=$DEFAULT_PORT}
 
-if test -z "$(command -v nmap)"; then
-  clr 1 "You need to have nmap installed\n"
+if [[ -z "$(command -v nmap)" ]]; then
+  echo "$(cprint 1 ERROR): You need to have nmap installed."
   exit 1
 fi
 
-if test -z "$ARG_SCRIPT" -o ! -f "$ARG_SCRIPT"; then
-  clr 1 "Please provide a valid script to run\n"
+if [[ -z $ARG_SCRIPT || ! -x $ARG_SCRIPT ]]; then
+  echo "$(cprint 1 ERROR): Please provide a valid script to run"
   exit 1
 fi
 
-if ! test -x "$ARG_SCRIPT"; then
-  clr 1 "'$ARG_SCRIPT' needs to be executable.\n"
+if [[ -z "$(ncat localhost $ARG_PORT < /dev/null 2>&1)" ]]; then
+  echo "$(cprint 1 ERROR): Port $ARG_PORT is not open."
   exit 1
 fi
 
-if test -z "$(ncat localhost $ARG_PORT < /dev/null 2>&1)"; then
-  clr 1 "Port $ARG_PORT is not open.\n"
-  exit 1
-fi
-
-clr 2 "Running on port: $ARG_PORT\n"
+echo "$(cprint 2 OK): Running on port $ARG_PORT"
 
 trap "exit 0" SIGINT SIGTERM
 while true; do

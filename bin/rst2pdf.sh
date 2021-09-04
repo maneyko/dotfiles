@@ -7,7 +7,7 @@ arg_boolean    "[delete] [d] [Delete the intermediate LaTeX file.]"
 arg_help       "[Does a quick compilation of a '.rst' file to a '.pdf'.]"
 parse_args
 
-if test -n "$(command -v pdflatex)"; then
+if [[ -n "$(command -v pdflatex)" ]]; then
   cat << EOT
 'pdflatex' is not installed. On MacOS do: brew install mactex
 EOT
@@ -20,5 +20,5 @@ rst2latex.py "$ARG_FILE" "$texfile" || exit 1
 
 pdflatex "$texfile"
 
-test -n "$ARG_DELETE" && rm "$texfile"
+[[ -n $ARG_DELETE ]] && rm "$texfile"
 rm *.{aux,log,out}

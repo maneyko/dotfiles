@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if test $(uname) = 'Darwin'; then
+if [[ -n $USING_MAC_OS ]]; then
   afplay /System/Library/Sounds/Glass.aiff
 fi
 

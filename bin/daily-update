@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if test $(uname) = 'Darwin'; then
+if [[ -n $USING_MAC_OS ]]; then
   PATH="\
 /usr/local/bin:\
 /usr/local/sbin:\
@@ -22,11 +22,13 @@ fi
 $HOME/.bin/pip-upgrade
 $HOME/.bin/pip-upgrade -3
 
-if test -n "$(command -v npm)"; then
+if [[ -n "$(command -v npm)" ]]; then
   npm update -g
   npm upgrade -g
 fi
 
-test $(uname) = 'Darwin' && brew doctor
+if [[ -n $USING_MAC_OS ]]; then
+  brew doctor
+fi
 
-. ~/.bashrc
+\. $HOME/.bashrc

@@ -16,12 +16,12 @@ _backup_path() {
   f="$(basename "$arg")"
   f_dest=""
 
-  if test "$src_dir" == "./"; then
+  if [[ $src_dir == './' ]]; then
     src_dir=""
   fi
 
   DOTF=''
-  if test "${f:0:1}" == "."; then
+  if [[ ${f:0:1} == '.' ]]; then
     DOTF=1
     f="${f:1}"
   fi
@@ -29,13 +29,13 @@ _backup_path() {
   ext="${f##*.}"
   fbase="${f%.*}"
 
-  if test "$fbase" == "$ext"; then
+  if [[ $fbase == $ext ]]; then
     f_dest="$fbase.1"
   fi
 
   fbase_ext="${fbase##*.}"
 
-  if test -z "$f_dest"; then
+  if [[ -z $f_dest ]]; then
     if ! test $(expr "$fbase_ext" : "^[0-9]*$") == "0"; then
       num="$(echo "$fbase_ext + 1" | bc)"
       f_dest="${fbase%.*}.${num}.${ext}"
@@ -57,18 +57,18 @@ i=0
 while test -f "$_backup_path_result"; do
   _backup_path "$_backup_path_result"
   i=$((i + 1))
-  test $i -ge $ARG_RETRIES && break
+  [[ $i -ge $ARG_RETRIES ]] && break
 done
 
 f_dest="$_backup_path_result"
 
-if test -n "$f_dest"; then
-  test -n "$DOTF" && f_dest=".${f_dest}"
-  if test -n "$ARG_COPY"; then
+if [[ -n $f_dest ]]; then
+  [[ -n $DOTF ]] && f_dest=".${f_dest}"
+  if [[ -n $ARG_COPY ]]; then
     cp -v "$ARG_FILE" "${src_dir}${f_dest}"
   else
     echo "${src_dir}${f_dest}"
   fi
 else
-  echo "ERR: could not create backup path for '$f_dest'"
+  echo "$(cprint 1 ERROR): could not create backup path for '$f_dest'"
 fi

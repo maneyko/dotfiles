@@ -1,5 +1,6 @@
 #!/bin/bash
 
+source "argparse.sh"
 
 EXTENSIONS=(
 bz2
@@ -18,21 +19,37 @@ xz
 Z
 )
 
-if test "$1" = '-h' -o "$1" = '--help'; then
-  cat << EOT
+for ext in ${EXTENSIONS[@]}; do
+  exts="$exts$ext, "
+done
+exts="[${exts%,*}]"
+
+ARG_EXTENSION='gz'
+
+arg_positional "[extension]
+[Tar file compression alrgorithm. Default '$ARG_EXTENSION'.
+Available extensions are $exts.]"
+arg_positional "[file-or-directory]"
+arg_help "[
 This script will compress a file using tar.
-The available extensions are [$(echo "${EXTENSIONS[@]}" | perl -pe "s/(\S+)/'\1',/g;s/.\$//s")]
+The available extensions are $exts.
 
-To pass an extension do \`tarc myproject/ --lzma\`
-EOT
-  exit 0
+To pass an extension do: \`tarc myproject/ --lzma'
+You can also do:         \`tarc myproject/ -lzma'
+]"
+parse_args
+
+if [[ $ARG_FILE_OR_DIRECTORY =~ ^- ]]; then
+  if [[ $ARG_EXTENSION =~ ^- ]]; then
+    echo "$(cprint 1 ERROR): Files starting with a dash are not supported."
+    exit 1
+  else
+    arg_ext="$ARG_FILE_OR_DIRECTORY"
+    ARG_FILE_OR_DIRECTORY="$ARG_EXTENSION"
+    ARG_EXTENSION="$arg_ext"
+  fi
 fi
 
-ext="$(echo "$@" | perl -ne 'print $1 if /--(\S+)/')"
-if test -z "$ext"; then
-  ext='gz'
-fi
+ARG_EXTENSION="${ARG_EXTENSION#*-}"
 
-f="$(echo "$@" | perl -pe 's/--\S+//g; s/^\s+|\s+$//g')"
-
-tar -a -cvf "${f%/}.tar.${ext}" "$f"
+tar -a -cvf "${ARG_FILE_OR_DIRECTORY%/}.tar.${ARG_EXTENSION}" "$ARG_FILE_OR_DIRECTORY"

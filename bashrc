@@ -61,7 +61,14 @@ $HOME/local/share/man:\
 
 export UNAME_N="${UNAME_N:="$(uname -n)"}"
 export UNAME_S="${UNAME_S:="$(uname -s)"}"
+export UNAME="${UNAME:="$UNAME_S"}"
 export TTY="${TTY:="$(tty)"}"
+
+if [[ $UNAME_S == Darwin ]]; then
+  export USING_MAC_OS=true
+else
+  unset USING_MAC_OS
+fi
 
 
 _vim="$(type -P nvim vim vi | head -1)"
@@ -129,7 +136,7 @@ _expand() {
 # ---------------------------------------------------------------------
 
 TERM_COLORS="$HOME/.config/colors/base16-custom.dark.sh"
-[[ $TMUX && -s $TERM_COLORS && $UNAME_S == Darwin ]] && {
+[[ $TMUX && -s $TERM_COLORS && -n $USING_MAC_OS ]] && {
   source "$TERM_COLORS"
 }
 
@@ -291,7 +298,7 @@ done
 alias whois='whois -h whois.arin.net'
 
 # Platform specific
-if [[ $UNAME_S == Darwin ]]; then
+if [[ -n $USING_MAC_OS ]]; then
   alias top='top -u'
   alias mcopy='pbcopy'
   alias mpaste='pbpaste'
@@ -305,7 +312,7 @@ fi
 
 # First TTY Greeting
 # ------------------
-if [[ -n $INTERACTIVE && $UNAME_S == Darwin ]]; then
+if [[ -n $INTERACTIVE && -n $USING_MAC_OS ]]; then
   if [[
     $TTY =~ .*0[1-2]$ &&
     -n $(command -v neofetch) &&
@@ -335,13 +342,14 @@ $HOME/.rvm/scripts/rvm
 for f in ${rvms[@]}; do
   if [[ -s $f ]]; then
     # This takes ~0.15 seconds
+    rvm_source="$f"
     source "$f"  # Load RVM into a shell session *as a function*
     break
   fi
 done
 
 # Helps initialize RVM in new terminal
-if [[ $UNAME_S == Darwin ]]; then
+if [[ -s $rvm_source ]]; then
   _origin_pwd="$PWD"
   cd ../
   cd "$_origin_pwd"

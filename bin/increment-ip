@@ -1,12 +1,12 @@
 #!/bin/bash
 
-if test -z "$(command -v python3)"; then
-  test "$1" = '255.255.255.255' && {
+if [[ -z "$(command -v python3)" ]]; then
+  if [[ $1 == '255.255.255.255' ]]; then
     echo '0.0.0.0'
     exit 1
-  }
+  fi
 
-  IP=$1
+  IP="$1"
   IP_HEX=$(printf '%.2X%.2X%.2X%.2X\n' `echo $IP | perl -pe 's/\./ /g'`)
   NEXT_IP_HEX=$(printf %.8X `echo "ibase=16;$IP_HEX + 1" | bc`)
   NEXT_IP=$(printf '%d.%d.%d.%d\n' `echo $NEXT_IP_HEX | perl -pe 's/(..)/0x\1 /g'`)
@@ -14,5 +14,5 @@ if test -z "$(command -v python3)"; then
   exit 0
 fi
 
-arg2=$(test -z $2 && echo '1' || echo $2)
+arg2="$(test -z "$2" && echo '1' || echo "$2")"
 python3 -c "import ipaddress; print(str(ipaddress.ip_address('$1')+$arg2))"

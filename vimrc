@@ -112,7 +112,12 @@ if !minimal_vimrc
       \ 'Ignored'   : '☒',
       \ "Unknown"   : "?"
       \ }
-    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+    autocmd BufEnter * if (winnr("$") == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()) | quit | endif
+    autocmd VimLeave *  if !v:dying | execute 'tabdo NERDTreeClose' | endif
+    autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
+    if winwidth('%') > 220
+      let g:NERDTreeWinSize = 64
+    endif
     " let NERDTreeMapOpenInTab='<ENTER>'  " As a consequence, this disables 't' as the new tab opener :/
 
   Plug 'yegappan/mru'
@@ -330,7 +335,9 @@ nnoremap <C-l>            <C-w>l
 nnoremap <C-w>h           :vertical resize -5<CR>
 nnoremap <C-w>l           :vertical resize +5<CR>
 nnoremap <C-i>            gT
+nnoremap <C-a><C-i>       :tabmove -1<CR>
 nnoremap <C-o>            gt
+nnoremap <C-a><C-o>       :tabmove +1<CR>
 nnoremap <C-b>            :nohl<CR><C-l>
 nnoremap <C-n>            :set relativenumber!<CR>
 nnoremap <leader><leader> :w<CR>

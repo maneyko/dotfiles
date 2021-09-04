@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if test -f bin/bundle; then
+if [[ -f ./bin/bundle ]]; then
   ./bin/bundle exec rspec $@
 else
   bundle exec rspec $@

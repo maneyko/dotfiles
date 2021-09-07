@@ -328,13 +328,6 @@ fi
 # Specific Environment
 # ---------------------------------------------------------------------
 
-# Necessary environment variable for ~/.tmux.conf
-if [[ -n $(command -v tmux) ]]; then
-  export TMUX_VERSION=$(tmux -V \
-    | perl -ne 'printf("%d.%02d",$1,$2) if /([\d]+)\.([\d]+)/')
-  export TMUX_VERSION_INT=${TMUX_VERSION//.}
-fi
-
 rvms=(
 /usr/local/rvm/scripts/rvm
 $HOME/.rvm/scripts/rvm

@@ -38,7 +38,7 @@ arg_help    "[\n$helptext]"
 parse_args
 
 if [[ $__DIR__ != $HOME/.dotfiles && ! -d $HOME/.dotfiles ]]; then
-  cprint 3 "Moving repo to \$HOME/.dotfiles\n"
+  echo "$(cprint 3 INFO): Moving repo to \$HOME/.dotfiles"
   cd
   mv "$__DIR__" "$HOME/.dotfiles"
 fi
@@ -124,3 +124,5 @@ if [[ $vim == nvim ]]; then
 fi
 
 rm -f "$vim_config_dir/plugged/vim-plug/.git/objects/pack/*.pack"  2>/dev/null
+
+echo "$(cprint 2 OK)!"

@@ -114,10 +114,8 @@ if !minimal_vimrc
       \ }
     autocmd BufEnter * if (winnr("$") == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()) | quit | endif
     autocmd VimLeave *  if !v:dying | execute 'tabdo NERDTreeClose' | endif
-    autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
-    if winwidth('%') > 220
-      let g:NERDTreeWinSize = 64
-    endif
+    " autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif " This breaks `ack.vim`.
+    autocmd BufEnter * if winwidth('%') > 220 | let g:NERDTreeWinSize = 64 | endif
     " let NERDTreeMapOpenInTab='<ENTER>'  " As a consequence, this disables 't' as the new tab opener :/
 
   Plug 'yegappan/mru'
@@ -185,10 +183,14 @@ if !minimal_vimrc
 
   " Completion
   " ----------
-  Plug 'autozimu/LanguageClient-neovim', {
-      \ 'branch': 'next',
-      \ 'do': 'bash install.sh',
-      \ }
+  " Plug 'autozimu/LanguageClient-neovim', {
+  "     \ 'branch': 'next',
+  "     \ 'do': 'bash install.sh',
+  "     \ }
+
+  " let g:LanguageClient_serverCommands = {
+  "     \ 'ruby': ['/usr/bin/env', 'solargraph', 'stdio'],
+  "     \ }
 
   if executable('node')
     if has('nvim')
@@ -335,9 +337,9 @@ nnoremap <C-l>            <C-w>l
 nnoremap <C-w>h           :vertical resize -5<CR>
 nnoremap <C-w>l           :vertical resize +5<CR>
 nnoremap <C-i>            gT
-nnoremap <C-a><C-i>       :tabmove -1<CR>
+nnoremap <C-w><C-i>       :tabmove -1<CR>
 nnoremap <C-o>            gt
-nnoremap <C-a><C-o>       :tabmove +1<CR>
+nnoremap <C-w><C-o>       :tabmove +1<CR>
 nnoremap <C-b>            :nohl<CR><C-l>
 nnoremap <C-n>            :set relativenumber!<CR>
 nnoremap <leader><leader> :w<CR>

@@ -62,7 +62,7 @@ $HOME/local/share/man:\
 export UNAME_N="${UNAME_N:="$(uname -n)"}"
 export UNAME_S="${UNAME_S:="$(uname -s)"}"
 export UNAME="${UNAME:="$UNAME_S"}"
-export TTY="${TTY:="$(tty)"}"
+export TTY_S="$(tty)"
 
 if [[ $UNAME_S == Darwin ]]; then
   export USING_MAC_OS=true
@@ -313,13 +313,14 @@ fi
 # First TTY Greeting
 # ------------------
 if [[ -n $INTERACTIVE && -n $USING_MAC_OS ]]; then
-  if [[
-    $TTY =~ .*0[1-2]$ &&
-    -n $(command -v neofetch) &&
-    $COLUMNS -ge 70 &&
-    $LINES   -ge 20
-  ]]; then
-    neofetch
+  if [[ $TTY_S =~ .*0[1-2]$ ]]; then
+    if [[ $COLUMNS -ge 70 && $LINES -ge 20 ]]; then
+      if [[ $(($(date +%w) % 2)) -eq 0 ]]; then
+        neofetch
+      else
+        curl wttr.in?2Fn
+      fi
+    fi
   fi
 fi
 

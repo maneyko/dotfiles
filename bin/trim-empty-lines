@@ -1,0 +1,56 @@
+#!/bin/bash
+
+source "argparse.sh"
+
+ARG_NUMBER_TRAILING=0
+arg_positional "[input-file]          [Input file to process.]"
+arg_optional   "[number-trailing] [n] [Allow this many trailing lines to be grouped together. Default '$ARG_NUMBER_TRAILING'.]"
+arg_help       "[Do not print out empty lines.]"
+parse_args
+
+read -r -d '' perl_script << 'EOT'
+BEGIN {
+  $n = 0;
+}
+if (/^\s+?$/) {
+  $n++;
+  if ($n gt <ARG_NUMBER_TRAILING>) {
+    $n = 0;
+  } else {
+    print;
+  }
+} else {
+  $n = 0;
+  print;
+}
+EOT
+
+read -r -d '' perl_script1 << 'EOT'
+BEGIN {
+  $n = 0;
+}
+if (/^\s+?$/) {
+  $n++;
+  if ($n gt <ARG_NUMBER_TRAILING>) {
+    print;
+    $n = 0;
+  } else {
+    $n++;
+  }
+} else {
+  $n = 0;
+  print;
+}
+EOT
+
+if [[ $ARG_NUMBER_TRAILING == 1 ]]; then
+  perl_script="$perl_script1"
+fi
+
+perl_script="${perl_script//<ARG_NUMBER_TRAILING>/$ARG_NUMBER_TRAILING}"
+
+if [[ ${#POSITIONAL[@]} -eq 0 ]]; then
+  cat | perl -ne "$perl_script"
+else
+  perl -ne "$perl_script" "$ARG_INPUT_FILE"
+fi

@@ -1,9 +1,1 @@
-{
-  "python.linting.enabled": false,
-  "python.linting.pylintEnabled": false,
-  "solargraph.hover": true,
-  "solargraph.completion": false,
-  "solargraph.definitions": true,
-  "solargraph.promptDownload": false,
-  "solargraph.checkGemVersion": false
-}
+../../vim/coc-settings.json

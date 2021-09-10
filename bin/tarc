@@ -26,10 +26,10 @@ exts="[${exts%,*}]"
 
 ARG_EXTENSION='gz'
 
+arg_positional "[file-or-directory]"
 arg_positional "[extension]
 [Tar file compression alrgorithm. Default '$ARG_EXTENSION'.
 Available extensions are $exts.]"
-arg_positional "[file-or-directory]"
 arg_help "[
 This script will compress a file using tar.
 The available extensions are $exts.

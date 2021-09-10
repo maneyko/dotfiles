@@ -37,29 +37,33 @@ arg_boolean "[vim-full]  [f] [Install all vim plugins (~100Mb)]"
 arg_help    "[\n$helptext]"
 parse_args
 
-if [[ $__DIR__ != $HOME/.dotfiles && ! -d $HOME/.dotfiles ]]; then
+cd "$HOME"
+
+DOTFILES_FULL="$HOME/.dotfiles"
+
+if [[ $__DIR__ != $DOTFILES_FULL && ! -d $DOTFILES_FULL ]]; then
   echo "$(cprint 3 INFO): Moving repo to \$HOME/.dotfiles"
-  cd
   mv "$__DIR__" "$HOME/.dotfiles"
 fi
-
-__DIR__="$HOME/.dotfiles"
-
-cd
 
 for file_basename in "${FILES_TO_LINK[@]}"; do
   dotf=".$file_basename"
   if [[ -n $ARG_UNINSTALL ]]; then
-    [[ -L $dotf ]] && rm -v "$dotf"
-    continue
+    if [[ -e $dotf ]]; then
+      if [[ -L $dotf ]]; then
+        rm -v "$dotf"
+      else
+        echo "$(cprint 3 WARN): File '\$HOME/$dotf' is not a symlink! Won't remove it."
+      fi
+    fi
   fi
   if [[ -e $dotf ]]; then
     echo
     printf "~/$dotf exists, move to ~/.dotfiles/_backups/${file_basename}? [Y/n] "
     read res
-    if [[ -z $res || $res = 'Y' || $reg = 'y' ]]; then
-      mkdir -p "$__DIR__/_backups/"
-      mv -v "$dotf" "$__DIR__/_backups/$file_basename"
+    if [[ -z $res || $res = 'Y' || $res = 'y' ]]; then
+      mkdir -p "$DOTFILES_FULL/_backups/"
+      mv -v "$dotf" "$DOTFILES_FULL/_backups/$file_basename"
     else
       continue
     fi
@@ -69,16 +73,16 @@ done
 
 if [[ -n $ARG_UNINSTALL ]]; then
   # Check if directory is not empty
-  if [[ -n "$(\ls "$__DIR__/_backups" 2>/dev/null)" ]]; then
+  if [[ -n "$(\ls "$DOTFILES_FULL/_backups" 2>/dev/null)" ]]; then
     cat << EOT
 
-There is something in '$__DIR__/_backups'
+There is something in '$DOTFILES_FULL/_backups'
 I will move it back to your \$HOME directory so you do not lose it.
 
 EOT
-    for f in $__DIR__/_backups/*; do
+    for f in $DOTFILES_FULL/_backups/*; do
       base="$(basename "$f")"
-      dest=$HOME/."$base"
+      dest="$HOME/.$base"
       if [[ -f $dest ]]; then
         echo "File '$dest' exists. Won't overwrite it."
         continue
@@ -87,7 +91,7 @@ EOT
         continue
       fi
 
-      mv -v $__DIR__/_backups/"$base" $HOME/."$base"
+      mv -v $DOTFILES_FULL/_backups/"$base" $HOME/."$base"
     done
   fi
 
@@ -125,4 +129,4 @@ fi
 
 rm -f "$vim_config_dir/plugged/vim-plug/.git/objects/pack/*.pack"  2>/dev/null
 
-echo "$(cprint 2 OK)!"
+echo "$(cprint 2 OK)! Done."

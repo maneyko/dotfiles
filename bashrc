@@ -8,9 +8,9 @@
 [[ -n $BASHRC_LOADED ]] && return
 BASHRC_LOADED=1
 
-[[ -r /etc/bashrc ]] && {
+if [[ -r /etc/bashrc ]]; then
   source /etc/bashrc
-}
+fi
 
 set +e
 set -o ignoreeof
@@ -26,9 +26,9 @@ shopt -s no_empty_cmd_completion >/dev/null 2>&1
 
 umask 0002
 
-[[ -s $HOME/.bashrc.local.preload ]] && {
+if [[ -s $HOME/.bashrc.local.preload ]]; then
   source "$HOME/.bashrc.local.preload"
-}
+fi
 
 # ---------------------------------------------------------------------
 # Environment Variables
@@ -93,19 +93,19 @@ esac
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
 # Reclaim <C-q>, <C-s>, and <C-z>
-[[ -n $INTERACTIVE ]] && {
+if [[ -n $INTERACTIVE ]]; then
   controls=(start stop susp)
   for control in ${controls[@]}; do
     stty $control 'undef'
   done
-}
+fi
 
 # My module
 export PYTHONPATH="$HOME/.dotfiles/ipython/maneyko:$PYTHONPATH"
 
-# [[ -f $HOME/.pythonrc.py ]] && {
+# if [[ -f $HOME/.pythonrc.py ]]; then
 #   PYTHONSTARTUP="$HOME/.pythonrc.py"
-# }
+# fi
 
 
 # Bash Completion
@@ -136,9 +136,9 @@ _expand() {
 # ---------------------------------------------------------------------
 
 TERM_COLORS="$HOME/.config/colors/base16-custom.dark.sh"
-[[ $TMUX && -s $TERM_COLORS && -n $USING_MAC_OS ]] && {
+if [[ $TMUX && -s $TERM_COLORS && -n $USING_MAC_OS ]]; then
   source "$TERM_COLORS"
-}
+fi
 
 # Bold print.
 #
@@ -192,9 +192,9 @@ pwd_color=228
 : ${user_color:=196}
 : ${host_color:=147}
 
-[[ $USER == root ]] && {
+if [[ $USER == root ]]; then
   user_color=220  # Yellow
-}
+fi
 
 # \n\
 # `pclr $border_color  '\$(date_command)' `\
@@ -239,9 +239,9 @@ export PS1="$LONG_PS1"
 
 # Find and evaluate `dircolors` if exists
 _dircolors="$(type -P gdircolors dircolors | head -1)"
-[[ -n $_dircolors && -f $HOME/.dotfiles/bash/dircolors ]] && {
+if [[ -n $_dircolors && -f $HOME/.dotfiles/bash/dircolors ]]; then
   eval "$($_dircolors -b $HOME/.dotfiles/bash/dircolors)"
-}
+fi
 
 _cp="$(type -P gcp cp | head -1)"
 alias cp="$_cp -i"
@@ -353,12 +353,12 @@ fi
 NVM_DIR="/usr/local/opt/nvm"
 
 if [[ -n $USING_NVM ]]; then
-  [[ -s $NVM_DIR/nvm.sh ]] && {
+  if [[ -s $NVM_DIR/nvm.sh ]]; then
     # NOTE: This takes ~0.5 seconds
     \. "$NVM_DIR/nvm.sh"  # This loads nvm
-  }
+  fi
 fi
 
-[[ -f $HOME/.bashrc.local ]] && {
+if [[ -f $HOME/.bashrc.local ]]; then
   source $HOME/.bashrc.local
-}
+fi

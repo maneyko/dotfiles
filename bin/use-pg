@@ -1,0 +1,31 @@
+#!/bin/bash
+
+
+source "argparse.sh"
+
+arg_positional "[pg-version] [Postgresql version to use.]"
+arg_help "[Configure Mac settings to use a postgres version.]"
+parse_args
+
+if [[ $(uname) != Darwin ]]; then
+  echo "$(cprint 1 ERROR): Requires MacOS"
+  exit 1
+elif [[ -z $ARG_PG_VERSION ]]; then
+  echo "$(cprint 1 ERROR): No PG version supplied. Use '-h' for more info."
+  exit 1
+fi
+
+for d in /usr/local/Cellar/postgresql*; do
+  dirname="${d##*/}"  # postgresql@12
+  brew services stop "$dirname"
+done
+
+if [[ "$ARG_PG_VERSION" == 13 ]]; then
+  pg_name='postgresql'
+elif [[ $ARG_PG_VERSION == '9' ]]; then
+  pg_name='postgresql@9.6'
+else
+  pg_name="postgresql@$ARG_PG_VERSION"
+fi
+
+brew services start "$pg_name"

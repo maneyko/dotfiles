@@ -1,0 +1,65 @@
+#!/bin/bash
+
+source "argparse.sh"
+
+ARG_PS_ARGS='aux'
+
+arg_optional "[ps-args]      [p] [Arguments passed directly to 'ps'. Default is '$ARG_PS_ARGS'.]"
+arg_boolean  "[header-first] [f] [Print the header first.]"
+arg_boolean  "[memory]       [m] [Sort by memory (default option).]"
+arg_boolean  "[cpu]          [c] [Sort by CPU %.]"
+arg_boolean  "[wrap]         [w] [Wrap the output in the console.]"
+arg_help     "[Machine agnostic 'ps' command.]"
+parse_args
+
+
+if [[ $(uname) == Darwin ]]; then
+  USING_MAC_OS=true
+  options='-m'
+else
+  unset USING_MAC_OS
+  options='--sort rss'
+fi
+
+if [[ -n $ARG_CPU ]]; then
+  if [[ -n $USING_MAC_OS ]]; then
+    options='-r'
+  else
+    options='--sort pcpu'
+  fi
+fi
+
+read -r -d '' awk_script << 'EOT'
+{
+  a[NR] = $0
+}
+END {
+  if ("<ARG_HEADER_FIRST>") {
+    printf("%s\n", a[1]);
+  }
+  if ("<USING_MAC_OS>") {
+    for(i = NR; i >= 2; i--) {
+      printf("%s\n", a[i]);
+    }
+  } else {
+    for (i = 2; i <= NR; i++) {
+      printf("%s\n", a[i]);
+    }
+  }
+  if (! "<ARG_HEADER_FIRST>") {
+    printf("%s\n", a[1]);
+  }
+}
+EOT
+
+awk_script="${awk_script//<ARG_HEADER_FIRST\>/$ARG_HEADER_FIRST}"
+awk_script="${awk_script//<USING_MAC_OS\>/$USING_MAC_OS}"
+awk_script="${awk_script//<ARG_CPU\>/$ARG_CPU}"
+
+if [[ -t 1 && -z $ARG_WRAP ]]; then
+  tput rmam
+  ps $ARG_PS_ARGS $options | awk "$awk_script"
+  tput smam
+else
+  ps $ARG_PS_ARGS $options | awk "$awk_script"
+fi

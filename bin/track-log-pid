@@ -100,8 +100,8 @@ echo "$perl_script"
 if [[ ${#POSITIONAL[@]} -eq 0 ]]; then
   cat | perl -ne "$perl_script"
 elif [[ ${#POSITIONAL[@]} -eq 1 && -n $ARG_FOLLOW ]]; then
-  cat "${POSITIONAL[@]}" | perl -ne "$perl_script"
-  tail -f -n0 "${POSITIONAL[@]}" | perl -ne "$perl_script"
+  cat "$ARG_FILE" | perl -ne "$perl_script"
+  tail -f -n0 "$ARG_FILE" | perl -ne "$perl_script"
 else
   for f in ${POSITIONAL[@]}; do
     func::zzcat "$f" | perl -ne "$perl_script"

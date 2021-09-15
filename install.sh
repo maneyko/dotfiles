@@ -6,7 +6,6 @@ FILES_TO_LINK=(
 bash_profile
 bashrc
 inputrc
-nvimrc
 tmux.conf
 vimrc
 bin
@@ -56,6 +55,7 @@ for file_basename in "${FILES_TO_LINK[@]}"; do
         echo "$(cprint 3 WARN): File '\$HOME/$dotf' is not a symlink! Won't remove it."
       fi
     fi
+    continue
   fi
   if [[ -e $dotf ]]; then
     echo
@@ -125,6 +125,7 @@ $vim +PlugInstall +qall
 
 if [[ $vim == nvim ]]; then
   $vim +UpdateRemotePlugins +qall
+  ln -s ../../.local/share/nvim/site/autoload/ .dotfiles/vim/
 fi
 
 rm -f "$vim_config_dir/plugged/vim-plug/.git/objects/pack/*.pack"  2>/dev/null

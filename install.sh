@@ -126,6 +126,7 @@ $vim +PlugInstall +qall
 if [[ $vim == nvim ]]; then
   $vim +UpdateRemotePlugins +qall
   ln -s ../../.local/share/nvim/site/autoload/ .dotfiles/vim/
+  ln -s ../config/nvim/plugged .dotfiles/vim/
 fi
 
 rm -f "$vim_config_dir/plugged/vim-plug/.git/objects/pack/*.pack"  2>/dev/null

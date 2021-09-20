@@ -1,3 +1,6 @@
+#!/usr/bin/env ruby
+
+# vim: ft=ruby
 # ~/.irbrc
 
 def get_pwd

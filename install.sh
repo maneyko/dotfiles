@@ -119,8 +119,8 @@ if [[ -n $ARG_VIM_FULL && $vim == nvim ]]; then
   python3 -m pip install pynvim --upgrade
 fi
 
-if [[ -z $ARG_VIM_FULL ]]; then
-  perl -i -pe 's/minimal_vimrc = ([\d]+)/minimal_vimrc = 1/g' $HOME/.dotfiles/vimrc
+if [[ -n $ARG_VIM_FULL ]]; then
+  echo 'let g:minimal_vimrc = 0' >> "$HOME/.vimrc.local.preload"
 fi
 
 $vim +PlugInstall +qall

@@ -10,7 +10,11 @@
 "   * Auto Commands
 "   * Colors
 
-let g:minimal_vimrc = 0
+if filereadable(expand("$HOME/.vimrc.local.preload"))
+  source $HOME/.vimrc.local.preload
+endif
+
+let g:minimal_vimrc = get(g:, 'minimal_vimrc', 1)
 
 set nocompatible
 filetype off

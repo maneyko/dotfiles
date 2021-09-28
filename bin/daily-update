@@ -13,10 +13,12 @@ if [[ -n $USING_MAC_OS ]]; then
   brew update
   brew update
   brew upgrade
-else
-  apt-get -y update
-  apt-get -y upgrade
-  apt-get -y dist-upgrade
+elif { cat /etc/issue | grep Ubuntu ; } 2>/dev/null ; then
+  sudo apt-get -y update
+  sudo apt-get -y upgrade
+  sudo apt-get -y dist-upgrade
+  sudo apt-get -y autoremove
+  sudo apt-get -y autoclean
 fi
 
 $HOME/.bin/pip-upgrade

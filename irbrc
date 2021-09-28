@@ -1,8 +1,5 @@
 #!/usr/bin/env ruby
 
-# vim: ft=ruby
-# ~/.irbrc
-
 def get_pwd
   %x{printf "$PWD"}
 end
@@ -51,8 +48,8 @@ USER = Etc.getlogin.freeze
 UNAME = %x{uname -a}.chomp.freeze
 
 if defined?(Rails)
-  if Rails.env.development? || Rails.env.test?
-    Rails.application.eager_load!
+  if (Rails.env.development? || Rails.env.test?)
+    Rails.application&.eager_load!
   end
 end
 
@@ -188,6 +185,14 @@ end
 # https://stackoverflow.com/questions/2772778/parse-a-string-as-if-it-were-a-querystring-in-ruby-on-rails
 def parse_qs(string)
   Rack::Utils.parse_nested_query(string)
+end
+
+def isbn13_checksum(*arr)
+  arr.
+    map.with_index(1) { |x, i| x * ( i.odd? ? 1 : 3 ) }.
+    sum.
+    then { |s| s % 10 }.
+    then { |n| (10 - n) % 10 }
 end
 
 irbrc_local = File.join(HOME, ".irbrc.local")

@@ -98,6 +98,8 @@ EOT
   exit 0
 fi
 
+mkdir -p $HOME/.psql_history.d/
+
 vim_path="$(type -P nvim vim vi | head -1)"
 vim="$(basename $vim_path)"
 

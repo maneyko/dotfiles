@@ -350,14 +350,21 @@ if [[ -s $rvm_source ]]; then
   cd "$_origin_pwd"
 fi
 
-NVM_DIR="/usr/local/opt/nvm"
+nvms=(
+/usr/local/opt/nvm
+$HOME/.nvm
+)
 
-if [[ -n $USING_NVM ]]; then
-  if [[ -s $NVM_DIR/nvm.sh ]]; then
-    # NOTE: This takes ~0.5 seconds
-    \. "$NVM_DIR/nvm.sh"  # This loads nvm
+for d in ${nvms[@]}; do
+  if [[ -s $d/nvm.sh ]]; then
+    NVM_DIR="$d"
+    if [[ -n $USING_NVM ]]; then
+      # NOTE: This takes ~0.5 seconds
+      \. "$NVM_DIR/nvm.sh"
+    fi
+    break
   fi
-fi
+done
 
 if [[ -f $HOME/.bashrc.local ]]; then
   source $HOME/.bashrc.local

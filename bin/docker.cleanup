@@ -1,11 +1,13 @@
 #!/bin/bash
 
-docker images \
-  | awk '/<none>/ && (/months ago/ || /weeks ago/ || /\s([7-9]|[1-9][0-9]) days ago/) {print $3}' \
-  | xargs docker rmi
+docker image ls \
+  -qaf 'dangling=true' \
+  | xargs docker image rm
 
-docker images -q -f 'dangling=true' | xargs docker rmi
+docker volume ls \
+  -qf 'dangling=true' \
+  | xargs docker volume rm
 
-docker volume ls -qf 'dangling=true' | xargs docker volume rm
-
-+docker container ls -a --filter 'status=exited' --format '{{.ID}}' | xargs docker container rm
+docker ps \
+  -qaf 'status=exited' \
+  | xargs docker container rm

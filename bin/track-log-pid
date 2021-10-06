@@ -19,12 +19,17 @@ Example:
 EOT
 
 ARG_TIMEOUT=90
+ARG_STOP_PATTERN='""'
 
-arg_boolean    "[no-color] [n] [Do not print color output for regex matches.]"
-arg_optional   "[pattern]  [p] [Perl regex pattern to start tracking (required)]"
-arg_optional   "[timeout]  [t] [Stop tracking the PID after this many seconds. Default: '$ARG_TIMEOUT']"
-arg_boolean    "[follow]   [f] [Follow the log.]"
-arg_positional "[file]        [File to parse.]"
+arg_boolean    "[no-color]     [n] [Do not print color output for regex matches.]"
+arg_optional   "[pattern]      [p] [Perl regex pattern to start tracking (required)]"
+arg_optional   "[stop-pattern] [s] [Stop tracking the PID once this string is matched. Example: '/Completed 200 OK in \\d+ms/']"
+arg_optional   "[timeout]      [t] [Stop tracking the PID after this many seconds. Default: '$ARG_TIMEOUT']"
+arg_boolean    "[follow]       [f] [Follow the log.]"
+arg_boolean    "[reverse]      [r] [Track the logs in reverse. Helpful for backtracking an error.
+Example: track-log-pid log/production.log -rp '/ActiveRecord::ValidationError/' -s 'm{POST \"/upload_file\"}'
+]"
+arg_positional "[file]             [File to parse.]"
 arg_help "[\n$helptxt]"
 parse_args
 
@@ -33,11 +38,17 @@ read -r -d '' perl_script << 'EOT'
   BEGIN {
     $RED   = "\e[31m";
     $RESET = "\e[0m";
+    $LOG_START_PAT = q/^\w,\s+\[(?<timestamp>\d+-\d+-\d+T\d+:\d+:\d+).*?#(?<pid>\d+)\]\s+/;
+    if (q{<ARG_STOP_PATTERN>}) {
+      $LOG_STOP_TRACK_PAT = q{<ARG_STOP_PATTERN>};
+    } else {
+      $LOG_STOP_TRACK_PAT = $LOG_START_PAT . q/.*?Completed.*?in\s+\d+ms/;
+    }
   }
   my %pids = ();
-  $pat = q/I,\s+\[(?<timestamp>\d+-\d+-\d+T\d+:\d+:\d+).*?#(?<pid>\d+)\]\s+INFO/;
-  /$pat/;
-  $pid = $+{pid}, $timestamp = $+{timestamp};
+  /$LOG_START_PAT/;
+  $pid       = $+{pid};
+  $timestamp = $+{timestamp};
   if (<ARG_PATTERN>) {
     my ($year, $mon, $mday, $hour, $min, $sec) = split(/[-:T]+/, $timestamp);
     $ts = timelocal($sec, $min, $hour, $mday, $mon - 1, $year);
@@ -62,15 +73,16 @@ read -r -d '' perl_script << 'EOT'
       print;
     }
   } elsif ($t0 = $pids["$pid"]) {
-    print;
-    if (/${pat}.*?Completed.*?in\s+\d+ms/) {
+    if (eval($LOG_STOP_TRACK_PAT)) {
       delete($pids["$pid"]);
     };
     my ($year, $mon, $mday, $hour, $min, $sec) = split(/[-:T]+/, $timestamp);
     $t1 = timelocal($sec, $min, $hour, $mday, $mon - 1, $year);
-    if ($t1 > ($t0 + <ARG_TIMEOUT>)) {
+    $d = $t1 - $t0;
+    if (abs($t1 - $t0) gt <ARG_TIMEOUT>) {
       delete($pids["$pid"]);
     };
+    print;
   };
 EOT
 
@@ -86,16 +98,22 @@ else
   ARG_NO_COLOR=0
 fi
 
-func::zzcat() {
-  cat "$1" | zcat 2>/dev/null || cat "$1"
+func::zzcat_base() {
+  { cat "$1" | zcat 2>/dev/null ; } || { cat "$1" ; }
 }
 
+func::zzcat() {
+  if [[ -n $ARG_REVERSE ]]; then
+    func::zzcat_base "$1" | tac
+  else
+    func::zzcat_base "$1"
+  fi
+}
 
 perl_script="${perl_script//<ARG_PATTERN\>/$ARG_PATTERN}"
 perl_script="${perl_script//<ARG_TIMEOUT\>/$ARG_TIMEOUT}"
 perl_script="${perl_script//<ARG_NO_COLOR\>/$ARG_NO_COLOR}"
-
-echo "$perl_script"
+perl_script="${perl_script//<ARG_STOP_PATTERN\>/$ARG_STOP_PATTERN}"
 
 if [[ ${#POSITIONAL[@]} -eq 0 ]]; then
   cat | perl -ne "$perl_script"

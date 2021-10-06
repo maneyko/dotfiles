@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Managed by Homebrew (or apt)
 no_update=(
@@ -15,12 +15,17 @@ test "$1" = '-3' && pyversion=3
 
 python_pip="python$pyversion -m pip"
 
-no_grep="$(echo "${no_update[@]}" | perl -pe 's/ /|/g')"
+no_grep="$(echo "${no_update[@]}" | awk 'gsub(/\s+/, "|")')"
 
-packages="$(
-  $python_pip list --outdated \
-    | awk "NR > 2 && ! (tolower(\$1) ~ /$no_grep/) {print \$1}"
-)"
+read -r -d '' awk_script << 'EOT'
+NR > 2 && !(tolower($1) ~ /<NO_GREP>/) {
+  print $1;
+}
+EOT
+
+awk_script="${awk_script//\<NO_GREP>/"$no_grep"}"
+
+packages="$($python_pip list --outdated | awk "$awk_script")"
 
 for pkg in $packages; do
   $python_pip install --upgrade "$pkg"

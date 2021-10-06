@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 def get_pwd
-  %x{printf "$PWD"}
+  Dir.pwd
 end
 
 def try_block
@@ -15,9 +15,7 @@ end
 def try_require(lib_name, &block)
   require lib_name
   if block_given?
-    try_block do
-      yield
-    end
+    try_block { yield }
   end
 rescue LoadError => error
   error
@@ -39,6 +37,10 @@ try_require("irb/ext/save-history") do
 end
 
 try_require("hirb") do
+  Hirb.enable
+end
+
+try_require("hirber") do
   Hirb.enable
 end
 
@@ -81,7 +83,6 @@ try_block do
     PROMPT_S:    "[#{cprint_q 2, "%03n%l"}]: ",
     PROMPT_C:    "[#{cprint_q 2, "%03n"}]: ",
     PROMPT_N:    "[#{cprint_q 2, "%03n?"}]: ",
-
     RETURN:      " => %s \n",
     AUTO_INDENT: true
   }

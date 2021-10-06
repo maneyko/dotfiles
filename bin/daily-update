@@ -1,19 +1,19 @@
 #!/bin/bash
 
 if [[ -n $USING_MAC_OS ]]; then
-  PATH="\
-/usr/local/bin:\
-/usr/local/sbin:\
-/usr/bin:\
-/usr/sbin:\
-/bin:\
-/sbin:
-"
-  unalias -a
+  # PATH="\
+# /usr/local/bin:\
+# /usr/local/sbin:\
+# /usr/bin:\
+# /usr/sbin:\
+# /bin:\
+# /sbin:
+# "
+  # unalias -a
   brew update
   brew update
   brew upgrade
-elif { cat /etc/issue | grep Ubuntu ; } 2>/dev/null ; then
+elif { cat /etc/issue | awk '/Ubuntu|Raspbian/' ; } 2>/dev/null ; then
   sudo apt-get -y update
   sudo apt-get -y upgrade
   sudo apt-get -y dist-upgrade
@@ -33,4 +33,4 @@ if [[ -n $USING_MAC_OS ]]; then
   brew doctor
 fi
 
-\. $HOME/.bashrc
+# \. $HOME/.bashrc

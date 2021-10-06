@@ -144,7 +144,7 @@ fi
 #
 # @param text [String]
 bprint() {
-  printf "\033[1m$1\033[0m"
+  printf -- "%b" "\033[1m$1\033[0m"
 }
 export -f bprint
 
@@ -153,17 +153,17 @@ export -f bprint
 # @param number [Integer]
 # @param text   [String]
 cprint() {
-  printf "\033[38;5;${1}m${2}\033[0m"
+  printf -- "%b" "\033[38;5;${1}m${2}\033[0m"
 }
 export -f cprint
 
 clr24() {  # ("r;g;b", text)
-  printf "\033[38;2;${1}m${2}\033[0m"
+  printf -- "%b" "\033[38;2;${1}m${2}\033[0m"
 }
 export -f clr24
 
 pclr() {  # (number, text)
-  printf "\[\033[38;5;${1}m\]${2}\[\033[0m\]"
+  printf --  "%b" "\[\033[38;5;${1}m\]${2}\[\033[0m\]"
 }
 
 export PS1_NO_GIT=0
@@ -310,6 +310,24 @@ else
 fi
 
 
+# ---------------------------------------------------------------------
+# Specific Environment
+# ---------------------------------------------------------------------
+
+if [[ -f $HISTFILE ]]; then
+  hist_size=$(wc -l < $HISTFILE)
+  hist_size=$(($hist_size / 2))  # Every other line is a timestamp
+  if [[ $(($HISTSIZE - $hist_size)) -le 1000 ]]; then
+    hist_dir="${HISTFILE}.d"
+    hist_logfile="${hist_dir}/bash_history-$(date +'%Y%m%d')"
+    hist_keep=1000
+    echo "Rolling bash history. Backup will be saved to '$hist_logfile'. Keeping last $hist_keep commands."
+    mkdir -p "${hist_dir}/"
+    cp "$HISTFILE" "$hist_logfile"
+    tail -n $(($hist_keep * 2)) "$hist_logfile" > "$HISTFILE"
+  fi
+fi
+
 # First TTY Greeting
 # ------------------
 if [[ -n $INTERACTIVE && -n $USING_MAC_OS ]]; then
@@ -325,10 +343,8 @@ if [[ -n $INTERACTIVE && -n $USING_MAC_OS ]]; then
 fi
 
 
-# ---------------------------------------------------------------------
-# Specific Environment
-# ---------------------------------------------------------------------
-
+# RVM
+# ---
 rvms=(
 /usr/local/rvm/scripts/rvm
 $HOME/.rvm/scripts/rvm
@@ -350,6 +366,9 @@ if [[ -s $rvm_source ]]; then
   cd "$_origin_pwd"
 fi
 
+
+# NVM
+# ---
 nvms=(
 /usr/local/opt/nvm
 $HOME/.nvm
@@ -365,6 +384,7 @@ for d in ${nvms[@]}; do
     break
   fi
 done
+
 
 if [[ -f $HOME/.bashrc.local ]]; then
   source $HOME/.bashrc.local

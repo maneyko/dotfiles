@@ -13,7 +13,8 @@ case "$file" in
   *.gz)
     gunzip "$file" ;;
   *.bz2)
-    bunzip "$file" ;;
+    bunzip=$(type -P bunzip bunzip2 | head -1)
+    $bunzip "$file" ;;
   *.dmg)
     bunzip2 "$file" ;;
   *.zip|*ZIP)

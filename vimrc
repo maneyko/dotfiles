@@ -46,6 +46,7 @@ if version >= 702
   au InsertLeave * set list
   au InsertEnter * set nolist
 endif
+set noerrorbells visualbell t_vb=
 set nowildmenu
 set number
 set numberwidth=3
@@ -145,15 +146,15 @@ if !minimal_vimrc
   Plug 'martinda/Jenkinsfile-vim-syntax'
   Plug 'phreax/vim-coffee-script'
   Plug 'vim-scripts/nginx.vim'       " nginx
-  Plug 'digitaltoad/vim-pug'
-  Plug 'jbmorgado/vim-pine-script'
+  " Plug 'digitaltoad/vim-pug'
+  " Plug 'jbmorgado/vim-pine-script'
   Plug 'gisphm/vim-gitignore'        " .gitignore files
   " Plug 'vim-python/python-syntax'
 
-  Plug 'yuezk/vim-js'
-  Plug 'maxmellon/vim-jsx-pretty'
+  " Plug 'yuezk/vim-js'
+  " Plug 'maxmellon/vim-jsx-pretty'
 
-  Plug 'tomlion/vim-solidity'
+  " Plug 'tomlion/vim-solidity'
 
   Plug 'tpope/vim-markdown'
     let g:markdown_fenced_languages = ['bash=sh', 'html', 'python', 'ruby', 'sql', 'yaml', 'perl', 'diff']
@@ -187,6 +188,7 @@ if !minimal_vimrc
 
   " Completion
   " ----------
+
   " Plug 'autozimu/LanguageClient-neovim', {
   "     \ 'branch': 'next',
   "     \ 'do': 'bash install.sh',

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+docker ps -a \
+  --format "table {{.ID}}\t{{.Status}}" \
+  --filter 'status=exited' \
+  | awk 'NR != 1 {print $1}' \
+  | xargs -I{} docker container rm {}

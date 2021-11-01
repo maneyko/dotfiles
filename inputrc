@@ -14,6 +14,8 @@ set mark-symlinked-directories on
 # colored tab completion
 set colored-stats on
 
+set bell-style none
+
 # -------------------------------------------------------------------
 
 # Map arrow keys and <delete> key

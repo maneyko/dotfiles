@@ -4,8 +4,8 @@ args="$@"
 
 sys_man="$(which -a man | tail -1)"
 
-if [[ -n "$(echo $EDITOR | grep 'nvim$')" && -z $USING_MAC_OS ]]; then
-  export MANPAGER="nvim -c 'set ft=man' -c 'silent! call ReadMode(1)' -"
+if [[ $EDITOR == *nvim* ]]; then
+  export MANPAGER="nvim +Man! -c 'silent! call ReadMode(1)'"
   $sys_man "$args"
   exit 0
 fi
@@ -13,15 +13,15 @@ fi
 my_vim="$(which vim)"
 
 if [[
-  -d "$HOME/.vim/plugged/vim-man" &&
+  -d "$VIM_CONFIG_DIR/plugged/vim-man" &&
   -n "$(grep 'vim-man' $HOME/.vimrc)" &&
   -z "$(grep 'minimal_vimrc = 1' $HOME/.vimrc)"
 ]]; then
   $my_vim \
     -c "execute 'Man ' . '$args'" \
-    -c "execute \"normal \<C-w>o\"" \
-    -c "silent! call ReadMode(1)" \
-    -c "set so=0 ft=man"
+    -c 'execute "normal \<C-w>o"' \
+    -c 'silent! call ReadMode(1)' \
+    -c 'set so=0 ft=man'
 else
   $sys_man "$args"
 fi

@@ -98,24 +98,35 @@ EOT
   exit 0
 fi
 
+git_pager_settings=(
+core.pager
+pager.log
+show.log
+)
+
+for setting in ${git_pager_settings[@]}; do
+  if ! git config --global --get $setting >/dev/null ; then
+    git config --global $setting 'less -QFRX'
+  fi
+done
+
 mkdir -p $HOME/.psql_history.d/
 
-vim_path="$(type -P nvim vim vi | head -1)"
-vim="$(basename $vim_path)"
+vim="$(type -P nvim vim vi | head -1)"
 
-if [[ $vim == nvim ]]; then
-  vim_plug_dir="$HOME/.local/share/nvim/site"
-  vim_config_dir="$HOME/.config/nvim"
+if [[ $vim == *nvim* ]]; then
+  vim_plugin_dir=".local/share/nvim/site"
+  vim_config_dir=".config/nvim"
 else
-  vim_plug_dir="$HOME/.vim"
-  vim_config_dir="$HOME/.vim"
+  vim_plugin_dir=".vim"
+  vim_config_dir=".vim"
 fi
 
-curl -fLo "$vim_plug_dir/autoload/plug.vim" \
+curl -fLo "$vim_plugin_dir/autoload/plug.vim" \
   --create-dirs \
     'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 
-if [[ -n $ARG_VIM_FULL && $vim == nvim ]]; then
+if [[ -n $ARG_VIM_FULL && $vim == *nvim* ]]; then
   python3 -m pip install pynvim --upgrade
 fi
 
@@ -125,10 +136,10 @@ fi
 
 $vim +PlugInstall +qall
 
-if [[ $vim == nvim ]]; then
+if [[ $vim == *nvim* ]]; then
   $vim +UpdateRemotePlugins +qall
-  ln -s ../../.local/share/nvim/site/autoload/ .dotfiles/vim/
-  ln -s ../config/nvim/plugged .dotfiles/vim/
+  ln -s "../../$vim_plugin_dir/autoload" .dotfiles/vim/
+  ln -s "../../$vim_config_dir/plugged"  .dotfiles/vim/
 fi
 
 rm -f "$vim_config_dir/plugged/vim-plug/.git/objects/pack/*.pack"  2>/dev/null

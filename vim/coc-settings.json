@@ -1,7 +1,4 @@
 {
   "suggest.maxCompleteItemCount": 50,
-  "python.linting.enabled": false,
-  "python.linting.pylintEnabled": false,
-  "solargraph.promptDownload": false,
-  "solargraph.checkGemVersion": false
+  "solargraph.trace.server": "verbose"
 }

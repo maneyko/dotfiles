@@ -1,6 +1,8 @@
 #!/bin/bash
 
 if [[ -n $USING_MAC_OS ]]; then
-  afplay /System/Library/Sounds/Glass.aiff
+  {
+    afplay /System/Library/Sounds/Glass.aiff & disown
+  } >/dev/null 2>&1
 fi
 

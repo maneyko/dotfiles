@@ -59,10 +59,10 @@ $HOME/local/share/man:\
 /usr/share/man\
 "
 
-export UNAME_N="${UNAME_N:="$(uname -n)"}"
-export UNAME_S="${UNAME_S:="$(uname -s)"}"
-export UNAME="${UNAME:="$UNAME_S"}"
-export TTY_S="$(tty)"
+export UNAME_N=${UNAME_N:=$(uname -n)}
+export UNAME_S=${UNAME_S:=$(uname -s)}
+export UNAME=${UNAME:=$UNAME_S}
+export GPG_TTY=$(tty)
 
 if [[ $UNAME_S == Darwin ]]; then
   export USING_MAC_OS=true
@@ -71,24 +71,25 @@ else
 fi
 
 
-_vim="$(type -P nvim vim vi | head -1)"
-export EDITOR="$_vim"
-alias vi="$_vim"
-alias vim="$_vim"
+_vim=$(type -P nvim vim vi | head -1)
+export EDITOR=$_vim
+alias vi=$_vim
+alias vim=$_vim
 
 export GREP_COLOR='1;31'
-export LESS='-RX -j5'
+export LESS='-QRX -j5'
 export PAGER='less'
 
 export TZ='America/Chicago'
-export HISTFILE="$HOME/.bash_history"
+export HISTFILE=$HOME/.bash_history
 export HISTSIZE=200000
 export HISTTIMEFORMAT="%F %T: "
 
-case "$-" in
-  *i*) INTERACTIVE=true ;;
-  *) unset INTERACTIVE ;;
-esac
+if [[ $- == *i* ]]; then
+  INTERACTIVE=true
+else
+  unset INTERACTIVE
+fi
 
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
@@ -126,9 +127,7 @@ for f in ${completion_sources[@]}; do
 done
 
 # Override `bash_completion` and disable tilde expansion
-_expand() {
-  return 0
-}
+_expand() { return 0 ; }
 
 
 # ---------------------------------------------------------------------
@@ -141,30 +140,22 @@ if [[ $TMUX && -s $TERM_COLORS && -n $USING_MAC_OS ]]; then
 fi
 
 # Bold print.
-#
-# @param text [String]
-bprint() {
-  printf -- "%b" "\033[1m$1\033[0m"
-}
+bprint() { printf -- "%b" "\033[1m$1\033[0m" ; }
 export -f bprint
 
-# Color print.
-#
-# @param number [Integer]
-# @param text   [String]
-cprint() {
-  printf -- "%b" "\033[38;5;${1}m${2}\033[0m"
-}
+# 8-bit color print. Example: cprint 1 ERROR
+cprint() { printf -- "%b" "\033[38;5;${1}m${2}\033[0m" ; }
 export -f cprint
 
-clr24() {  # ("r;g;b", text)
-  printf -- "%b" "\033[38;2;${1}m${2}\033[0m"
-}
-export -f clr24
+# 24-bit color print. Example: clr24 "255;0;0" "hello world". Color is in "r;g;b" format.
+cprint24() { printf -- "%b" "\033[38;2;${1}m${2}\033[0m" ; }
+export -f cprint24
 
-pclr() {  # (number, text)
-  printf --  "%b" "\[\033[38;5;${1}m\]${2}\[\033[0m\]"
-}
+# Underline print.
+ulprint() { printf -- "%b" -- "\033[4${1}\033[0m" ; }
+
+# Special color print for prompt string.
+pclr() { printf -- "%b" "\[\033[38;5;${1}m\]${2}\[\033[0m\]" ; }
 
 export PS1_NO_GIT=0
 
@@ -176,15 +167,13 @@ export -f branch_colon
 
 parse_git_branch() {
   [[ $PS1_NO_GIT -eq 1 ]] && return
-  t1="$(git branch 2>/dev/null)"
-  t2="${t1##*\* }"
-  printf "${t2%%$'\n'*}"
+  t1=$(git branch 2>/dev/null)
+  t2=${t1##*\* }
+  printf -- "%b" "${t2%%$'\n'*}"
 }
 export -f parse_git_branch
 
-date_command() {
-  date +'%A %B %d, %Y @ %I:%M:%S %p'
-}
+date_command() { date +'%H:%M:%S' ; }
 
 border_color=241
 pwd_color=228
@@ -230,7 +219,7 @@ SHORT_PS1="\
 `pclr $border_color  ']› '         `\
 "
 
-export PS1="$LONG_PS1"
+export PS1=$LONG_PS1
 
 
 # ---------------------------------------------------------------------
@@ -238,23 +227,23 @@ export PS1="$LONG_PS1"
 # ---------------------------------------------------------------------
 
 # Find and evaluate `dircolors` if exists
-_dircolors="$(type -P gdircolors dircolors | head -1)"
+_dircolors=$(type -P gdircolors dircolors | head -1)
 if [[ -n $_dircolors && -f $HOME/.dotfiles/bash/dircolors ]]; then
   eval "$($_dircolors -b $HOME/.dotfiles/bash/dircolors)"
 fi
 
-_cp="$(type -P gcp cp | head -1)"
+_cp=$(type -P gcp cp | head -1)
 alias cp="$_cp -i"
 
-_grep="$(type -P ggrep grep | head -1)"
+_grep=$(type -P ggrep grep | head -1)
 alias grep="$_grep -i --color=auto"
 
 alias ag='ag --color-match "0;35"'
 
 alias mv='mv -i'
 
-_ls="$(type -P gls ls | head -1)"
-if { $_ls --version | \grep GNU ; } >/dev/null 2>&1; then
+_ls=$(type -P gls ls | head -1)
+if [[ $($_ls --version 2>/dev/null) == *GNU* ]]; then
   GNU_LS=true
 fi
 if [[ -n $GNU_LS ]]; then
@@ -287,7 +276,7 @@ alias nowrap='tput rmam'
 alias rewrap='tput smam'
 alias git-root='cd "$(git rev-parse --show-toplevel 2>/dev/null || echo ".")"'
 
-function mkdirpcd { mkdir -p "$1"; cd "$1"; }
+mkdirpcd() { mkdir -p "$1" ; cd "$1" ; }
 export -f mkdirpcd
 
 alias ..='cd ../'
@@ -303,7 +292,7 @@ if [[ -n $USING_MAC_OS ]]; then
   alias mcopy='pbcopy'
   alias mpaste='pbpaste'
 else
-  if [[ -n $(command -v xclip) ]]; then
+  if command -v xclip >/dev/null 2>&1; then
     alias mcopy='xclip -selection c'
     alias mpaste='xclip -o'
   fi
@@ -314,12 +303,22 @@ fi
 # Specific Environment
 # ---------------------------------------------------------------------
 
+if command -v tmux >/dev/null 2>&1; then
+  export TMUX_VERSION_INT=$(tmux -V | awk "{ gsub(/[:alpha:]/, \"\", \$2); split(\$2, a, \".\"); printf(\"%d%02d\", a[1], a[2]) }")
+fi
+
+if [[ $(command -v vi) == *nvim* ]]; then
+  export VIM_CONFIG_DIR="$HOME/.config/nvim"
+else
+  export VIM_CONFIG_DIR="$HOME/.vim"
+fi
+
 if [[ -f $HISTFILE ]]; then
   hist_size=$(wc -l < $HISTFILE)
   hist_size=$(($hist_size / 2))  # Every other line is a timestamp
   if [[ $(($HISTSIZE - $hist_size)) -le 1000 ]]; then
-    hist_dir="${HISTFILE}.d"
-    hist_logfile="${hist_dir}/bash_history-$(date +'%Y%m%d')"
+    hist_dir=$HISTFILE.d
+    hist_logfile="$hist_dir/bash_history-$(date +'%Y%m%d')"
     hist_keep=1000
     echo "Rolling bash history. Backup will be saved to '$hist_logfile'. Keeping last $hist_keep commands."
     mkdir -p "${hist_dir}/"
@@ -327,21 +326,6 @@ if [[ -f $HISTFILE ]]; then
     tail -n $(($hist_keep * 2)) "$hist_logfile" > "$HISTFILE"
   fi
 fi
-
-# First TTY Greeting
-# ------------------
-if [[ -n $INTERACTIVE && -n $USING_MAC_OS ]]; then
-  if [[ $TTY_S =~ .*0[1-2]$ ]]; then
-    if [[ $COLUMNS -ge 70 && $LINES -ge 20 ]]; then
-      if [[ $(($(date +%w) % 2)) -eq 0 ]]; then
-        neofetch
-      else
-        curl wttr.in?2Fn
-      fi
-    fi
-  fi
-fi
-
 
 # RVM
 # ---
@@ -353,7 +337,7 @@ $HOME/.rvm/scripts/rvm
 for f in ${rvms[@]}; do
   if [[ -s $f ]]; then
     # This takes ~0.15 seconds
-    rvm_source="$f"
+    rvm_source=$f
     source "$f"  # Load RVM into a shell session *as a function*
     break
   fi
@@ -361,7 +345,7 @@ done
 
 # Helps initialize RVM in new terminal
 if [[ -s $rvm_source ]]; then
-  _origin_pwd="$PWD"
+  _origin_pwd=$PWD
   cd ../
   cd "$_origin_pwd"
 fi
@@ -388,4 +372,18 @@ done
 
 if [[ -f $HOME/.bashrc.local ]]; then
   source $HOME/.bashrc.local
+fi
+
+# First TTY Greeting
+# ------------------
+if [[ -n $INTERACTIVE && -n $USING_MAC_OS ]]; then
+  if [[ $GPG_TTY == *0[1-2] ]]; then
+    if [[ $COLUMNS -ge 70 && $LINES -ge 20 ]]; then
+      # if [[ $(($(date +%w) % 2)) -eq 0 ]]; then
+      #   neofetch
+      # else
+        curl wttr.in?2Fn
+      # fi
+    fi
+  fi
 fi

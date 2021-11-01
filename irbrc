@@ -53,10 +53,18 @@ if defined?(Rails)
   if (Rails.env.development? || Rails.env.test?)
     Rails.application&.eager_load!
   end
+  unless Rails.env.production?
+    # https://stackoverflow.com/a/17675841
+    ActiveRecord::Base.logger.level = 1
+  end
 end
 
 def cls
   puts "\033c\033[3J"
+end
+
+def bel
+  print "\07"
 end
 
 def bprint(text)
@@ -83,7 +91,7 @@ try_block do
     PROMPT_S:    "[#{cprint_q 2, "%03n%l"}]: ",
     PROMPT_C:    "[#{cprint_q 2, "%03n"}]: ",
     PROMPT_N:    "[#{cprint_q 2, "%03n?"}]: ",
-    RETURN:      " => %s \n",
+    RETURN:      " # => %s \n",
     AUTO_INDENT: true
   }
   IRB.conf[:PROMPT_MODE] = :CUSTOM

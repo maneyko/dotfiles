@@ -59,12 +59,9 @@ $HOME/local/share/man:\
 /usr/share/man\
 "
 
-export UNAME_N=${UNAME_N:=$(uname -n)}
-export UNAME_S=${UNAME_S:=$(uname -s)}
-export UNAME=${UNAME:=$UNAME_S}
 export GPG_TTY=$(tty)
 
-if [[ $UNAME_S == Darwin ]]; then
+if [[ $OSTYPE == *darwin* ]]; then
   export USING_MAC_OS=true
 else
   unset USING_MAC_OS
@@ -177,7 +174,7 @@ date_command() { date +'%H:%M:%S' ; }
 
 border_color=241
 pwd_color=228
-: ${host_text:="$UNAME_N"}
+: ${host_text:=$HOSTNAME}
 : ${user_color:=196}
 : ${host_color:=147}
 
@@ -380,9 +377,9 @@ if [[ -n $INTERACTIVE && -n $USING_MAC_OS ]]; then
   if [[ $GPG_TTY == *0[1-2] ]]; then
     if [[ $COLUMNS -ge 70 && $LINES -ge 20 ]]; then
       # if [[ $(($(date +%w) % 2)) -eq 0 ]]; then
-      #   neofetch
+        neofetch
       # else
-        curl wttr.in?2Fn
+        # curl wttr.in?2Fn
       # fi
     fi
   fi

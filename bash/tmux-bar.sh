@@ -8,7 +8,7 @@ date_status() {
   tmux set -g status-right "$text" || break
 }
 
-if [[ $UNAME_S == Darwin ]]; then
+if [[ $OSTYPE == *darwin* ]]; then
   while [[ -n $TMUX ]]; do
     tunes="$(~/.dotfiles/mac/tunes.js)"
     if [[ -n $tunes ]]; then

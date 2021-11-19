@@ -7,7 +7,7 @@ arg_positional "[pg-version] [Postgresql version to use.]"
 arg_help "[Configure Mac settings to use a postgres version.]"
 parse_args
 
-if [[ $(uname) != Darwin ]]; then
+if [[ $OSTYPE != *darwin* ]]; then
   echo "$(cprint 1 ERROR): Requires MacOS"
   exit 1
 elif [[ -z $ARG_PG_VERSION ]]; then

@@ -19,7 +19,7 @@ Example:
 EOT
 
 ARG_TIMEOUT=90
-ARG_STOP_PATTERN='""'
+ARG_STOP_PATTERN=''
 
 arg_boolean    "[no-color]     [n] [Do not print color output for regex matches.]"
 arg_optional   "[pattern]      [p] [Perl regex pattern to start tracking (required)]"
@@ -42,7 +42,7 @@ read -r -d '' perl_script << 'EOT'
     if (q{<ARG_STOP_PATTERN>}) {
       $LOG_STOP_TRACK_PAT = q{<ARG_STOP_PATTERN>};
     } else {
-      $LOG_STOP_TRACK_PAT = $LOG_START_PAT . q/.*?Completed.*?in\s+\d+ms/;
+      $LOG_STOP_TRACK_PAT = q(/) . $LOG_START_PAT . q(.*?Completed.*?in\s+\d+ms/);
     }
   }
   my %pids = ();

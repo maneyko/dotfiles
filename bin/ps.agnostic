@@ -13,7 +13,7 @@ arg_help     "[Machine agnostic 'ps' command.]"
 parse_args
 
 
-if [[ $(uname) == Darwin ]]; then
+if [[ $OSTYPE == *darwin* ]]; then
   USING_MAC_OS=true
   options='-m'
 else

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if $(uname) != 'Darwin'; then
-  echo 'Can only run on MacOS.'
+if [[ $OSTYPE != *darwin* ]]; then
+  echo 'ERROR: Can only run on MacOS.'
   exit 1
 fi
 

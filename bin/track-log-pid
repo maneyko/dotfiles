@@ -87,8 +87,7 @@ read -r -d '' perl_script << 'EOT'
 EOT
 
 if [[ -z $ARG_PATTERN ]]; then
-  cprint 1 "ERROR"
-  echo ": Must provide '-p' flag. See help menu for details."
+  echo "$(cprint 1 ERROR): Must provide '-p' flag. See help menu for details."
   exit 1
 fi
 

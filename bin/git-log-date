@@ -8,7 +8,7 @@ arg_help       "[Show git logs between two dates.]"
 parse_args
 
 if [[ -z $ARG_START_DATE || -z $ARG_END_DATE ]]; then
-  cprint 1 "ERR"; echo ": You need to provide a start date and an end date."
+  echo "$(cprint 1 ERR): You need to provide a start date and an end date."
   print_help
   exit 1
 fi

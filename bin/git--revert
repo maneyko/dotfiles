@@ -1,6 +1,6 @@
 #!/bin/bash
 
-default_branch="$(git symbolic-ref refs/remotes/origin/HEAD)"
+default_branch=$(git symbolic-ref refs/remotes/origin/HEAD)
 default_branch=${default_branch#*remotes\/origin\/}
 
 git checkout origin/$default_branch "$@"

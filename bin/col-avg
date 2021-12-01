@@ -2,8 +2,8 @@
 
 col=1
 
-if [[ -n "$1" ]]; then
-  col="$1"
+if [[ -n $1 ]]; then
+  col=$1
 fi
 
 awk '{ total += $'$col'; count++ } END { print total / count } '

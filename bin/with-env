@@ -10,7 +10,7 @@ parse_args
 # https://github.com/bashup/dotenv
 
 set -o allexport
-for f in ${ARG_FILE[@]}; do
+for f in "${ARG_FILE[@]}"; do
   source "$f"
 done
 set +o allexport

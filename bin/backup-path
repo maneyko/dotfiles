@@ -11,42 +11,42 @@ arg_help       "[Create a backup path for a file.]"
 parse_args
 
 _backup_path() {
-  arg="$1"
-  src_dir="$(dirname "$arg")/"
-  f="$(basename "$arg")"
-  f_dest=""
+  arg=$1
+  src_dir=$(dirname "$arg")/
+  f=$(basename "$arg")
+  f_dest=
 
   if [[ $src_dir == './' ]]; then
-    src_dir=""
+    src_dir=
   fi
 
-  DOTF=''
+  DOTF=
   if [[ ${f:0:1} == '.' ]]; then
     DOTF=1
-    f="${f:1}"
+    f=${f:1}
   fi
 
-  ext="${f##*.}"
-  fbase="${f%.*}"
+  ext=${f##*.}
+  fbase=${f%.*}
 
   if [[ $fbase == $ext ]]; then
     f_dest="$fbase.1"
   fi
 
-  fbase_ext="${fbase##*.}"
+  fbase_ext=${fbase##*.}
 
   if [[ -z $f_dest ]]; then
-    if ! test $(expr "$fbase_ext" : "^[0-9]*$") == "0"; then
+    if [[ $(expr "$fbase_ext" : "^[0-9]*$") != 0 ]]; then
       num="$(echo "$fbase_ext + 1" | bc)"
-      f_dest="${fbase%.*}.${num}.${ext}"
-    elif ! test $(expr "$ext" : "^[0-9]*$") == "0"; then
+      f_dest=${fbase%.*}.${num}.${ext}
+    elif [[ $(expr "$ext" : "^[0-9]*$") != 0 ]]; then
       num="$(echo "$ext + 1" | bc)"
-      f_dest="${fbase}.${num}"
-    elif test $(expr "$ext" : "^[0-9]*$") == "0"; then
-      f_dest="${fbase}.1.${ext}"
+      f_dest=${fbase}.${num}
+    elif [[ $(expr "$ext" : "^[0-9]*$") == 0 ]]; then
+      f_dest=${fbase}.1.${ext}
     fi
   fi
-  _backup_path_result="$f_dest"
+  _backup_path_result=$f_dest
 }
 
 : ${ARG_RETRIES:=$RETRIES_DEFAULT}
@@ -54,16 +54,16 @@ _backup_path() {
 _backup_path "$ARG_FILE"
 
 i=0
-while test -f "$_backup_path_result"; do
+while [[ -f $_backup_path_result ]]; do
   _backup_path "$_backup_path_result"
   i=$((i + 1))
   [[ $i -ge $ARG_RETRIES ]] && break
 done
 
-f_dest="$_backup_path_result"
+f_dest=$_backup_path_result
 
 if [[ -n $f_dest ]]; then
-  [[ -n $DOTF ]] && f_dest=".${f_dest}"
+  [[ -n $DOTF ]] && f_dest=.${f_dest}
   if [[ -n $ARG_COPY ]]; then
     cp -v "$ARG_FILE" "${src_dir}${f_dest}"
   else

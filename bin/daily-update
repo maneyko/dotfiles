@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [[ -n $USING_MAC_OS ]]; then
+if [[ $OSTYPE == *darwin* ]]; then
   # PATH="\
 # /usr/local/bin:\
 # /usr/local/sbin:\
@@ -29,7 +29,7 @@ if [[ -n "$(command -v npm)" ]]; then
   npm upgrade -g
 fi
 
-if [[ -n $USING_MAC_OS ]]; then
+if [[ $OSTYPE == *darwin* ]]; then
   brew doctor
 fi
 

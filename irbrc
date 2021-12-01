@@ -155,15 +155,18 @@ def mock_hash(size = 10)
 end
 
 # Object methods
-def omethods(obj, pprint = true)
-  diff = obj.public_send(:methods) - Object.methods
-  if pprint
-    cmd = defined?(AwesomePrint) ? :ap : :pp
-    __send__(cmd, diff)
-  end
+def omethods(instance, *compare_classes)
+  subtract_methods = Object.instance_methods
+
+  compare_classes.each { |klass| subtract_methods += klass.instance_methods }
+  subtract_methods.uniq!
+
+  diff = instance.public_send(:methods) - subtract_methods
+  cmd  = defined?(AwesomePrint) ? :ap : :pp
+  __send__(cmd, diff)
 end
 
-def value_counts(arr)
+def tally(arr)
   arr.group_by(&:itself).transform_values(&:count)
 end
 

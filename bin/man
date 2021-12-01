@@ -2,7 +2,7 @@
 
 args="$@"
 
-sys_man="$(which -a man | tail -1)"
+sys_man=$(which -a man | tail -1)
 
 if [[ $EDITOR == *nvim* ]]; then
   export MANPAGER="nvim +Man! -c 'silent! call ReadMode(1)'"
@@ -10,7 +10,7 @@ if [[ $EDITOR == *nvim* ]]; then
   exit 0
 fi
 
-my_vim="$(which vim)"
+my_vim=$(which vim)
 
 if [[
   -d "$VIM_CONFIG_DIR/plugged/vim-man" &&

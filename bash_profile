@@ -1,7 +1,7 @@
 #!/bin/bash
 
-test -n "$BASHRC_LOADED" && return
+[[ -n $BASHRC_LOADED ]] && return
 
-if test -f "$HOME/.bashrc"; then
+if [[ -f $HOME/.bashrc ]]; then
   source "$HOME/.bashrc"
 fi

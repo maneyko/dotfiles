@@ -9,12 +9,12 @@ parse_args
 
 if [[ -n "$(command -v pdflatex)" ]]; then
   cat << EOT
-'pdflatex' is not installed. On MacOS do: brew install mactex
+'pdflatex' is not installed. On macOS do: brew install mactex
 EOT
   exit 1
 fi
 
-texfile="${ARG_FILE}.tex"
+texfile=$ARG_FILE.tex
 
 rst2latex.py "$ARG_FILE" "$texfile" || exit 1
 

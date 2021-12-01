@@ -2,7 +2,7 @@
 
 
 if [[ -d $1 || -f $1 ]]; then
-  name="${1//\.*}"
+  name=${1//\.*}
   zip -r "${name%/}.zip" "$1"
 else
   echo "$1" is not a valid file

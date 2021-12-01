@@ -2,6 +2,6 @@
 
 for f in "$@"
 do
-  output="${f/%flac/mp3}"
+  output=${f/%flac/mp3}
   ffmpeg -i "$f" -qscale:a 0 "$output"
 done

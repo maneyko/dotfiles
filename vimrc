@@ -146,7 +146,7 @@ if !minimal_vimrc
   Plug 'martinda/Jenkinsfile-vim-syntax'
   Plug 'phreax/vim-coffee-script'
   Plug 'vim-scripts/nginx.vim'       " nginx
-  " Plug 'digitaltoad/vim-pug'
+  Plug 'digitaltoad/vim-pug'
   " Plug 'jbmorgado/vim-pine-script'
   Plug 'gisphm/vim-gitignore'        " .gitignore files
   " Plug 'vim-python/python-syntax'

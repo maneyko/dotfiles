@@ -67,7 +67,6 @@ else
   unset USING_MAC_OS
 fi
 
-
 _vim=$(type -P nvim vim vi | head -1)
 export EDITOR=$_vim
 alias vi=$_vim
@@ -132,7 +131,7 @@ _expand() { return 0 ; }
 # ---------------------------------------------------------------------
 
 TERM_COLORS="$HOME/.config/colors/base16-custom.dark.sh"
-if [[ $TMUX && -s $TERM_COLORS && -n $USING_MAC_OS ]]; then
+if [[ $TMUX && -s $TERM_COLORS && $OSTYPE == *darwin* ]]; then
   source "$TERM_COLORS"
 fi
 
@@ -284,7 +283,7 @@ done
 alias whois='whois -h whois.arin.net'
 
 # Platform specific
-if [[ -n $USING_MAC_OS ]]; then
+if [[ $OSTYPE == *darwin* ]]; then
   alias top='top -u'
   alias mcopy='pbcopy'
   alias mpaste='pbpaste'
@@ -373,7 +372,7 @@ fi
 
 # First TTY Greeting
 # ------------------
-if [[ -n $INTERACTIVE && -n $USING_MAC_OS ]]; then
+if [[ -n $INTERACTIVE && $OSTYPE == *darwin* ]]; then
   if [[ $GPG_TTY == *0[1-2] ]]; then
     if [[ $COLUMNS -ge 70 && $LINES -ge 20 ]]; then
       # if [[ $(($(date +%w) % 2)) -eq 0 ]]; then

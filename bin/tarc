@@ -44,12 +44,12 @@ if [[ $ARG_FILE_OR_DIRECTORY =~ ^- ]]; then
     echo "$(cprint 1 ERROR): Files starting with a dash are not supported."
     exit 1
   else
-    arg_ext="$ARG_FILE_OR_DIRECTORY"
-    ARG_FILE_OR_DIRECTORY="$ARG_EXTENSION"
-    ARG_EXTENSION="$arg_ext"
+    arg_ext=$ARG_FILE_OR_DIRECTORY
+    ARG_FILE_OR_DIRECTORY=$ARG_EXTENSION
+    ARG_EXTENSION=$arg_ext
   fi
 fi
 
-ARG_EXTENSION="${ARG_EXTENSION#*-}"
+ARG_EXTENSION=${ARG_EXTENSION#*-}
 
 tar -a -cvf "${ARG_FILE_OR_DIRECTORY%/}.tar.${ARG_EXTENSION}" "$ARG_FILE_OR_DIRECTORY"

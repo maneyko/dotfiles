@@ -1,6 +1,6 @@
 #!/bin/bash
 
-file="$1"
+file=$1
 
 if [[ ! -f $file ]]; then
   echo "ERROR: '$file' is not a valid file."

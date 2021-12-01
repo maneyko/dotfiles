@@ -4,8 +4,8 @@
 # => brew install ffmpeg
 # => brew install gifsicle
 
-mov="$1"
-gif="$2"
+mov=$1
+gif=$2
 
 : ${gif:="mov2git-output.gif"}
 

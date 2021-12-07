@@ -53,7 +53,7 @@ if defined?(Rails)
   if (Rails.env.development? || Rails.env.test?)
     Rails.application&.eager_load!
   end
-  unless Rails.env.production?
+  if defined?(ActiveRecord) && !Rails.env.production?
     # https://stackoverflow.com/a/17675841
     ActiveRecord::Base.logger.level = 1
   end

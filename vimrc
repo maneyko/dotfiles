@@ -410,9 +410,9 @@ endif
 au BufNewFile *.sh,*.bash
       \ exe "normal! i#!/bin/bash\<CR>\<Esc>"
 au BufNewFile *.rb
-      \ exe "normal! iclass " .
+      \ exe "normal! i# frozen_string_literal: truee\<CR>\<BS>\<BS>\<CR>\<CR>class " .
       \ substitute(substitute(expand('%:t')[:-4], '\(\%(\<\l\+\)\%(_\)\@=\)\|_\(\l\)', '\u\1\2', "g"),'^.','\u&','')
-      \ . "\<CR>\<CR>end\<Esc>ggj"
+      \ . "\<CR>\<CR>end\<Esc>gg3j"
 au BufNewFile *_spec.rb
       \ exe "normal! ggcGRSpec.describe " .
       \ substitute(substitute(expand('%:t')[:-9], '\(\%(\<\l\+\)\%(_\)\@=\)\|_\(\l\)', '\u\1\2', "g"),'^.','\u&','')

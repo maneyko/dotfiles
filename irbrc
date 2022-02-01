@@ -1,213 +1,232 @@
 #!/usr/bin/env ruby
 
-def get_pwd
-  Dir.pwd
-end
+def irbrc_error; @irbrc_error; end
 
-def try_block
-  begin
-    yield
-  rescue StandardError => error
+begin
+  require "etc"
+  require "fileutils"
+  require "pathname"
+  require "pp"
+
+  HOME ||= Pathname.new(Dir.home).freeze
+  USER ||= Etc.getlogin.freeze
+
+  UNAME ||= %x{uname -a}.chomp.freeze
+
+  def pwd
+    Dir.pwd
+  end
+
+  def try_block
+    begin
+      yield
+    rescue StandardError => error
+      error
+    end
+  end
+
+  def try_require(lib_name, &block)
+    require lib_name
+    if block_given?
+      try_block { yield }
+    end
+  rescue LoadError => error
     error
   end
-end
 
-def try_require(lib_name, &block)
-  require lib_name
-  if block_given?
-    try_block { yield }
-  end
-rescue LoadError => error
-  error
-end
-
-puts <<-EOT
+  puts <<-EOT
 #{RUBY_DESCRIPTION}
 
-EOT
+  EOT
 
-require "etc"
-require "fileutils"
-require "pp"
-try_require "awesome_print"
-try_require "irb/completion"
+  try_require "awesome_print"
+  try_require "irb/completion"
 
-try_require("irb/ext/save-history") do
-  IRB.conf[:SAVE_HISTORY] = 10_000
-end
-
-try_require("hirb") do
-  Hirb.enable
-end
-
-try_require("hirber") do
-  Hirb.enable
-end
-
-HOME = Dir.home.freeze
-USER = Etc.getlogin.freeze
-
-UNAME = %x{uname -a}.chomp.freeze
-
-if defined?(Rails)
-  if (Rails.env.development? || Rails.env.test?)
-    Rails.application&.eager_load!
+  try_require("irb/ext/save-history") do
+    IRB.conf[:SAVE_HISTORY] = 10_000
   end
-  if defined?(ActiveRecord) && !Rails.env.production?
-    # https://stackoverflow.com/a/17675841
-    ActiveRecord::Base.logger.level = 1
+
+  if defined?(Pry)
+    history_file =
+      if defined?(IRB) && IRB.respond_to?(:conf)
+        IRB.conf[:HISTORY_FILE]
+      end
+    history_file ||= "#{HOME}/.irb-history"
+    Pry.config.history_file = history_file
   end
-end
 
-def cls
-  puts "\033c\033[3J"
-end
+  try_require("hirb") do
+    Hirb.enable
+  end
 
-def bel
-  print "\07"
-end
+  try_require("hirber") do
+    Hirb.enable
+  end
 
-def bprint(text)
-  print "\033[1m#{text}\033[0m"
-end
+  if defined?(Rails)
+    if (Rails.env.development? || Rails.env.test?)
+      Rails.application&.eager_load!
+    end
+    if defined?(ActiveRecord) && !Rails.env.production?
+      # https://stackoverflow.com/a/17675841
+      ActiveRecord::Base.logger.level = 1
+    end
+  end
 
-def cprint_q(color256, text)
-  "\033[38;5;#{color256}m#{text}\033[0m"
-end
+  def cls
+    puts "\033c\033[3J"
+  end
 
-def colorize(text, options = {})
-  attribute = options[:attribute] || 0
-  color = options[:color] || 31
-  "\e[#{attribute};#{color}m" + text.strip + "\e[0m\n"
-end
+  def bel
+    print "\07"
+  end
 
-def cprint(*args)
-  print cprint_q(*args)
-end
+  def bprint(text)
+    print "\033[1m#{text}\033[0m"
+  end
 
-try_block do
-  IRB.conf[:PROMPT][:CUSTOM] = {
-    PROMPT_I:    "[#{cprint_q 2, "%03n"}]: ",
-    PROMPT_S:    "[#{cprint_q 2, "%03n%l"}]: ",
-    PROMPT_C:    "[#{cprint_q 2, "%03n"}]: ",
-    PROMPT_N:    "[#{cprint_q 2, "%03n?"}]: ",
-    RETURN:      " # => %s \n",
-    AUTO_INDENT: true
-  }
-  IRB.conf[:PROMPT_MODE] = :CUSTOM
-end
+  def cprint_q(color256, text)
+    "\033[38;5;#{color256}m#{text}\033[0m"
+  end
 
-at_exit do
+  def colorize(text, options = {})
+    attribute = options[:attribute] || 0
+    color = options[:color] || 31
+    "\e[#{attribute};#{color}m" + text.strip + "\e[0m\n"
+  end
+
+  def cprint(*args)
+    print cprint_q(*args)
+  end
+
   try_block do
-    line_no = IRB.CurrentContext.io.instance_variable_get(:@line_no) + 1
-    puts("[#{cprint_q 1, "%03d" % line_no}]:")
+    IRB.conf[:PROMPT][:CUSTOM] = {
+      PROMPT_I:    "[#{cprint_q 2, "%03n"}]: ",
+      PROMPT_S:    "[#{cprint_q 2, "%03n%l"}]: ",
+      PROMPT_C:    "[#{cprint_q 2, "%03n"}]: ",
+      PROMPT_N:    "[#{cprint_q 2, "%03n?"}]: ",
+      RETURN:      " # => %s \n",
+      AUTO_INDENT: true
+    }
+    IRB.conf[:PROMPT_MODE] = :CUSTOM
   end
-end
 
-# Re-implementation of `silence_stream` that was removed in Rails 5 due to it not being threadsafe.
-# This is not threadsafe either so only use it in single threaded operations.
-# See https://api.rubyonrails.org/v4.2.5/classes/Kernel.html#method-i-silence_stream.
-def silence_stream(stream)
-  old_stream = stream.dup
-  stream.reopen(File::NULL)
-  stream.sync = true
-  yield
-ensure
-  stream.reopen(old_stream)
-  old_stream.close
-end
-
-def suppress_stdout
-  silence_stream(STDOUT) { yield }
-end
-
-def source_file(path)
-  suppress_stdout do
-    source path
+  at_exit do
+    try_block do
+      line_no = IRB.CurrentContext.io.instance_variable_get(:@line_no) + 1
+      puts("[#{cprint_q 1, "%03d" % line_no}]:")
+    end
   end
-end
 
-def require_lib(lib_name)
-  lib = File.join(get_pwd, "lib")
-  $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-  require lib_name
-end
-
-def bundler_setup
-  require "bundler/setup"
-  Bundler.require
-end
-
-def to_money(val)
-  "$%.2f" % val.to_f.round(2)
-end
-
-def mock_hash(size = 10)
-  hash = { }
-  i = 0
-  while hash.size < size
-    letters = i.to_s(26)
-    i += 1
-    next if letters =~ /^\d/
-    hash[letters.to_sym] = hash.size + 1
+  # Re-implementation of `silence_stream` that was removed in Rails 5 due to it not being threadsafe.
+  # This is not threadsafe either so only use it in single threaded operations.
+  # See https://api.rubyonrails.org/v4.2.5/classes/Kernel.html#method-i-silence_stream.
+  def silence_stream(stream)
+    old_stream = stream.dup
+    stream.reopen(File::NULL)
+    stream.sync = true
+    yield
+  ensure
+    stream.reopen(old_stream)
+    old_stream.close
   end
-  hash
-end
 
-# Object methods
-def omethods(instance, *compare_classes)
-  subtract_methods = Object.instance_methods
-
-  compare_classes.each { |klass| subtract_methods += klass.instance_methods }
-  subtract_methods.uniq!
-
-  diff = instance.public_send(:methods) - subtract_methods
-  cmd  = defined?(AwesomePrint) ? :ap : :pp
-  __send__(cmd, diff)
-end
-
-def tally(arr)
-  arr.group_by(&:itself).transform_values(&:count)
-end
-
-def load_record(klass, identifier)
-  identifier.is_a?(klass) ? identifier : klass.find(identifier)
-end
-
-def timeit(&block)
-  format = "%F %T.%6N %z"
-  handle_finish = lambda do |start|
-    finish = Time.now
-    puts <<~EOT
-      Finish time: #{finish.strftime(format)}
-      Total time:  #{finish - start} seconds
-
-    EOT
+  def suppress_stdout
+    silence_stream(STDOUT) { yield }
   end
-  start = Time.now
-  puts "Start time:  #{start.strftime(format)}"
-  result = block.call
-  handle_finish.call(start)
-  result
+
+  def source_file(path)
+    suppress_stdout do
+      source path
+    end
+  end
+
+  def require_lib(lib_name)
+    lib = File.join(Dir.pwd, "lib")
+    $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+    require lib_name
+  end
+
+  def bundler_setup
+    require "bundler/setup"
+    Bundler.require
+  end
+
+  def to_money(val)
+    "$%.2f" % val.to_f.round(2)
+  end
+
+  def mock_hash(size = 10)
+    hash = { }
+    i = 0
+    while hash.size < size
+      letters = i.to_s(26)
+      i += 1
+      next if letters =~ /^\d/
+      hash[letters.to_sym] = hash.size + 1
+    end
+    hash
+  end
+
+  # Object methods
+  def omethods(instance, *compare_classes)
+    subtract_methods = Object.instance_methods
+
+    compare_classes.each { |klass| subtract_methods += klass.instance_methods }
+    subtract_methods.uniq!
+
+    diff = instance.public_send(:methods) - subtract_methods
+    cmd  = defined?(AwesomePrint) ? :ap : :pp
+    __send__(cmd, diff)
+  end
+
+  def tally(arr)
+    arr.group_by(&:itself).transform_values(&:count)
+  end
+
+  def load_record(klass, identifier)
+    identifier.is_a?(klass) ? identifier : klass.find(identifier)
+  end
+
+  def timeit(&block)
+    format = "%F %T.%6N %z"
+    handle_finish = lambda do |start|
+      finish = Time.now
+      puts <<~EOT
+        Finish time: #{finish.strftime(format)}
+        Total time:  #{finish - start} seconds
+
+      EOT
+    end
+    start = Time.now
+    puts "Start time:  #{start.strftime(format)}"
+    result = block.call
+    handle_finish.call(start)
+    result
+  rescue StandardError => error
+    handle_finish.call(start)
+    error
+  end
+
+  # https://stackoverflow.com/questions/2772778/parse-a-string-as-if-it-were-a-querystring-in-ruby-on-rails
+  def parse_qs(string)
+    Rack::Utils.parse_nested_query(string)
+  end
+
+  def isbn13_checksum(*arr)
+    arr.
+      map.with_index(1) { |x, i| x * ( i.odd? ? 1 : 3 ) }.
+      sum.
+      then { |s| s % 10 }.
+      then { |n| (10 - n) % 10 }
+  end
+
+  irbrc_local = File.join(HOME, ".irbrc.local")
+  if File.file?(irbrc_local)
+    load irbrc_local
+  end
 rescue StandardError => error
-  handle_finish.call(start)
+  @irbrc_error = error
+  puts error.message
   error
-end
-
-# https://stackoverflow.com/questions/2772778/parse-a-string-as-if-it-were-a-querystring-in-ruby-on-rails
-def parse_qs(string)
-  Rack::Utils.parse_nested_query(string)
-end
-
-def isbn13_checksum(*arr)
-  arr.
-    map.with_index(1) { |x, i| x * ( i.odd? ? 1 : 3 ) }.
-    sum.
-    then { |s| s % 10 }.
-    then { |n| (10 - n) % 10 }
-end
-
-irbrc_local = File.join(HOME, ".irbrc.local")
-if File.file?(irbrc_local)
-  load irbrc_local
 end

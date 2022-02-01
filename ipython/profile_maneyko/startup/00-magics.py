@@ -20,8 +20,11 @@ ipython = get_ipython()
 @register_line_magic
 def saveall(line, exit=False):
     """Saves entire history of session to log file."""
+    import sys
+    if (sys.version_info[0] == 3 and sys.version_info[1] >= 9) or sys.version_info[0] > 3:
+        return
     logs = os.path.join(HOME, '.ipython/profile_maneyko/logs')
-    ninputs = ipython.run_cell('len(In)').result
+    ninputs = ipython.run_cell('len(In)').result or 0
     if not os.path.isdir(logs):
         os.makedirs(logs)
     if exit == True:

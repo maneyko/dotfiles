@@ -34,6 +34,10 @@ fi
 # Environment Variables
 # ---------------------------------------------------------------------
 
+if [[ $OSTYPE == *darwin* && -n $BREW_PREFIX ]]; then
+  PATH="$PATH:$BREW_PREFIX/bin"
+fi
+
 PATH="\
 $PATH:\
 /usr/local/bin:\

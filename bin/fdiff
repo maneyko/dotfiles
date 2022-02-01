@@ -2,7 +2,7 @@
 
 sys_diff="$(type -P /bin/diff /sbin/diff /usr/bin/diff /usr/sbin/diff /usr/local/bin/diff | head -1)"
 
-if [[ -n "$(command -v diff-so-fancy)" && -z "$(diff --color 2>&1 | grep 'unrecognized option')" ]]; then
+if [[ -n "$(command -v diff-so-fancy)" ]]; then
   diff --color -u $@ | diff-so-fancy
 else
   $sys_diff $@

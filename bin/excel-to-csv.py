@@ -22,13 +22,14 @@ def main(args):
     write_csv_args  = {'header': False, 'index': False}
 
     if len(xls.sheet_names) <= 1:
-        output_file = no_ext + ".csv"
+        output_file = "%s.csv" % no_ext
         print("Writing to '%s'" % output_file)
 
         pd.read_excel(args.excel_file, **read_excel_args).to_csv(output_file, **write_csv_args)
     else:
         for sheet_name in xls.sheet_names:
-            output_file = no_ext + ".%s.csv" % sheet_name
+            read_excel_args.update({'sheet_name': sheet_name})
+            output_file = "%s.%s.csv" % (no_ext, sheet_name)
             print("Writing sheet '%s' to '%s'" % (sheet_name, output_file))
             pd.read_excel(args.excel_file, **read_excel_args).to_csv(output_file, **write_csv_args)
 

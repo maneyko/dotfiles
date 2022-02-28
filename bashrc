@@ -35,7 +35,7 @@ fi
 # ---------------------------------------------------------------------
 
 if [[ $OSTYPE == *darwin* && -n $BREW_PREFIX ]]; then
-  PATH="$PATH:$BREW_PREFIX/bin"
+  PATH="$BREW_PREFIX/bin:$BREW_PREFIX/sbin:$PATH"
 fi
 
 PATH="\
@@ -71,10 +71,9 @@ else
   unset USING_MAC_OS
 fi
 
-_vim=$(type -P nvim vim vi | head -1)
-export EDITOR=$_vim
-alias vi=$_vim
-alias vim=$_vim
+export EDITOR=$(type -P nvim vim vi | head -1)
+alias vi=$EDITOR
+alias vim=$EDITOR
 
 export GREP_COLOR='1;31'
 export LESS='-QRX -j5'
@@ -113,7 +112,7 @@ export PYTHONPATH="$HOME/.dotfiles/ipython/maneyko:$PYTHONPATH"
 # ---------------
 
 completion_sources=(
-/usr/local/etc/bash_completion
+$BREW_PREFIX/etc/bash_completion
 /etc/bash_completion
 )
 
@@ -307,7 +306,7 @@ if command -v tmux >/dev/null 2>&1; then
   export TMUX_VERSION_INT=$(tmux -V | awk "{ gsub(/[:alpha:]/, \"\", \$2); split(\$2, a, \".\"); printf(\"%d%02d\", a[1], a[2]) }")
 fi
 
-if [[ $(command -v vi) == *nvim* ]]; then
+if [[ $EDITOR == *nvim* ]]; then
   export VIM_CONFIG_DIR="$HOME/.config/nvim"
 else
   export VIM_CONFIG_DIR="$HOME/.vim"
@@ -345,9 +344,8 @@ done
 
 # Helps initialize RVM in new terminal
 if [[ -s $rvm_source ]]; then
-  _origin_pwd=$PWD
   cd ../
-  cd "$_origin_pwd"
+  cd "$OLDPWD"
 fi
 
 
@@ -355,6 +353,7 @@ fi
 # ---
 nvms=(
 /usr/local/opt/nvm
+$BREW_PREFIX/opt/nvm
 $HOME/.nvm
 )
 

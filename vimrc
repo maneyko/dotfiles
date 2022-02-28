@@ -240,6 +240,8 @@ if !minimal_vimrc
   " let g:less.enabled = 0
   " let g:less.scrolloff = 5
 endif
+call plug#end()
+
 
 " Functions
 " =========
@@ -410,7 +412,7 @@ endif
 au BufNewFile *.sh,*.bash
       \ exe "normal! i#!/bin/bash\<CR>\<Esc>"
 au BufNewFile *.rb
-      \ exe "normal! i# frozen_string_literal: truee\<CR>\<BS>\<BS>\<CR>\<CR>class " .
+      \ exe "normal! i# frozen_string_literal: true\<CR>\<BS>\<BS>\<CR>\<CR>class " .
       \ substitute(substitute(expand('%:t')[:-4], '\(\%(\<\l\+\)\%(_\)\@=\)\|_\(\l\)', '\u\1\2', "g"),'^.','\u&','')
       \ . "\<CR>\<CR>end\<Esc>gg3j"
 au BufNewFile *_spec.rb
@@ -502,8 +504,6 @@ au FileType haml
 
 " Colors
 " ======
-call plug#end()
-
 filetype plugin indent on
 
 if !empty(glob($VIMRUNTIME . '/syntax/syntax.vim'))

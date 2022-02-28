@@ -69,7 +69,7 @@ begin
     end
     if defined?(ActiveRecord) && !Rails.env.production?
       # https://stackoverflow.com/a/17675841
-      ActiveRecord::Base.logger.level = 1
+      ActiveRecord::Base.logger.level = 0
     end
   end
 

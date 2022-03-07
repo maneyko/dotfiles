@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
 """
-Convert Excel file formats to CSV. May need to pip install 'xlrd' and 'openpyxl' first.
+Convert Excel file formats to CSV. Run the following 'pip install' commands first if there are issues:
+
+    pip install -U pandas xlrd openpyxl
 """
 
 from argparse import ArgumentParser, RawTextHelpFormatter

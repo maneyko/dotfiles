@@ -378,11 +378,11 @@ fi
 if [[ -n $INTERACTIVE && $OSTYPE == *darwin* ]]; then
   if [[ $GPG_TTY == *0[1-2] ]]; then
     if [[ $COLUMNS -ge 70 && $LINES -ge 20 ]]; then
-      # if [[ $(($(date +%w) % 2)) -eq 0 ]]; then
+      if [[ $(($(date +%w) % 2)) -eq 0 ]]; then
         neofetch
-      # else
-        # curl wttr.in?2Fn
-      # fi
+      else
+        curl wttr.in?2Fn
+      fi
     fi
   fi
 fi

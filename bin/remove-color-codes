@@ -7,17 +7,29 @@ arg_boolean    "[inplace] [i] [Modify the file in place.]"
 arg_help                     "[Remove color escape codes from a file.]"
 parse_args
 
-if [[ ! -f $ARG_FILE ]]; then
+if [ ! -t 0 ]; then
+  ARG_FILE=/dev/stdin
+elif [[ ! -f $ARG_FILE ]]; then
   echo "ERROR: '$ARG_FILE' is not a file."
   exit 1
 fi
 
 if [[ -n $(command -v perl) ]]; then
   cmd=perl
-  script='s/[[:cntrl:]]\[[[:digit:]]{1,3};[[:digit:]]{1,3};[[:digit:]]{1,3}m//g; s/[[:cntrl:]]\[[[:digit:]]{1,3}m//g;'
+  script='
+s/[[:cntrl:]]\[[[:digit:]]{1,3};[[:digit:]]{1,3};[[:digit:]]{1,3}m//g;
+s/[[:cntrl:]]\[[[:digit:]]{1,3};[[:digit:]]{1,3}m//g;
+s/[[:cntrl:]]\[[[:digit:]]{1,3}m//g;
+s/[[:cntrl:]]\[m//g;
+'
 elif [[ -n $(command -v ruby) ]]; then
   cmd=ruby
-  script='$_.gsub!(/[[:cntrl:]]\[[[:digit:]]{1,3};[[:digit:]]{1,3};[[:digit:]]{1,3}m/, ""); $_.gsub!(/[[:cntrl:]]\[[[:digit:]]{1,3}m/, "");'
+  script='
+$_.gsub!(/[[:cntrl:]]\[[[:digit:]]{1,3};[[:digit:]]{1,3};[[:digit:]]{1,3}m/, "");
+$_.gsub!(/[[:cntrl:]]\[[[:digit:]]{1,3};[[:digit:]]{1,3}m/, "");
+$_.gsub!(/[[:cntrl:]]\[[[:digit:]]{1,3}m/, "");
+$_.gsub!(/[[:cntrl:]]\[m/, "");
+'
 else
   echo "ERROR: Cannot proceed without either 'perl' or 'ruby'."
   exit 1

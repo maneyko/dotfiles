@@ -13,6 +13,7 @@ config/iterm2
 config/jgit/
 config/neofetch/
 config/nvim/plugged/
+config/nvim/plugged
 config/configstore/
 
 ipython/maneyko/build/
@@ -26,3 +27,5 @@ mac/SP*.txt
 
 vim/plugged/
 vim/autoload/
+vim/plugged
+vim/autoload

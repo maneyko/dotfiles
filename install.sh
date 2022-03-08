@@ -117,6 +117,7 @@ vim="$(type -P nvim vim vi | head -1)"
 if [[ $vim == *nvim* ]]; then
   vim_plugin_dir=".local/share/nvim/site"
   vim_config_dir=".config/nvim"
+  ln -s "../../../.local/share/nvim/plugged" .config/nvim/
 else
   vim_plugin_dir=".vim"
   vim_config_dir=".vim"

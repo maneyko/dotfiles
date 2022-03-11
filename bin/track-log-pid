@@ -109,18 +109,30 @@ func::zzcat() {
   fi
 }
 
+recat() {
+  if [[ -n $ARG_REVERSE ]]; then
+    tac
+  else
+    cat
+  fi
+}
+
 perl_script="${perl_script//<ARG_PATTERN\>/$ARG_PATTERN}"
 perl_script="${perl_script//<ARG_TIMEOUT\>/$ARG_TIMEOUT}"
 perl_script="${perl_script//<ARG_NO_COLOR\>/$ARG_NO_COLOR}"
 perl_script="${perl_script//<ARG_STOP_PATTERN\>/$ARG_STOP_PATTERN}"
 
 if [[ ${#POSITIONAL[@]} -eq 0 ]]; then
-  cat | perl -ne "$perl_script"
+  if [[ -t 1 ]]; then
+    func::zzcat /dev/stdin | perl -ne "$perl_script" | recat
+  else
+    cat | perl -ne "$perl_script"
+  fi
 elif [[ ${#POSITIONAL[@]} -eq 1 && -n $ARG_FOLLOW ]]; then
   cat "$ARG_FILE" | perl -ne "$perl_script"
   tail -f -n0 "$ARG_FILE" | perl -ne "$perl_script"
 else
   for f in ${POSITIONAL[@]}; do
-    func::zzcat "$f" | perl -ne "$perl_script"
+    func::zzcat "$f" | perl -ne "$perl_script" | recat
   done
 fi

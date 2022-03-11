@@ -89,12 +89,6 @@ begin
     "\033[38;5;#{color256}m#{text}\033[0m"
   end
 
-  def colorize(text, options = {})
-    attribute = options[:attribute] || 0
-    color = options[:color] || 31
-    "\e[#{attribute};#{color}m" + text.strip + "\e[0m\n"
-  end
-
   def cprint(*args)
     print cprint_q(*args)
   end

@@ -67,7 +67,7 @@ begin
     if (Rails.env.development? || Rails.env.test?)
       Rails.application&.eager_load!
     end
-    if defined?(ActiveRecord) && !Rails.env.production?
+    if defined?(ActiveRecord) && !Rails.env.production? && ActiveRecord::Base.logger
       # https://stackoverflow.com/a/17675841
       ActiveRecord::Base.logger.level = 0
     end
@@ -221,6 +221,7 @@ begin
   end
 rescue StandardError => error
   @irbrc_error = error
+  puts "WARN: Error occurred during irbrc load"
   puts error.message
-  error
+  puts "Error saved to +irbrc_error+"
 end

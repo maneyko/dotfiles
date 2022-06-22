@@ -134,7 +134,7 @@ _expand() { return 0 ; }
 # ---------------------------------------------------------------------
 
 TERM_COLORS="$HOME/.config/colors/base16-custom.dark.sh"
-if [[ $TMUX && -s $TERM_COLORS && $OSTYPE == *darwin* ]]; then
+if [[ -z "$TMUX" && -s $TERM_COLORS && $OSTYPE == *darwin* ]]; then
   source "$TERM_COLORS"
 fi
 

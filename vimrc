@@ -99,6 +99,7 @@ if !minimal_vimrc
         \ 'AcceptSelection("t")': ['<cr>'],
     \ }
     let g:ctrlp_regexp = 1
+    let g:ctrlp_custom_ignore = 'target\/docker\|node_modules'
 
   Plug 'scrooloose/nerdtree'         " filetree
   Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -345,8 +346,12 @@ nnoremap <C-l>            <C-w>l
 nnoremap <C-w>h           :vertical resize -5<CR>
 nnoremap <C-w>l           :vertical resize +5<CR>
 nnoremap <C-i>            gT
-nnoremap <C-w><C-i>       :tabmove -1<CR>
+nnoremap <tab>            gT
+nnoremap <M-i>            gT
+nnoremap <C-u>            gT
+nnoremap <C-w><tab>       :tabmove -1<CR>
 nnoremap <C-o>            gt
+nnoremap <M-o>            gt
 nnoremap <C-w><C-o>       :tabmove +1<CR>
 nnoremap <C-b>            :nohl<CR><C-l>
 nnoremap <C-n>            :set relativenumber!<CR>
@@ -412,7 +417,7 @@ endif
 au BufNewFile *.sh,*.bash
       \ exe "normal! i#!/bin/bash\<CR>\<Esc>"
 au BufNewFile *.rb
-      \ exe "normal! i# frozen_string_literal: true\<CR>\<BS>\<BS>\<CR>\<CR>class " .
+      \ exe "normal! i# frozen_string_literal: true\<CR>\<BS>\<BS>\<CR>class " .
       \ substitute(substitute(expand('%:t')[:-4], '\(\%(\<\l\+\)\%(_\)\@=\)\|_\(\l\)', '\u\1\2', "g"),'^.','\u&','')
       \ . "\<CR>\<CR>end\<Esc>gg3j"
 au BufNewFile *_spec.rb

@@ -5,4 +5,5 @@ if [[ $OSTYPE != *darwin* ]]; then
   exit 1
 fi
 
-open -a ScreenSaverEngine
+# open -a ScreenSaverEngine
+osascript -e 'tell app "System Events" to key code 12 using {control down, command down}'

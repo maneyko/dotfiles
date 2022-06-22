@@ -1,8 +1,10 @@
 #!/usr/bin/env ruby
 
 def irbrc_error; @irbrc_error; end
+def rails_init_error; @rails_init_error; end
 
 begin
+  require "date"
   require "etc"
   require "fileutils"
   require "pathname"
@@ -39,19 +41,37 @@ begin
 
   EOT
 
+  try_require "readline"
   try_require "awesome_print"
   try_require "irb/completion"
 
+  history_file =
+    if defined?(IRB) && IRB.respond_to?(:conf)
+      IRB.conf[:HISTORY_FILE]
+    end
+  history_file ||= "#{HOME}/.irb-history"
+  save_history   = 200_000
+
   try_require("irb/ext/save-history") do
-    IRB.conf[:SAVE_HISTORY] = 10_000
+    history_lines = `wc -l "#{history_file}"`.to_i
+    if history_lines.to_f / save_history > 0.8
+      puts "Rolling IRB history file"
+      last_20 = `tail -n #{(save_history / 5.0).to_i} "#{history_file}"`
+
+      history_dir = "#{history_file}.d"
+      dest = "#{history_dir}/irb-history-#{Date.today.strftime("%Y%m%d")}"
+      Dir.mkdir(history_dir) unless File.directory?(history_dir)
+
+      File.rename(history_file, dest)
+      puts "Existing history was saved to '#{dest}'"
+      File.write(history_file, last_20)
+    end
+
+    IRB.conf[:SAVE_HISTORY] = save_history
   end
 
+
   if defined?(Pry)
-    history_file =
-      if defined?(IRB) && IRB.respond_to?(:conf)
-        IRB.conf[:HISTORY_FILE]
-      end
-    history_file ||= "#{HOME}/.irb-history"
     Pry.config.history_file = history_file
   end
 
@@ -65,7 +85,16 @@ begin
 
   if defined?(Rails)
     if (Rails.env.development? || Rails.env.test?)
-      Rails.application&.eager_load!
+      result = try_block do
+        Rails.application&.eager_load!
+      end
+      if result.is_a?(StandardError)
+        @rails_init_error = result
+        puts <<~EOT
+          Error loading Rails application: #{result}
+          Error stored in 'rails_init_error'
+        EOT
+      end
     end
     if defined?(ActiveRecord) && !Rails.env.production? && ActiveRecord::Base.logger
       # https://stackoverflow.com/a/17675841
@@ -73,9 +102,7 @@ begin
     end
   end
 
-  def cls
-    puts "\033c\033[3J"
-  end
+  def cls; puts "\033c\033[3J"; end
 
   def bel
     print "\07"
@@ -93,12 +120,15 @@ begin
     print cprint_q(*args)
   end
 
+  %:hello world:
+
   try_block do
+    IRB.conf[:USE_SINGLELINE] = true  # Turn off reline
     IRB.conf[:PROMPT][:CUSTOM] = {
-      PROMPT_I:    "[#{cprint_q 2, "%03n"}]: ",
+      PROMPT_I:    "[#{cprint_q 2, "%03n"  }]: ",
       PROMPT_S:    "[#{cprint_q 2, "%03n%l"}]: ",
-      PROMPT_C:    "[#{cprint_q 2, "%03n"}]: ",
-      PROMPT_N:    "[#{cprint_q 2, "%03n?"}]: ",
+      PROMPT_C:    "[#{cprint_q 2, "%03n"  }]: ",
+      PROMPT_N:    "[#{cprint_q 2, "%03n?" }]: ",
       RETURN:      " # => %s \n",
       AUTO_INDENT: true
     }

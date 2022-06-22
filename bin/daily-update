@@ -13,6 +13,7 @@ if [[ $OSTYPE == *darwin* ]]; then
   brew update
   brew update
   brew upgrade
+  brew upgrade --cask
 elif { cat /etc/issue | awk '/Ubuntu|Raspbian/' ; } 2>/dev/null ; then
   sudo apt-get -y update
   sudo apt-get -y upgrade

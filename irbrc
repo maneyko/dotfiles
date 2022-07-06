@@ -45,34 +45,33 @@ begin
   try_require "awesome_print"
   try_require "irb/completion"
 
-  history_file =
-    if defined?(IRB) && IRB.respond_to?(:conf)
-      IRB.conf[:HISTORY_FILE]
-    end
-  history_file ||= "#{HOME}/.irb-history"
-  save_history   = 200_000
+  if defined?(IRB) && IRB.respond_to?(:conf)
+    IRB.conf[:HISTORY_FILE] = nil
+    HISTORY_FILE = "#{HOME}/.irb-history"
+  end
+  SAVE_HISTORY = 200_000
 
   try_require("irb/ext/save-history") do
-    history_lines = `wc -l "#{history_file}"`.to_i
-    if history_lines.to_f / save_history > 0.8
+    history_lines = `wc -l "#{HISTORY_FILE}"`.to_i
+    if history_lines.to_f / SAVE_HISTORY > 0.8
       puts "Rolling IRB history file"
-      last_20 = `tail -n #{(save_history / 5.0).to_i} "#{history_file}"`
+      last_20 = `tail -n #{(SAVE_HISTORY / 5.0).to_i} "#{HISTORY_FILE}"`
 
-      history_dir = "#{history_file}.d"
+      history_dir = "#{HISTORY_FILE}.d"
       dest = "#{history_dir}/irb-history-#{Date.today.strftime("%Y%m%d")}"
       Dir.mkdir(history_dir) unless File.directory?(history_dir)
 
-      File.rename(history_file, dest)
+      File.rename(HISTORY_FILE, dest)
       puts "Existing history was saved to '#{dest}'"
-      File.write(history_file, last_20)
+      File.write(HISTORY_FILE, last_20)
     end
 
-    IRB.conf[:SAVE_HISTORY] = save_history
+    IRB.conf[:SAVE_HISTORY] = nil
   end
 
 
   if defined?(Pry)
-    Pry.config.history_file = history_file
+    Pry.config.history_file = HISTORY_FILE
   end
 
   try_require("hirb") do
@@ -120,8 +119,6 @@ begin
     print cprint_q(*args)
   end
 
-  %:hello world:
-
   try_block do
     IRB.conf[:USE_SINGLELINE] = true  # Turn off reline
     IRB.conf[:PROMPT][:CUSTOM] = {
@@ -135,10 +132,55 @@ begin
     IRB.conf[:PROMPT_MODE] = :CUSTOM
   end
 
+  # BEGIN: History hacks
+
+  # Load history from the history file.
+  def load_history
+    File.open(HISTORY_FILE, "rb") do |f|
+      f.each { |l| ::Readline::HISTORY << l.chomp }
+    end
+  end
+
+  # Load history on the first prompt.
+  def __init_histappend(main_context = nil)
+    return unless main_context
+    @__init_histappend ||= begin
+      load_history
+      true
+    end
+  end
+
+  # Append history with the previous line when the prompt is being loaded.
+  def __histappend
+    return unless main_context = IRB.conf[:MAIN_CONTEXT]
+    return unless _line_no = main_context.instance_variable_get(:@line_no)
+    return if (@__histappend_lines ||= {})[_line_no]
+    @__histappend_lines = {_line_no => true}
+
+    File.open(HISTORY_FILE, "a+") do |f|
+      f.write(main_context.io.line(_line_no))
+    end
+  end
+
+
+  try_block do
+    IRB.conf[:AT_EXIT] = []  # Don't save history at exit. This should automatically be set to empty, but just to be sure
+    IRB.conf[:IRB_RC] = proc do |main_context|
+      # Override a random method on {IRB::Context} so that our prompt hooks get run.
+      main_context.define_singleton_method(:prompting?) do
+        __histappend
+        __init_histappend(main_context)
+        super()
+      end
+    end
+  end
+
+  # END: History hacks
+
   at_exit do
     try_block do
-      line_no = IRB.CurrentContext.io.instance_variable_get(:@line_no) + 1
-      puts("[#{cprint_q 1, "%03d" % line_no}]:")
+      _line_no = IRB.CurrentContext.io.instance_variable_get(:@line_no) + 1
+      puts("[#{cprint_q 1, "%03d" % _line_no}]:")
     end
   end
 

@@ -79,7 +79,12 @@ export GREP_COLOR='1;31'
 export LESS='-QRX -j5'
 export PAGER='less'
 
+__prompt_cmd() {
+  history -a
+}
+
 export TZ='America/Chicago'
+export PROMPT_COMMAND="__prompt_cmd"
 export HISTFILE=$HOME/.bash_history
 export HISTSIZE=200000
 export HISTTIMEFORMAT="%F %T: "
@@ -274,6 +279,7 @@ alias nohide='chflags nohidden'
 alias nowrap='tput rmam'
 alias rewrap='tput smam'
 alias git-root='cd "$(git rev-parse --show-toplevel 2>/dev/null || echo ".")"'
+alias hread="history -r"
 
 mkdirpcd() { mkdir -p "$1" ; cd "$1" ; }
 export -f mkdirpcd

@@ -47,9 +47,9 @@ begin
 
   if defined?(IRB) && IRB.respond_to?(:conf)
     IRB.conf[:HISTORY_FILE] = nil
-    HISTORY_FILE = "#{HOME}/.irb-history"
+    HISTORY_FILE ||= "#{HOME}/.irb-history"
   end
-  SAVE_HISTORY = 200_000
+  SAVE_HISTORY ||= 200_000
 
   try_require("irb/ext/save-history") do
     history_lines = `wc -l "#{HISTORY_FILE}"`.to_i

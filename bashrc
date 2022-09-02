@@ -151,7 +151,7 @@ export -f bprint
 cprint() { printf -- "%b" "\033[38;5;${1}m${2}\033[0m" ; }
 export -f cprint
 
-# 24-bit color print. Example: clr24 "255;0;0" "hello world". Color is in "r;g;b" format.
+# 24-bit color print. Example: cprint24 "255;0;0" "hello world". Color is in "r;g;b" format.
 cprint24() { printf -- "%b" "\033[38;2;${1}m${2}\033[0m" ; }
 export -f cprint24
 
@@ -159,25 +159,10 @@ export -f cprint24
 ulprint() { printf -- "%b" -- "\033[4${1}\033[0m" ; }
 
 # Special color print for prompt string.
-pclr() { printf -- "%b" "\[\033[38;5;${1}m\]${2}\[\033[0m\]" ; }
+pclr() { REPLY="\[\033[38;5;${1}m\]${2}\[\033[0m\]" ; }
+pstr() { pclr "$1" "$2"; ps1+="$REPLY" ; }
 
 export PS1_NO_GIT=0
-
-branch_colon() {
-  [[ $PS1_NO_GIT -eq 1 ]] && return
-  git branch >/dev/null 2>&1 && echo ':'
-}
-export -f branch_colon
-
-parse_git_branch() {
-  [[ $PS1_NO_GIT -eq 1 ]] && return
-  t1=$(git branch 2>/dev/null)
-  t2=${t1##*\* }
-  printf -- "%b" "${t2%%$'\n'*}"
-}
-export -f parse_git_branch
-
-date_command() { date +'%H:%M:%S' ; }
 
 border_color=241
 pwd_color=228
@@ -189,40 +174,81 @@ if [[ $USER == root ]]; then
   user_color=220  # Yellow
 fi
 
-# \n\
-# `pclr $border_color  '\$(date_command)' `\
-# \n\
-LONG_PS1="\
-`pclr $border_color  '┌─['                  `\
-`pclr $user_color    "$USER"                `\
-`pclr $border_color  ':'                    `\
-`pclr 250            '@'                    `\
-`pclr $host_color    "$host_text"           `\
-`pclr $border_color  ':'                    `\
-`pclr $pwd_color     '\\w'                  `\
-`pclr $border_color  '\$(branch_colon)'     `\
-`pclr 207            '\$(parse_git_branch)' `\
-`pclr $border_color  ']'                    `\
-\n\
-`pclr $border_color  '└['                   `\
-`pclr 7              '\\$'                  `\
-`pclr $border_color  ']› '                  `\
-"
+export border_color user_color host_color host_text pwd_color
 
-SHORT_PS1="\
-`pclr $border_color  '┌─['         `\
-`pclr $user_color    "$USER"       `\
-`pclr 250            '@'           `\
-`pclr $host_color    "$host_text"  `\
-`pclr $border_color  ':'           `\
-`pclr $pwd_color     '\\W'         `\
-`pclr $border_color  ']'           `\
-\n\
-`pclr $border_color  '└['          `\
-`pclr 7              '\\$'         `\
-`pclr $border_color  ']› '         `\
-"
+ps1::git_branch() {
+  [[ $PS1_NO_GIT -eq 1 ]] && return
+  [[ $ps1_git_branch_size == 0 ]] && return
+  : ${ps1_git_branch1:=$(git branch 2>/dev/null)}
+  if [[ ${#ps1_git_branch1} -eq 0 ]]; then
+    ps1_git_branch_size=0
+    return
+  fi
+  : ${ps1_git_branch2:=${ps1_git_branch1##*\* }}
+  ps1_git_branch=${ps1_git_branch2%%$'\n'*}
+  printf "$ps1_git_branch"
+}
 
+ps1::branch_colon() {
+  [[ $PS1_NO_GIT -eq 1 ]] && return
+  ps1::git_branch >/dev/null 2>&1
+  if [[ ${#ps1_git_branch} -gt 0 ]]; then
+    ps1_branch_colon=':'
+    printf $ps1_branch_colon
+  fi
+}
+
+ps1::tilde_home() {
+  ps1_tilde_home=${PWD/#$HOME/'~'}
+  printf "$ps1_tilde_home"
+}
+
+ps1::spaces() {
+  columns=$(tput cols)
+  { ps1::git_branch ; ps1::branch_colon ; ps1::tilde_home; } >/dev/null 2>&1
+  line1_size=$((3 + ${#USER} + 2 + ${#host_text} + 1 + ${#ps1_tilde_home} + ${#ps1_branch_colon} + ${#ps1_git_branch} + 1))
+  remaining_width=$(($columns - $line1_size % $columns))
+  space_width=$(($remaining_width - 10))
+  if [[ $space_width -lt 0 ]]; then
+    space_width=0
+  fi
+  printf -- ' %.0s' `seq 1 $space_width`
+}
+
+pstr $border_color '┌─['
+pstr $user_color   "$USER"
+pstr $border_color ':'
+pstr 250           '@'
+pstr $host_color   "$host_text"
+pstr $border_color ':'
+pstr $pwd_color    '$(ps1::tilde_home)'
+pstr $border_color '$(ps1::branch_colon)'
+pstr 207           '$(ps1::git_branch)'
+pstr $border_color "]"
+ps1+='$(ps1::spaces)'
+pstr $border_color "[\\t]"
+
+ps1+="\n"
+pstr $border_color '└['
+pstr 7             '\\$'
+pstr $border_color ']› '
+export LONG_PS1="$ps1"
+
+ps1=
+
+pstr $border_color '┌─['
+pstr $user_color   "$USER"
+pstr 250           '@'
+pstr $host_color   "$host_text"
+pstr $border_color ':'
+pstr $pwd_color    '\W'
+pstr $border_color ']'
+ps1+="\n"
+pstr $border_color '└['
+pstr 7             '\$'
+pstr $border_color ']› '
+
+export SHORT_PS1="$ps1"
 export PS1=$LONG_PS1
 
 
@@ -332,6 +358,15 @@ if [[ -f $HISTFILE ]]; then
   fi
 fi
 
+export LESSOPEN="|$BREW_PREFIX/bin/lesspipe.sh %s:"
+
+if [[ -n $BREW_X86_PREFIX ]]; then
+  alias ibrew="arch -x86_64 $BREW_X86_PREFIX/bin/brew"
+fi
+
+# https://github.com/h5py/h5py/blob/05ceae63a19ba0cbac7f37a5b2a8ecf745e2bc32/setup_configure.py#L108
+export HDF5_DIR="$BREW_PREFIX/opt/hdf5"
+
 # RVM
 # ---
 rvms=(
@@ -354,6 +389,26 @@ if [[ -s $rvm_source ]]; then
   cd "$OLDPWD"
 fi
 
+if [[ -n $USING_MAC_OS ]]; then
+  ulimit -Sn 1024
+fi
+
+
+if [[ -f $HOME/.bashrc.local ]]; then
+  source $HOME/.bashrc.local
+fi
+
+export GRPC_PYTHON_BUILD_SYSTEM_OPENSSL=1
+export GRPC_PYTHON_BUILD_SYSTEM_ZLIB=1
+
+if [[ -n "$(command -v pyenv)" ]]; then
+  export PYENV_ROOT="$HOME/.pyenv"
+  export PATH="$PYENV_ROOT/bin:$PATH"
+  export PATH="$PYENV_ROOT/shims:$PATH"  # eval "$(pyenv init --path)"
+  if [[ -n $PYTHON_USE_VIRTUALENV ]]; then
+    eval "$(pyenv virtualenv-init -)"
+  fi
+fi
 
 # NVM
 # ---
@@ -375,9 +430,6 @@ for d in ${nvms[@]}; do
 done
 
 
-if [[ -f $HOME/.bashrc.local ]]; then
-  source $HOME/.bashrc.local
-fi
 
 # First TTY Greeting
 # ------------------

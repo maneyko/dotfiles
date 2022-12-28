@@ -421,7 +421,7 @@ au BufNewFile *.rb
       \ substitute(substitute(expand('%:t')[:-4], '\(\%(\<\l\+\)\%(_\)\@=\)\|_\(\l\)', '\u\1\2', "g"),'^.','\u&','')
       \ . "\<CR>\<CR>end\<Esc>gg3j"
 au BufNewFile *_spec.rb
-      \ exe "normal! ggcGRSpec.describe " .
+      \ exe "normal! k\"kcGRSpec.describe " .
       \ substitute(substitute(expand('%:t')[:-9], '\(\%(\<\l\+\)\%(_\)\@=\)\|_\(\l\)', '\u\1\2', "g"),'^.','\u&','')
       \ . " do\<CR>\<CR>end\<Esc>ggj"
 au BufNewFile *.node
@@ -446,7 +446,7 @@ au BufNewFile *.html,*.php
 
 au BufRead *.ipynb
       \ setlocal ft=json
-au BufRead pom.xml
+au BufRead settings.xml,pom.xml
       \ setlocal sw=2 ts=2 sts=2
 au BufRead *.url
       \ setlocal ft=dosini

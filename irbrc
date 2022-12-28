@@ -97,6 +97,7 @@ begin
     end
     if defined?(ActiveRecord) && !Rails.env.production? && ActiveRecord::Base.logger
       # https://stackoverflow.com/a/17675841
+      ActiveRecord::Base.logger = ActiveSupport::Logger.new(STDOUT)
       ActiveRecord::Base.logger.level = 0
     end
   end

@@ -10,6 +10,7 @@ _backups/
 config/coc/
 config/hub
 config/iterm2
+config/gh/
 config/jgit/
 config/neofetch/
 config/nvim/plugged/

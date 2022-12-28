@@ -76,6 +76,7 @@ alias vi=$EDITOR
 alias vim=$EDITOR
 
 export GREP_COLOR='1;31'
+export GREP_COLORS='mt=1;31'
 export LESS='-QRX -j5'
 export PAGER='less'
 
@@ -208,7 +209,7 @@ ps1::spaces() {
   { ps1::git_branch ; ps1::branch_colon ; ps1::tilde_home; } >/dev/null 2>&1
   line1_size=$((3 + ${#USER} + 2 + ${#host_text} + 1 + ${#ps1_tilde_home} + ${#ps1_branch_colon} + ${#ps1_git_branch} + 1))
   remaining_width=$(($columns - $line1_size % $columns))
-  space_width=$(($remaining_width - 10))
+  space_width=$(($remaining_width - 12))
   if [[ $space_width -lt 0 ]]; then
     space_width=0
   fi

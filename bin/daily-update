@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 if [[ $OSTYPE == *darwin* ]]; then
   # PATH="\
 # /usr/local/bin:\
@@ -12,8 +14,9 @@ if [[ $OSTYPE == *darwin* ]]; then
   # unalias -a
   brew update
   brew update
-  brew upgrade
-  brew upgrade --cask
+  brew upgrade --greedy
+  brew upgrade --cask --greedy
+  brew cleanup --prune=30
 elif { cat /etc/issue | awk '/Ubuntu|Raspbian/' ; } 2>/dev/null ; then
   sudo apt-get -y update
   sudo apt-get -y upgrade

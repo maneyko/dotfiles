@@ -158,7 +158,7 @@ if !minimal_vimrc
   " Plug 'tomlion/vim-solidity'
 
   Plug 'tpope/vim-markdown'
-    let g:markdown_fenced_languages = ['bash=sh', 'html', 'python', 'ruby', 'sql', 'yaml', 'perl', 'diff']
+    let g:markdown_fenced_languages = ['bash=sh', 'html', 'python', 'ruby', 'sql', 'yaml', 'perl', 'diff', 'groovy']
     let g:markdown_syntax_conceal = 0
 
   Plug 'tpope/vim-projectionist'
@@ -348,7 +348,6 @@ nnoremap <C-w>l           :vertical resize +5<CR>
 nnoremap <C-i>            gT
 nnoremap <tab>            gT
 nnoremap <M-i>            gT
-nnoremap <C-u>            gT
 nnoremap <C-w><tab>       :tabmove -1<CR>
 nnoremap <C-o>            gt
 nnoremap <M-o>            gt
@@ -415,7 +414,7 @@ endif
 " au BufNewFile *__doc__*
 "       \ silent! call ReadMode(1)
 au BufNewFile *.sh,*.bash
-      \ exe "normal! i#!/bin/bash\<CR>\<Esc>"
+      \ exe "normal! i#!/bin/bash\<CR>\<BS>\<CR>\<Esc>"
 au BufNewFile *.rb
       \ exe "normal! i# frozen_string_literal: true\<CR>\<BS>\<BS>\<CR>class " .
       \ substitute(substitute(expand('%:t')[:-4], '\(\%(\<\l\+\)\%(_\)\@=\)\|_\(\l\)', '\u\1\2', "g"),'^.','\u&','')
@@ -501,7 +500,7 @@ au FileType vim
       \ let b:coc_start_at_startup = 0
 au FileType jinja
       \ setlocal commentstring=<!--%s-->
-au FileType apache,nginx
+au FileType apache,nginx,eruby.yaml
       \ setlocal commentstring=#\ %s
 au FileType sql
       \ setlocal commentstring=--%s

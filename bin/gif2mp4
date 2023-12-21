@@ -1,0 +1,23 @@
+#!/bin/bash
+
+source "argparse.sh"
+
+arg_positional "[gif]        [The GIF file to convert.]"
+arg_optional   "[output] [o] [The name of the output file. Defaults to the name of the input file with '.mp4' as the new extension.]"
+arg_help       "[Convert a GIF to an MP4 video file.]"
+parse_args
+
+if [[ ! -f $ARG_GIF ]]; then
+  echo "A GIF file must be provided. See the help page for details."
+  exit 1
+fi
+
+: ${ARG_OUTPUT:=${ARG_GIF%.*}.mp4}
+
+# https://unix.stackexchange.com/a/294892
+ffmpeg \
+  -i "$ARG_GIF" \
+  -movflags faststart \
+  -pix_fmt yuv420p \
+  -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" \
+  "$ARG_OUTPUT"

@@ -1,6 +1,5 @@
 #!/bin/bash
 
 for f in "$@"; do
-  echo "$f"
   magick convert "$f" "${f/%.*/.jpg}"
 done

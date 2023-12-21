@@ -16,7 +16,7 @@ begin
   UNAME ||= %x{uname -a}.chomp.freeze
 
   def pwd
-    Dir.pwd
+    Pathname.new(Dir.pwd)
   end
 
   def try_block
@@ -45,6 +45,8 @@ begin
   try_require "awesome_print"
   try_require "irb/completion"
 
+  IRB.conf[:RC_NAME_GENERATOR] = proc { "#{HOME}/.irbrc" }
+
   if defined?(IRB) && IRB.respond_to?(:conf)
     IRB.conf[:HISTORY_FILE] = nil
     HISTORY_FILE ||= "#{HOME}/.irb-history"
@@ -69,17 +71,16 @@ begin
     IRB.conf[:SAVE_HISTORY] = nil
   end
 
-
   if defined?(Pry)
     Pry.config.history_file = HISTORY_FILE
   end
 
   try_require("hirb") do
-    Hirb.enable
+    Hirb.enable if defined?(ActiveRecord)
   end
 
   try_require("hirber") do
-    Hirb.enable
+    Hirb.enable if defined?(ActiveRecord)
   end
 
   if defined?(Rails)
@@ -245,6 +246,13 @@ begin
     diff = instance.public_send(:methods) - subtract_methods
     cmd  = defined?(AwesomePrint) ? :ap : :pp
     __send__(cmd, diff)
+  end
+
+  def publicize!(object)
+    object.private_methods.each do |private_method|
+      object.singleton_class.__send__(:public, private_method)
+    end
+    object
   end
 
   def tally(arr)

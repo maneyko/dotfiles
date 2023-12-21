@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if [[ $1 == '-e' || $1 == '--empty' ]]; then
+  rm -fr "$HOME/.bash-trash"
+  exit 0
+fi
+
+set_dir() {
+  [[ -d $TRASH_DIR ]] && return
+
+  TRASH_DIR="$HOME/.bash-trash/$(date +%Y%m%dT%H%M%S)"
+
+  mkdir -p "$TRASH_DIR"
+}
+
+while [[ $# -gt 0 ]]; do
+  arg=$1
+  shift
+
+  if [[ -f "$arg" || -d "$arg" ]]; then
+    set_dir
+    mv "$arg" "$TRASH_DIR"
+  fi
+done

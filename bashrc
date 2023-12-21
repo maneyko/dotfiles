@@ -166,7 +166,7 @@ pstr() { pclr "$1" "$2"; ps1+="$REPLY" ; }
 export PS1_NO_GIT=0
 
 border_color=241
-pwd_color=228
+: ${pwd_color:=228}
 : ${host_text:=$HOSTNAME}
 : ${user_color:=196}
 : ${host_color:=147}
@@ -336,7 +336,7 @@ fi
 # ---------------------------------------------------------------------
 
 if command -v tmux >/dev/null 2>&1; then
-  export TMUX_VERSION_INT=$(tmux -V | awk "{ gsub(/[:alpha:]/, \"\", \$2); split(\$2, a, \".\"); printf(\"%d%02d\", a[1], a[2]) }")
+  export TMUX_VERSION_INT=$(tmux -V | awk "{ gsub(/[[:alpha:]]/, \"\", \$2); split(\$2, a, \".\"); printf(\"%d%02d\", a[1], a[2]) }")
 fi
 
 if [[ $EDITOR == *nvim* ]]; then
@@ -394,6 +394,15 @@ if [[ -n $USING_MAC_OS ]]; then
   ulimit -Sn 1024
 fi
 
+if [[ $OSTYPE == *darwin* ]]; then
+  d1="$HOME/Applications/Google Chrome.app"
+  d2="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+  if [[ -d "$d1" ]]; then
+    export WD_CHROME_PATH=$d1
+  elif [[ -d "$d2" ]]; then
+    export WD_CHROME_PATH=$d2
+  fi
+fi
 
 if [[ -f $HOME/.bashrc.local ]]; then
   source $HOME/.bashrc.local
@@ -403,10 +412,14 @@ export GRPC_PYTHON_BUILD_SYSTEM_OPENSSL=1
 export GRPC_PYTHON_BUILD_SYSTEM_ZLIB=1
 
 if [[ -n "$(command -v pyenv)" ]]; then
+  # eval "$(pyenv init -)"
   export PYENV_ROOT="$HOME/.pyenv"
   export PATH="$PYENV_ROOT/bin:$PATH"
   export PATH="$PYENV_ROOT/shims:$PATH"  # eval "$(pyenv init --path)"
+  command pyenv rehash 2>/dev/null
+
   if [[ -n $PYTHON_USE_VIRTUALENV ]]; then
+    export PYENV_VIRTUALENV_DISABLE_PROMPT=1
     eval "$(pyenv virtualenv-init -)"
   fi
 fi

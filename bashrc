@@ -226,9 +226,10 @@ pstr $pwd_color    '$(ps1::tilde_home)'
 pstr $border_color '$(ps1::branch_colon)'
 pstr 207           '$(ps1::git_branch)'
 pstr $border_color "]"
-ps1+='$(ps1::spaces)'
-pstr $border_color "[\\t]"
-
+if [[ -z $PS1_NO_TIME ]]; then
+  ps1+='$(ps1::spaces)'
+  pstr $border_color "[\\t]"
+fi
 ps1+="\n"
 pstr $border_color '└['
 pstr 7             '\\$'

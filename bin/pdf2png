@@ -5,4 +5,5 @@ if [[ $OSTYPE != *darwin* ]]; then
   exit 1
 fi
 
-sips -f format png "$1" --out "${1}.png"
+# sips -f format png "$1" --out "${1}.png"
+convert -quality 100 -density 200 -colorspace sRGB "$1" -flatten "${1}.%02d.png"

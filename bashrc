@@ -396,13 +396,13 @@ if [[ -n $USING_MAC_OS ]]; then
 fi
 
 if [[ $OSTYPE == *darwin* ]]; then
-  d1="$HOME/Applications/Google Chrome.app"
-  d2="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-  if [[ -d "$d1" ]]; then
-    export WD_CHROME_PATH=$d1
-  elif [[ -d "$d2" ]]; then
-    export WD_CHROME_PATH=$d2
-  fi
+  for app_root in $HOME/ /; do
+    chrome_path="${app_root}Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+    if [[ -r $chrome_path ]]; then
+      : ${WD_CHROME_PATH:=$chrome_path}
+      export WD_CHROME_PATH
+    fi
+  done
 fi
 
 if [[ -f $HOME/.bashrc.local ]]; then
@@ -413,7 +413,7 @@ export GRPC_PYTHON_BUILD_SYSTEM_OPENSSL=1
 export GRPC_PYTHON_BUILD_SYSTEM_ZLIB=1
 
 if [[ -n "$(command -v pyenv)" ]]; then
-  # eval "$(pyenv init -)"
+  eval "$(pyenv init -)"
   export PYENV_ROOT="$HOME/.pyenv"
   export PATH="$PYENV_ROOT/bin:$PATH"
   export PATH="$PYENV_ROOT/shims:$PATH"  # eval "$(pyenv init --path)"
@@ -430,6 +430,7 @@ fi
 nvms=(
 /usr/local/opt/nvm
 $BREW_PREFIX/opt/nvm
+/usr/local/nvm
 $HOME/.nvm
 )
 

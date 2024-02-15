@@ -150,7 +150,10 @@ if !minimal_vimrc
   Plug 'digitaltoad/vim-pug'
   " Plug 'jbmorgado/vim-pine-script'
   Plug 'gisphm/vim-gitignore'        " .gitignore files
-  " Plug 'vim-python/python-syntax'
+  Plug 'vim-python/python-syntax'
+    let g:python_highlight_all = 1
+    " let g:python_highlight_string_format = 1
+    " let g:python_highlight_builtin_objs  = 1
 
   " Plug 'yuezk/vim-js'
   " Plug 'maxmellon/vim-jsx-pretty'

@@ -255,6 +255,16 @@ begin
     object
   end
 
+  # def publicize!(object)
+  #   object.private_methods.each do |private_method|
+  #     object.singleton_class.alias_method(:"original_#{private_method}", private_method)
+  #     object.define_singleton_method(private_method) do |*args, **kwargs, &block|
+  #       __send__(:"original_#{private_method}", *args, **kwargs, &block)
+  #     end
+  #   end
+  #   object
+  # end
+
   def tally(arr)
     arr.group_by(&:itself).transform_values(&:count)
   end

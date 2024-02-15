@@ -21,6 +21,12 @@ s/[[:cntrl:]]\[[[:digit:]]{1,3};[[:digit:]]{1,3};[[:digit:]]{1,3}m//g;
 s/[[:cntrl:]]\[[[:digit:]]{1,3};[[:digit:]]{1,3}m//g;
 s/[[:cntrl:]]\[[[:digit:]]{1,3}m//g;
 s/[[:cntrl:]]\[m//g;
+
+# This block removes unescaped color sequences
+s/\\e\[[[:digit:]]{1,3};[[:digit:]]{1,3};[[:digit:]]{1,3}m//g;
+s/\\e\[[[:digit:]]{1,3};[[:digit:]]{1,3}m//g;
+s/\\e\[[[:digit:]]{1,3}m//g;
+s/\\e\[m//g;
 '
 elif [[ -n $(command -v ruby) ]]; then
   cmd=ruby
@@ -29,6 +35,12 @@ $_.gsub!(/[[:cntrl:]]\[[[:digit:]]{1,3};[[:digit:]]{1,3};[[:digit:]]{1,3}m/, "")
 $_.gsub!(/[[:cntrl:]]\[[[:digit:]]{1,3};[[:digit:]]{1,3}m/, "");
 $_.gsub!(/[[:cntrl:]]\[[[:digit:]]{1,3}m/, "");
 $_.gsub!(/[[:cntrl:]]\[m/, "");
+
+# This block removes unescaped color sequences
+$_.gsub!(/\\e\[[[:digit:]]{1,3};[[:digit:]]{1,3};[[:digit:]]{1,3}m/, "");
+$_.gsub!(/\\e\[[[:digit:]]{1,3};[[:digit:]]{1,3}m/, "");
+$_.gsub!(/\\e\[[[:digit:]]{1,3}m/, "");
+$_.gsub!(/\\e\[m/, "");
 '
 else
   echo "ERROR: Cannot proceed without either 'perl' or 'ruby'."

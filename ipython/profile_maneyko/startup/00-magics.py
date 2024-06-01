@@ -6,12 +6,15 @@ Define magic command to save session history to log file.
 """
 
 import os
+import sys
 import time as _time
 import atexit
 
 from IPython import get_ipython
 from IPython.core.magic import register_line_magic
 
+script_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append("%s/../../maneyko" % script_dir)
 from maneyko import *
 
 HOME = os.environ['HOME']

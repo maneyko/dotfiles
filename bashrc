@@ -455,7 +455,7 @@ if [[ -n $INTERACTIVE && $OSTYPE == *darwin* ]]; then
       if [[ $(($(date +%w) % 2)) -eq 1 && -z $DONT_USE_WTTR_IN ]]; then
         curl wttr.in?2Fn
       else
-        neofetch
+        fastfetch -c $HOME/.config/fastfetch-config.json
       fi
     fi
   fi

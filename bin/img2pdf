@@ -1,8 +1,10 @@
 #!/bin/bash
 
 if [[ -z "$(command -v magick)" ]]; then
-  echo 'imagemagick not installed'
-  echo 'Please install it'
+  cat << EOT
+imagemagick not installed
+Please install it
+EOT
   exit 1
 fi
 

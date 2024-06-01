@@ -1,0 +1,28 @@
+#!/bin/bash
+
+
+env filename=$1 perl -MTime::Piece -e '
+my ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
+    $atime,$mtime,$ctime,$blksize,$blocks)
+       = stat($ENV{filename});
+
+$atime = localtime($atime)->strftime("%FT%T%z");
+$mtime = localtime($mtime)->strftime("%FT%T%z");
+$ctime = localtime($ctime)->strftime("%FT%T%z");
+$output = qq<{
+  "dev": "$dev",
+  "ino": "$ino",
+  "mode": "$mode",
+  "nlink": "$nlink",
+  "uid": "$uid",
+  "gid": "$gid",
+  "rdev": "$rdev",
+  "size": "$size",
+  "atime": "$atime",
+  "mtime": "$mtime",
+  "ctime": "$ctime",
+  "blksize": "$blksize",
+  "blocks": "$blocks"
+}>;
+print $output;
+'

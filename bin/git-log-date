@@ -13,4 +13,5 @@ if [[ -z $ARG_START_DATE || -z $ARG_END_DATE ]]; then
   exit 1
 fi
 
-git log origin/master --after="$ARG_START_DATE" --before="$ARG_END_DATE"
+default_branch=$(git rev-parse --abbrev-ref origin/HEAD)
+git log "$default_branch" --after="$ARG_START_DATE" --before="$ARG_END_DATE"

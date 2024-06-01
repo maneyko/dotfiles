@@ -68,6 +68,8 @@ let g:netrw_dirhistmax=0  " no .netrwhist files
 if has('nvim')
   set guicursor=
   set laststatus=0
+  " set notermguicolors  " May be required for neovim>=0.10 (https://github.com/neovim/neovim/issues/29056)
+  "                      " Also COLORTERM=truecolor (https://github.com/neovim/neovim/issues/28776)
 endif
 
 " Plugins
@@ -148,6 +150,7 @@ if !minimal_vimrc
   Plug 'phreax/vim-coffee-script'
   Plug 'vim-scripts/nginx.vim'       " nginx
   Plug 'digitaltoad/vim-pug'
+  Plug 'hashivim/vim-terraform'
   " Plug 'jbmorgado/vim-pine-script'
   Plug 'gisphm/vim-gitignore'        " .gitignore files
   Plug 'vim-python/python-syntax'

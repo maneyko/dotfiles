@@ -17,7 +17,7 @@ if [[ $OSTYPE == *darwin* ]]; then
   brew upgrade --greedy
   brew upgrade --cask --greedy
   brew cleanup --prune=30
-elif { cat /etc/issue | awk '/Ubuntu|Raspbian/' ; } 2>/dev/null ; then
+elif command -v apt-get >/dev/null 2>&1; then
   sudo apt-get -y update
   sudo apt-get -y upgrade
   sudo apt-get -y dist-upgrade
@@ -28,7 +28,7 @@ fi
 $HOME/.bin/pip-upgrade
 $HOME/.bin/pip-upgrade -3
 
-if [[ -n "$(command -v npm)" ]]; then
+if command -v npm >/dev/null 2>&1; then
   npm update -g
   npm upgrade -g
 fi

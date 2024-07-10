@@ -360,7 +360,17 @@ if [[ -f $HISTFILE ]]; then
   fi
 fi
 
-export LESSOPEN="|$BREW_PREFIX/bin/lesspipe.sh %s:"
+lesspipes=(
+$BREW_PREFIX/bin/lesspipe.sh
+$BREW_PREFIX/bin/lesspipe
+)
+
+for f in ${lesspipes[@]}; do
+  if [[ -f $f ]]; then
+    export LESSOPEN="|$f %s:"
+    break
+  fi
+done
 
 if [[ -n $BREW_X86_PREFIX ]]; then
   alias ibrew="arch -x86_64 $BREW_X86_PREFIX/bin/brew"

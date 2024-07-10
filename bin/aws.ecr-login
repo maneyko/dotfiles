@@ -1,0 +1,45 @@
+#!/bin/bash
+
+source "argparse.sh"
+
+arg_positional "[profile] [The AWS profile to use]"
+arg_help "[Login to AWS ECR with the specified profile]"
+
+parse_args
+
+if [[ -z $ARG_PROFILE ]]; then
+  echo 'A profile name must be specified' >&2
+  exit 1
+fi
+
+aws_executable_is_old() {
+  # A true boolean makes awk exit with a code of 1
+  aws --version \
+    | awk -F'[/ ]' '{print $2}' \
+    | awk -F. '{ver=sprintf("%d.%02d%03d", $1, $2, $3); exit !(ver < 1.17010)}'
+}
+
+if aws_executable_is_old; then
+  echo "The AWS executable must be above version 1.17.10" >&2
+  exit 1
+fi
+
+profiles=($(aws configure list-profiles))
+
+for profile in ${profiles[@]}; do
+  if [[ $ARG_PROFILE == $profile ]]; then
+    registry_id=$(aws ecr describe-repositories --profile=$profile --max-items 1 | jq -r '.repositories[0].registryId')
+    region=$(aws configure list --profile=$profile | awk "NR > 2 && \$1 == \"region\" { print \$2 }")
+
+    domain="$registry_id.dkr.ecr.$region.amazonaws.com"
+    echo "Logging in with configuration: profile=$profile domain=$domain"
+    aws ecr get-login-password --profile "$ARG_PROFILE" \
+      | docker login --username AWS --password-stdin "$domain"
+
+    exit 0
+  fi
+done
+
+echo "Unknown profile" >&2
+echo "Valid profiles are: $(jq -c -n '$ARGS.positional' --args "${profiles[@]}")"
+exit 1

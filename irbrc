@@ -236,6 +236,15 @@ begin
     hash
   end
 
+  # @param m [Method]
+  def original_method(m)
+    if m.inspect.include?("sorbet-runtime")
+      T::Utils.signature_for_method(m).method
+    else
+      m
+    end
+  end
+
   # Object methods
   def omethods(instance, *compare_classes)
     subtract_methods = Object.instance_methods

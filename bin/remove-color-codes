@@ -14,7 +14,7 @@ elif [[ ! -f $ARG_FILE ]]; then
   exit 1
 fi
 
-if [[ -n $(command -v perl) ]]; then
+if command -v perl >/dev/null 2>&1; then
   cmd=perl
   script='
 s/[[:cntrl:]]\[[[:digit:]]{1,3};[[:digit:]]{1,3};[[:digit:]]{1,3}m//g;
@@ -28,7 +28,7 @@ s/\\e\[[[:digit:]]{1,3};[[:digit:]]{1,3}m//g;
 s/\\e\[[[:digit:]]{1,3}m//g;
 s/\\e\[m//g;
 '
-elif [[ -n $(command -v ruby) ]]; then
+elif command -v ruby >/dev/null 2>&1; then
   cmd=ruby
   script='
 $_.gsub!(/[[:cntrl:]]\[[[:digit:]]{1,3};[[:digit:]]{1,3};[[:digit:]]{1,3}m/, "");

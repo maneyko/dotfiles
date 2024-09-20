@@ -180,13 +180,11 @@ export border_color user_color host_color host_text pwd_color
 ps1::git_branch() {
   [[ $PS1_NO_GIT -eq 1 ]] && return
   [[ $ps1_git_branch_size == 0 ]] && return
-  : ${ps1_git_branch1:=$(git branch 2>/dev/null)}
-  if [[ ${#ps1_git_branch1} -eq 0 ]]; then
+  : ${ps1_git_branch:=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)}
+  if [[ ${#ps1_git_branch} -eq 0 ]]; then
     ps1_git_branch_size=0
     return
   fi
-  : ${ps1_git_branch2:=${ps1_git_branch1##*\* }}
-  ps1_git_branch=${ps1_git_branch2%%$'\n'*}
   printf "$ps1_git_branch"
 }
 
@@ -426,8 +424,11 @@ if [[ -n "$(command -v pyenv)" ]]; then
   eval "$(pyenv init -)"
   export PYENV_ROOT="$HOME/.pyenv"
   export PATH="$PYENV_ROOT/bin:$PATH"
-  export PATH="$PYENV_ROOT/shims:$PATH"  # eval "$(pyenv init --path)"
-  command pyenv rehash 2>/dev/null
+  # export PATH="$PYENV_ROOT/shims:$PATH"  # eval "$(pyenv init --path)"
+  # command pyenv rehash 2>/dev/null
+
+  eval "$(pyenv init --path)"
+  eval "$(pyenv init -)"
 
   if [[ -n $PYTHON_USE_VIRTUALENV ]]; then
     export PYENV_VIRTUALENV_DISABLE_PROMPT=1

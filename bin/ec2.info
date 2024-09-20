@@ -1,0 +1,33 @@
+#!/bin/bash
+
+source "argparse.sh"
+
+ARG_INSTANCE_NAME_EXAMPLE="t4g.micro"
+
+arg_positional "[instance-name] [The identifier of the instance. Example: $ARG_INSTANCE_NAME_EXAMPLE]"
+arg_boolean    "[open] [o]      [Open the link in the browser.]"
+arg_help "[
+Get information about an EC2 instance type.
+
+Example:
+    ec2.info $ARG_INSTANCE_NAME_EXAMPLE]"
+
+parse_args
+
+if [[ -z $ARG_INSTANCE_NAME ]]; then
+  printf "$(cprint 1 ERROR): No instance name was provided\n\n"
+  print_help
+  exit 1
+fi
+
+url="https://ec2instances.info/aws/ec2/$ARG_INSTANCE_NAME"
+
+if [[ -n $ARG_OPEN ]]; then
+  if [[ $OSTYPE == *darwin* ]]; then
+    open "$url"
+  else
+    echo "Opening the link is only available for MacOS" >&2
+  fi
+fi
+
+echo "$url"

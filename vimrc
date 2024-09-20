@@ -353,10 +353,9 @@ nnoremap <C-w>h           :vertical resize -5<CR>
 nnoremap <C-w>l           :vertical resize +5<CR>
 nnoremap <C-i>            gT
 nnoremap <tab>            gT
-nnoremap <M-i>            gT
+nnoremap <S-tab>          gt
 nnoremap <C-w><tab>       :tabmove -1<CR>
 nnoremap <C-o>            gt
-nnoremap <M-o>            gt
 nnoremap <C-w><C-o>       :tabmove +1<CR>
 nnoremap <C-b>            :nohl<CR><C-l>
 nnoremap <C-n>            :set relativenumber!<CR>

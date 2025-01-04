@@ -68,8 +68,14 @@ let g:netrw_dirhistmax=0  " no .netrwhist files
 if has('nvim')
   set guicursor=
   set laststatus=0
-  " set notermguicolors  " May be required for neovim>=0.10 (https://github.com/neovim/neovim/issues/29056)
-  "                      " Also COLORTERM=truecolor (https://github.com/neovim/neovim/issues/28776)
+
+  " Is required for neovim>=0.10 (https://github.com/neovim/neovim/issues/29056)
+  " https://neovim.io/doc/user/news-0.10.html#_breaking-changes
+  if has('nvim-0.10')
+    " Also perhaps COLORTERM=truecolor (https://github.com/neovim/neovim/issues/28776)
+    set notermguicolors
+  endif
+
 endif
 
 " Plugins

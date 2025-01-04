@@ -1,10 +1,15 @@
 #!/bin/bash
 
 
-export SERVICE_TIMEOUT=30000
+export SERVICE_TIMEOUT=300000000
+export RACK_TIMEOUT_SERVICE_TIMEOUT=$SERVICE_TIMEOUT
+export RACK_TIMEOUT_WAIT_TIMEOUT=$SERVICE_TIMEOUT
+export RACK_TIMEOUT_WAIT_OVERTIME=$SERVICE_TIMEOUT
 
 if [[ -f ./bin/bundle ]]; then
-  env SERVICE_TIMEOUT=30000 ./bin/bundle exec rspec $@
+  # env SERVICE_TIMEOUT=30000 ./bin/bundle exec rspec $@
+  ./bin/bundle exec rspec $@
 else
-  env SERVICE_TIMEOUT=30000 bundle exec rspec $@
+  # env SERVICE_TIMEOUT=30000 bundle exec rspec $@
+  bundle exec rspec $@
 fi

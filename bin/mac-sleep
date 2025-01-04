@@ -6,4 +6,6 @@ if [[ $OSTYPE != *darwin* ]]; then
 fi
 
 # open -a ScreenSaverEngine
-osascript -e 'tell app "System Events" to key code 12 using {control down, command down}'
+
+# https://apple.stackexchange.com/a/343629
+osascript -e 'tell app "System Events" to keystroke "q" using {control down, command down}'

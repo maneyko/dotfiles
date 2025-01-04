@@ -1,14 +1,43 @@
-#!/bin/bash
+#!/usr/bin/env perl
 
-
-env filename=$1 perl -MTime::Piece -e '
 my ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
     $atime,$mtime,$ctime,$blksize,$blocks)
-       = stat($ENV{filename});
+       = stat($ARGV[0]);
 
-$atime = localtime($atime)->strftime("%FT%T%z");
-$mtime = localtime($mtime)->strftime("%FT%T%z");
-$ctime = localtime($ctime)->strftime("%FT%T%z");
+sub epoch_to_timestamp
+{
+  my $unix_timestamp = $_[0];
+  my ($sec, $min, $hour, $mday, $mon, $year) = localtime($unix_timestamp);
+
+  # Get UTC time components
+  my ($utc_sec, $utc_min, $utc_hour) = gmtime($unix_timestamp);
+
+  # Calculate the UTC offset in seconds
+  my $offset_seconds = (($hour - $utc_hour) * 3600) + (($min - $utc_min) * 60);
+
+  # Handle potential day boundary wraparounds
+  if ($offset_seconds > 43200) {   # More than 12 hours ahead of UTC
+      $offset_seconds -= 86400;   # Subtract one day in seconds
+  } elsif ($offset_seconds < -43200) {  # More than 12 hours behind UTC
+      $offset_seconds += 86400;   # Add one day in seconds
+  }
+
+  # Convert seconds to hours and minutes
+  my $offset_sign = $offset_seconds >= 0 ? "+" : "-";
+  $offset_seconds = abs($offset_seconds);
+  my $offset_hours = int($offset_seconds / 3600);
+  my $offset_minutes = ($offset_seconds % 3600) / 60;
+
+  # Format the offset as "+HH:MM" or "-HH:MM"
+  my $utc_offset = sprintf("%s%02d:%02d", $offset_sign, $offset_hours, $offset_minutes);
+
+  return sprintf("%d-%02d-%02dT%02d:%02d:%02d%s", $year + 1900, $mon + 1, $mday, $hour, $min, $sec, $utc_offset);
+}
+
+$atime = epoch_to_timestamp($atime);
+$mtime = epoch_to_timestamp($mtime);
+$ctime = epoch_to_timestamp($ctime);
+
 $output = qq<{
   "dev": "$dev",
   "ino": "$ino",
@@ -25,4 +54,3 @@ $output = qq<{
   "blocks": "$blocks"
 }>;
 print $output;
-'

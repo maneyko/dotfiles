@@ -1,0 +1,15 @@
+#!/bin/bash
+
+source "argparse.sh"
+
+ARG_DIRECTORY='.'
+ARG_DU_FLAGS='sh'
+
+arg_positional "[directory]     [The directory to get file size contents. Default: '$ARG_DIRECTORY']"
+arg_optional   "[du-flags]  [f] [Flags to pass to 'du' command. Default: '${ARG_DU_FLAGS}']"
+arg_help "[Get file sizes of all files and directories within the specified directory.]"
+parse_args
+
+echo $ARG_DU_FLAGS
+
+find "${ARG_DIRECTORY%/}" -maxdepth 1 | while read line; do du -$ARG_DU_FLAGS "$line"; done | sort -h

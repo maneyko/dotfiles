@@ -80,7 +80,15 @@ begin
   end
 
   try_require("hirber") do
-    Hirb.enable if defined?(ActiveRecord)
+    if defined?(ActiveRecord)
+      Hirb.enable
+
+      # Render the array of hashes as a Hirb table.
+      # @param array [Array[Hash]]
+      def hirb_table(array)
+        Hirb::Helpers::AutoTable.render(array, fields: array.first.keys)
+      end
+    end
   end
 
   if defined?(Rails)
@@ -100,6 +108,9 @@ begin
       # https://stackoverflow.com/a/17675841
       ActiveRecord::Base.logger = ActiveSupport::Logger.new(STDOUT)
       ActiveRecord::Base.logger.level = 0
+      if ActiveRecord::Base.respond_to?(:verbose_query_logs=)
+        ActiveRecord::Base.verbose_query_logs = true
+      end
     end
   end
 

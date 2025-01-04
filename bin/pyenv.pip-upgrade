@@ -1,0 +1,49 @@
+#!/bin/bash
+
+if [[ ! -f requirements.in ]]; then
+  echo "No 'requirements.in' file found!" >&2
+  exit 1
+fi
+
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+if [[ -z $1 ]]; then
+  if [[ -f .python-version ]]; then
+    pyenv_name=$(cat .python-version)
+    python_version=$(pyenv versions | awk -F/ "\$NF == \"$pyenv_name\" {print \$1}")
+
+  elif [[ -d .git ]]; then
+    pyenv_name=$(git remote get-url origin | xargs basename -s .git)
+    python_version=$(pyenv versions | awk -F/ "\$NF == \"$pyenv_name\" {print \$1}")
+
+  elif [[ -f Dockerfile ]]; then
+    python_version=$(perl -ne 'print $1 and exit if /python:([\d\.]+)/' Dockerfile)
+  fi
+
+  if [[ -z $python_version ]]; then
+    cat << EOT
+Could not determine Python version, please pass the Python version as an argument to this script.
+Example: ${0##*/} 3.11.6
+All available versions can be found be running:
+  pyenv install -l
+EOT
+  fi
+else
+  python_version=$1
+fi
+
+venv_name=temp_pip_package_bump
+
+echo "Using Python version $python_version"
+
+pyenv virtualenv-delete $venv_name
+
+pyenv virtualenv $python_version $venv_name
+
+pip install -U pip
+pip install -r requirements.in
+pip freeze > requirements.txt
+
+pyenv virtualenv-delete -f $venv_name

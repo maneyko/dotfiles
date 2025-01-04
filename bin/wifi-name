@@ -5,5 +5,12 @@ if [[ $OSTYPE != *darwin* ]]; then
   exit 1
 fi
 
-/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I \
-  | perl -ne 'print "$1\n" if /\bSSID: (.*)$/'
+networksetup -listpreferredwirelessnetworks en0 | awk -F'\t' 'NR == 2 {print $2}'
+
+# system_profiler SPAirPortDataType -detailLevel basic -json \
+#   | jq -r '
+#   .SPAirPortDataType[0].spairport_airport_interfaces
+#   | map(select(._name == "en0"))
+#   | first
+#   | .spairport_current_network_information._name
+# '

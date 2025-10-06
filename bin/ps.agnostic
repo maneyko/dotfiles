@@ -58,8 +58,8 @@ awk_script="${awk_script//<ARG_CPU\>/$ARG_CPU}"
 
 if [[ -t 1 && -z $ARG_WRAP ]]; then
   tput rmam
-  ps $ARG_PS_ARGS $options | awk "$awk_script"
+  ps $ARG_PS_ARGS $options | awk "$awk_script" | perl -pe 's/\s+$/\n/g'
   tput smam
 else
-  ps $ARG_PS_ARGS $options | awk "$awk_script"
+  ps $ARG_PS_ARGS $options | awk "$awk_script" | perl -pe 's/\s+$/\n/g'
 fi

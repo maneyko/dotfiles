@@ -10,3 +10,4 @@ SELECT  datname,
 FROM pg_stat_activity
 WHERE upper(query) LIKE '%VACUUM%'
 ORDER BY xact_start
+;

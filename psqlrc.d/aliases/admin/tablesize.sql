@@ -6,3 +6,4 @@ FROM pg_class pgc
 WHERE nspname NOT IN ('pg_catalog', 'information_schema')
 ORDER BY pg_relation_size(pgc.oid)
 DESC LIMIT 40
+;

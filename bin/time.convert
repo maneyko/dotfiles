@@ -1,0 +1,5 @@
+#!/bin/bash
+
+t=$1
+
+ruby -rtime -e "puts Time.at(Time.parse('$t').to_i).iso8601"

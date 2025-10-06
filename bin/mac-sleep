@@ -8,4 +8,6 @@ fi
 # open -a ScreenSaverEngine
 
 # https://apple.stackexchange.com/a/343629
-osascript -e 'tell app "System Events" to keystroke "q" using {control down, command down}'
+osascript << EOT
+tell app "System Events" to keystroke "q" using {control down, command down}
+EOT

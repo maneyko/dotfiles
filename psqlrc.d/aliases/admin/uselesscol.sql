@@ -24,3 +24,4 @@ WHERE nspname NOT LIKE E'pg\\_%'
   AND reltuples >= 100
   AND stadistinct BETWEEN 0 AND 1
 ORDER BY nspname, relname, attname
+;

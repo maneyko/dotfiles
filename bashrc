@@ -50,6 +50,7 @@ $PATH:\
 
 PATH="\
 $HOME/local/bin:\
+$HOME/.local/bin:\
 $HOME/.bin.local:\
 $HOME/.bin:\
 $PATH\
@@ -106,16 +107,19 @@ if [[ -n $INTERACTIVE ]]; then
   done
 fi
 
-# My module
-export PYTHONPATH="$HOME/.dotfiles/ipython/maneyko:$PYTHONPATH"
-
-# if [[ -f $HOME/.pythonrc.py ]]; then
-#   PYTHONSTARTUP="$HOME/.pythonrc.py"
-# fi
-
+# For debugging Bash startup slowdowns
+LOG_TIME_ENABLED=
+log_time() {
+  if [[ -n $LOG_TIME_ENABLED ]]; then
+    : ${START:=$EPOCHREALTIME}
+    echo "$1: $(awk "BEGIN { print $EPOCHREALTIME - $START }")"
+  fi
+}
 
 # Bash Completion
 # ---------------
+
+log_time "Before bash completion"
 
 completion_sources=(
 $BREW_PREFIX/etc/bash_completion
@@ -130,6 +134,8 @@ for f in ${completion_sources[@]}; do
     break
   fi
 done
+
+log_time "After bash completion"
 
 # Override `bash_completion` and disable tilde expansion
 _expand() { return 0 ; }
@@ -163,7 +169,8 @@ ulprint() { printf -- "%b" -- "\033[4${1}\033[0m" ; }
 pclr() { REPLY="\[\033[38;5;${1}m\]${2}\[\033[0m\]" ; }
 pstr() { pclr "$1" "$2"; ps1+="$REPLY" ; }
 
-export PS1_NO_GIT=0
+: ${PS1_NO_GIT:=0}
+export PS1_NO_GIT
 
 border_color=241
 : ${pwd_color:=228}
@@ -178,17 +185,22 @@ fi
 export border_color user_color host_color host_text pwd_color
 
 ps1::git_branch() {
+  : ${ps1_git_branch:=}
   [[ $PS1_NO_GIT -eq 1 ]] && return
-  [[ $ps1_git_branch_size == 0 ]] && return
+  [[ ${ps1_git_branch_size:-} == 0 ]] && return
   : ${ps1_git_branch:=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)}
   if [[ ${#ps1_git_branch} -eq 0 ]]; then
     ps1_git_branch_size=0
     return
+  elif [[ $ps1_git_branch == HEAD ]]; then
+    ref=$(git rev-parse HEAD)
+    ps1_git_branch=${ref:0:7}
   fi
   printf "$ps1_git_branch"
 }
 
 ps1::branch_colon() {
+  : ${ps1_branch_colon:=}
   [[ $PS1_NO_GIT -eq 1 ]] && return
   ps1::git_branch >/dev/null 2>&1
   if [[ ${#ps1_git_branch} -gt 0 ]]; then
@@ -214,6 +226,7 @@ ps1::spaces() {
   printf -- ' %.0s' `seq 1 $space_width`
 }
 
+ps1=
 pstr $border_color '┌─['
 pstr $user_color   "$USER"
 pstr $border_color ':'
@@ -251,6 +264,7 @@ pstr $border_color ']› '
 export SHORT_PS1="$ps1"
 export PS1=$LONG_PS1
 
+log_time "After PS1"
 
 # ---------------------------------------------------------------------
 # Aliases
@@ -329,13 +343,14 @@ else
   fi
 fi
 
+log_time "After aliases"
 
 # ---------------------------------------------------------------------
 # Specific Environment
 # ---------------------------------------------------------------------
 
 if command -v tmux >/dev/null 2>&1; then
-  export TMUX_VERSION_INT=$(tmux -V | awk "{ gsub(/[[:alpha:]]/, \"\", \$2); split(\$2, a, \".\"); printf(\"%d%02d\", a[1], a[2]) }")
+  export TMUX_VERSION_INT=$(tmux -V | awk "{match(\$2, /[[:digit:]]+\.[[:digit:]]+/); s = substr(\$2, RSTART, RLENGTH); split(s, a, \".\"); printf(\"%d%02d\", a[1], a[2])}")
 fi
 
 if [[ $EDITOR == *nvim* ]]; then
@@ -365,7 +380,11 @@ $BREW_PREFIX/bin/lesspipe
 
 for f in ${lesspipes[@]}; do
   if [[ -f $f ]]; then
-    export LESSOPEN="|$f %s:"
+    export LESSOPEN="|$f %s"
+
+    if [[ $OSTYPE == *darwin* ]]; then
+      LESSOPEN+=":"
+    fi
     break
   fi
 done
@@ -376,6 +395,11 @@ fi
 
 # https://github.com/h5py/h5py/blob/05ceae63a19ba0cbac7f37a5b2a8ecf745e2bc32/setup_configure.py#L108
 export HDF5_DIR="$BREW_PREFIX/opt/hdf5"
+
+export K9S_CONFIG_DIR=$HOME/.k9s
+export K9S_LOGS_DIR=$HOME/.k9s
+
+log_time "After specific environment section"
 
 # RVM
 # ---
@@ -413,28 +437,43 @@ if [[ $OSTYPE == *darwin* ]]; then
   done
 fi
 
+log_time "After RVM"
+
 if [[ -f $HOME/.bashrc.local ]]; then
   source $HOME/.bashrc.local
 fi
+
+log_time "After bashrc.local"
+
+# Pyenv
+# -----
+
+# My module
+export PYTHONPATH="$HOME/.dotfiles/ipython/maneyko:$PYTHONPATH"
+export PYTHON_BASIC_REPL=1
+
+# if [[ -f $HOME/.pythonrc.py ]]; then
+#   PYTHONSTARTUP="$HOME/.pythonrc.py"
+# fi
 
 export GRPC_PYTHON_BUILD_SYSTEM_OPENSSL=1
 export GRPC_PYTHON_BUILD_SYSTEM_ZLIB=1
 
 if [[ -n "$(command -v pyenv)" ]]; then
-  eval "$(pyenv init -)"
   export PYENV_ROOT="$HOME/.pyenv"
-  export PATH="$PYENV_ROOT/bin:$PATH"
-  # export PATH="$PYENV_ROOT/shims:$PATH"  # eval "$(pyenv init --path)"
-  # command pyenv rehash 2>/dev/null
+  [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+  eval "$(pyenv init - bash)"
 
-  eval "$(pyenv init --path)"
-  eval "$(pyenv init -)"
+  log_time "After pyenv init"
 
   if [[ -n $PYTHON_USE_VIRTUALENV ]]; then
     export PYENV_VIRTUALENV_DISABLE_PROMPT=1
     eval "$(pyenv virtualenv-init -)"
   fi
+
+  log_time "After pyenv virtualenv init"
 fi
+
 
 # NVM
 # ---
@@ -456,7 +495,7 @@ for d in ${nvms[@]}; do
   fi
 done
 
-
+log_time "After NVM"
 
 # First TTY Greeting
 # ------------------
@@ -466,7 +505,8 @@ if [[ -n $INTERACTIVE && $OSTYPE == *darwin* ]]; then
       if [[ $(($(date +%w) % 2)) -eq 1 && -z $DONT_USE_WTTR_IN ]]; then
         curl wttr.in?2Fn
       else
-        fastfetch -c $HOME/.config/fastfetch-config.json
+        :
+        # fastfetch -c $HOME/.config/fastfetch-config.json
       fi
     fi
   fi

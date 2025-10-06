@@ -28,7 +28,9 @@ if has('patch-7.4-346')
   set breakindent
 endif
 set clipboard=unnamed
-set encoding=UTF-8
+set encoding=utf-8
+set fileencoding=utf-8
+set ambiwidth=double
 set expandtab
 set hlsearch
 set ignorecase
@@ -89,6 +91,11 @@ Plug 'alvan/vim-closetag'
 let g:closetag_filenames = '*.html,*.xhtml,*.xml'
 
 Plug 'jiangmiao/auto-pairs'        " completes pairs
+let g:AutoPairsShortcutToggle     = ''
+let g:AutoPairsShortcutFastWrap   = ''
+let g:AutoPairsShortcutJump       = ''
+let g:AutoPairsShortcutBackInsert = ''
+
 Plug 'tpope/vim-commentary'        " commenting motions
 Plug 'tpope/vim-endwise'           " closes functions (if and fi)
 Plug 'tpope/vim-repeat'            " '.' for plugins
@@ -107,7 +114,7 @@ if !minimal_vimrc
         \ 'AcceptSelection("t")': ['<cr>'],
     \ }
     let g:ctrlp_regexp = 1
-    let g:ctrlp_custom_ignore = 'target\/docker\|node_modules'
+    let g:ctrlp_custom_ignore = 'target\/docker\|node_modules\|venv'
 
   Plug 'scrooloose/nerdtree'         " filetree
   Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -154,6 +161,7 @@ if !minimal_vimrc
   " ------
   Plug 'martinda/Jenkinsfile-vim-syntax'
   Plug 'phreax/vim-coffee-script'
+  Plug 'towolf/vim-helm'
   Plug 'vim-scripts/nginx.vim'       " nginx
   Plug 'digitaltoad/vim-pug'
   Plug 'hashivim/vim-terraform'
@@ -214,23 +222,62 @@ if !minimal_vimrc
   if executable('node')
     if has('nvim')
       Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
+
+      " Notes:
+      " * 'suggest' is the menu that comes up when you press '.'
+      " * 'signature' is when you enter '('
+      " * 'diagnostics' are the warnings by the line numbers (linter errors, etc.)
+      " * 'snippet' is when there is a '~' in the suggestion
+
+
+      " Plug 'github/copilot.vim'  " Requires Node 20+
+      "   let g:copilot_node_command = "~/.nvm/versions/node/v20.19.2/bin/node"
+      "   inoremap <C-[> <Plug>(copilot-previous)
+      "   inoremap <C-]> <Plug>(copilot-next)
+      "   inoremap <C-l> <Plug>(copilot-dismiss)
     else
       Plug 'neoclide/coc.nvim'
     endif
     if !has('patch-8.0-1453')
       let g:coc_disable_startup_warning = 1
     endif
-      inoremap <silent><expr> <TAB>
-            \ pumvisible() ? "\<C-n>" :
-            \ <SID>check_back_space() ? "\<TAB>" :
-            \ coc#refresh()
-      inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-      function! s:check_back_space() abort
-        let col = col('.') - 1
-        return !col || getline('.')[col - 1]  =~# '\s'
-      endfunction
-      " let g:coc_global_extensions = ['coc-solargraph']
+    inoremap <silent><expr> <TAB>
+          \ coc#pum#visible() ? coc#pum#next(1) :
+          \ CheckBackspace() ? "\<Tab>" :
+          \ coc#refresh()
+    inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+    " Note: <C-e> cancels the popup menu
+
+    function! CoCEnterOverride() abort
+      if coc#pum#has_item_selected()
+        return coc#pum#confirm()
+      else
+        return "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+      endif
+    endfunction
+    " inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+    "                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+    inoremap <silent><expr> <CR> CoCEnterOverride()
+
+    function! CheckBackspace() abort
+      let col = col('.') - 1
+      return !col || getline('.')[col - 1]  =~# '\s'
+    endfunction
+
+    " Remap <C-f> and <C-b> to scroll float windows/popups
+    if has('nvim-0.4.0') || has('patch-8.2.0750')
+      nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+      nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+      inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+      inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+      vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+      vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+    endif
+
+    let g:coc_disable_transparent_cursor = 1
+
+    " let g:coc_global_extensions = ['coc-solargraph']
   endif
 
   " Miscellaneous
@@ -396,7 +443,8 @@ nnoremap zfl              :loadview<CR>
 inoremap <C-a>            <C-o>^
 inoremap <C-d>            <C-o>x
 inoremap <C-e>            <C-o>$
-inoremap <C-p>            <C-r>*
+inoremap <C-p>            <C-o>k
+inoremap <C-n>            <C-o>j
 inoremap <C-w>            <C-o><C-w>
 inoremap <M-b>            <C-o>dd
 inoremap <M-f>            <C-o>w
@@ -406,6 +454,7 @@ vnoremap .                :normal! .<CR>
 vnoremap &                :normal! &<CR>
 vnoremap \y               "ly
 vnoremap \p               "lp
+vnoremap f                zf
 
 map <ScrollWheelUp>       <C-y>
 map <ScrollWheelDown>     <C-e>
@@ -437,7 +486,9 @@ au BufNewFile *_spec.rb
 au BufNewFile *.node
       \ exe "normal! i#!/usr/bin/env node\<CR>\<Esc>"
 au BufNewFile *.py
-      \ exe "normal! i#!/usr/bin/env python\<CR>\<Esc>"
+      \ exe "normal! iclass " .
+      \ substitute(substitute(expand('%:t')[:-4], '\(\%(\<\l\+\)\%(_\)\@=\)\|_\(\l\)', '\u\1\2', "g"),'^.','\u&','')
+      \ . ":\<CR>pass\<CR>"
 au BufNewFile *.pl
       \ exe "normal! i#!/usr/bin/env perl\<CR>\<Esc>x"
 au BufNewFile *.html,*.php
@@ -483,9 +534,9 @@ autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
 autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
 
 " au FileType ruby setlocal omnifunc=LanguageClient#complete
-au FileType coffee,css,scss,html,javascript,
+au FileType bash,coffee,css,scss,html,javascript,
       \jinja,json,php,pug,R,ruby,rst,
-      \sh,sql,tex,typescript,vim,yaml
+      \sh,sql,tex,typescript,vim,yaml,helm
       \ setlocal ts=2 sw=2 sts=2
 au FileType sql
       \ setlocal ts=4 sw=4 sts=4
@@ -511,10 +562,10 @@ au FileType vim
       \ let b:coc_start_at_startup = 0
 au FileType jinja
       \ setlocal commentstring=<!--%s-->
-au FileType apache,nginx,eruby.yaml
+au FileType apache,nginx,eruby.yaml,terraform
       \ setlocal commentstring=#\ %s
 au FileType sql
-      \ setlocal commentstring=--%s
+      \ setlocal commentstring=--\ %s
 au FileType haml
       \ setlocal wrap
 

@@ -1,0 +1,28 @@
+#!/bin/bash
+
+source "argparse.sh"
+
+ARG_TIMEOUT=10
+arg_positional "[domain]      [The domain name to check.]"
+arg_optional   "[port]    [p] [The port number.]"
+arg_optional   "[timeout] [t] [The amount of time to wait on a connection. Default: $ARG_TIMEOUT]"
+arg_help "[Check if a port is open on a remote host.]"
+parse_args
+
+if [[ -z $ARG_DOMAIN ]]; then
+  echo "A domain must be specified"
+  exit 1
+fi
+
+if [[ -z $ARG_PORT ]]; then
+  echo "A port must be specified"
+  exit 1
+fi
+
+timeout $ARG_TIMEOUT bash -c "</dev/tcp/$ARG_DOMAIN/$ARG_PORT"
+
+if [[ $? -eq 0 ]]; then
+  echo "SUCCESS: Port $ARG_PORT on '$ARG_DOMAIN' is open"
+else
+  echo "FAIL: Port $ARG_PORT on '$ARG_DOMAIN' is not open"
+fi

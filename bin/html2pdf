@@ -1,0 +1,57 @@
+#!/bin/bash
+
+source "argparse.sh"
+
+arg_positional "[html_file]      [Input HTML file.]"
+arg_optional   "[pdf_file]       [Output PDF file. Defaults to '{html_file}.pdf']"
+arg_boolean    "[chrome]     [c] [Use Google Chrome to generate the PDF file.]"
+arg_boolean    "[weasyprint] [w] [Use 'weasyprint' to generate the PDF file.]"
+arg_help "[Convert an HTML file to PDF.]"
+parse_args
+
+HTML_FILE=$ARG_HTML_FILE
+
+if [[ ${HTML_FILE:0:1} != '/' ]]; then
+  HTML_FILE="$PWD/$HTML_FILE"
+fi
+
+# # Get absolute path
+# HTML_FILE=$(perl -MCwd -e "print Cwd::abs_path(shift)" "$HTML_FILE")
+
+if [[ ! -f $HTML_FILE ]]; then
+  echo "'$ARG_HTML_FILE' is not a file!"
+  exit 1
+fi
+
+if [[ -z $ARG_PDF_FILE ]]; then
+  ARG_PDF_FILE=$HTML_FILE.pdf
+fi
+
+chrome_html_to_pdf() {
+  if [[ $(uname -s) == Darwin ]]; then
+    for d in $HOME/Applications /Applications; do
+      if [[ -d $d ]]; then
+        chrome_exec=$(find "$d" -name 'Google Chrome' 2>/dev/null | head -1)
+        [[ -n $chrome_exec ]] && break
+      fi
+    done
+    if [[ -n $chrome_exec ]]; then
+      "$chrome_exec" \
+        --headless \
+        --disable-gpu \
+        --print-to-pdf="$ARG_PDF_FILE" \
+        --no-pdf-header-footer \
+        file://"$HTML_FILE"
+    fi
+  fi
+}
+
+if [[ -n $ARG_CHROME ]]; then
+  chrome_html_to_pdf
+
+elif [[ -n $ARG_WEASYPRINT ]]; then
+  weasyprint --dpi 96 "$HTML_FILE" "$ARG_PDF_FILE"
+
+elif command -v wkhtmltopdf >/dev/null 2>&1; then
+  wkhtmltopdf --margin-top 0 --margin-bottom 0 --margin-left 0 --margin-right 0 --print-media-type --page-size letter --enable-local-file-access --dpi 96 "$HTML_FILE" "$ARG_PDF_FILE"
+fi

@@ -1,0 +1,23 @@
+#!/bin/bash
+
+
+if [[ -f $1 ]]; then
+  INPUT_FILE=$1
+elif [[ -t 2 ]]; then
+  INPUT_FILE=/dev/stdin
+else
+  echo "Either a file must be specified, or data must be piped through stdin"
+  exit 1
+fi
+
+if [[ -n $(command -v yq 2>/dev/null) ]]; then
+  yq -o=json 'from_xml' < "$INPUT_FILE"
+
+elif [[ $(command -v python3 2>/dev/null) ]]; then
+  python3 -c "import sys, json, xmltodict; print(json.dumps(xmltodict.parse(sys.stdin.read()), indent=2))" < "$INPUT_FILE"
+elif [[ $(command -v python 2>/dev/null) ]]; then
+  python -c "import sys, json, xmltodict; print(json.dumps(xmltodict.parse(sys.stdin.read()), indent=2))" < "$INPUT_FILE"
+else
+  echo "Unable to find tool to convert XML to JSON"
+  exit 1
+fi

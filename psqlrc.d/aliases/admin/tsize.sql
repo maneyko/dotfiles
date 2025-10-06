@@ -9,3 +9,4 @@ ORDER BY
   x.total_size DESC,
   table_schema,
   table_name
+;

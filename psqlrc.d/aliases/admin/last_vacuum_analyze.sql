@@ -7,3 +7,4 @@ FROM pg_stat_all_tables
 --ORDER BY last_autovacuum, last_autoanalyze;
 --ORDER BY schemaname, relname;
 ORDER BY pg_total_relation_size('"' || schemaname || '"."' || relname || '"') DESC
+;

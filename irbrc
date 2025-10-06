@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+return if @irbrc_loaded
+
 def irbrc_error; @irbrc_error; end
 def rails_init_error; @rails_init_error; end
 
@@ -50,6 +52,7 @@ begin
   if defined?(IRB) && IRB.respond_to?(:conf)
     IRB.conf[:HISTORY_FILE] = nil
     HISTORY_FILE ||= "#{HOME}/.irb-history"
+    FileUtils.touch(HISTORY_FILE)
   end
   SAVE_HISTORY ||= 200_000
 
@@ -94,7 +97,7 @@ begin
   if defined?(Rails)
     if (Rails.env.development? || Rails.env.test?)
       result = try_block do
-        Rails.application&.eager_load!
+        # Rails.application&.eager_load!
       end
       if result.is_a?(StandardError)
         @rails_init_error = result
@@ -104,12 +107,18 @@ begin
         EOT
       end
     end
-    if defined?(ActiveRecord) && !Rails.env.production? && ActiveRecord::Base.logger
+    if defined?(ActiveRecord) && ActiveRecord::Base.logger
       # https://stackoverflow.com/a/17675841
       ActiveRecord::Base.logger = ActiveSupport::Logger.new(STDOUT)
       ActiveRecord::Base.logger.level = 0
-      if ActiveRecord::Base.respond_to?(:verbose_query_logs=)
-        ActiveRecord::Base.verbose_query_logs = true
+      if Rails.version < "7"
+        if ActiveRecord::Base.respond_to?(:verbose_query_logs=)
+          ActiveRecord::Base.verbose_query_logs = true
+        end
+      else
+        if ActiveRecord.respond_to?(:verbose_query_logs=)
+          ActiveRecord.verbose_query_logs = true
+        end
       end
     end
   end
@@ -256,6 +265,10 @@ begin
     end
   end
 
+  def get_method(obj, method_name)
+    Kernel.instance_method(:method).bind(obj).call(method_name)
+  end
+
   # Object methods
   def omethods(instance, *compare_classes)
     subtract_methods = Object.instance_methods
@@ -336,3 +349,5 @@ rescue StandardError => error
   puts error.message
   puts "Error saved to +irbrc_error+"
 end
+
+@irbrc_loaded = true

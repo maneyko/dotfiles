@@ -5,4 +5,3 @@ if [[ $OSTYPE == *darwin* ]]; then
     afplay /System/Library/Sounds/Glass.aiff & disown
   } >/dev/null 2>&1
 fi
-

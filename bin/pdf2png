@@ -5,5 +5,20 @@ if [[ $OSTYPE != *darwin* ]]; then
   exit 1
 fi
 
+first_page_only=true
+
 # sips -f format png "$1" --out "${1}.png"
-convert -quality 100 -density 200 -colorspace sRGB "$1" -flatten "${1}.%02d.png"
+output_file=$1.png
+
+if command -v magick >/dev/null 2>&1; then
+  magick -quality 100 -density 200 -colorspace sRGB "${1}[0]" -flatten "$output_file"
+
+elif command -v convert >/dev/null 2>&1; then
+  convert -quality 100 -density 200 -colorspace sRGB "${1}[0]" -flatten "$output_file"
+
+elif command -v pdftoppm >/dev/null 2>&1; then
+  pdftoppm -png -aa no -r 300 -f 1 -l 1 "$1" > "$output_file"
+
+fi
+
+echo "Wrote to '$output_file'"

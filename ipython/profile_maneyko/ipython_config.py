@@ -11,4 +11,7 @@ c.TerminalInteractiveShell.confirm_exit = False
 c.BaseIPythonApplication.profile = 'maneyko'
 c.InteractiveShell.colors = 'Linux'
 
+# Make pandas vertical display show all columns
+# pd.set_option('display.max_rows', None)
+
 c.IPCompleter.use_jedi = False

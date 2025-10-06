@@ -7,3 +7,4 @@ FROM pg_type AS t
     ON t.oid = e.enumtypid
   INNER JOIN pg_catalog.pg_namespace AS n
     ON n.oid = t.typnamespace
+;

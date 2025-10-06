@@ -45,3 +45,4 @@ WHERE c.relkind = 'r'
   )
 ORDER BY age(relfrozenxid) DESC
 LIMIT 50
+;

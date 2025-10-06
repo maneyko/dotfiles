@@ -7,3 +7,4 @@ SELECT
 FROM pg_stat_activity
 WHERE pg_stat_activity.query !~ '%IDLE%'::text
   AND pg_stat_activity.waiting = true
+;

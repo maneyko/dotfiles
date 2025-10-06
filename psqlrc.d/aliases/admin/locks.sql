@@ -10,3 +10,4 @@ FROM pg_catalog.pg_locks bl
                                         AND bl.pid != kl.pid
   JOIN pg_catalog.pg_stat_activity ka ON kl.pid = ka.pid
 WHERE NOT bl.granted
+;

@@ -16,7 +16,7 @@ if [[ $OSTYPE == *darwin* ]]; then
   brew update
   brew upgrade --greedy
   brew upgrade --cask --greedy
-  brew cleanup --prune=30
+  brew cleanup --prune=all
 elif command -v apt-get >/dev/null 2>&1; then
   sudo apt-get -y update
   sudo apt-get -y upgrade

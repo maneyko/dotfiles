@@ -1,4 +1,62 @@
 {
+  "suggest.autoTrigger": "always",
+  "suggest.defaultSortMethod": "alphabetical",
+  "suggest.enablePreselect": false,
+  "suggest.highPrioritySourceLimit": 5,
+  "suggest.labelMaxLength": 40,
+  "suggest.lowPrioritySourceLimit": 5,
   "suggest.maxCompleteItemCount": 50,
+  "suggest.triggerAfterInsertEnter": true,
+  "suggest.noselect": true,
+  "dialog.maxWidth": 60,
+  "dialog.maxHeight": 20,
+  "suggest.floatConfig": {
+    "maxWidth": 80
+  },
+  "signature.floatConfig": {
+    "maxWidth": 50,
+    "maxHeight": 15
+  },
+  "pylsp.plugins.pycodestyle.enabled": false,
+  "pylsp.plugins.pyflakes.enabled": false,
+  "pylsp.plugins.mccabe.enabled": false,
+  "solargraph.checkGemVersion": false,
+  "diagnostic.enable": false,
+  "languageserver": {
+    "ruby-lsp": {
+      "command": "ruby-lsp",
+      "initializationOptions": {
+        "disabledFeatures": ["diagnostics"]
+      },
+      "filetypes": ["ruby"],
+      "featuresConfiguration": {
+        "inlayHint": {
+          "implicitHashValue": false,
+          "implicitRescue": false
+        }
+      },
+      "indexing": {
+        "excludedPatterns": ["path/to/excluded/file.rb"],
+        "includedPatterns": ["path/to/included/file.rb"],
+        "excludedGems": ["gem1", "gem2", "etc."],
+        "excludedMagicComments": ["compiled:true"]
+      },
+      "formatter": "auto",
+      "linters": [],
+      "experimentalFeaturesEnabled": false
+    },
+    "terraform": {
+      "command": "terraform-ls",
+      "args": ["serve"],
+      "filetypes": ["terraform", "tf"],
+      "disableSnippetCompletion": true,
+      "suggest.lowPrioritySourceLimit": 20,
+      "suggest.highPrioritySourceLimit": 20
+    }
+  },
+  "[terraform]": {
+    "suggest.lowPrioritySourceLimit": 5,
+    "suggest.highPrioritySourceLimit": 10
+  },
   "solargraph.trace.server": "verbose"
 }

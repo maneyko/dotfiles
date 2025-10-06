@@ -1,0 +1,41 @@
+#!/bin/bash
+
+source "argparse.sh"
+
+ARG_DIRECTORY='.'
+
+ARG_SIZE_MB=1
+
+arg_positional "[directory]       [The directory to get file size contents. Default: '$ARG_DIRECTORY']"
+arg_optional   "[min-size-mb] [s] [Minimum size to enter recursion (in MiB). Default: $ARG_MIN_SIZE_MB]"
+arg_help "[Get file sizes of all files and directories within the specified directory.]"
+parse_args
+
+ARG_DIRECTORY=${ARG_DIRECTORY%/}
+
+min_size_kb=$(( ARG_MIN_SIZE_MB * 1024 ))
+
+du -a -k -x "$ARG_DIRECTORY"/* | \
+  awk "\$1 > $min_size_kb" | \
+  sort -n | \
+  while read -r size_kb path; do
+    if [[ -d $path ]]; then
+      ftype="[d]"
+    elif [[ -f $path ]]; then
+      ftype="[f]"
+    else
+      ftype="[?]"
+    fi
+    printf "%s\t%s\t%s\n" "$size_kb" "$ftype" "$path"
+  done | \
+  awk -F '\t' '{
+    size = $1
+    ftype = $2
+    path = $3
+    unit = "KiB"
+    human = size
+    if (size >= 1024)       { human = size / 1024;       unit = "MiB"; }
+    if (size >= 1048576)    { human = size / 1048576;    unit = "GiB"; }
+    if (size >= 1073741824) { human = size / 1073741824; unit = "TiB"; }
+    printf "%5.1f %s %s  %s\n", human, unit, ftype, path
+  }'

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# vim: ft=bash
+
+pid=$1
+
+status_file="/proc/$pid/status"
+
+if [[ ! -r $status_file ]]; then
+  echo "PID status file '$status_file' is not readable!"
+  exit 1
+fi
+
+awk '/^VmRSS/' "$status_file"

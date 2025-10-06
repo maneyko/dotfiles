@@ -1,0 +1,23 @@
+#!/bin/bash
+
+domain_name="$1"
+
+
+ip=$(ping -t1 -c1 "$domain_name" 2>/dev/null | awk -F '[()]' 'NR==1{print $2}')
+
+if [[ -z $ip ]]; then
+  if command -v perl >/dev/null; then
+    ip=$(perl -MSocket -e 'printf "%s\n", inet_ntoa(scalar(gethostbyname($ARGV[0])))' "$domain_name")
+  else
+    py=$(command -v python3 python | head -1)
+    if [[ -n $py ]]; then
+      ip=$($py -c "import socket; print(socket.gethostbyname('$domain_name'))")
+    fi
+  fi
+fi
+
+if [[ -z $ip ]]; then
+  echo "Unable to determine IP address for '$domain_name'"
+else
+  echo "$ip"
+fi

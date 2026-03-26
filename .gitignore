@@ -16,6 +16,9 @@ config/neofetch/
 config/nvim/plugged/
 config/nvim/plugged
 config/configstore/
+config/argocd/
+config/osxphotos/themes/
+config/gtk-2.0/
 
 ipython/maneyko/build/
 ipython/maneyko/dist/
@@ -23,6 +26,8 @@ ipython/maneyko/maneyko.egg-info/
 ipython/profile_default/
 ipython/profile_maneyko/logs/
 ipython/profile_maneyko/startup/README
+ipython/profile_default/
+ipython/profile_default
 
 mac/SP*.txt
 

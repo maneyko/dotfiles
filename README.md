@@ -20,3 +20,4 @@ git clone https://github.com/maneyko/dotfiles
 [tmux]: https://en.wikipedia.org/wiki/Tmux
 [vim]: https://en.wikipedia.org/wiki/Vim_(text_editor)
 [neovim]: https://neovim.io/
+

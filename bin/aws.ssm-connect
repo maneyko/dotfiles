@@ -1,0 +1,39 @@
+#!/bin/bash
+
+source "argparse.sh"
+
+ARG_PROFILE=$AWS_PROFILE
+
+arg_positional "[instance-id]       [The instance ID: Example: 'i-0d1f519fd64d6e21c']"
+arg_optional   "[instance-name] [n] [The human-readable name of the EC2 instance.]"
+arg_optional   "[profile]       [p] [The AWS profile to use.]"
+
+arg_help "[Use AWS SSM to connect to an EC2 instance.]"
+parse_args
+
+if [[ -z $ARG_INSTANCE_NAME && -z $ARG_INSTANCE_ID ]]; then
+  echo "An instance name or instance ID must be specified"
+  exit 1
+fi
+
+if [[ -n $ARG_PROFILE ]]; then
+  export AWS_PROFILE=$ARG_PROFILE
+fi
+
+if [[ -z $ARG_INSTANCE_ID ]]; then
+  ARG_INSTANCE_ID=$(
+    aws ec2 describe-instances \
+      --filters 'Name=instance-state-name,Values=running' "Name=tag:Name,Values=$ARG_INSTANCE_NAME" \
+      --query 'Reservations[].Instances[].[InstanceId]' \
+      --output text
+  )
+fi
+
+if [[ -z $ARG_INSTANCE_ID ]]; then
+  echo "No instance found for AWS_PROFILE='$AWS_PROFILE', instance_name='$ARG_INSTANCE_NAME'"
+  exit 1
+fi
+
+echo "Instance ID: $ARG_INSTANCE_ID"
+
+aws ssm start-session --target $ARG_INSTANCE_ID

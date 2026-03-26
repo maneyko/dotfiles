@@ -1,0 +1,10 @@
+#!/usr/bin/env python3 -u
+
+import csv
+import json
+import sys
+
+csv.field_size_limit(sys.maxsize)
+
+f = open(sys.argv[1]) if sys.stdin.isatty() else sys.stdin
+[print(json.dumps(row)) for row in csv.DictReader(f)]

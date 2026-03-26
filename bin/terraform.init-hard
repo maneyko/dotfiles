@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -e
+
+cd "$(git rev-parse --show-toplevel 2>/dev/null || echo ".")"
+cd terraform
+
+rm -fr .terraform
+terraform init -reconfigure -upgrade
+
+if [[ -s $TERRAFORM_INIT_HARD_LOCAL ]]; then
+  "$TERRAFORM_INIT_HARD_LOCAL"
+fi
+
+echo "Current workspace: $(terraform workspace show)"

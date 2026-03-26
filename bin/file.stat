@@ -52,5 +52,6 @@ $output = qq<{
   "ctime": "$ctime",
   "blksize": "$blksize",
   "blocks": "$blocks"
-}>;
+}
+>;
 print $output;

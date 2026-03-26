@@ -1,0 +1,115 @@
+#!/bin/bash
+
+# Convert UNIX epoch timestamp to an ISO 8601 timestamp.
+timestamp=$1
+
+if command -v jq >/dev/null 2>&1; then
+  jq_script=$(
+cat << 'EOT'
+def lpad($char; $n):
+  tostring as $s |
+  ([($n - ($s | length)), 0] | max) as $num_char |
+  $char * $num_char + $s
+  ;
+def rpad($char; $n):
+  tostring as $s |
+  ([($n - ($s | length)), 0] | max) as $num_char |
+  $s + $char * $num_char
+  ;
+def offset_seconds_to_tz:
+  . as $seconds |
+  ($seconds | abs) as $abs_seconds |
+  ($abs_seconds / 3600 | floor) as $h |
+  ($abs_seconds % 3600) as $m |
+  if ($seconds < 0) then "-" else "+" end +
+    ($h | lpad("0"; 2)) + ":" + ($m | lpad("0"; 2))
+  ;
+def utc_offset_seconds:
+  . as $ts |
+  ($ts | localtime | mktime) - ($ts | gmtime | mktime)
+  ;
+
+def to_iso8601:
+  . as $input |
+  (.[:10] | tonumber) as $ts |
+  ($ts | utc_offset_seconds) as $offset_seconds |
+  ($offset_seconds | offset_seconds_to_tz) as $offset |
+  ($ts | strflocaltime("%FT%T")) as $base_iso |
+  .[10:] as $fractional |
+  (
+    if ($fractional | startswith(".")) then
+      $fractional[1:]
+    else
+      $fractional
+    end
+  ) as $fractional |
+  (
+    if ($fractional | length) != 0 then
+      (($fractional | length) / 3 | ceil * 3) as $zero_count |
+      ($fractional | rpad("0"; $zero_count)) as $fractional_with_pad |
+      ($base_iso + ".\($fractional_with_pad)")
+    else
+      $base_iso
+    end
+  ) as $base_iso |
+  $base_iso + $offset
+  ;
+. | to_iso8601
+EOT
+)
+  echo "$timestamp" | jq -Rr "$jq_script"
+elif command -v python3 >/dev/null 2>&1; then
+  python_script=$(
+cat << 'EOT'
+from datetime import datetime
+import math
+
+
+def convert_gmt_to_utc(iso):
+    if iso.endswith("00:00"):
+        iso = iso[:19] + "Z"
+    return iso
+
+def unix_time_to_iso8601(ts_str):
+    if not ts_str.replace(".", "").isdigit():
+        raise ValueError(f"Argument {ts_str!r} contains invalid characters")
+
+    seconds_int_str, fractional_str = ts_str[:10], ts_str[10:]
+
+    dt = datetime.fromtimestamp(int(seconds_int_str)).astimezone()
+
+    if len(fractional_str) == 0:
+        return convert_gmt_to_utc(dt.isoformat())
+
+    if fractional_str.startswith("."):  # 1762786902.123
+        fractional_int_str = fractional_str[1:]
+        if len(fractional_int_str) == 0:  # 1762786902.
+            fractional_int_str = "0"
+    else:  # 1762786902123
+        fractional_int_str = fractional_str
+
+    fractional_format_len = math.ceil(len(fractional_int_str) / 3) * 3
+
+    zero_count = fractional_format_len - len(fractional_int_str)
+
+    iso = dt.strftime("%FT%T") + "." + fractional_int_str + "0" * zero_count + dt.strftime("%:z")
+
+    return convert_gmt_to_utc(iso)
+
+def main():
+    import sys
+    argv = sys.argv[1:]
+    if len(argv) == 0:
+        basename = __file__.split("/")[-1]
+        print(f"Usage: {basename} <timestamp>")
+        sys.exit(1)
+
+    iso = unix_time_to_iso8601(argv[0])
+    print(iso)
+
+if __name__ == "__main__":
+    main()
+EOT
+)
+  python3 -c "$python_script" "$timestamp"
+fi

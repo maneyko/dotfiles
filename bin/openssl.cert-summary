@@ -1,0 +1,6 @@
+#!/bin/bash
+
+: ${PORT:=443}
+
+openssl s_client -connect "$1":$PORT </dev/null | \
+  openssl x509 -noout -text

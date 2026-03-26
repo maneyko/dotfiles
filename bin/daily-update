@@ -28,6 +28,12 @@ fi
 $HOME/.bin/pip-upgrade
 $HOME/.bin/pip-upgrade -3
 
+if command -v uv >/dev/null 2>&1; then
+  uv tool list --no-progress | awk '$1 == "-" {print $2}' | while read line; do
+    uv tool upgrade "$line"
+  done
+fi
+
 if command -v npm >/dev/null 2>&1; then
   npm update -g
   npm upgrade -g

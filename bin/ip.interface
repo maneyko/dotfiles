@@ -1,17 +1,17 @@
 #!/bin/bash
 
 if [[ $OSTYPE == *darwin* ]]; then
-  device=$(route get default | awk '$1 == "interface:" {print $2; exit}')
+  interface=$(route get default | awk '$1 == "interface:" {print $2; exit}')
 
-  ip_address=$(ifconfig $device | awk '$1 == "inet" {print $2; exit}')
+  ip_address=$(ifconfig $interface | awk '$1 == "inet" {print $2; exit}')
 else
-  device=$(ip route | awk '$1 == "default" {print $5; exit}')
+  interface=$(ip route | awk '$1 == "default" {print $5; exit}')
 
-  ip_address=$(ip -4 addr show $device | awk '$1 == "inet" {print $2; exit}')
+  ip_address=$(ip -4 addr show $interface | awk '$1 == "inet" {print $2; exit}')
   ip_address=${ip_address%.*/}
 fi
 
 cat << EOT
-Primary Interface: $device
+Primary Interface: $interface
 IP Address:        $ip_address
 EOT

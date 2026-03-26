@@ -5,7 +5,26 @@ if [[ $OSTYPE != *darwin* ]]; then
   exit 1
 fi
 
-networksetup -listpreferredwirelessnetworks en0 | awk -F'\t' 'NR == 2 {print $2}'
+interface=$(route get default | awk '$1 == "interface:" {print $2; exit}')
+
+# sudo ipconfig sethidewifiinfo 0
+
+wifi_name=$(ipconfig getsummary "$interface" | awk -F ' : ' '$1 ~ /^[[:space:]]+SSID$/ {print $2}')
+
+if [[ $wifi_name != "<redacted>" ]]; then
+  echo "$wifi_name"
+  exit
+fi
+
+cat >&2 << EOT
+Wi-Fi name is redacted. To un-redact, run:
+  sudo ipconfig sethidewifiinfo 0
+
+Falling back to best guess...
+
+EOT
+
+networksetup -listpreferredwirelessnetworks "$interface" | awk -F'\t' 'NR == 2 {print $2}'
 
 # system_profiler SPAirPortDataType -detailLevel basic -json \
 #   | jq -r '

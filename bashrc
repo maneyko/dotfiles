@@ -81,9 +81,7 @@ export GREP_COLORS='mt=1;31'
 export LESS='-QRX -j5'
 export PAGER='less'
 
-__prompt_cmd() {
-  history -a
-}
+__prompt_cmd() { history -a ; }
 
 export TZ='America/Chicago'
 export PROMPT_COMMAND="__prompt_cmd"
@@ -139,7 +137,6 @@ log_time "After bash completion"
 
 # Override `bash_completion` and disable tilde expansion
 _expand() { return 0 ; }
-
 
 # ---------------------------------------------------------------------
 # COLORS and PS1
@@ -209,6 +206,31 @@ ps1::branch_colon() {
   fi
 }
 
+: ${PS1_NO_AWS_PROFILE:=1}
+
+ps1::aws_profile() {
+  : ${ps1_aws_profile:=}
+  [[ $PS1_NO_AWS_PROFILE -eq 1 ]] && return
+  [[ $AWS_PROFILE == staging ]] && return
+  [[ ${ps1_aws_profile_size:-} == 0 ]] && return
+  : ${ps1_aws_profile:=$AWS_PROFILE}
+  if [[ ${#ps1_aws_profile} -eq 0 ]]; then
+    ps1_aws_profile_size=0
+    return
+  fi
+  printf "$ps1_aws_profile"
+}
+
+ps1::aws_profile_colon() {
+  : ${ps1_aws_profile_colon:=}
+  [[ $PS1_NO_GIT -eq 1 ]] && return
+  ps1::aws_profile >/dev/null 2>&1
+  if [[ ${#ps1_aws_profile} -gt 0 ]]; then
+    ps1_aws_profile_colon=':'
+    printf $ps1_aws_profile_colon
+  fi
+}
+
 ps1::tilde_home() {
   ps1_tilde_home=${PWD/#$HOME/'~'}
   printf "$ps1_tilde_home"
@@ -216,8 +238,18 @@ ps1::tilde_home() {
 
 ps1::spaces() {
   columns=$(tput cols)
-  { ps1::git_branch ; ps1::branch_colon ; ps1::tilde_home; } >/dev/null 2>&1
-  line1_size=$((3 + ${#USER} + 2 + ${#host_text} + 1 + ${#ps1_tilde_home} + ${#ps1_branch_colon} + ${#ps1_git_branch} + 1))
+  {
+    if [[ $PS1_NO_GIT -ne 1 ]]; then
+      ps1::git_branch
+      ps1::branch_colon
+    fi
+    if [[ $PS1_NO_AWS_PROFILE -ne 1 ]]; then
+      ps1::aws_profile
+      ps1::aws_profile_colon
+    fi
+    ps1::tilde_home
+  } >/dev/null 2>&1
+  line1_size=$((3 + ${#USER} + 2 + ${#host_text} + 1 + ${#ps1_tilde_home} + ${#ps1_branch_colon} + ${#ps1_git_branch} + ${#ps1_aws_profile} + ${#ps1_aws_profile_colon} + 1))
   remaining_width=$(($columns - $line1_size % $columns))
   space_width=$(($remaining_width - 12))
   if [[ $space_width -lt 0 ]]; then
@@ -236,6 +268,8 @@ pstr $border_color ':'
 pstr $pwd_color    '$(ps1::tilde_home)'
 pstr $border_color '$(ps1::branch_colon)'
 pstr 207           '$(ps1::git_branch)'
+pstr $border_color '$(ps1::aws_profile_colon)'
+pstr 24            '$(ps1::aws_profile)'
 pstr $border_color "]"
 if [[ -z $PS1_NO_TIME ]]; then
   ps1+='$(ps1::spaces)'
@@ -282,7 +316,7 @@ alias cp="$_cp -i"
 _grep=$(type -P ggrep grep | head -1)
 alias grep="$_grep -i --color=auto"
 
-alias ag='ag --color-match "0;35"'
+alias ag="ag --color-match '0;35' --hidden --ignore '\\.git/*' --ignore '\\.terraform/*'"
 
 alias mv='mv -i'
 

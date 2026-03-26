@@ -159,6 +159,7 @@ if !minimal_vimrc
 
   " Syntax
   " ------
+  " Plug 'nvim-treesitter/nvim-treesitter'
   Plug 'martinda/Jenkinsfile-vim-syntax'
   Plug 'phreax/vim-coffee-script'
   Plug 'towolf/vim-helm'
@@ -167,7 +168,9 @@ if !minimal_vimrc
   Plug 'hashivim/vim-terraform'
   " Plug 'jbmorgado/vim-pine-script'
   Plug 'gisphm/vim-gitignore'        " .gitignore files
+  Plug 'Vimjas/vim-python-pep8-indent' " Fix Python newline indentation
   Plug 'vim-python/python-syntax'
+    let g:python_highlight_space_errors = 0
     let g:python_highlight_all = 1
     " let g:python_highlight_string_format = 1
     " let g:python_highlight_builtin_objs  = 1
@@ -178,7 +181,7 @@ if !minimal_vimrc
   " Plug 'tomlion/vim-solidity'
 
   Plug 'tpope/vim-markdown'
-    let g:markdown_fenced_languages = ['bash=sh', 'html', 'python', 'ruby', 'sql', 'yaml', 'perl', 'diff', 'groovy']
+    let g:markdown_fenced_languages = ['bash=sh', 'html', 'python', 'ruby', 'sql', 'yaml', 'perl', 'diff', 'groovy', 'javascript']
     let g:markdown_syntax_conceal = 0
 
   Plug 'tpope/vim-projectionist'
@@ -404,11 +407,11 @@ nnoremap <C-k>            <C-w>k
 nnoremap <C-l>            <C-w>l
 nnoremap <C-w>h           :vertical resize -5<CR>
 nnoremap <C-w>l           :vertical resize +5<CR>
-nnoremap <C-i>            gT
-nnoremap <tab>            gT
-nnoremap <S-tab>          gt
+nnoremap <C-i>            :tabprevious<CR>
+nnoremap <tab>            :tabprevious<CR>
+nnoremap <S-tab>          :tabnext<CR>
 nnoremap <C-w><tab>       :tabmove -1<CR>
-nnoremap <C-o>            gt
+nnoremap <C-o>            :tabnext<CR>
 nnoremap <C-w><C-o>       :tabmove +1<CR>
 nnoremap <C-b>            :nohl<CR><C-l>
 nnoremap <C-n>            :set relativenumber!<CR>
@@ -469,6 +472,20 @@ endif
 
 " Auto Commands
 " =============
+
+if has('nvim')
+  lua << EOT
+    -- require'nvim-treesitter'.install { 'python' }
+    -- vim.api.nvim_create_autocmd('FileType', {
+    --   pattern = { 'python' },
+    --   callback = function()
+    --     vim.treesitter.start()
+    --     vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+    --   end,
+    -- })
+EOT
+endif
+
 " au BufLeave *__doc__*,help
 "       \ silent! call ReadMode(0)
 " au BufNewFile *__doc__*
@@ -507,6 +524,8 @@ au BufNewFile *.html,*.php
 
 au BufRead *.ipynb
       \ setlocal ft=json
+au BufRead *.jsonl
+      \ setlocal ft=json
 au BufRead settings.xml,pom.xml
       \ setlocal sw=2 ts=2 sts=2
 au BufRead *.url
@@ -535,11 +554,9 @@ autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
 
 " au FileType ruby setlocal omnifunc=LanguageClient#complete
 au FileType bash,coffee,css,scss,html,javascript,
-      \jinja,json,php,pug,R,ruby,rst,
+      \jinja,json,jq,php,pug,R,ruby,rst,
       \sh,sql,tex,typescript,vim,yaml,helm
       \ setlocal ts=2 sw=2 sts=2
-au FileType sql
-      \ setlocal ts=4 sw=4 sts=4
 au FileType c,cpp,php,psl
       \ setlocal commentstring=//\ %s
 " au FileType help

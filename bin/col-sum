@@ -6,4 +6,4 @@ if [[ -n $1 ]]; then
   col=$1
 fi
 
-awk '{ total += $'$col' } END { print total } '
+awk '{ total += $'$col' } END { printf("%.10f\n", total) } '

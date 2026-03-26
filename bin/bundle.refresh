@@ -10,12 +10,12 @@ arg_help  "[Reload the Gemfile.lock from scratch.]"
 arg_array "[platform] [Specific platform(s) to add to 'Gemfile.lock'. Default: ${ARG_PLATFORM[@]}]"
 parse_args
 
-if [[ ! -f Gemfile || ! -f Gemfile.lock ]]; then
-  echo "Both 'Gemfile' and 'Gemfile.lock' need to be present in this directory to run this script." >&2
+if [[ ! -f Gemfile ]]; then
+  echo "'Gemfile' needs to be present in this directory to run this script." >&2
   exit 1
 fi
 
-rm Gemfile.lock
+rm -f Gemfile.lock
 bundle install
 
 for platform in ${ARG_PLATFORM[@]}; do

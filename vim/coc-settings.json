@@ -24,7 +24,17 @@
   "diagnostic.enable": false,
   "languageserver": {
     "ruby-lsp": {
-      "command": "ruby-lsp",
+      "command0": "ruby-lsp",
+      "command2": "tail",
+      "command1": "/Users/peter.maneykowski/.rvm/bin/rvm",
+      "args1": ["3.3.9@ruby_lsp", "do", "ruby-lsp"],
+      "args2": ["-f", "/dev/null"],
+      "command": "/usr/bin/env",
+      "args": [
+        "BUNDLE_GEMFILE=/Users/peter.maneykowski/.rvm/gems/ruby-3.3.9@ruby_lsp/mini-project/Gemfile",
+        "/Users/peter.maneykowski/.rvm/bin/rvm", "3.3.9@ruby_lsp", "do", "ruby-lsp"
+      ],
+      "rootPatterns": [".git", "Gemfile"],
       "initializationOptions": {
         "disabledFeatures": ["diagnostics"]
       },
@@ -36,9 +46,9 @@
         }
       },
       "indexing": {
-        "excludedPatterns": ["path/to/excluded/file.rb"],
-        "includedPatterns": ["path/to/included/file.rb"],
-        "excludedGems": ["gem1", "gem2", "etc."],
+        "excludedPatterns2": ["path/to/excluded/file.rb"],
+        "includedPatterns2": ["path/to/included/file.rb"],
+        "excludedGems": ["gem1", "gem2"],
         "excludedMagicComments": ["compiled:true"]
       },
       "formatter": "auto",
@@ -57,6 +67,14 @@
   "[terraform]": {
     "suggest.lowPrioritySourceLimit": 5,
     "suggest.highPrioritySourceLimit": 10
+  },
+  "[json]": {
+    "diagnostic.enable": false,
+    "inlayHint.enable": false,
+    "inlayHint.display": false,
+    "suggest.autoTrigger": "none",
+    "signature.enable": false,
+    "semanticTokens.enable": false
   },
   "solargraph.trace.server": "verbose"
 }

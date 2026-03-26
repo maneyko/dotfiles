@@ -6,8 +6,12 @@ SELECT pid
     , now() - query_start AS duration
     , application_name
     , client_addr
-    , client_hostname
-    , LEFT(query, 10) AS query
+    -- , client_hostname
+    -- , query
+    , LEFT(query, 50) AS query
 FROM pg_stat_activity
-ORDER BY pid
+where 1=1
+ORDER BY
+-- pid
+query_start
 ;

@@ -109,8 +109,20 @@ begin
     end
     if defined?(ActiveRecord) && ActiveRecord::Base.logger
       # https://stackoverflow.com/a/17675841
-      ActiveRecord::Base.logger = ActiveSupport::Logger.new(STDOUT)
-      ActiveRecord::Base.logger.level = 0
+      if defined?(RailsSemanticLogger)
+        RailsSemanticLogger::ActiveRecord::LogSubscriber.logger.level = 0
+        if SemanticLogger.appenders.none? { |a| a.name.end_with?("SemanticLogger::Appender::IO") }
+          SemanticLogger.add_appender(io: STDOUT, formatter: {
+            color: {
+              log_application: false,
+              log_environment: false,
+              log_host:        false,
+            }
+          })
+        end
+      else
+        ActiveRecord::Base.logger = ActiveSupport::Logger.new(STDOUT).tap { |l| l.level = 0 }
+      end
       if Rails.version < "7"
         if ActiveRecord::Base.respond_to?(:verbose_query_logs=)
           ActiveRecord::Base.verbose_query_logs = true

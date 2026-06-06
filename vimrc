@@ -116,6 +116,9 @@ if !minimal_vimrc
     let g:ctrlp_regexp = 1
     let g:ctrlp_custom_ignore = 'target\/docker\|node_modules\|venv'
 
+  Plug 'neovim/nvim-lspconfig'
+  Plug 'saghen/blink.cmp', { 'tag': 'v1.*' }
+
   Plug 'scrooloose/nerdtree'         " filetree
   Plug 'Xuyuanp/nerdtree-git-plugin'
   Plug 'ryanoasis/vim-devicons'
@@ -222,66 +225,66 @@ if !minimal_vimrc
   "     \ 'ruby': ['/usr/bin/env', 'solargraph', 'stdio'],
   "     \ }
 
-  if executable('node')
-    if has('nvim')
-      Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
-
-      " Notes:
-      " * 'suggest' is the menu that comes up when you press '.'
-      " * 'signature' is when you enter '('
-      " * 'diagnostics' are the warnings by the line numbers (linter errors, etc.)
-      " * 'snippet' is when there is a '~' in the suggestion
-
-
-      " Plug 'github/copilot.vim'  " Requires Node 20+
-      "   let g:copilot_node_command = "~/.nvm/versions/node/v20.19.2/bin/node"
-      "   inoremap <C-[> <Plug>(copilot-previous)
-      "   inoremap <C-]> <Plug>(copilot-next)
-      "   inoremap <C-l> <Plug>(copilot-dismiss)
-    else
-      Plug 'neoclide/coc.nvim'
-    endif
-    if !has('patch-8.0-1453')
-      let g:coc_disable_startup_warning = 1
-    endif
-
-    inoremap <silent><expr> <TAB>
-          \ coc#pum#visible() ? coc#pum#next(1) :
-          \ CheckBackspace() ? "\<Tab>" :
-          \ coc#refresh()
-    inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-    " Note: <C-e> cancels the popup menu
-
-    function! CoCEnterOverride() abort
-      if coc#pum#has_item_selected()
-        return coc#pum#confirm()
-      else
-        return "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-      endif
-    endfunction
-    " inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-    "                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-    inoremap <silent><expr> <CR> CoCEnterOverride()
-
-    function! CheckBackspace() abort
-      let col = col('.') - 1
-      return !col || getline('.')[col - 1]  =~# '\s'
-    endfunction
-
-    " Remap <C-f> and <C-b> to scroll float windows/popups
-    if has('nvim-0.4.0') || has('patch-8.2.0750')
-      nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-      nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-      inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-      inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-      vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-      vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-    endif
-
-    let g:coc_disable_transparent_cursor = 1
-
-    " let g:coc_global_extensions = ['coc-solargraph']
-  endif
+"  if executable('node')
+"    if has('nvim')
+"      Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
+"
+"      " Notes:
+"      " * 'suggest' is the menu that comes up when you press '.'
+"      " * 'signature' is when you enter '('
+"      " * 'diagnostics' are the warnings by the line numbers (linter errors, etc.)
+"      " * 'snippet' is when there is a '~' in the suggestion
+"
+"
+"      " Plug 'github/copilot.vim'  " Requires Node 20+
+"      "   let g:copilot_node_command = "~/.nvm/versions/node/v20.19.2/bin/node"
+"      "   inoremap <C-[> <Plug>(copilot-previous)
+"      "   inoremap <C-]> <Plug>(copilot-next)
+"      "   inoremap <C-l> <Plug>(copilot-dismiss)
+"    else
+"      Plug 'neoclide/coc.nvim'
+"    endif
+"    if !has('patch-8.0-1453')
+"      let g:coc_disable_startup_warning = 1
+"    endif
+"
+"    inoremap <silent><expr> <TAB>
+"          \ coc#pum#visible() ? coc#pum#next(1) :
+"          \ CheckBackspace() ? "\<Tab>" :
+"          \ coc#refresh()
+"    inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+"    " Note: <C-e> cancels the popup menu
+"
+"    function! CoCEnterOverride() abort
+"      if coc#pum#has_item_selected()
+"        return coc#pum#confirm()
+"      else
+"        return "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+"      endif
+"    endfunction
+"    " inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+"    "                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+"    inoremap <silent><expr> <CR> CoCEnterOverride()
+"
+"    function! CheckBackspace() abort
+"      let col = col('.') - 1
+"      return !col || getline('.')[col - 1]  =~# '\s'
+"    endfunction
+"
+"    " Remap <C-f> and <C-b> to scroll float windows/popups
+"    if has('nvim-0.4.0') || has('patch-8.2.0750')
+"      nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+"      nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+"      inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+"      inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+"      vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+"      vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+"    endif
+"
+"    let g:coc_disable_transparent_cursor = 1
+"
+"    " let g:coc_global_extensions = ['coc-solargraph']
+"  endif
 
   " Miscellaneous
   " -------------
@@ -304,6 +307,27 @@ if !minimal_vimrc
   " let g:less.scrolloff = 5
 endif
 call plug#end()
+
+lua << EOF
+require('blink.cmp').setup({
+  keymap = {
+    preset = 'default',
+    ["<Tab>"] = { 'accept' }
+  },
+  -- appearance = {
+  --   nerd_font_variant = 'mono'
+  -- },
+  completion = {
+    documentation = { auto_show = false }
+  },
+  sources = {
+    default = { 'lsp', 'path', 'snippets', 'buffer' },
+  },
+  fuzzy = {
+    implementation = "prefer_rust_with_warning"
+  }
+})
+EOF
 
 
 " Functions
@@ -475,6 +499,20 @@ endif
 
 if has('nvim')
   lua << EOT
+    -- vim.lsp.enable('pyright')
+    -- vim.lsp.enable('pylsp')
+    vim.lsp.config('pylsp', {
+      settings = {
+        pylsp = {
+          plugins = {
+            pycodestyle = {
+              ignore = {'W391'},
+              maxLineLength = 100
+            }
+          }
+        }
+      }
+    })
     -- require'nvim-treesitter'.install { 'python' }
     -- vim.api.nvim_create_autocmd('FileType', {
     --   pattern = { 'python' },
@@ -553,9 +591,9 @@ autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
 autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
 
 " au FileType ruby setlocal omnifunc=LanguageClient#complete
-au FileType bash,coffee,css,scss,html,javascript,
-      \jinja,json,jq,php,pug,R,ruby,rst,
-      \sh,sql,tex,typescript,vim,yaml,helm
+au FileType bash,coffee,css,scss,helm,html,javascript,
+      \jinja,json,jq,markdown,php,pug,R,ruby,rst,
+      \sh,sql,tex,typescript,vim,yaml
       \ setlocal ts=2 sw=2 sts=2
 au FileType c,cpp,php,psl
       \ setlocal commentstring=//\ %s
@@ -563,6 +601,10 @@ au FileType c,cpp,php,psl
 "       \ silent! call ReadMode(1)
 au FileType markdown
       \ syn match markdownError "\w\@<=\w\@="
+if has('nvim-0.12')
+  au FileType markdown
+        \ call v:lua.vim.treesitter.stop()
+endif
 au FileType php
       \ setlocal ft=html syn=php
 au FileType tex

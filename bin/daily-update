@@ -25,11 +25,11 @@ elif command -v apt-get >/dev/null 2>&1; then
   sudo apt-get -y autoclean
 fi
 
-$HOME/.bin/pip-upgrade
-$HOME/.bin/pip-upgrade -3
+# $HOME/.bin/pip-upgrade
+# $HOME/.bin/pip-upgrade -3
 
 if command -v uv >/dev/null 2>&1; then
-  uv tool list --no-progress | awk '$1 == "-" {print $2}' | while read line; do
+  uv tool list --no-progress | awk '$1 != "-" {print $1}' | while read line; do
     uv tool upgrade "$line"
   done
 fi

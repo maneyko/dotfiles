@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+
+import ipaddress
+import json
+import sys
+
+def cidr_to_range(cidr):
+    # strict=False allows CIDR like 192.168.1.5/24 (non-network address)
+    net = ipaddress.ip_network(cidr, strict=False)
+
+    first_ip = str(net.network_address)
+    last_ip = str(net.broadcast_address)
+    return {
+        "cidr": net.exploded,
+        "netmask": str(net.netmask),
+        "hostmask": str(net.hostmask),
+        "first_ip": first_ip,
+        "last_ip": last_ip,
+        "total_ips": net.num_addresses,
+    }
+
+# Example usage
+print(json.dumps(cidr_to_range(sys.argv[1]), indent=2))

@@ -1,0 +1,29 @@
+#!/bin/bash
+
+source "argparse.sh"
+
+ARG_SIZE=32
+
+arg_positional "[size]     [The number of random characters in the string. Default: $ARG_SIZE]"
+arg_boolean    "[uuid] [u] [Generate a UUID.]"
+parse_args
+
+if [[ -n $ARG_UUID ]]; then
+  ARG_SIZE=32
+fi
+
+generate_hex() {
+  if command -v openssl >/dev/null 2>&1; then
+    openssl rand -hex $((ARG_SIZE/2))
+  elif [[ -r /dev/urandom ]]; then
+    head -c $((ARG_SIZE/2)) /dev/urandom | od -An -vtx1 | tr -d ' \n' && echo
+  fi
+}
+
+generate_hex | {
+  if [[ -n $ARG_UUID ]]; then
+    awk '{print substr($0,1,8)"-"substr($0,9,4)"-"substr($0,13,4)"-"substr($0,17,4)"-"substr($0,21,12)}'
+  else
+    cat
+  fi
+}

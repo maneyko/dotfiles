@@ -10,6 +10,7 @@ Administrative queries:
         :settings               -- Server settings
         :conninfo               -- Server connections
         :activity               -- Server activity
+        :activity_running       -- Server activity of non-idle processes
         :locks                  -- Lock info
         :waits                  -- Waiting queries
         :autovac_runtime        -- Whether autovacuum is running, and how long it has been running
@@ -54,6 +55,7 @@ $$ AS help_menu \gset
 \set locks            `cat ~/.psqlrc.d/aliases/admin/locks.sql`
 \set conninfo         'SELECT usename, count(*) FROM pg_stat_activity GROUP BY usename;'
 \set activity         `cat ~/.psqlrc.d/aliases/admin/activity.sql`
+\set activity_running `cat ~/.psqlrc.d/aliases/admin/activity_running.sql`
 \set waits            `cat ~/.psqlrc.d/aliases/admin/waits.sql`
 \set autovac_runtime  `cat ~/.psqlrc.d/aliases/admin/autovac_runtime.sql`
 \set last_vacuum      `cat ~/.psqlrc.d/aliases/admin/last_vacuum_analyze.sql`

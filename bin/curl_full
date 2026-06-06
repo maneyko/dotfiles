@@ -1,0 +1,26 @@
+#!/bin/bash
+
+curl_full() {
+  local curl_metadata_file=$(mktemp)
+  local response_body_file=$(mktemp)
+  curl -s --write-out '%{json} %{header_json}' -o "$response_body_file" "$@" > "$curl_metadata_file"
+  local exit_code=$?
+
+  local curl_metadata=$(jq -cs '.[0]' "$curl_metadata_file")
+  local response_headers=$(jq -cs '.[1]' "$curl_metadata_file")
+  local response_body=$(< "$response_body_file")
+
+  rm -f "$curl_metadata_file" "$response_body_file"
+
+  jq -cn \
+    --argjson curl_metadata "$curl_metadata" \
+    --arg response_body "$response_body" \
+    --argjson response_headers "$response_headers" \
+    '{
+      metadata: $curl_metadata,
+      headers:  $response_headers,
+      body:     $response_body,
+    }'
+}
+
+curl_full "$@"

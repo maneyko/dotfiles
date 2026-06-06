@@ -164,94 +164,112 @@ ulprint() { printf -- "%b" -- "\033[4${1}\033[0m" ; }
 
 # Special color print for prompt string.
 pclr() { REPLY="\[\033[38;5;${1}m\]${2}\[\033[0m\]" ; }
-pstr() { pclr "$1" "$2"; ps1+="$REPLY" ; }
+pstr() { pclr "$1" "$2"; ps1+=$REPLY ; }
 
-: ${PS1_NO_GIT:=0}
-export PS1_NO_GIT
-
-border_color=241
-: ${pwd_color:=228}
-: ${host_text:=$HOSTNAME}
-: ${user_color:=196}
-: ${host_color:=147}
+ps1_border_color=241
+: ${ps1_pwd_color:=228}
+: ${ps1_host_text:=$HOSTNAME}
+: ${ps1_user_color:=196}
+: ${ps1_host_color:=147}
+: ${PS1_NO_AWS_PROFILE:=true}
 
 if [[ $USER == root ]]; then
   user_color=220  # Yellow
 fi
 
-export border_color user_color host_color host_text pwd_color
+export ps1_border_color ps1_user_color ps1_host_color ps1_host_text ps1_pwd_color
 
 ps1::git_branch() {
-  : ${ps1_git_branch:=}
-  [[ $PS1_NO_GIT -eq 1 ]] && return
-  [[ ${ps1_git_branch_size:-} == 0 ]] && return
+  REPLY=
+  [[ $PS1_NO_GIT == true ]] && return
   : ${ps1_git_branch:=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)}
-  if [[ ${#ps1_git_branch} -eq 0 ]]; then
-    ps1_git_branch_size=0
-    return
-  elif [[ $ps1_git_branch == HEAD ]]; then
-    ref=$(git rev-parse HEAD)
+  if [[ $ps1_git_branch == HEAD ]]; then
+    local ref=$(git rev-parse HEAD)
     ps1_git_branch=${ref:0:7}
   fi
-  printf "$ps1_git_branch"
+  REPLY=$ps1_git_branch
 }
 
 ps1::branch_colon() {
-  : ${ps1_branch_colon:=}
-  [[ $PS1_NO_GIT -eq 1 ]] && return
+  REPLY=
   ps1::git_branch >/dev/null 2>&1
   if [[ ${#ps1_git_branch} -gt 0 ]]; then
     ps1_branch_colon=':'
-    printf $ps1_branch_colon
   fi
+  REPLY=$ps1_branch_colon
 }
 
-: ${PS1_NO_AWS_PROFILE:=1}
-
 ps1::aws_profile() {
+  REPLY=
   : ${ps1_aws_profile:=}
-  [[ $PS1_NO_AWS_PROFILE -eq 1 ]] && return
+  [[ $PS1_NO_AWS_PROFILE == true ]] && return
   [[ $AWS_PROFILE == staging ]] && return
-  [[ ${ps1_aws_profile_size:-} == 0 ]] && return
   : ${ps1_aws_profile:=$AWS_PROFILE}
-  if [[ ${#ps1_aws_profile} -eq 0 ]]; then
-    ps1_aws_profile_size=0
-    return
-  fi
-  printf "$ps1_aws_profile"
+  REPLY=$ps1_aws_profile
 }
 
 ps1::aws_profile_colon() {
-  : ${ps1_aws_profile_colon:=}
-  [[ $PS1_NO_GIT -eq 1 ]] && return
+  REPLY=
   ps1::aws_profile >/dev/null 2>&1
   if [[ ${#ps1_aws_profile} -gt 0 ]]; then
     ps1_aws_profile_colon=':'
-    printf $ps1_aws_profile_colon
   fi
+  REPLY=$ps1_aws_profile_colon
+}
+
+ps1::virtual_env() {
+  REPLY=
+  [[ $PS1_NO_VIRTUAL_ENV == true ]] && return
+  ps1_virtual_env=${VIRTUAL_ENV##*/}
+  REPLY=$ps1_virtual_env
+}
+
+ps1::virtual_env_colon() {
+  REPLY=
+  ps1::virtual_env >/dev/null 2>&1
+  if [[ ${#ps1_virtual_env} -gt 0 ]]; then
+    ps1_virtual_env_colon=':'
+  fi
+  REPLY=$ps1_virtual_env_colon
 }
 
 ps1::tilde_home() {
   ps1_tilde_home=${PWD/#$HOME/'~'}
-  printf "$ps1_tilde_home"
+  REPLY=$ps1_tilde_home
 }
 
 ps1::spaces() {
   columns=$(tput cols)
   {
-    if [[ $PS1_NO_GIT -ne 1 ]]; then
+    if [[ $PS1_NO_GIT != true ]]; then
       ps1::git_branch
       ps1::branch_colon
     fi
-    if [[ $PS1_NO_AWS_PROFILE -ne 1 ]]; then
+    if [[ $PS1_NO_AWS_PROFILE != true ]]; then
       ps1::aws_profile
       ps1::aws_profile_colon
     fi
+    if [[ $PS1_NO_VIRTUAL_ENV != true ]]; then
+      ps1::virtual_env_colon
+    fi
     ps1::tilde_home
   } >/dev/null 2>&1
-  line1_size=$((3 + ${#USER} + 2 + ${#host_text} + 1 + ${#ps1_tilde_home} + ${#ps1_branch_colon} + ${#ps1_git_branch} + ${#ps1_aws_profile} + ${#ps1_aws_profile_colon} + 1))
-  remaining_width=$(($columns - $line1_size % $columns))
-  space_width=$(($remaining_width - 12))
+  local line1_size=$((3
+    + ${#USER}
+    + 2
+    + ${#ps1_host_text}
+    + 1
+    + ${#ps1_tilde_home}
+    + ${#ps1_branch_colon}
+    + ${#ps1_git_branch}
+    + ${#ps1_aws_profile}
+    + ${#ps1_aws_profile_colon}
+    + ${#ps1_virtual_env}
+    + ${#ps1_virtual_env_colon}
+    + 1
+  ))
+  local remaining_width=$(($columns - $line1_size % $columns))
+  local space_width=$(($remaining_width - 12))
   if [[ $space_width -lt 0 ]]; then
     space_width=0
   fi
@@ -259,43 +277,45 @@ ps1::spaces() {
 }
 
 ps1=
-pstr $border_color '┌─['
-pstr $user_color   "$USER"
-pstr $border_color ':'
-pstr 250           '@'
-pstr $host_color   "$host_text"
-pstr $border_color ':'
-pstr $pwd_color    '$(ps1::tilde_home)'
-pstr $border_color '$(ps1::branch_colon)'
-pstr 207           '$(ps1::git_branch)'
-pstr $border_color '$(ps1::aws_profile_colon)'
-pstr 24            '$(ps1::aws_profile)'
-pstr $border_color "]"
-if [[ -z $PS1_NO_TIME ]]; then
+pstr $ps1_border_color '┌─['
+pstr $ps1_user_color   "$USER"
+pstr $ps1_border_color ':'
+pstr 250               '@'
+pstr $ps1_host_color   "$ps1_host_text"
+pstr $ps1_border_color ':'
+pstr $ps1_pwd_color    '$(ps1::tilde_home;        printf "$REPLY")'
+pstr $ps1_border_color '$(ps1::branch_colon;      printf "$REPLY")'
+pstr 207               '$(ps1::git_branch;        printf "$REPLY")'
+pstr $ps1_border_color '$(ps1::aws_profile_colon; printf "$REPLY")'
+pstr 24                '$(ps1::aws_profile;       printf "$REPLY")'
+pstr $ps1_border_color '$(ps1::virtual_env_colon; printf "$REPLY")'
+pstr 52                '$(ps1::virtual_env;       printf "$REPLY")'
+pstr $ps1_border_color "]"
+if [[ $PS1_NO_TIME != true ]]; then
   ps1+='$(ps1::spaces)'
-  pstr $border_color "[\\t]"
+  pstr $ps1_border_color "[\\t]"
 fi
 ps1+="\n"
-pstr $border_color '└['
-pstr 7             '\\$'
-pstr $border_color ']› '
+pstr $ps1_border_color '└['
+pstr 7                 '\\$'
+pstr $ps1_border_color ']› '
 export LONG_PS1="$ps1"
 
 ps1=
 
-pstr $border_color '┌─['
-pstr $user_color   "$USER"
-pstr 250           '@'
-pstr $host_color   "$host_text"
-pstr $border_color ':'
-pstr $pwd_color    '\W'
-pstr $border_color ']'
+pstr $ps1_border_color '┌─['
+pstr $ps1_user_color   "$USER"
+pstr 250               '@'
+pstr $ps1_host_color   "$ps1_host_text"
+pstr $ps1_border_color ':'
+pstr $ps1_pwd_color    '\W'
+pstr $ps1_border_color ']'
 ps1+="\n"
-pstr $border_color '└['
-pstr 7             '\$'
-pstr $border_color ']› '
+pstr $ps1_border_color '└['
+pstr 7                 '\$'
+pstr $ps1_border_color ']› '
 
-export SHORT_PS1="$ps1"
+export SHORT_PS1=$ps1
 export PS1=$LONG_PS1
 
 log_time "After PS1"
@@ -305,23 +325,40 @@ log_time "After PS1"
 # ---------------------------------------------------------------------
 
 # Find and evaluate `dircolors` if exists
-_dircolors=$(type -P gdircolors dircolors | head -1)
+_dircolors=$(type -P uu-dircolors gdircolors dircolors | head -1)
 if [[ -n $_dircolors && -f $HOME/.dotfiles/bash/dircolors ]]; then
   eval "$($_dircolors -b $HOME/.dotfiles/bash/dircolors)"
 fi
 
-_cp=$(type -P gcp cp | head -1)
+_cp=$(type -P uu-cp gcp cp | head -1)
 alias cp="$_cp -i"
 
 _grep=$(type -P ggrep grep | head -1)
 alias grep="$_grep -i --color=auto"
 
-alias ag="ag --color-match '0;35' --hidden --ignore '\\.git/*' --ignore '\\.terraform/*'"
+if command -v rg >/dev/null 2>&1; then
+  read -r -d '' _ag_alias << 'EOT'
+--smart-case
+--hidden
+--glob='!**/.git/*'
+--glob='!**/.terraform/*'
+--colors='match:fg:magenta'
+--colors='match:style:nobold'
+--colors='line:fg:yellow'
+--colors='line:style:bold'
+--colors='path:fg:green'
+--colors='path:style:bold'
+EOT
+  alias rg="rg ${_ag_alias//$'\n'/ }"
+  alias ag="rg"
+else
+  alias ag="ag --color-match '0;35' --hidden --ignore '\\.git/*' --ignore '\\.terraform/*'"
+fi
 
 alias mv='mv -i'
 
-_ls=$(type -P gls ls | head -1)
-if [[ $($_ls --version 2>/dev/null) == *GNU* ]]; then
+_ls=$(type -P gls uu-ls ls | head -1)
+if [[ $($_ls --version 2>/dev/null) == *(GNU|uutils)* ]]; then
   GNU_LS=true
 fi
 if [[ -n $GNU_LS ]]; then
@@ -376,6 +413,35 @@ else
     alias mpaste='xclip -o'
   fi
 fi
+
+named_array_to_json() {
+  jq -n '
+    $ARGS.positional
+    | map(
+      split("=")
+      | {
+          key:   .[0],
+          value: (.[1:] | if . == [] then null else join("=") end)
+        }
+    )
+    | from_entries
+  ' --args "$@"
+}
+
+json_to_named_array() {
+  local reply=()
+  while read -r line; do
+    reply+=("$line")
+  done < <(
+    jq --argjson mapping "$1" -nr '
+      $mapping
+      | to_entries
+      | map("\(.key)=\(.value)")[]
+    '
+  )
+  echo 'Result is stored in $REPLY'
+  REPLY=$reply
+}
 
 log_time "After aliases"
 
@@ -493,6 +559,8 @@ export PYTHON_BASIC_REPL=1
 export GRPC_PYTHON_BUILD_SYSTEM_OPENSSL=1
 export GRPC_PYTHON_BUILD_SYSTEM_ZLIB=1
 
+export DOCKER_CLI_HINTS=false
+
 if [[ -n "$(command -v pyenv)" ]]; then
   export PYENV_ROOT="$HOME/.pyenv"
   [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
@@ -521,7 +589,7 @@ $HOME/.nvm
 for d in ${nvms[@]}; do
   if [[ -s $d/nvm.sh ]]; then
     NVM_DIR="$d"
-    if [[ -n $USING_NVM ]]; then
+    if [[ $USING_NVM == true ]]; then
       # NOTE: This takes ~0.5 seconds
       \. "$NVM_DIR/nvm.sh"
     fi

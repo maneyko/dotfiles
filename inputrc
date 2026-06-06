@@ -20,12 +20,12 @@ set bell-style none
 
 # Map arrow keys and <delete> key
 "\e[1;3D":  backward-word
+"\e\e[D":   backward-word
 "\e[1;3C":  forward-word
+"\e\e[C":   forward-word
 "\e\b":     backward-kill-word
 
-"\e\e[D":   backward-word
-"\e\e[C":   forward-word
-
+# Map left and right arrows explicitly
 "\eOD":     backward-char
 "\eOC":     forward-char
 

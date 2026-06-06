@@ -153,6 +153,12 @@ begin
     print cprint_q(*args)
   end
 
+  def disable_verbose_active_record_logging
+    try_block { ActiveRecord::Base.logger.level = 1 }
+    try_block { RailsSemanticLogger::ActiveRecord::LogSubscriber.logger.level = 1 }
+    "OK"
+  end
+
   try_block do
     IRB.conf[:USE_SINGLELINE] = true  # Turn off reline
     IRB.conf[:PROMPT][:CUSTOM] = {
@@ -165,6 +171,19 @@ begin
     }
     IRB.conf[:PROMPT_MODE] = :CUSTOM
   end
+
+  # Add motion to throwaway keys
+  ENV["INPUTRC"] = "/does/not/exist"
+  prev_char = "\C-s"
+  next_char = "\C-o"
+  back_char = "\C-t"
+  frwd_char = "\C-q"
+  Reline.core.config.bind_key(%("#{prev_char}"), "vi-prev-char")
+  Reline.core.config.bind_key(%("#{next_char}"), "vi-next-char")
+  Reline.core.config.bind_key(%("#{back_char}"), "backward-char")
+  Reline.core.config.bind_key(%("#{frwd_char}"), "forward-char")
+  Reline.core.config.bind_key(%("\C-b"), %("#{back_char}#{prev_char} #{frwd_char}"))
+  Reline.core.config.bind_key(%("\C-f"), %("#{next_char} #{frwd_char}"))
 
   # BEGIN: History hacks
 

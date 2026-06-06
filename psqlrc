@@ -12,7 +12,8 @@
 -- Consider: http://petereisentraut.blogspot.com/2009/09/how-to-set-xterm-titles-in-psql.html
 
 --host/db specific history files
-\set HISTFILE ~/.psql_history.d/ :HOST.:DBNAME
+-- \set HISTFILE ~/.psql_history.d/ :HOST.:DBNAME
+\set HISTFILE ~/.psql_history
 \set HISTSIZE 100000
 
 -- Pager settings to support color

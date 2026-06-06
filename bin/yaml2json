@@ -1,0 +1,34 @@
+#!/bin/bash
+
+exec_exists() {
+  command -v "$1" >/dev/null 2>&1
+}
+
+python_eligible() {
+  python_cmd=$(type -P python3 python python2 | head -1)
+  [[ -z $python_cmd ]] && return 1
+  "$python_cmd" -c 'import yaml' >/dev/null 2>&1
+  local status=$?
+  if [[ $status -ne 0 ]]; then
+    echo "Python is installed but 'import yaml' failed. Unable to find YAML parser." >&2
+  fi
+  return $status
+}
+
+input_file=$1
+
+if [[ -p /dev/stdin ]]; then
+  input_file="/dev/stdin"
+fi
+
+if exec_exists yq; then
+  yq -p=yaml -o=json -P "$input_file"
+elif exec_exists ruby; then
+  ruby -ryaml -rjson -e 'puts JSON.pretty_generate(YAML.unsafe_load(ARGF))' "$input_file"
+elif python_eligible; then
+  "$python_cmd" -c 'import sys, yaml, json; print(json.dumps(yaml.unsafe_load(sys.stdin), indent=2))' < "$input_file"
+  exit $?
+else
+  echo "Unable to find YAML parser. Only 'yq', 'ruby', and Python with YAML module installed are supported." >&2
+  exit 1
+fi

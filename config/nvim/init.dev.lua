@@ -1,10 +1,5 @@
 vim.g.mapleader = ","
 
-vim.cmd("filetype off")
-
--- vim.o.foo = "\n"
--- TODO: foo
-
 vim.o.autoindent = true
 vim.o.breakindent = true
 vim.o.clipboard = "unnamed"
@@ -26,22 +21,20 @@ vim.o.number = true
 vim.o.numberwidth = 3
 vim.o.ruler = true
 vim.o.scrolloff = 1
-vim.o.shiftwidth = 4
 vim.o.showcmd = true
 vim.o.smartcase = true
 vim.o.smartindent = true
 vim.o.smarttab = true
-vim.o.softtabstop = 4
--- vim.o.t_Co = 256
-vim.o.tabstop = 4
+vim.o.tabstop = 2
+vim.o.softtabstop = 2
+vim.o.shiftwidth = 2
 vim.o.tildeop = true
 vim.o.wrap = false
 
--- if has("mouse")
-if vim.fn.has("mouse") then
+-- if vim.fn.has("mouse") == 1 then
+  -- Try in all editors
   vim.o.mouse = "a"
-end
--- endif
+-- end
 
 vim.o.guicursor = ""
 vim.o.laststatus = 0
@@ -59,10 +52,6 @@ vim.api.nvim_create_autocmd("InsertEnter", {
     vim.o.list = false
   end,
 })
-
--- au InsertLeave * set list
--- au InsertEnter * set nolist
--- foo
 
 vim.keymap.set("n", "Q", "<nop>", { desc = "Disable Ex mode" })
 vim.keymap.set("i", "jk", "<esc>", { desc = "Exit insert mode" })
@@ -86,10 +75,13 @@ vim.keymap.set({"n", "i", "v"}, "<2-ScrollWheelDown>", "<C-e>")
 vim.keymap.set({"n", "i", "v"}, "<3-ScrollWheelDown>", "<C-e>")
 vim.keymap.set({"n", "i", "v"}, "<4-ScrollWheelDown>", "<C-e>")
 
+vim.keymap.set("n", "<C-i>", "<cmd>tabprevious<cr>")
+vim.keymap.set("n", "<C-o>", "<cmd>tabnext<cr>")
+vim.keymap.set("n", "<C-w><C-i>", "<cmd>tabmove -1<cr>")
+vim.keymap.set("n", "<C-w><C-o>", "<cmd>tabmove +1<cr>")
 
 require("config.lazy")
 
--- vim.cmd("colorscheme tokyonight-moon")
 vim.cmd.colorscheme("catppuccin-nvim")
 vim.cmd.syntax("on")
 vim.cmd("filetype plugin indent on")

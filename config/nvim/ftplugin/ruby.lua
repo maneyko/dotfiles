@@ -1,0 +1,11 @@
+-- Highlight Sorbet signatures as comments
+vim.api.nvim_set_hl(0, "RubySigComment",  { link = "rubyComment" })
+vim.api.nvim_set_hl(0, "RubySigDoRegion", { link = "rubyComment" })
+
+vim.fn.matchadd("RubySigComment",  [[sig\s*{.*}]], 200)
+vim.fn.matchadd("RubySigDoRegion", [[\<sig\s*do\>\_.\{-}\<end\>]], 200)
+
+-- First attempt at 'K' just enables the LSP
+-- vim.keymap.set("n", "K", function()
+--   vim.lsp.enable("ruby-lsp")
+-- end)

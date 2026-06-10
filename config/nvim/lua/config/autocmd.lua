@@ -12,9 +12,18 @@ vim.api.nvim_create_autocmd("InsertEnter", {
   end,
 })
 
+-- Default to having treesitter off
 vim.api.nvim_create_autocmd("FileType", {
   callback = function()
     vim.treesitter.stop()
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "lua",
+  callback = function()
+    vim.treesitter.start()
+    vim.lsp.enable("lua_lsp")
   end,
 })
 
@@ -46,15 +55,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
       -- vim.keymap.del("n", "K")
       local bufnr = vim.api.nvim_get_current_buf()
       vim.keymap.set("n", "K", "<cmd>tab split | lua vim.lsp.buf.definition()<cr>", { buf = bufnr })
-      -- vim.keymap.set("n", "K", function()
-      --   vim.cmd("tab split")
-      --   vim.lsp.buf.definition()
-      -- end)
-
       vim.keymap.set("n", ";", "<cmd>lua vim.lsp.buf.hover()<cr>", { buf = bufnr })
-      -- vim.keymap.set('n', ';', function()
-      --   vim.lsp.buf.hover()
-      -- end, { desc = 'vim.lsp.buf.hover()' })
 
       -- Disable syntax highlighting
       client.server_capabilities.semanticTokensProvider = nil
@@ -62,18 +63,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end,
 })
 
--- Highlight Sorbet signatures as comments
-vim.api.nvim_set_hl(0, "RubySigComment",  { link = "rubyComment" })
-vim.api.nvim_set_hl(0, "RubySigDoRegion", { link = "rubyComment" })
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "ruby",
   callback = function()
+    -- First attempt at 'K' just enables the LSP
     vim.keymap.set("n", "K", function()
       vim.lsp.enable("ruby-lsp")
     end)
-    vim.fn.matchadd("RubySigComment",  [[\<sig\s*do\>]], 200)
-    vim.fn.matchadd("RubySigDoRegion", [[\<sig\s*do\>\_.\{-}\<end\>]], 200)
-    -- vim.treesitter.stop()
   end,
 })
 

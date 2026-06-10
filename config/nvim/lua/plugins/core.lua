@@ -1,8 +1,11 @@
-return {
-  "tpope/vim-repeat", -- '.' for plugins
-  "tpope/vim-endwise", -- if .. fi
-  -- "tpope/vim-sleuth",  -- automatic indentation (tab vs spaces) based on file
+vim.pack.add({
+  { src = "https://github.com/tpope/vim-repeat" },
+  { src = "https://github.com/tpope/vim-endwise" },
+  { src = "https://github.com/tpope/vim-rails" },
+  { src = "https://github.com/Vimjas/vim-python-pep8-indent" },
+  { src = "https://github.com/ZhiyuanLck/smart-pairs" },
+})
 
-  -- "tpope/vim-commentary", -- replaced by mini
-  -- "tpope/vim-surround", -- replaced by mini
-}
+require("pairs"):setup({
+  enable_smart_space = true,
+})

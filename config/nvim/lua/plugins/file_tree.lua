@@ -1,10 +1,10 @@
-vim.pack.add({
-  { src = "https://github.com/nvim-neo-tree/neo-tree.nvim", version = vim.version.range("3") },
+vim.pack.add({ { src = "https://github.com/nvim-neo-tree/neo-tree.nvim", version = vim.version.range("3") } })
 
-  -- Dependencies
-  { src = "https://github.com/nvim-lua/plenary.nvim" },
-  { src = "https://github.com/MunifTanjim/nui.nvim" },
-  { src = "https://github.com/nvim-tree/nvim-web-devicons" },
+-- Dependencies
+vim.pack.add({
+  "https://github.com/nvim-lua/plenary.nvim",
+  "https://github.com/MunifTanjim/nui.nvim",
+  "https://github.com/nvim-tree/nvim-web-devicons",
 })
 
 vim.keymap.set("n", "<leader>n", "<cmd>Neotree toggle reveal<cr>", { desc = "Toggle file drawer" })
@@ -48,6 +48,7 @@ require("neo-tree").setup({
       },
       ["<2-LeftMouse>"] = "open",
       ["<cr>"] = "open",
+      ["<bs>"] = "navigate_up",
       ["<esc>"] = "revert_preview",
       ["P"] = { "toggle_preview", config = { use_float = true } },
       ["l"] = "focus_preview",

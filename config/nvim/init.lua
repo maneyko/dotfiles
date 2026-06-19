@@ -1,14 +1,25 @@
-local utils = require("config.utils")
+require("vim._core.ui2").enable()
+
 require("config.autocmd")
 require("config.options")
 require("config.keymaps")
+
+-- require("config.treesitter-diagnostic")
+require("plugins.treesitter")
+require("config.treesitter")
+require("plugins.core")
+require("plugins.colors")
+
+require("plugins.completion") -- breaks function..end
+require("plugins.lsp")
 require("config.lsp")
 
-utils.init_plugins()
+require("plugins.file_tree")
+require("plugins.fzf")
+require("plugins.mini")
+-- require("plugins.snacks") -- enables treesitter
+-- require("plugins.syntax")
 
 vim.cmd.colorscheme("catppuccin-nvim")
--- vim.cmd.syntax("on")
+vim.cmd.syntax("on")
 vim.cmd("filetype plugin indent on")
-
--- utils.stop_lsps({fargs = {}, bang = true})
--- vim.treesitter.stop()

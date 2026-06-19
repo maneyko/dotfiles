@@ -30,6 +30,8 @@ vim.o.softtabstop = 2
 vim.o.shiftwidth = 2
 vim.o.tildeop = true
 vim.o.wrap = false
+vim.opt.mousescroll = "ver:1,hor:1"
+vim.opt.spelllang = "en_us"
 
 -- if vim.fn.has("mouse") == 1 then
   -- Try in all editors
@@ -40,3 +42,8 @@ vim.o.guicursor = ""
 vim.o.laststatus = 0
 
 vim.o.termguicolors = false
+
+-- Disable diagnostic sidebar warnings
+vim.diagnostic.config({signs = false})
+
+vim.opt.updatetime = 3000 -- Reduce CursorHold delay to 3s

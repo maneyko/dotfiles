@@ -1,18 +1,48 @@
 local M = {}
 
-function M.init_plugins()
-  require("plugins.catppuccin")
-  require("plugins.completion") -- breaks function..end in Lua
-  require("plugins.core")
-  require("plugins.file_tree")
-  require("plugins.fzf")
-  require("plugins.mini")
-  require("plugins.snacks")
-  require("plugins.treesitter")
+M.sleep_and_clear = function(milliseconds)
+  vim.defer_fn(function() print("") end, milliseconds)
+end
+
+M.echo_info = function(message, display_timeout_ms)
+  vim.api.nvim_echo({{message, "MoreMsg"}}, true, {})
+  M.sleep_and_clear(display_timeout_ms)
+end
+
+local state = {}
+vim.g.autocmd_file_loaded_table = {}
+M.autocmd_file_loaded = function(options)
+  vim.api.nvim_create_autocmd({
+    "BufReadPost",
+    "BufNewFile",
+    "BufEnter",
+  }, {
+    pattern = "*",
+    callback = function()
+      local key = options["name"]..vim.api.nvim_get_current_buf()
+      if state[key] then
+        return
+      else
+        state[key] = true
+      end
+      if vim.bo.filetype == "" then
+        vim.cmd("filetype detect")
+      end
+      local pattern = options["pattern"]
+      if type(pattern) ~= "table" then
+        pattern = { pattern }
+      end
+      if options["pattern"] ~= "*" and not vim.tbl_contains(pattern, vim.bo.filetype) then
+        return
+      end
+      options["callback"]()
+    end
+  })
 end
 
 -- https://github.com/neovim/neovim/discussions/37122#discussioncomment-15352797
-function M.stop_lsps(info)
+M.stop_lsps = function(info)
+-- function M.stop_lsps(info)
   local client_names = info.fargs
 
   -- Default to disabling all servers on current buffer

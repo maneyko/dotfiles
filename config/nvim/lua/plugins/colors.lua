@@ -1,4 +1,4 @@
-vim.pack.add { { src = "https://github.com/catppuccin/nvim", name = "catppuccin" } }
+vim.pack.add({ { src = "https://github.com/catppuccin/nvim", name = "catppuccin" } })
 
 require("catppuccin").setup({
   flavour = "mocha",
@@ -32,12 +32,12 @@ require("catppuccin").setup({
       light4      = "#949494", -- orig(246 = 148;148;148)
 
       red    = "#d75f5f", -- orig(167 = 232;85;90)
-      green  = "#afaf00", -- orig(142 = 175;175;0)
+      orange = "#ff8700", -- orig(208 = 255;126;0)
       yellow = "#ffaf00", -- orig(214 = 255;171;0)
+      aqua   = "#87af87", -- orig(108 = 124;176;131)
+      green  = "#afaf00", -- orig(142 = 175;175;0)
       blue   = "#87afaf", -- orig(109 = 124;176;176)
       purple = "#d787af", -- orig(175 = 228;130;177)
-      aqua   = "#87af87", -- orig(108 = 124;176;131)
-      orange = "#ff8700", -- orig(208 = 255;126;0)
 
       bg0 = "#262626", -- dark0
       bg1 = "#3a3a3a", -- dark1
@@ -56,11 +56,11 @@ require("catppuccin").setup({
 
       -- ------------------------------------------
 
-      -- mauve = "#e0b0ff", --
-      mauve    = "#d75f5f", -- red
-      teal     = "#87af87", -- aqua (green) orig(124;176;131)
-      flamingo = "#ff8700", -- orange orig(255;126;0)
-      lavender = "#d787af", -- keymap orig(228;130;177)
+      -- -- mauve = "#e0b0ff", --
+      -- mauve    = "#d75f5f", -- red
+      -- teal     = "#87af87", -- aqua (green) orig(124;176;131)
+      -- flamingo = "#ff8700", -- orange orig(255;126;0)
+      -- lavender = "#d787af", -- keymap orig(228;130;177)
 
       -- True neutral dark base (no blue or brown tint)
       base   = "#0B1215", -- Clean dark background
@@ -223,7 +223,6 @@ require("catppuccin").setup({
       diffLine    = { link = "colorsboxBlue" },
 
       -- gitcommitOverflow = { link = "" },
-      -- gitcommitSummary = { link = "colorsboxRed" },
       gitcommitSummary = { fg = colors.rosewater, style = {} },
       gitcommitSelectedFile = { link = "colorsboxGreen" },
 
@@ -372,15 +371,44 @@ require("catppuccin").setup({
       rubyInterpolationDelimiter = { link = "colorsboxAqua" },
 
       ["@string.special.symbol.ruby"] = { link = "colorsboxPurple" },
+      -- ["@string.special.symbol.ruby"] = { link = "colorsboxBlue" },
       ["@variable.member"]            = { link = "colorsboxBlue" },
       ["@constant.ruby"]              = { link = "colorsboxYellow" },
       -- ["@keyword.ruby"]            = { link = "colorsboxRed" },
-      -- ["@keyword.function.ruby"]   = { link = "colorsboxAqua" },
+      ["@keyword.function.ruby"]   = { link = "colorsboxAqua" },
       ["@keyword.type.ruby"]          = { link = "colorsboxAqua" },
-      ["@keyword.function.ruby"]      = { link = "colorsboxAqua" },
+      -- ["@keyword.function.ruby"] = { link = "colorsboxRed" },
+      -- ["@keyword.type.ruby"]          = { link = "colorsboxRed" },
+      -- ["@keyword.function.ruby"]      = { link = "colorsboxAqua" },
       ["@punctuation.delimiter.ruby"] = { link = "text" },
-      ["@function.builtin.ruby"]      = { link = "colorsboxGreen" },
-      ["@keyword.modifier.ruby.ruby"] = { link = "colorsboxAqua" },
+      ["@function.builtin.ruby"]      = { link = "colorsboxAqua" },
+      ["@keyword.modifier.ruby"] = { link = "colorsboxAqua" },
+      -- ["@function.call.ruby"] = { link = "@variable.ruby" },
+      ["@function.call.ruby"] = { link = "text" },
+      ["@variable.builtin.ruby"] = { link = "colorsboxPurple" },
+      ["@variable.parameter.ruby"] = { link = "text" },
+
+      -- ["@function.builtin.bash"]    = { link = "colorsboxRed", style = {} },
+      ["@function.builtin.sh"]       = { link = "colorsboxRed", style = {} },
+      ["@variable.bash"]             = { link = "colorsboxBlue" },
+      ["@variable.parameter.bash"]   = { link = "colorsboxOrange" },
+      ["@function.builtin.bash"]     = { link = "colorsboxRed" },
+      ["@function.call.bash"]        = { link = "text" },
+      -- ["@string.variable.bash"]      = { link = "colorsboxAqua" },
+      ["@string.interpolation.bash"] = { link = "colorsboxAqua" },
+      ["@string.command.bash"]       = { link = "text" },
+
+      -- peach     = "#ff8800",
+      -- maroon    = "#ff6188",
+      -- sky       = "#95e6cb",
+      -- sapphire  = "#c07ab8",
+      -- rosewater = "#ffa0a0",
+
+      ["@keyword.terraform"] = { link = "colorsboxYellow" },
+      -- hclBraces = { link = "text" },
+
+      ["@variable.builtin.terraform"] = { link = "text" },
+      -- ["@variable.member.terraform"] = { link = "text" },
 
       luaIn       = { link = "colorsboxRed" },
       luaFunction = { link = "colorsboxAqua" },
@@ -469,7 +497,6 @@ require("catppuccin").setup({
       -- StatusLine   = { fg = colors.bg4, bg = colors.bg0 },
       -- StatusLineNC = { fg = colors.bg2, bg = colors.fg4 },
       -- VertSplit    = { fg = colors.fg4, bg = colors.bg2 },
-      -- ModeMsg      = { link = "colorsboxYellowBold" },
     }
   end
 })

@@ -8,6 +8,8 @@ vim.keymap.set("n", "<leader>r", "<cmd>restart<cr>")
 vim.keymap.set("n", "Y", "y$")
 vim.keymap.set("n", "<C-b>", "<cmd>nohl<cr><C-l>")
 vim.keymap.set("n", "U", "<cmd>redo<cr>")
+vim.keymap.set("n", "<C-r>", "<nop>")
+
 
 
 vim.keymap.set("n", "<leader>s", function()

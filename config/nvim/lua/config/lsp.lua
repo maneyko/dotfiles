@@ -6,6 +6,7 @@ local utils = require("config.utils")
 local lsp_names = {
   -- "bashls",
   "lua_ls",
+  "pylsp",
   -- "ruby-lsp",
   -- "solargraph",
   -- "rubocop",
@@ -77,6 +78,23 @@ vim.lsp.config("ruby-lsp", {
         enablePendingMigrationsPrompt = false,
       },
     },
+  }
+})
+
+-- All options: https://github.com/python-lsp/python-lsp-server/blob/develop/CONFIGURATION.md
+vim.lsp.config("pylsp", {
+  settings = {
+    pylsp = {
+      plugins = {
+        pycodestyle = {
+          -- https://pycodestyle.pycqa.org/en/latest/intro.html#error-codes
+          ignore = {
+            -- "E111",  -- Allow indent of 2
+          },
+          maxLineLength = 120
+        }
+      }
+    }
   }
 })
 

@@ -1,0 +1,27 @@
+return function(colors)
+  return {
+    markdownItalic            = { fg = colors.fg3, bg = colors.none, style = { "italic" } },
+    markdownH1                = { link = "colorsboxGreenBold" },
+    markdownH2                = { link = "colorsboxGreenBold" },
+    markdownH3                = { link = "colorsboxYellowBold" },
+    markdownH4                = { link = "colorsboxYellowBold" },
+    markdownH5                = { link = "colorsboxYellow" },
+    markdownH6                = { link = "colorsboxYellow" },
+    markdownCode              = { link = "colorsboxAqua" },
+    markdownCodeBlock         = { link = "colorsboxAqua" },
+    markdownCodeDelimiter     = { link = "colorsboxAqua" },
+    markdownBlockquote        = { link = "colorsboxGray" },
+    markdownListMarker        = { link = "colorsboxGray" },
+    markdownOrderedListMarker = { link = "colorsboxGray" },
+    markdownRule              = { link = "colorsboxGray" },
+    markdownHeadingRule       = { link = "colorsboxGray" },
+    markdownUrlDelimiter      = { link = "colorsboxFg3" },
+    markdownLinkDelimiter     = { link = "colorsboxFg3" },
+    markdownLinkTextDelimiter = { link = "colorsboxFg3" },
+    markdownHeadingDelimiter  = { link = "colorsboxOrange" },
+    markdownUrl               = { link = "colorsboxPurple" },
+    markdownUrlTitleDelimiter = { link = "colorsboxGreen" },
+    markdownLinkText          = { fg = colors.gray, bg = colors.none, style = { "underline" } },
+    markdownIdDeclaration     = { link = "markdownLinkText" },
+  }
+end

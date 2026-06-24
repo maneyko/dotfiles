@@ -9,13 +9,14 @@ vim.pack.add({
 require("blink.cmp").setup({
   keymap = {
     preset = "none", -- Use 'none' to have full control
-    ["<C-j>"] = { "select_next" },
-    ["<C-k>"] = { "select_prev" },
-    -- ["<CR>"] = { "accept", "fallback" }, -- Accept completion
-    ["<Tab>"] = { "select_next" },
-    ["<S-Tab>"] = { "select_prev" },
-    ["<C-y>"] = { "select_and_accept" },
-    ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
+    ["<C-j>"]   = { "select_next", "fallback" },
+    ["<C-k>"]   = { "select_prev", "fallback" },
+    ["<Tab>"]   = { "select_next", "fallback" },
+    ["<S-Tab>"] = { "select_prev", "fallback" },
+
+    ["<C-y>"]     = { "accept", "snippet_forward" },
+    ["<C-space>"] = { "accept", "snippet_forward" },
+    -- ["<C-space>"] = { "show", "show_documentation", "hide_documentation" },
     ["<Esc>"] = {
       function(cmp)
         if cmp.is_visible() then

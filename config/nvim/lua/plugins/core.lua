@@ -1,6 +1,7 @@
 vim.pack.add({
   "https://github.com/tpope/vim-repeat",
   "https://github.com/tpope/vim-endwise",
+  "https://github.com/rrethy/nvim-treesitter-endwise",
   "https://github.com/tpope/vim-rails",
   "https://github.com/Vimjas/vim-python-pep8-indent",
   "https://github.com/altermo/ultimate-autopair.nvim",
@@ -13,7 +14,6 @@ vim.g.markdown_syntax_conceal = 0
 vim.pack.add({ "https://github.com/junegunn/vim-easy-align" })
 vim.keymap.set("n", "ga", "<Plug>(EasyAlign)", { remap = false })
 vim.keymap.set("x", "ga", "<Plug>(EasyAlign)", { remap = false }) -- Visual-only mode, not select mode
-
 
 require("ultimate-autopair").setup({
   pair_cmap = false,  -- Don't pair in command mode

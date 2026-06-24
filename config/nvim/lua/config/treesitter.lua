@@ -8,10 +8,11 @@ local utils = require("config.utils")
 local enable_treesitter = {
   "json",
   "lua",
-  -- "ruby",
-  "sh",
+  "ruby",
+  "python",
+  -- "sh",
   "terraform",
-  -- "tf",
+  "query", -- .scm files for Neovim
 }
 
 vim.g.ts_enabled = true -- Neovim enables treesitter by default

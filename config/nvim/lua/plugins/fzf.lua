@@ -1,5 +1,8 @@
 local height = 0.3
 
+-- Search syntax:
+-- https://junegunn.github.io/fzf/search-syntax/
+
 vim.api.nvim_create_autocmd("PackChanged", {
   callback = function(ev)
     local name, kind = ev.data.spec.name, ev.data.kind
@@ -75,6 +78,12 @@ vim.keymap.set("n", "<leader>a", function() builtin.live_grep(  make_conf({ resu
 local actions = require("telescope.actions")
 local sorters = require("telescope.sorters")
 
+local deprioritize_substrs = {
+  "/spec/",
+  "/test/",
+  "_spec.rb",
+}
+
 require("telescope").setup({
   defaults = {
     mappings = {
@@ -100,8 +109,20 @@ require("telescope").setup({
       "--smart-case",
       "--trim",
     },
-    sorting_strategy = "ascending",
-    -- file_sorter = sorters.get_fuzzy_file,
+    tiebreak = function(current_entry, existing_entry)
+      for _, pat in ipairs(deprioritize_substrs) do
+        if current_entry.path:find(pat, 1, true) then
+          return false
+        end
+      end
+
+      return current_entry.path:len() < existing_entry.path:len()
+    end,
+    -- path_display = { "filename_first" }
+    -- sorting_strategy = "descending",
+    sorting_strategy = "descending",
+    -- selection_strategy = "limit"
+    -- file_sorter = sorters.fuzzy_with_index_bias,
   },
   extensions = {
     fzf = {

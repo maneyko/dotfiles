@@ -4,9 +4,9 @@ require("config.autocmd")
 require("config.options")
 require("config.keymaps")
 
--- require("config.treesitter-diagnostic")
 require("plugins.treesitter")
 require("config.treesitter")
+-- require("config.treesitter-diagnostic")
 require("plugins.core")
 require("plugins.colors")
 
@@ -14,7 +14,7 @@ require("plugins.completion") -- breaks function..end
 require("plugins.lsp")
 require("config.lsp")
 
-require("plugins.file_tree")
+require("plugins.file-tree")
 require("plugins.fzf")
 require("plugins.mini")
 -- require("plugins.snacks") -- enables treesitter

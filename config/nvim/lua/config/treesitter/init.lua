@@ -6,16 +6,24 @@ local utils = require("config.utils")
 -- }
 
 local enable_treesitter = {
+  "dockerfile",
   "json",
   "lua",
   "ruby",
   "python",
-  -- "sh",
+  "sh",
   "terraform",
   "query", -- .scm files for Neovim
 }
 
 vim.g.ts_enabled = true -- Neovim enables treesitter by default
+
+require("config.treesitter.is-posix")
+
+-- { match = { [42] = { <userdata 1> } } }
+-- { pattern = 60 }
+-- { bufnr = 1 }
+-- { metadata = { "is-populated?", 38 } }
 
 vim.api.nvim_create_user_command("TSStart", function(options)
   if not vim.g.ts_init_ran then

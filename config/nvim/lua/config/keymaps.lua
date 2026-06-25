@@ -1,3 +1,5 @@
+local utils = require("config.utils")
+
 vim.keymap.set("n", "Q", "<nop>", { desc = "Disable Ex mode" })
 vim.keymap.set("i", "jk", "<esc>", { desc = "Exit insert mode" })
 
@@ -10,20 +12,23 @@ vim.keymap.set("n", "<C-b>", "<cmd>nohl<cr><C-l>")
 vim.keymap.set("n", "U", "<cmd>redo<cr>")
 vim.keymap.set("n", "<C-r>", "<nop>")
 
-
-
 vim.keymap.set("n", "<leader>s", function()
   vim.o.spell = not vim.o.spell
+  if vim.o.spell then
+    utils.echo_info("Spellcheck enabled")
+  else
+    utils.echo_info("Spellcheck disabled")
+  end
 end, { desc = "Toggle spellcheck" })
 
 vim.keymap.set("n", "\\w", ":%s/\\s\\+$//g<CR>", { silent = true, desc = "Trim trailing whitespace" })
 vim.keymap.set("n", "\\a", "0100lf<space>r<cr>", { silent = true, desc = "Align row to width of 100" })
 
 for _, n in ipairs({ "", "2-", "3-", "4-" }) do
-  vim.keymap.set({"n", "i", "v"}, "<"..n.."ScrollWheelLeft>",  "<nop>")
-  vim.keymap.set({"n", "i", "v"}, "<"..n.."ScrollWheelRight>", "<nop>")
-  vim.keymap.set({"n", "i", "v"}, "<"..n.."ScrollWheelUp>",    "<C-y>")
-  vim.keymap.set({"n", "i", "v"}, "<"..n.."ScrollWheelDown>",  "<C-e>")
+  vim.keymap.set({"n", "i", "v"}, "<"..n.."ScrollWheelLeft>",  "<nop>", { silent = true })
+  vim.keymap.set({"n", "i", "v"}, "<"..n.."ScrollWheelRight>", "<nop>", { silent = true })
+  vim.keymap.set({"n", "i", "v"}, "<"..n.."ScrollWheelUp>",    "<C-y>", { silent = true })
+  vim.keymap.set({"n", "i", "v"}, "<"..n.."ScrollWheelDown>",  "<C-e>", { silent = true })
 end
 
 vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Select window to the left" })

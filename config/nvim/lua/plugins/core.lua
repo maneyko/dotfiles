@@ -7,6 +7,16 @@ vim.pack.add({
   "https://github.com/altermo/ultimate-autopair.nvim",
 })
 
+vim.pack.add({ "https://github.com/andymass/vim-matchup" })
+-- vim.g.matchup_treesitter_enable_quotes = false
+require("match-up").setup({
+  sync = true,  -- Run synchronously
+  treesitter = {
+    enable_quotes = false,
+  }
+})
+vim.api.nvim_set_hl(0, "MatchWord", { fg = "NONE", bg = "NONE" }) -- Do not highlight blocks
+
 vim.pack.add({ "https://github.com/tpope/vim-markdown" })
 vim.g.markdown_fenced_languages = { "bash=sh", "jq", "html", "python", "ruby", "sql", "yaml", "perl", "diff", "groovy", "javascript" }
 vim.g.markdown_syntax_conceal = 0

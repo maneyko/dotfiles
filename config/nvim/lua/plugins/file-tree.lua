@@ -26,4 +26,9 @@ require("neo-tree").setup({
       folder_empty_open = "o",
     }
   },
+  window = {
+    mappings = {
+      ["<cr>"] = "open_tabnew",
+    }
+  }
 })

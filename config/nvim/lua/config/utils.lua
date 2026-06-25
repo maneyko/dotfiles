@@ -5,6 +5,7 @@ M.sleep_and_clear = function(milliseconds)
 end
 
 M.echo_info = function(message, display_timeout_ms)
+  display_timeout_ms = display_timeout_ms or 2000
   vim.api.nvim_echo({{message, "MoreMsg"}}, true, {})
   M.sleep_and_clear(display_timeout_ms)
 end

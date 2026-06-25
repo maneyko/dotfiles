@@ -3,6 +3,10 @@ return function(colors)
     rubyStringDelimiter        = { link = "colorsboxGreen" },
     rubyInterpolationDelimiter = { link = "colorsboxAqua" },
 
+    -- MatchBackground = { fg = colors.none, bg = colors.none, style = { "underline" } },
+    -- MatchWord = { fg = colors.none, bg = colors.none },
+    -- :hi MatchWord ctermbg=NONE cterm=NONE ctermfg=NONE
+
     ["@attribute.single.ruby"] = { link = "text" },
 
     ["@constant.builtin.ruby"] = { link = "colorsboxPurple" }, -- nil
@@ -16,7 +20,9 @@ return function(colors)
     ["@function.builtin.ruby"] = { link = "colorsboxAqua" },
     ["@function.call.ruby"]    = { link = "text" },
 
-    ["@keyword.exception.ruby"] = { link = "colorsboxAqua" },
+    ["@keyword.exception.ruby"] = { link = "colorsboxRed" },
+    ["@keyword.exception.block.ruby"] = { link = "colorsboxRed" },
+    ["@keyword.exception.rescue.ruby"] = { link = "colorsboxAqua" },
     ["@keyword.function.ruby"]  = { link = "colorsboxAqua" },
     ["@keyword.macro"]          = { link = "colorsboxAqua" },
     ["@keyword.magic"]          = { link = "colorsboxOrange" },
@@ -40,6 +46,9 @@ return function(colors)
 
     ["@variable.builtin.ruby"]   = { link = "colorsboxPurple" },
     ["@variable.parameter.ruby"] = { link = "text" },
+    ["@variable.parameter.keyword"] = { link = "colorsboxPurple" },
+
+    ["@test.helper.ruby"] = { link = "colorsboxGreenBold" },
 
     -- ["@attribute.single.ruby"] = { fg = colors.text, style = { "italic" } },
 

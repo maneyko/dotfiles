@@ -47,6 +47,12 @@
 (string_array (bare_string (interpolation (identifier) @variable (#set! priority 151))))
 (symbol_array (bare_symbol (interpolation (identifier) @variable (#set! priority 151))))
 
+; Make method calls at the class-level highlight as aqua. Ex: `delegate`, `alias_method`, etc.
+(class
+  body: (body_statement
+    (call
+      method: (identifier) @keyword.macro)))
+
 ; Highlight these as aqua
 (call
   method: (identifier) @macro
@@ -111,6 +117,18 @@
   "expect_any_instance_of"
 ))
 
+((identifier) @test.helper
+  (#any-of? @test.helper
+  "described_class"
+  "double"
+  "instance_double"
+  "class_double"
+  "object_double"
+  "stub_const"
+  "hide_const"
+))
+
+
 "alias" @macro (#set! priority 130)
 
 ; Highlight these as red
@@ -118,8 +136,14 @@
   method: (identifier) @keyword
   (#any-of? @keyword
   "raise"
-  "rescue"
 ))
+
+; Highlight as red
+((super) @keyword)
+
+(keyword_parameter name: (identifier) @variable.parameter.keyword)
+
+("rescue" @keyword.exception.rescue)
 
 ; Highlight these as blue
 ((constant) @constant.predefined
@@ -150,11 +174,11 @@
   "/" @punctuation.regex
   "/" @punctuation.regex)
 
-; Make method calls at the class-level highlight as aqua. Ex: `delegate`, `alias_method`, etc.
-(class
-  body: (body_statement
-    (call
-      method: (identifier) @keyword.macro)))
+; Make `rescue` for blocks highlight as red
+(begin (rescue "rescue" @keyword.exception.block))
+(do_block
+  (body_statement
+    (rescue "rescue" @keyword.exception.block)))
 
 ; ; Gets the whole rescue block
 ; (method

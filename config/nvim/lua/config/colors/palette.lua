@@ -78,6 +78,7 @@ return {
 
   -- Additional colors if needed
   peach     = "#ff8800",
+  pink      = "#f5c2e7",
   maroon    = "#ff6188",
   sky       = "#95e6cb",
   sapphire  = "#c07ab8",

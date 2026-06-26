@@ -1,5 +1,9 @@
 local M = {}
 
+M.substr_exists = function(str, substr)
+  return string.find(str, substr, 1, true) ~= nil
+end
+
 M.sleep_and_clear = function(milliseconds)
   vim.defer_fn(function() print("") end, milliseconds)
 end

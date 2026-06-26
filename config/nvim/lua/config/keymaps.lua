@@ -27,8 +27,8 @@ vim.keymap.set("n", "\\a", "0100lf<space>r<cr>", { silent = true, desc = "Align 
 for _, n in ipairs({ "", "2-", "3-", "4-" }) do
   vim.keymap.set({"n", "i", "v"}, "<"..n.."ScrollWheelLeft>",  "<nop>", { silent = true })
   vim.keymap.set({"n", "i", "v"}, "<"..n.."ScrollWheelRight>", "<nop>", { silent = true })
-  vim.keymap.set({"n", "i", "v"}, "<"..n.."ScrollWheelUp>",    "<C-y>", { silent = true })
-  vim.keymap.set({"n", "i", "v"}, "<"..n.."ScrollWheelDown>",  "<C-e>", { silent = true })
+  -- vim.keymap.set({"n", "i", "v"}, "<"..n.."ScrollWheelUp>",    "<C-y>", { silent = true })
+  -- vim.keymap.set({"n", "i", "v"}, "<"..n.."ScrollWheelDown>",  "<C-e>", { silent = true })
 end
 
 vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Select window to the left" })

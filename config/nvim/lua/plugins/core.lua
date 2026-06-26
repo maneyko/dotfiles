@@ -12,6 +12,7 @@ vim.pack.add({ "https://github.com/andymass/vim-matchup" })
 require("match-up").setup({
   sync = true,  -- Run synchronously
   treesitter = {
+    disable_virtual_text = true,
     enable_quotes = false,
   }
 })

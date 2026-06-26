@@ -1,4 +1,27 @@
 return {
+  -- https://coolors.co/colors
+
+  -- Core colors
+  red    = "#d75f5f", -- orig(167 = 232;85;90)
+  orange = "#ff8700", -- orig(208 = 255;126;0)
+  yellow = "#ffaf00", -- orig(214 = 255;171;0)
+  green  = "#afaf00", -- orig(142 = 175;175;0)
+  aqua   = "#87af87", -- orig(108 = 124;176;131)
+  blue   = "#87afaf", -- orig(109 = 124;176;176)
+  purple = "#d787af", -- orig(175 = 228;130;177)
+
+  -- Accent colors
+  peach     = "#ff8700",  -- Orange modifier
+  maroon    = "#ff6188",  -- Red modifier
+  sky       = "#95e6cb",  -- Blue modifier
+  sapphire  = "#c07ab8",  -- Purple modifier
+
+  blue_bright1 = "#87c3c3",
+  blue_bright2 = "#87d7d7",
+
+  pink      = "#f5c2e7",
+  rosewater = "#ffa0a0",
+
   dark0_hard = "#1c1c1c", -- orig(234 = 28;28;28)
   dark0      = "#262626", -- orig(235 = 38;38;38)
   dark0_soft = "#303030", -- orig(236 = 48;48;48)
@@ -16,14 +39,6 @@ return {
   light2      = "#bcbcbc", -- orig(250 = 188;188;188)
   light3      = "#a8a8a8", -- orig(248 = 168;168;168)
   light4      = "#949494", -- orig(246 = 148;148;148)
-
-  red    = "#d75f5f", -- orig(167 = 232;85;90)
-  orange = "#ff8700", -- orig(208 = 255;126;0)
-  yellow = "#ffaf00", -- orig(214 = 255;171;0)
-  aqua   = "#87af87", -- orig(108 = 124;176;131)
-  green  = "#afaf00", -- orig(142 = 175;175;0)
-  blue   = "#87afaf", -- orig(109 = 124;176;176)
-  purple = "#d787af", -- orig(175 = 228;130;177)
 
   bg0 = "#262626", -- dark0
   bg1 = "#3a3a3a", -- dark1
@@ -64,23 +79,9 @@ return {
   surface1 = "#333333",
   surface0 = "#292929",
 
-  -- Vibrant accent colors without blue dominance
-  -- red = "#d75f5f", -- orig(232;85;90)
-  -- green = "#afaf00", -- text orig(175;175;0)
-  -- yellow = "#ffaf00", -- orig(255;171;0)
-  -- blue = "#87b0b0", -- orig(124;176;176)
-  -- mauve = "#e0b0ff", -- 
+  -- Required by plugin
+  lavender = "#d787af", -- purple
   mauve    = "#d75f5f", -- red
-  teal     = "#87af87", -- aqua (green) orig(124;176;131)
-  flamingo = "#ff8700", -- orange orig(255;126;0)
-  lavender = "#d787af", -- keymap orig(228;130;177)
-  -- lavender = "#b8bb26", -- keymap
-
-  -- Additional colors if needed
-  peach     = "#ff8800",
-  pink      = "#f5c2e7",
-  maroon    = "#ff6188",
-  sky       = "#95e6cb",
-  sapphire  = "#c07ab8",
-  rosewater = "#ffa0a0",
+  teal     = "#87af87", -- aqua
+  flamingo = "#ff8700", -- orange
 }

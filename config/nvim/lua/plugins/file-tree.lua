@@ -18,7 +18,8 @@ require("neo-tree").setup({
     },
     icon = {
       folder_closed     = ">",
-      folder_open = "⋁",
+      -- folder_open = "⋁",
+      folder_open = "v",
       -- folder_open       = "˅⌄",
       -- folder_open = "",
       -- folder_closed = "",

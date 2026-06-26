@@ -1,0 +1,28 @@
+#!/bin/sh
+
+# Poor man's `ps` (useful for Docker containers with minimal resources)
+
+{
+  template="%-8s %-8s %-20s %-10s %-10s %-27s %s\n"
+  printf "$template" "PID" "UID" "Name" 'CPU %' "RSS" "Started At" "Command"
+
+  # Get the system boot time (btime)
+  BTIME=$(awk '$1 == "btime" {print $2}' /proc/stat)
+  HZ=$(getconf CLK_TCK)
+
+  for p in /proc/[0-9]*; do
+    pid=$(basename $p)
+    real_uid=$(awk '$1 == "Uid:" {print $2}' $p/status)
+    cpu=$(awk '{print $14+$15}' $p/stat 2>/dev/null)
+    rss_kb=$(awk '$1 == "VmRSS:" {print $2}' $p/status)
+    cmd=$(tr '\0' ' ' < $p/cmdline)
+    name=$(cat $p/comm 2>/dev/null)
+
+    ticks=$(awk '{print $22}' $p/stat)
+    started_at=$(date -d "@$(( BTIME + ticks / HZ ))" +%FT%T%z)
+
+    load_avg=$(awk '$1 == "se.avg.load_avg" {printf "%.2f", ($3 / 1024) * 100}' $p/sched 2>/dev/null)
+
+    printf "$template" "$pid" "$real_uid" "$name" "$load_avg" "$rss_kb" "$started_at" "$cmd"
+  done
+}

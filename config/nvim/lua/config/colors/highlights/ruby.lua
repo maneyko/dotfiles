@@ -45,6 +45,7 @@ return function(colors)
     ["@string.regexp.ruby"]          = { link = "String" },
 
     ["@variable.builtin.ruby"]   = { link = "colorsboxPurple" },
+    ["@variable.global.ruby"]    = { link = "colorsboxBlue" },
     ["@variable.parameter.ruby"] = { link = "text" },
     ["@variable.parameter.keyword"] = { link = "colorsboxPurple" },
 

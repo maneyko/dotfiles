@@ -53,6 +53,80 @@
     (call
       method: (identifier) @keyword.macro)))
 
+"alias" @macro (#set! priority 130)
+
+((global_variable) @variable.global)
+
+; Highlight these as red
+(call
+  method: (identifier) @keyword
+  (#any-of? @keyword
+  "raise"
+))
+
+; Highlight as red
+((super) @keyword)
+
+(keyword_parameter name: (identifier) @variable.parameter.keyword)
+
+("rescue" @keyword.exception.rescue)
+
+; Highlight these as blue
+((constant) @constant.predefined
+  (#any-of? @constant.predefined
+  "ARGF"
+  "ARGV"
+  "DATA"
+  "ENV"
+  "STDIN"
+  "TOPLEVEL_BINDING"
+  "STDERR"
+  "STDOUT"
+  "RUBY_VERSION"
+  "RUBY_PLATFORM"
+  "RUBY_RELEASE_DATE"
+  "RUBY_PATCHLEVEL"
+  "RUBY_REVISION"
+  "RUBY_DESCRIPTION"
+  "RUBY_COPYRIGHT"
+  "RUBY_ENGINE"
+))
+
+; Make 'module' have the same highlighting category as 'class
+"module" @keyword.type
+
+; Target the delimiters of a regex expression
+(regex
+  "/" @punctuation.regex
+  "/" @punctuation.regex)
+
+; Make `rescue` for blocks highlight as red
+(begin (rescue "rescue" @keyword.exception.block))
+(do_block
+  (body_statement
+    (rescue "rescue" @keyword.exception.block)))
+
+
+; ------------------------------------------------------------------------
+; Filetype specifics
+; ------------------------------------------------------------------------
+
+(call
+  method: (identifier) @macro.keyword
+  (#any-of? @macro.keyword
+    ; RSpec
+    "expect"
+    "allow"
+    "allow_any_instance_of"
+    "expect_any_instance_of"
+    "get"
+    "post"
+    "put"
+    "patch"
+    "delete"
+  )
+  (#is-rspec?))
+
 ; Highlight these as aqua
 (call
   method: (identifier) @macro
@@ -106,15 +180,11 @@
   "loop"
   "trap"
 
+  "proc"
+
   ; Controllers
   "head"
   "render"
-
-  ; RSpec
-  "expect"
-  "allow"
-  "allow_any_instance_of"
-  "expect_any_instance_of"
 ))
 
 ((identifier) @test.helper
@@ -127,70 +197,3 @@
   "stub_const"
   "hide_const"
 ))
-
-
-"alias" @macro (#set! priority 130)
-
-; Highlight these as red
-(call
-  method: (identifier) @keyword
-  (#any-of? @keyword
-  "raise"
-))
-
-; Highlight as red
-((super) @keyword)
-
-(keyword_parameter name: (identifier) @variable.parameter.keyword)
-
-("rescue" @keyword.exception.rescue)
-
-; Highlight these as blue
-((constant) @constant.predefined
-  (#any-of? @constant.predefined
-  "ARGF"
-  "ARGV"
-  "DATA"
-  "ENV"
-  "STDIN"
-  "TOPLEVEL_BINDING"
-  "STDERR"
-  "STDOUT"
-  "RUBY_VERSION"
-  "RUBY_PLATFORM"
-  "RUBY_RELEASE_DATE"
-  "RUBY_PATCHLEVEL"
-  "RUBY_REVISION"
-  "RUBY_DESCRIPTION"
-  "RUBY_COPYRIGHT"
-  "RUBY_ENGINE"
-))
-
-; Make 'module' have the same highlighting category as 'class
-"module" @keyword.type
-
-; Target the delimiters of a regex expression
-(regex
-  "/" @punctuation.regex
-  "/" @punctuation.regex)
-
-; Make `rescue` for blocks highlight as red
-(begin (rescue "rescue" @keyword.exception.block))
-(do_block
-  (body_statement
-    (rescue "rescue" @keyword.exception.block)))
-
-; ; Gets the whole rescue block
-; (method
-;     (body_statement
-;       (rescue) @keyword.type
-;       (#set! priority 120)))
-
-; "raise" @keyword
-
-; ((program
-;   .
-;   (comment)*
-;   .
-;   (comment) @keyword.directive @nospell)
-;   (#lua-match? @keyword.directive "^#+ *frozen_string_literal"))

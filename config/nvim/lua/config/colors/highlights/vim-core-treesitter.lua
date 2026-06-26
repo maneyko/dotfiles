@@ -3,5 +3,6 @@ return function(colors)
     ["@string.documentation"] = { link = "String" },
     ["@variable.member"]      = { link = "colorsboxBlue" },
     ["@module"]               = { link = "colorsboxYellow", style = {} },
+    ["@label"]                = { link = "String" }, -- heredoc
   }
 end

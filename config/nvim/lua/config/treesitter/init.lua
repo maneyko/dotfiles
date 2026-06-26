@@ -18,7 +18,8 @@ local enable_treesitter = {
 
 vim.g.ts_enabled = true -- Neovim enables treesitter by default
 
-require("config.treesitter.is-posix")
+require("config.treesitter.predicates.bash.is-posix")
+require("config.treesitter.predicates.ruby")
 
 -- { match = { [42] = { <userdata 1> } } }
 -- { pattern = 60 }

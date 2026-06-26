@@ -19,7 +19,6 @@ local enable_treesitter = {
 vim.g.ts_enabled = true -- Neovim enables treesitter by default
 
 require("config.treesitter.predicates.bash.is-posix")
--- require("config.treesitter.predicates.ruby")
 
 vim.api.nvim_create_user_command("TSStart", function(options)
   if not vim.g.ts_init_ran then

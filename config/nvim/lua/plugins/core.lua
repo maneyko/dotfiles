@@ -7,6 +7,11 @@ vim.pack.add({
   "https://github.com/altermo/ultimate-autopair.nvim",
 })
 
+
+vim.pack.add({
+  { src = "https://github.com/maneyko/nvim-treesitter-rails" },
+})
+
 vim.pack.add({ "https://github.com/andymass/vim-matchup" })
 -- vim.g.matchup_treesitter_enable_quotes = false
 require("match-up").setup({
@@ -19,7 +24,7 @@ require("match-up").setup({
 vim.api.nvim_set_hl(0, "MatchWord", { fg = "NONE", bg = "NONE" }) -- Do not highlight blocks
 
 vim.pack.add({ "https://github.com/tpope/vim-markdown" })
-vim.g.markdown_fenced_languages = { "bash=sh", "jq", "html", "python", "ruby", "sql", "yaml", "perl", "diff", "groovy", "javascript" }
+vim.g.markdown_fenced_languages = { "bash=sh", "jq", "html", "python", "ruby", "sql", "yaml", "perl", "diff", "groovy", "lua", "javascript" }
 vim.g.markdown_syntax_conceal = 0
 
 vim.pack.add({ "https://github.com/junegunn/vim-easy-align" })
@@ -32,7 +37,6 @@ require("ultimate-autopair").setup({
    internal_pairs={
      -- Add completion for pipes in Ruby
      {'|','|',suround=true,ft={"ruby"},multiline=false},
-
      {'[',']',fly=true,dosuround=true,newline=true,space=true},
      {'(',')',fly=true,dosuround=true,newline=true,space=true},
      {'{','}',fly=true,dosuround=true,newline=true,space=true},

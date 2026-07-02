@@ -1,0 +1,57 @@
+# Config file priorities:
+#   * "$HOME/Library/Application Support/com.mitchellh.ghostty/config.ghostty"
+#   * "$HOME/.config/ghostty/config"
+
+
+# TODO:
+#   * Everything is too bold in retina fullscreen
+#   * Scrolling is too fast
+#     * quasi resolved by Neovim C-e and C-y mappings
+
+# Notes:
+#   * Command+Shift to click on URLs: https://github.com/ghostty-org/ghostty/issues/1972#issuecomment-2240048536
+
+# Basics
+font-family = "InconsolataGo Nerd Font Mono"
+# font-family-bold = "InconsolataGo Nerd Font Mono Bold"
+font-size = 20
+link-url = true
+cursor-style-blink = false
+mouse-hide-while-typing = true
+macos-option-as-alt = true
+background-opacity = 0.75
+# Ensure cursor is a block
+shell-integration-features = no-cursor
+
+# Already defaults:
+# macos-hidden = never
+# cursor-style = block
+
+# disable bell entirely
+bell-features = no-system,no-audio,no-attention,no-title,no-border
+
+# Quick terminal
+quick-terminal-position = right
+keybind = global:alt+space=toggle_visibility
+keybind = cmd+u=toggle_background_opacity
+
+
+# Padding
+window-padding-x = 2
+window-padding-y = 0
+# window-padding-balance = true
+
+# Font
+
+# font-feature=-calt,-liga,-dlig
+bold-color = bright
+# font-synthetic-style = no-bold
+# Almost makes it too thick in Neovim
+font-thicken = true
+# font-thicken-strength = 255
+
+# ---- Misc ----
+
+# mouse-scroll-multiplier = 0.5
+# macos-titlebar-style = tabs
+# term = xterm-256color

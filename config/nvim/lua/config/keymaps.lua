@@ -21,6 +21,19 @@ vim.keymap.set("n", "<leader>s", function()
   end
 end, { desc = "Toggle spellcheck" })
 
+vim.keymap.set("n", "\\f", function()
+  if vim.g.flymode_toggle then
+    vim.g.flymode_toggle = false
+    vim.opt.scrolloff = 1
+    utils.echo_info("Fly Mode disabled")
+  else
+    vim.g.flymode_toggle = true
+    vim.cmd.normal({ "M", bang = true })
+    vim.opt.scrolloff = 999
+    utils.echo_info("Fly Mode enabled")
+  end
+end, { desc = "Toggle Fly Mode" })
+
 vim.keymap.set("n", "\\w", ":%s/\\s\\+$//g<CR>", { silent = true, desc = "Trim trailing whitespace" })
 vim.keymap.set("n", "\\a", "0100lf<space>r<cr>", { silent = true, desc = "Align row to width of 100" })
 

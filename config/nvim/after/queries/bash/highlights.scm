@@ -7,6 +7,11 @@
   (variable_name) @string.interpolation
   (#set! priority 110))
 
+(expansion
+  (subscript
+    (variable_name) @string.interpolation
+))
+
 ((simple_expansion) @string.interpolation
   (#set! priority 120))
 
@@ -62,6 +67,15 @@
   "|" @operator.pipeline
   (command)
 )
+
+(array (word) @string.variable)
+(test_command
+  (binary_expression
+    [
+      right: (word)
+      left:  (word)
+    ] @string.variable
+))
 
 ; Highlight positional args as strings for `echo` and `printf
 (command

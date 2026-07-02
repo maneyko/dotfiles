@@ -3,6 +3,8 @@ return function(colors)
     rubyStringDelimiter        = { link = "colorsboxGreen" },
     rubyInterpolationDelimiter = { link = "colorsboxAqua" },
 
+    ["@vim_ruby.interpolation_delimiter.ruby"] = { link = "colorsboxAqua" },
+
     -- MatchBackground = { fg = colors.none, bg = colors.none, style = { "underline" } },
     -- MatchWord = { fg = colors.none, bg = colors.none },
     -- :hi MatchWord ctermbg=NONE cterm=NONE ctermfg=NONE

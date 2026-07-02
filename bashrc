@@ -66,6 +66,8 @@ $HOME/local/share/man:\
 
 export GPG_TTY=$(tty)
 
+export LANG="en_US.UTF-8"
+
 if [[ $OSTYPE == *darwin* ]]; then
   export USING_MAC_OS=true
 else

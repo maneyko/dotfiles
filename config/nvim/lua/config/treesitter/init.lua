@@ -9,8 +9,9 @@ local enable_treesitter = {
   "dockerfile",
   "json",
   "lua",
-  "ruby",
+  "markdown",
   "python",
+  "ruby",
   "sh",
   "terraform",
   "query", -- .scm files for Neovim

@@ -2,6 +2,9 @@ vim.pack.add({ { src = "https://github.com/catppuccin/nvim", name = "catppuccin"
 
 local config = require("config.colors")
 
+-- Writes colors to ~/.cache/nvim/catppuccin/*.lua
+vim.g.catppuccin_debug = 1
+
 require("catppuccin").setup({
   flavour = "mocha",
   transparent_background = true,

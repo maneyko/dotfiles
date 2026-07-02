@@ -14,8 +14,6 @@ return function(colors)
     SpecialKey   = { link = "colorsboxBg2" },
     Visual       = { fg = colors.none, bg = colors.bg3, style = { "reverse" } },
     VisualNOS    = { link = "Visual" },
-    Search       = { fg = colors.bg0, bg = colors.yellow },
-    IncSearch    = { fg = colors.bg0, bg = colors.orange },
     Underlined   = { fg = colors.blue, style = { "underline" } },
     StatusLine   = { fg = colors.bg4, bg = colors.bg0, style = { "bold", "reverse" } },
     StatusLineNC = { fg = colors.bg2, bg = colors.fg4, style = { "bold", "reverse" } },
@@ -33,10 +31,14 @@ return function(colors)
     Folded       = { fg = colors.gray, bg = colors.bg1, style = { "italic" } },
     FoldColumn   = { fg = colors.gray, bg = colors.bg1 },
 
-    Cursor  = { fg = colors.none, bg = colors.none, style = { "reverse" } },
-    vCursor = { link = "Cursor" },
-    iCursor = { link = "Cursor" },
-    lCursor = { link = "Cursor" },
+    Search    = { fg = colors.bg0, bg = colors.yellow },
+    IncSearch = { fg = colors.bg0, bg = colors.orange }, -- preview match while typing
+    CurSearch = { link = "Search" },  -- Current search result
+
+    Cursor    = { fg = colors.none, bg = colors.none, style = { "reverse" } },
+    vCursor   = { link = "Cursor" },
+    iCursor   = { link = "Cursor" },
+    lCursor   = { link = "Cursor" },
 
     Special = { link = "colorsboxOrange" },
 

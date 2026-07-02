@@ -17,6 +17,7 @@ require("config.lsp")
 require("plugins.file-tree")
 require("plugins.fzf")
 require("plugins.mini")
+require("plugins.syntax")
 
 vim.cmd.colorscheme("catppuccin-nvim")
 vim.cmd.syntax("on")

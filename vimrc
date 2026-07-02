@@ -636,15 +636,7 @@ if !empty(glob($VIMRUNTIME . '/syntax/syntax.vim'))
   syntax on
 endif
 
-if has('nvim')
-  let config_dir = '~/.dotfiles/config/nvim'
-else
-  let config_dir = '~/.dotfiles/vim/'
-endif
-
-if isdirectory(glob(config_dir . '/plugged/colorsbox'))
-  colorscheme colorsbox-stnight
-endif
+colorscheme colorsbox-stnight
 
 " Make text yellow for ack.vim
 if has('nvim')

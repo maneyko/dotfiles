@@ -1,24 +1,5 @@
 ; extends
 
-; ((method (identifier) @function.builtin) (#set! "priority" 110))
-; ((method (identifier) @keyword.modifier) (#set! "priority" 110))
-
-(call
-  receiver: (identifier)
-  method: (identifier) @attribute.single)
-
-(call
-  receiver: (instance_variable)
-  method: (identifier) @attribute.single)
-
-(call
-  receiver: (call)
-  method: (identifier) @method.chained)
-
-(interpolation
-  "#{" @punctuation.interpolation
-  "}" @punctuation.interpolation)
-
 ; Ensure `end` has same highlighting as `module`, `class`, `def self.foo`, etc.
 (class "end" @keyword.structure)
 (module "end" @keyword.structure)
@@ -47,47 +28,28 @@
 (string_array (bare_string (interpolation (identifier) @variable (#set! priority 151))))
 (symbol_array (bare_symbol (interpolation (identifier) @variable (#set! priority 151))))
 
-; Make method calls at the class-level highlight as aqua. Ex: `delegate`, `alias_method`, etc.
-(class
-  body: (body_statement
-    (call
-      method: (identifier) @keyword.macro)))
+; ; Make method calls at the class-level highlight as aqua. Ex: `delegate`, `alias_method`, etc.
+; (class
+;   body: (body_statement
+;     (call
+;       .
+;       method: (identifier) @keyword.macro)))
 
-"alias" @macro (#set! priority 130)
-
-((global_variable) @variable.global)
-
-; Highlight these as red
-(call
-  method: (identifier) @keyword
-  (#any-of? @keyword
-  "raise"
-))
-
-; Highlight as red
-((super) @keyword)
-
+; Create target for keyword arguments
 (keyword_parameter name: (identifier) @variable.parameter.keyword)
 
-("rescue" @keyword.exception.rescue)
+; Make `rescue` and `ensure` have the same highlight color as `def..end`
+(method body: (body_statement (rescue "rescue" @keyword.function)))
+(method body: (body_statement (ensure "ensure" @keyword.function)))
+(singleton_method body: (body_statement (rescue "rescue" @keyword.function)))
+(singleton_method body: (body_statement (ensure "ensure" @keyword.function)))
 
-; Highlight these as blue
-((constant) @constant.predefined
-  (#any-of? @constant.predefined
-  "ARGF" "ARGV" "DATA" "ENV" "STDIN" "TOPLEVEL_BINDING" "STDERR" "STDOUT" "RUBY_VERSION" "RUBY_PLATFORM"
-  "RUBY_RELEASE_DATE" "RUBY_PATCHLEVEL" "RUBY_REVISION" "RUBY_DESCRIPTION" "RUBY_COPYRIGHT" "RUBY_ENGINE"
-))
-
-; Make 'module' have the same highlighting category as 'class
-"module" @keyword.type
-
-; Target the delimiters of a regex expression
-(regex
-  "/" @punctuation.regex
-  "/" @punctuation.regex)
-
-; Make `rescue` for blocks highlight as red
-(begin (rescue "rescue" @keyword.exception.block))
-(do_block
-  (body_statement
-    (rescue "rescue" @keyword.exception.block)))
+; (call
+;   receiver: (identifier)
+;   method: (identifier) @attribute.single)
+; (call
+;   receiver: (instance_variable)
+;   method: (identifier) @attribute.single)
+; (call
+;   receiver: (call)
+;   method: (identifier) @method.chained)

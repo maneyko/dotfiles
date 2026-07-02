@@ -30,3 +30,5 @@ vim.keymap.set("x", "S", [[:<C-u>lua MiniSurround.add("visual")<CR>]], { silent 
 vim.keymap.set("n", "yss", "ys_", { remap = true })
 
 -- require("mini.pairs").setup()
+
+-- MiniPairs.open("()", )

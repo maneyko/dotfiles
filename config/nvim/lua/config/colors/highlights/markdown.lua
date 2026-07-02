@@ -23,5 +23,12 @@ return function(colors)
     markdownUrlTitleDelimiter = { link = "colorsboxGreen" },
     markdownLinkText          = { fg = colors.gray, bg = colors.none, style = { "underline" } },
     markdownIdDeclaration     = { link = "markdownLinkText" },
+
+    ["@markup.link.url"] = { fg = colors.blue, style = { "italic" } },
+    ["@markup.raw"]      = { link = "colorsboxAqua" },
+    ["@label.markdown"]  = { link = "colorsboxAqua" },
+    ["@markup.list.markdown"] = { link = "Delimiter" },
+    -- ["@text.uri"] = { fg = colors.blue, style = { "italic" }  },
+    -- ["@_url"] = { fg = colors.blue, style = { "italic" } },
   }
 end

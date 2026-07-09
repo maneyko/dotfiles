@@ -43,3 +43,30 @@ utils.autocmd_file_loaded({
     vim.keymap.set("n", "K", ":tabfind <Plug><cfile><cr>", { desc = "Open definition in new tab", silent = true })
   end
 })
+
+local function cd_to_git_root()
+  -- Get the full path of the current file
+  local current_file = vim.api.nvim_buf_get_name(0)
+  if current_file == "" then return end
+
+  local pwd = vim.fn.getcwd()
+  local current_dir = current_file:match("(.*[/\\])")
+  vim.api.nvim_set_current_dir(current_dir)
+
+  -- Find the directory containing the .git folder
+  -- local git_root = vim.fs.find(".git", { path = current_file, upward = true })[1]
+  local git_root = vim.fn.system("git rev-parse --show-toplevel 2>/dev/null"):gsub("\n", "")
+
+  if git_root ~= "" then
+    -- Convert '.git' path back to its parent directory path
+    -- local root_dir = vim.fs.dirname(git_root)
+    vim.api.nvim_set_current_dir(git_root)
+  else
+    vim.api.nvim_set_current_dir(pwd)
+  end
+end
+
+-- Create an autocommand to trigger this on file navigation
+vim.api.nvim_create_autocmd("BufEnter", {
+  callback = cd_to_git_root,
+})

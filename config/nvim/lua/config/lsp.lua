@@ -5,7 +5,7 @@ local utils = require("config.utils")
 
 local lsp_names = {
   -- "bashls",
-  "lua_ls",
+  -- "lua_ls",
   "pylsp",
   -- "ruby-lsp",
   -- "solargraph",

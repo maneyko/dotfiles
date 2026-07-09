@@ -30,5 +30,15 @@ return function(colors)
     colorsboxBlueSign   = { fg = colors.blue,   bg = colors.bg1 },
     colorsboxPurpleSign = { fg = colors.purple, bg = colors.bg1 },
     colorsboxAquaSign   = { fg = colors.aqua,   bg = colors.bg1 },
+
+    colorsboxText     = { fg = colors.text },
+    colorsboxSubtext1 = { fg = colors.subtext1 },
+    colorsboxSubtext0 = { fg = colors.subtext0 },
+    colorsboxOverlay2 = { fg = colors.overlay2 },
+    colorsboxOverlay1 = { fg = colors.overlay1 },
+    colorsboxOverlay0 = { fg = colors.overlay0 },
+    colorsboxSurface2 = { fg = colors.surface2 },
+    colorsboxSurface1 = { fg = colors.surface1 },
+    colorsboxSurface0 = { fg = colors.surface0 },
   }
 end

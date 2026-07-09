@@ -21,6 +21,7 @@ return function(colors)
 
     ["@function.builtin.ruby"] = { link = "colorsboxAqua" },
     ["@function.call.ruby"]    = { link = "text" },
+    ["@keyword.type.module"] = { link = "@function.builtin.ruby" },
 
     ["@keyword.exception.ruby"] = { link = "colorsboxRed" },
     ["@keyword.exception.block.ruby"] = { link = "colorsboxRed" },
@@ -31,6 +32,11 @@ return function(colors)
     ["@keyword.modifier.ruby"]  = { link = "colorsboxAqua" },
     ["@keyword.structure.ruby"] = { link = "colorsboxAqua" },
     ["@keyword.type.ruby"]      = { link = "colorsboxAqua" },
+
+    ["@variable.parameter.builtin.block.implicit.ruby"] = { link = "@variable.member" },
+    ["@variable.parameter.builtin.block.numbered.ruby"] = { link = "@variable.member" },
+    ["@constant.global.predefined"] = { link = "colorsboxBlue" },
+    ["@function.builtin.module.attribute.ruby"] = { link = "@keyword.function.ruby" },
 
     ["@macro.keyword.ruby"] = { link = "colorsboxRed" },
     ["@macro.ruby"]         = { link = "colorsboxAqua" },
@@ -62,12 +68,14 @@ return function(colors)
     ["@punctuation.delimiter.ruby"]     = { link = "text" },
 
     ["@string.special.symbol.ruby"] = { link = "colorsboxPurple" },
+    ["@string.special.symbol.array.ruby"] = { link = "colorsboxPurple" },
     ["@string.regexp.ruby"]          = { link = "String" },
 
     ["@variable.builtin.ruby"]   = { link = "colorsboxPurple" },
     ["@variable.global.ruby"]    = { link = "colorsboxBlue" },
     ["@variable.parameter.ruby"] = { link = "text" },
-    ["@variable.parameter.keyword"] = { link = "colorsboxPurple" },
+    ["@variable.parameter.keyword.ruby"] = { link = "colorsboxPurple" },
+    ["@function.builtin.module.exec.ruby"] = { link = "@function.builtin.module.attribute.ruby" },
 
     ["@test.helper.ruby"] = { link = "colorsboxGreenBold" },
 

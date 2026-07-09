@@ -12,9 +12,17 @@ local enable_treesitter = {
   "markdown",
   "python",
   "ruby",
-  "sh",
   "terraform",
   "query", -- .scm files for Neovim
+  "jq",
+  "sql",
+
+  -- Current issues with Bash
+  --   * Treesitter nodes structure:
+  --     * No interpolation in heredocs
+  --     * Variables references like like "$1m" not highlighting correctly (thinks `1m` is name, instead of just `1`)
+  --     * [x] Heredoc ending indentation not showing warnings when not at beginning of line
+  "sh",
 }
 
 vim.g.ts_enabled = true -- Neovim enables treesitter by default

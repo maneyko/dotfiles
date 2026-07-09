@@ -12,6 +12,11 @@ return {
   blue   = xterm_to_rgb(109),
   purple = xterm_to_rgb(175),
 
+  maroon1 = xterm_to_rgb(161),  -- good for special variables (parameters)
+  orange_muted = xterm_to_rgb(172),  -- good for builtins
+
+  -- maroon1 = xterm_to_rgb(88),
+
   -- Accent colors
   peach     = "#ff8700",  -- Orange modifier
   maroon    = "#ff6188",  -- Red modifier
@@ -65,6 +70,7 @@ return {
   -- vim comment is 245
 
   text     = xterm_to_rgb(252), -- if too dark try 253, Neovim original is dde0de, Vim original (and terminal) is d8d8d8
+  subtext00 = xterm_to_rgb(251),
   subtext1 = xterm_to_rgb(250),
   subtext0 = xterm_to_rgb(248),
   overlay2 = xterm_to_rgb(246),

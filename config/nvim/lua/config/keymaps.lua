@@ -44,6 +44,10 @@ for _, n in ipairs({ "", "2-", "3-", "4-" }) do
   -- vim.keymap.set({"n", "i", "v"}, "<"..n.."ScrollWheelDown>",  "<C-e>", { silent = true })
 end
 
+-- Make `j` and `k` work in linewrap mode
+vim.keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+
 vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Select window to the left" })
 vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Select window to the right" })
 vim.keymap.set("n", "<C-i>", "<cmd>tabprevious<cr>", { desc = "Go to tab to the left" })

@@ -51,7 +51,14 @@ local function cd_to_git_root()
 
   local pwd = vim.fn.getcwd()
   local current_dir = current_file:match("(.*[/\\])")
-  vim.api.nvim_set_current_dir(current_dir)
+  if vim.fn.isdirectory(current_dir) then
+    success, _ = pcall(function()
+      vim.api.nvim_set_current_dir(current_dir)
+    end)
+    if not success then return end
+  else
+    return
+  end
 
   -- Find the directory containing the .git folder
   -- local git_root = vim.fs.find(".git", { path = current_file, upward = true })[1]

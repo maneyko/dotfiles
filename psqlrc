@@ -2,12 +2,24 @@
 
 -- Prevent noisy loading of psqlrc file
 \set QUIET yes
+\timing off
+
+\set ps1_color_arrow     `printf '\033[1;31m'`
+\set ps1_color_time      `printf '\033[2;37m'`
+\set ps1_color_username  `printf '\033[1;36m'`
+\set ps1_color_at_symbol `printf '\033[34m'`
+\set ps1_color_hostname  `printf '\033[1;36m'`
+\set ps1_color_dbname    `printf '\033[1;33m'`
+\set ps1_color_line2     `printf '\033[1;33m'`
+\set ps1_color_reset     `printf '\033[0m'`
+\set ps1_color_txn       `printf '\033[1;31m'`
 
 -- Customize prompt
 -- http://i-dba.blogspot.se/2014/02/colorizing-psql-prompt-guide.html
 -- %m -> short hostname; %M -> full hostname
 -- \set PROMPT1 '\n%[%033[1;31m%]➤  %[%033[2;37m%]%`\! date "+%F %I:%M %p %Z"`%[%033[0m%] %[%033[1;36m%]%n%[%033[34m%]@%[%033[1;36m%]%M:%>%[%033[1;33m%]/%/ %[%033[1;31m%]%x %[%033[K%]%[%033[0m%]\n%[%033[1;33m%]%R%#%[%033[0m%] '
-\set PROMPT1 '\n%[%033[1;31m%]➤  %[%033[2;37m%]%`\! date "+%FT%T%z"`%[%033[0m%] %[%033[1;36m%]%n%[%033[34m%]@%[%033[1;36m%]%M:%>%[%033[1;33m%]/%/ %[%033[1;31m%]%x %[%033[K%]%[%033[0m%]\n%[%033[1;33m%]%R%#%[%033[0m%] '
+-- \set PROMPT1 '\n%[%033[1;31m%]➤  %[%033[2;37m%]%`\! date "+%FT%T%z"`%[%033[0m%] %[%033[1;36m%]%n%[%033[34m%]@%[%033[1;36m%]%M:%>%[%033[1;33m%]/%/ %[%033[1;31m%]%x %[%033[K%]%[%033[0m%]\n%[%033[1;33m%]%R%#%[%033[0m%] '
+\set PROMPT1 '\n%[%:ps1_color_arrow:%]➤  %[%:ps1_color_time:%]%`\! date "+%FT%T%z"`%[%:ps1_color_reset:%] %[%:ps1_color_username:%]%n%[%:ps1_color_at_symbol:%]@%[%:ps1_color_hostname:%]%M:%>%[%:ps1_color_dbname:%]/%/ %[%:ps1_color_txn:%]%x %[%033[K%]%[%:ps1_color_reset:%]\n%[%:ps1_color_line2:%]%R%#%[%:ps1_color_reset:%] '
 \set PROMPT2 '%[%033[1;33m%]%R%#%[%033[0m%] '
 -- Consider: http://petereisentraut.blogspot.com/2009/09/how-to-set-xterm-titles-in-psql.html
 
@@ -25,12 +37,6 @@
 -- Get rid of duplicates in history
 \set HISTCONTROL ignoredups
 
-SELECT :'HOST' LIKE '%.redshift.amazonaws.com' AS "IS_REDSHIFT" \gset
-
--- \if :IS_REDSHIFT
---   \echo 'Running in Redshift'
--- \endif
-
 -- Protect against results floods
 --\set FETCH_COUNT 1000
 
@@ -40,14 +46,35 @@ SELECT :'HOST' LIKE '%.redshift.amazonaws.com' AS "IS_REDSHIFT" \gset
 -- Show NULLs as: [NULL]
 --\pset null '[NULL]'
 
--- Show timing info for queries
-\timing on
-
--- Set noisyness back to normal
-\unset QUIET
-
 -- How to add multiline aliases:
 -- \set some_alias `cat ~/.psqlrc.d/aliases/some_client/some_alias.sql`
 
 -- Useful only in interactive mode. Add custom alias sets below.
 \ir ~/.psqlrc.d/psqlrc-admin
+
+\echo
+
+SELECT :'HOST' LIKE '%.redshift.amazonaws.com' AS "IS_REDSHIFT" \gset
+
+\if :IS_REDSHIFT
+
+  -- Bold
+  \echo 'Running in \033[1;31mREDSHIFT\033[0m'
+
+  \set ps1_color_red `printf '\033[1;31m'`
+
+  SELECT REPLACE(:'HOST', 'redshift',
+    chr(1) || :'ps1_color_red'      || chr(2) || 'redshift' ||
+    chr(1) || :'ps1_color_hostname' || chr(2)
+  ) AS ps1_redshift_text_colorized
+  \gset
+
+  \set PROMPT1 '\n%[%:ps1_color_arrow:%]➤  %[%:ps1_color_time:%]%`\! date "+%FT%T%z"`%[%:ps1_color_reset:%] %[%:ps1_color_username:%]%n%[%:ps1_color_at_symbol:%]@%[%:ps1_color_hostname:%]%:ps1_redshift_text_colorized:%[%:ps1_color_hostname:%]%:prompt_host_after::%>%[%:ps1_color_dbname:%]/%/ %[%:ps1_color_txn:%]%x %[%033[K%]%[%:ps1_color_reset:%]\n%[%:ps1_color_line2:%]%R%#%[%:ps1_color_reset:%] '
+\endif
+
+
+-- Show timing info for queries
+\timing on
+-- Set noisyness back to normal
+\unset QUIET
+\echo

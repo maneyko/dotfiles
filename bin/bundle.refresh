@@ -4,10 +4,7 @@ set -e
 
 source "argparse.sh"
 
-ARG_PLATFORM=(x86_64-linux aarch64-linux)
-
-arg_help  "[Reload the Gemfile.lock from scratch.]"
-arg_array "[platform] [Specific platform(s) to add to 'Gemfile.lock'. Default: ${ARG_PLATFORM[@]}]"
+arg_help "[Reload the Gemfile.lock from scratch.]"
 parse_args
 
 if [[ ! -f Gemfile ]]; then
@@ -17,7 +14,3 @@ fi
 
 rm -f Gemfile.lock
 bundle install
-
-for platform in ${ARG_PLATFORM[@]}; do
-  bundle lock --add-platform "$platform"
-done

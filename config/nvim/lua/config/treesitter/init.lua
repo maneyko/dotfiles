@@ -10,12 +10,16 @@ local enable_treesitter = {
   "json",
   "lua",
   "markdown",
+  "php",
   "python",
   "ruby",
   "terraform",
   "query", -- .scm files for Neovim
   "jq",
   "sql",
+  "yaml",
+  "gotmpl",
+  "helm",
 
   -- Current issues with Bash
   --   * Treesitter nodes structure:

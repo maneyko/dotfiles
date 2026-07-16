@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+export HOMEBREW_NO_ASK=true
 
 if [[ $OSTYPE == *darwin* ]]; then
   # PATH="\
@@ -17,6 +17,7 @@ if [[ $OSTYPE == *darwin* ]]; then
   brew upgrade --greedy
   brew upgrade --cask --greedy
   brew cleanup --prune=all
+  brew doctor
 elif command -v apt-get >/dev/null 2>&1; then
   sudo apt-get -y update
   sudo apt-get -y upgrade
@@ -37,10 +38,6 @@ fi
 if command -v npm >/dev/null 2>&1; then
   npm update -g
   npm upgrade -g
-fi
-
-if [[ $OSTYPE == *darwin* ]]; then
-  brew doctor
 fi
 
 # \. $HOME/.bashrc

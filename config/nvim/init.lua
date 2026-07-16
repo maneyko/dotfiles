@@ -21,5 +21,6 @@ require("plugins.pi")
 require("plugins.syntax")
 
 vim.cmd.colorscheme("catppuccin-nvim")
+
 vim.cmd.syntax("on")
 vim.cmd("filetype plugin indent on")

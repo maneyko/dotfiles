@@ -27,6 +27,17 @@ require("neo-tree").setup({
       folder_empty_open = "o",
     }
   },
+  filesystem = {
+    filtered_items = {
+      hide_dotfiles = false,
+      never_show = {
+        ".DS_Store",
+        "thumbs.db",
+        ".git",
+        ".terraform",
+      }
+    },
+  },
   window = {
     mappings = {
       ["<cr>"] = "open_tabnew",

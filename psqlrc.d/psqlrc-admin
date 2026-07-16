@@ -1,9 +1,6 @@
 -- vim: ft=sql
 
-\set QUIET yes
-
 -- source: http://opensourcedbms.com/dbms/psqlrc-psql-startup-file-for-postgres/
-\timing off
 SELECT $$
 Administrative queries:
         :aliases                -- Show all aliases
@@ -43,7 +40,6 @@ Administrative queries:
         \h                      -- Help with SQL commands
         \?                      -- Help with psql commands
 $$ AS help_menu \gset
-\timing on
 
 \echo -n :help_menu
 
@@ -85,5 +81,3 @@ $$ AS help_menu \gset
 \set clear            '\\! clear;'
 \set cls              '\\! clear && printf "\\033[3J";'
 \set ll               '\\! ls -lrt;'
-
-\unset QUIET

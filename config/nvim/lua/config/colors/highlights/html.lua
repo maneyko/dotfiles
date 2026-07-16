@@ -15,5 +15,9 @@ return function(colors)
     htmlUnderline           = { fg = colors.fg0, bg = colors.bg0, style = { "underline" } },
     htmlUnderlineItalic     = { fg = colors.fg0, bg = colors.bg0, style = { "underline", "italic" } },
     htmlItalic              = { fg = colors.fg0, bg = colors.bg0, style = { "italic" } },
+
+    ["@tag.html"] = { link = "colorsboxAqua" },
+    ["@constant.macro.doctype.html"] = { link = "Comment" },
+    ["@tag.attribute.html"] = { link = "colorsboxAqua" },
   }
 end

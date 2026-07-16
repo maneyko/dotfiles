@@ -1,4 +1,5 @@
 #!/bin/bash
+# vim: ft=sh
 
 curl_full() {
   local curl_metadata_file=$(mktemp)

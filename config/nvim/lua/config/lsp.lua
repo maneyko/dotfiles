@@ -7,6 +7,8 @@ local lsp_names = {
   -- "bashls",
   -- "lua_ls",
   "pylsp",
+  -- "helm_ls",
+  -- "yamlls",
   -- "ruby-lsp",
   -- "solargraph",
   -- "rubocop",
@@ -97,6 +99,9 @@ vim.lsp.config("pylsp", {
     }
   }
 })
+
+-- vim.lsp.config("helm_ls", {})
+-- vim.lsp.config("yamlls", {})
 
 vim.lsp.config("bashls", {})
 vim.lsp.config("lua_ls", {

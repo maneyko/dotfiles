@@ -108,6 +108,7 @@ require("telescope").setup({
       "--column",
       "--smart-case",
       "--trim",
+      "--hidden",
     },
     tiebreak = function(current_entry, existing_entry)
       for _, pat in ipairs(deprioritize_substrs) do
@@ -124,11 +125,17 @@ require("telescope").setup({
     -- selection_strategy = "limit"
     -- file_sorter = sorters.fuzzy_with_index_bias,
   },
+  pickers = {
+    find_files = {
+      hidden = true,
+      file_ignore_patterns = { ".git/", ".terraform/", ".DS_Store", "thumbs.db" },
+    }
+  },
   extensions = {
     fzf = {
       fuzzy = true
     }
-  }
+  },
 })
 
 require("telescope").load_extension("fzf")

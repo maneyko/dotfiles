@@ -1,12 +1,9 @@
-#!/usr/bin/env python3
-
-# #!/usr/bin/env -S uv run
-
+#!/usr/bin/env -S uv run --script
+#
 # /// script
-# dependencies = [
-#     "pandas", "xlrd", "openpyxl"
-# ]
+# dependencies = ["pandas", "xlrd", "openpyxl"]
 # ///
+
 
 """
 Convert Excel file formats to CSV.

@@ -1,0 +1,32 @@
+#!/bin/bash
+
+if [[ ! $MACHTYPE == *darwin* ]]; then
+  echo "Only available on macOS"
+  exit 1
+fi
+
+if ! command -v qlmarkdown_cli >/dev/null 2>&1; then
+  echo "QLMarkdown must be installed"
+  echo "    brew install qlmarkdown"
+  exit 1
+fi
+
+# input_file=$1
+# shift
+
+# if [[ -z $1 ]]; then
+#   echo "A file must be specified"
+#   exit 1
+# fi
+
+# output_file="$input_file.html"
+
+# if [[ -f $output_file ]]; then
+#   echo "The output HTML file already exists: $output_file"
+#   echo "Please delete it or move it to continue"
+#   exit 1
+# fi
+
+qlmarkdown_cli --app /opt/homebrew/Caskroom/qlmarkdown/*/QLMarkdown.app "$@"
+
+# echo "Output HTML file: file://$PWD/$output_file" >&2

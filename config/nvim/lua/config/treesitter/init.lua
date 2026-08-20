@@ -19,6 +19,7 @@ local enable_treesitter = {
   "sql",
   "yaml",
   "gotmpl",
+  "ini",
   "helm",
 
   -- Current issues with Bash
@@ -26,7 +27,8 @@ local enable_treesitter = {
   --     * No interpolation in heredocs
   --     * Variables references like like "$1m" not highlighting correctly (thinks `1m` is name, instead of just `1`)
   --     * [x] Heredoc ending indentation not showing warnings when not at beginning of line
-  "sh",
+  --     * The following does not highlight $b as a variable: echo $a/1/$b/2
+  -- "sh",
 }
 
 vim.g.ts_enabled = true -- Neovim enables treesitter by default

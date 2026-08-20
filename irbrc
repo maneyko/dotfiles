@@ -112,7 +112,7 @@ begin
       if defined?(RailsSemanticLogger)
         RailsSemanticLogger::ActiveRecord::LogSubscriber.logger.level = 0
         if SemanticLogger.appenders.none? { |a| a.name.end_with?("SemanticLogger::Appender::IO") }
-          SemanticLogger.add_appender(io: STDOUT, formatter: {
+          SemanticLogger.appenders.add(io: STDOUT, formatter: {
             color: {
               log_application: false,
               log_environment: false,
@@ -123,7 +123,7 @@ begin
       else
         ActiveRecord::Base.logger = ActiveSupport::Logger.new(STDOUT).tap { |l| l.level = 0 }
       end
-      if Rails.version < "7"
+      if Rails.gem_version < "7"
         if ActiveRecord::Base.respond_to?(:verbose_query_logs=)
           ActiveRecord::Base.verbose_query_logs = true
         end
@@ -132,6 +132,7 @@ begin
           ActiveRecord.verbose_query_logs = true
         end
       end
+      ActiveRecord::Base.logger.level = 0
     end
   end
 

@@ -1,0 +1,9 @@
+-- vim: ft=sql
+
+.headers on
+
+-- ASCII table
+-- .mode table
+
+-- UTF-8 table
+.mode box

@@ -1,0 +1,79 @@
+#!/bin/bash
+
+set -e
+
+show_help() {
+  progname=${0##*/}
+  cat << EOT
+usage:  $progname [pane-number] [--follow]
+Follow output from a tmux pane.
+
+To see pane numbers run:
+    tmux display-panes
+
+Examples:
+    # Get all output from a pane in the current window
+    $progname 0
+
+    # Follow output from a pane in another window
+    $progname 1.0 -f
+EOT
+  exit
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -f|--follow) arg_follow=true; shift ;;
+    -h|--help) show_help ;;
+    *) pane_number=$1; shift ;;
+  esac
+done
+
+if [[ $pane_number =~ ^[[:digit:]]+$ ]]; then
+  pane_number=".$pane_number"
+fi
+
+if [[ ! $pane_number =~ ^([[:digit:]]+)?\.[[:digit:]]+$ ]]; then
+  show_help
+fi
+
+main() {
+  if [[ -n $arg_follow ]]; then
+    follow
+  else
+    tmux capture-pane -p -S "-" -t $pane_number
+  fi
+}
+
+cleanup() {
+  if [[ $cleanup_done ]]; then return; fi
+  printf "\nCleaning up..." >&2
+  # No arguments closes the pipe
+  tmux pipe-pane -t $pane_number
+  rm -f "$log_file"
+
+  echo 'done' >&2
+  cleanup_done=true
+}
+
+follow() {
+  log_file=$(mktemp -u)
+  mkfifo "$log_file"
+
+  # log_file=$(mktemp)
+
+  trap 'cleanup' EXIT INT TERM
+
+  if [[ -p $log_file ]]; then
+    tmux pipe-pane -t $pane_number "cat > \"$log_file\""
+    cat "$log_file"
+  else
+    tmux pipe-pane -t $pane_number "cat >> \"$log_file\""
+    tail -f "$log_file"
+  fi |
+    sed -u 's/\r$//'
+
+  cleanup
+}
+
+main

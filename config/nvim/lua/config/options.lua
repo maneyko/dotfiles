@@ -1,5 +1,7 @@
 vim.g.mapleader = ","
 
+local tabstop = 2
+
 vim.o.autoindent = true
 vim.o.breakindent = true
 vim.o.clipboard = "unnamed"
@@ -25,9 +27,9 @@ vim.o.showcmd = true
 vim.o.smartcase = true
 vim.o.smartindent = true
 vim.o.smarttab = true
-vim.o.tabstop = 2
-vim.o.softtabstop = 2
-vim.o.shiftwidth = 2
+vim.o.tabstop = tabstop
+vim.o.softtabstop = tabstop
+vim.o.shiftwidth = tabstop
 vim.o.tildeop = true
 vim.o.wrap = false
 vim.opt.mousescroll = "ver:1,hor:1"

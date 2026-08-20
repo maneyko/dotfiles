@@ -3,7 +3,7 @@ return function(colors)
     -- ["@function.builtin.bash"]    = { link = "colorsboxRed", style = {} },
     ["@function.builtin.sh"]       = { link = "colorsboxRed", style = {} },
     ["@variable.bash"]             = { link = "colorsboxBlue" },
-    ["@variable.parameter.bash"]   = { link = "colorsboxOrange" },
+    -- ["@variable.parameter.bash"]   = { link = "colorsboxOrange" },
     ["@function.builtin.bash"]     = { link = "colorsboxRed" },
     ["@function.call.bash"]        = { fg = colors.text, bg = colors.none, style = {} },
     ["@function.posix.bash"]       = { link = "colorsboxRed" },

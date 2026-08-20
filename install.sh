@@ -15,6 +15,7 @@ vim
 psqlrc
 psqlrc.d
 irbrc
+sqliterc
 )
 
 files_help_format=""

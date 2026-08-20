@@ -24,13 +24,16 @@ end
 -- Open diagnostics float on hover
 vim.api.nvim_create_autocmd("CursorHold", {
   callback = function()
-    vim.diagnostic.open_float(nil, {
-      scope        = "cursor",
-      focusable    = false,
-      close_events = { "CursorMoved", "CursorMovedI", "BufLeave" },
-      source       = "always", -- Shows the source of the warning (e.g., lua_ls)
-      prefix       = " ",
-    })
+    local config = vim.diagnostic.config()
+    if config.signs or config.underline or config.virtual_lines or config.virtual_text then
+      vim.diagnostic.open_float(nil, {
+        scope        = "cursor",
+        focusable    = false,
+        close_events = { "CursorMoved", "CursorMovedI", "BufLeave" },
+        source       = "always", -- Shows the source of the warning (e.g., lua_ls)
+        prefix       = " ",
+      })
+    end
   end,
 })
 

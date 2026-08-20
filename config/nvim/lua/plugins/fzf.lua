@@ -120,7 +120,6 @@ require("telescope").setup({
       return current_entry.path:len() < existing_entry.path:len()
     end,
     -- path_display = { "filename_first" }
-    -- sorting_strategy = "descending",
     sorting_strategy = "descending",
     -- selection_strategy = "limit"
     -- file_sorter = sorters.fuzzy_with_index_bias,

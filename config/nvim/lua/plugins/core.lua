@@ -18,7 +18,7 @@ vim.pack.add({ "https://github.com/YaroSpace/lua-console.nvim" })
 require("lua-console").setup({
   mappings = {
     toggle      = "<leader>`",
-    -- attach      = "<leader>t",  -- This shortcut is global
+    attach      = "<nop>", -- This shortcut is global
     messages    = "<nop>",
     save        = "<leader>s",
     load        = "<leader>l",
@@ -47,6 +47,10 @@ vim.pack.add({ "https://github.com/junegunn/vim-easy-align" })
 vim.keymap.set("n", "ga", "<Plug>(EasyAlign)", { remap = false })
 vim.keymap.set("x", "ga", "<Plug>(EasyAlign)", { remap = false }) -- Visual-only mode, not select mode
 
+local markdown_options = {
+  {"'", "'", { ignore = ".*", ignore_pre = ".*", ignore_after = ".*" }}, -- Single quotes are moreso used as apostrophes
+  {'`', '`', { triplet = true }},
+}
 vim.pack.add({ "https://github.com/ZhiyuanLck/smart-pairs" })
 require("pairs"):setup({
   enable_smart_space = true,
@@ -58,6 +62,8 @@ require("pairs"):setup({
       {"'", "'"},
       {'"', '"'},
       {"`", "`"},
-    }
+    },
+    markdown = markdown_options,
+    gitcommit = markdown_options,
   }
 })

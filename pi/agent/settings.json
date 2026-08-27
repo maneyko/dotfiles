@@ -1,0 +1,13 @@
+{
+  "lastChangelogVersion": "0.84.3",
+  "theme": "dark",
+  "defaultProvider": "github-copilot",
+  "defaultModel": "claude-opus-5",
+  "defaultThinkingLevel": "medium",
+  "compaction": {
+    "reserveTokens": 800000
+  },
+  "showCacheMissNotices": true,
+  "showHardwareCursor": false,
+  "tuiMode": "regular"
+}

@@ -1,0 +1,25 @@
+{
+  "providers": {
+    "ollama": {
+      "baseUrl": "http://localhost:11434/v1",
+      "api": "openai-completions",
+      "apiKey": "ollama",
+      "models": [
+        { "id": "qwen3.5:9b" }
+      ]
+    },
+    "docker-model-runner": {
+      "baseUrl": "http://localhost:12434/v1",
+      "api": "openai-completions",
+      "apiKey": "docker-model-runner",
+      "models": [
+        { "id": "llama3.2:1B-Q8_0" },
+        { "id": "llama3.2:latest" },
+        { "id": "gemma4:latest" },
+        { "id": "qwen3.5:2b" },
+        { "id": "qwen3.5:4b" },
+        { "id": "qwen3.5:9b" }
+      ]
+    }
+  }
+}

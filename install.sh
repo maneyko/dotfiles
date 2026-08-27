@@ -12,6 +12,7 @@ bin
 config
 ipython
 vim
+pi
 psqlrc
 psqlrc.d
 irbrc

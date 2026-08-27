@@ -31,6 +31,11 @@ ipython/profile_default
 
 mac/SP*.txt
 
+pi/agent/auth*
+pi/agent/sessions/
+pi/agent/models-store.json
+pi/agent/trust.json
+
 vim/plugged/
 vim/autoload/
 vim/plugged

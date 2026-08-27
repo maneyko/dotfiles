@@ -9,7 +9,9 @@ fi
 
 case "$file" in
   *.tar.*|*.tar|*.tbz2|*.tgz)
-    tar xvf "$file" ;;
+    tar -xvf "$file" ;;
+  *.zst|*.zstd)
+    zst -d "$file" ;;
   *.gz)
     gunzip "$file" ;;
   *.bz2)

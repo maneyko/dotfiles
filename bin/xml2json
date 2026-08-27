@@ -10,9 +10,11 @@ else
   exit 1
 fi
 
-if [[ -n $(command -v yq 2>/dev/null) ]]; then
-  yq -o=json 'from_xml' < "$INPUT_FILE"
 
+if [[ $(command -v uv 2>/dev/null) ]]; then
+  uv run --with xmltodict python3 -c "import sys, json, xmltodict; print(json.dumps(xmltodict.parse(sys.stdin.read()), indent=2))" < "$INPUT_FILE"
+elif [[ -n $(command -v yq 2>/dev/null) ]]; then
+  yq -o=json 'from_xml' < "$INPUT_FILE"
 elif [[ $(command -v python3 2>/dev/null) ]]; then
   python3 -c "import sys, json, xmltodict; print(json.dumps(xmltodict.parse(sys.stdin.read()), indent=2))" < "$INPUT_FILE"
 elif [[ $(command -v python 2>/dev/null) ]]; then

@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+
+import json
+import re
+import tomllib
+import sys
+from pathlib import Path
+
+# The official regular expression defined by PEP 723
+PEP723_REGEX = r"(?m)^# /// (?P<type>[a-zA-Z0-9-]+)$\s(?P<content>(?:^# .+$\s?)*)^# ///$"
+
+def parse_inline_metadata(content: str) -> dict | None:
+    # Find all compliant blocks in the file
+    matches = list(re.finditer(PEP723_REGEX, content))
+
+    # Optional constraint check: PEP 723 specifies multiple comment blocks
+    # of the SAME type must produce an error.
+    types = [m.group("type") for m in matches]
+    if len(set(types)) != len(types):
+        raise ValueError("Invalid script: Multiple metadata blocks of same type found.")
+
+    results = {}
+    for match in matches:
+        # Strip the leading '# ' from each line to get valid TOML
+        toml_lines = []
+        for line in match.group("content").splitlines():
+            if line.startswith("# "):
+                toml_lines.append(line[2:])
+            elif line == "#":
+                toml_lines.append("")
+
+        toml_content = "\n".join(toml_lines)
+        results[match.group("type")] = tomllib.loads(toml_content)
+    return results
+
+if __name__ == "__main__":
+    args = sys.argv[1:]
+    if not sys.stdin.isatty():
+        text = sys.stdin.read()
+    elif len(args) == 1:
+        text = Path(args[0]).read_text()
+    else:
+        print("Bad arguments")
+        sys.exit(1)
+
+    print(json.dumps(parse_inline_metadata(text)))

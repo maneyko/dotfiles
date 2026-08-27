@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -e
+
+db_file=$1
+
+if [[ ! -f $db_file ]]; then
+  echo "A valid file must be specified"
+  exit 1
+fi
+
+output_dir="$db_file.d"
+mkdir -p "$output_dir"
+
+while IFS= read -r line; do
+  output_file="$output_dir/$line.json"
+  echo "Creating $output_file"
+  sqlite3 -json "$db_file" "SELECT * from \"$line\";" > "$output_file"
+done < <(sqlite3 -json "$db_file" "SELECT name FROM sqlite_schema WHERE type='table' AND name NOT LIKE 'sqlite_%';" 2>/dev/null | jq -r '.[].name')

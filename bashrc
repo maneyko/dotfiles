@@ -512,28 +512,9 @@ export GRPC_PYTHON_BUILD_SYSTEM_ZLIB=1
 
 export DOCKER_CLI_HINTS=false
 
-
-# NVM
-# ---
-nvms=(
-/usr/local/opt/nvm
-$BREW_PREFIX/opt/nvm
-/usr/local/nvm
-$HOME/.nvm
-)
-
-for d in ${nvms[@]}; do
-  if [[ -s $d/nvm.sh ]]; then
-    NVM_DIR=$d
-    if [[ $USING_NVM == true ]]; then
-      # NOTE: This takes ~0.5 seconds
-      \. "$NVM_DIR/nvm.sh"
-    fi
-    break
-  fi
-done
-
-log_time "After NVM"
+if command -v pi >/dev/null 2>&1; then
+  export PI_CACHE_RETENTION=long
+fi
 
 # First TTY Greeting
 # ------------------

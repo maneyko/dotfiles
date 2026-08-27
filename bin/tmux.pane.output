@@ -66,10 +66,10 @@ follow() {
 
   if [[ -p $log_file ]]; then
     tmux pipe-pane -t $pane_number "cat > \"$log_file\""
-    cat "$log_file"
+    stdbuf -oL cat "$log_file"
   else
     tmux pipe-pane -t $pane_number "cat >> \"$log_file\""
-    tail -f "$log_file"
+    stdbuf -oL tail -f "$log_file"
   fi |
     sed -u 's/\r$//'
 

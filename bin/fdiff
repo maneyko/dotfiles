@@ -2,8 +2,9 @@
 
 sys_diff="$(type -P /bin/diff /sbin/diff /usr/bin/diff /usr/sbin/diff /usr/local/bin/diff | head -1)"
 
-if [[ -n "$(command -v diff-so-fancy)" ]]; then
-  diff -u "$@" | diff-so-fancy
+if command -v diff-so-fancy >/dev/null 2>&1; then
+  git diff --no-index "$@"
+  # diff -u "$@" | diff-so-fancy
 else
   $sys_diff "$@"
 fi

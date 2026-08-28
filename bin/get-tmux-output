@@ -1,0 +1,10 @@
+#!/bin/bash
+
+source "argparse.sh"
+
+arg_positional "[hostname] [Alias in ~/.ssh/config for the host]"
+arg_help       "[Copy ~/.tmux.out from a remote host]"
+
+parse_args
+
+scp $ARG_HOSTNAME:~/.tmux.out ./tmux.out-$ARG_HOSTNAME.txt

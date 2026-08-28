@@ -1,0 +1,8 @@
+#!/bin/bash
+
+log stream --info --style compact --predicate '(subsystem == "com.apple.TimeMachine")' 
+
+# Other useful commands
+# tmutil currentphase
+# tmutil listlocalsnapshots /
+# sudo fs_usage -w -f filesystem backupd

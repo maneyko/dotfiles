@@ -1,0 +1,54 @@
+#!/bin/bash
+
+if [[ -z $1 || $1 == "-h" || $1 == "--help" ]]; then
+  cat << EOT
+Wrapper for the Honeybadger Data API. Link to documentation:
+    https://docs.honeybadger.io/api/#data-api
+
+Example:
+    ${0##*/} /projects
+EOT
+  exit
+fi
+
+if [[ -z $HONEYBADGER_TOKEN ]]; then
+  echo '$HONEYBADGER_TOKEN must be set.'
+  exit 1
+fi
+
+ENDPOINT_PREFIX="https://app.honeybadger.io/v2"
+
+run_request() {
+  local endpoint=${1#$ENDPOINT_PREFIX}
+  shift
+  curl -s -u "$HONEYBADGER_TOKEN:" "$ENDPOINT_PREFIX$endpoint" "$@"
+}
+
+fetch_pages() {
+  local endpoint=$1
+  shift
+  local response=$(run_request "$endpoint" "$@")
+  if [[ $(jq -r '.results? // "" | type == "array"' <<< "$response") == false ]]; then
+    echo "$response"
+    return
+  fi
+  local results=$(jq -c '.results[]' <<< "$response")
+  local next_page=$(jq -r '.links.next // empty' <<< "$response")
+
+  while [[ -n $next_page ]]; do
+    response=$(run_request "$next_page")
+    results+=$(jq -c '.results[]' <<< "$response")
+    next_page=$(jq -r '.links.next // empty' <<< "$response")
+  done
+
+  jq -cs <<< "$results"
+}
+
+if [[ $1 == "-a" || $1 == "--all" || $ALL_PAGES == true ]]; then
+  shift
+  fetch_pages "$@"
+else
+  run_request "$@"
+fi
+
+echo

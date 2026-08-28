@@ -8,7 +8,8 @@
  *   /handoff now implement this for teams as well
  *   /handoff --session 01a040e0 pick up the pyapp service account work
  *
- * The generated prompt appears as a draft in the editor for review/editing.
+ * The generated context, followed by your message verbatim, appears as a draft
+ * in the editor for review/editing.
  * The new session runs in the directory pi was started in.
  *
  * LOCAL PATCH (not upstream): `--session <id>` hands off from any session by ID
@@ -28,16 +29,15 @@ import {
 	SessionManager,
 } from "@earendil-works/pi-coding-agent";
 
-const SYSTEM_PROMPT = `You are a context transfer assistant. Given a conversation history and the user's goal for a new thread, generate a focused prompt that:
+const SYSTEM_PROMPT = `You are a context transfer assistant. Given a conversation history and the user's goal for a new thread, write ONLY the background context the new thread needs to act on that goal:
 
-1. Summarizes relevant context from the conversation (decisions made, approaches taken, key findings)
-2. Lists any relevant files that were discussed or modified
-3. Clearly states the next task based on the user's goal
-4. Is self-contained - the new thread should be able to proceed without the old conversation
+1. Relevant decisions made, approaches taken, key findings
+2. Relevant files that were discussed or modified
+3. Enough detail to be self-contained - the new thread cannot see the old conversation
 
-Format your response as a prompt the user can send to start the new thread. Be concise but include all necessary context. Do not include any preamble like "Here's the prompt" - just output the prompt itself.
+The user's own words stating the task will be appended verbatim after your output. Do NOT restate, rephrase, summarize, or interpret the task. Do not write a "Task" or "Next steps" section. Do not include preamble like "Here's the context".
 
-Example output format:
+Output format:
 ## Context
 We've been working on X. Key decisions:
 - Decision 1
@@ -45,10 +45,7 @@ We've been working on X. Key decisions:
 
 Files involved:
 - path/to/file1.ts
-- path/to/file2.ts
-
-## Task
-[Clear description of what to do next based on user's goal]`;
+- path/to/file2.ts`;
 
 // LOCAL PATCH: /handoff [--session <id>] <goal>
 function splitArgs(args: string): { sessionId?: string; goal: string } {
@@ -105,7 +102,7 @@ function getHandoffMessages(branch: SessionEntry[]): AgentMessage[] {
 
 export default function (pi: ExtensionAPI) {
 	pi.registerCommand("handoff", {
-		description: "Transfer context to a new focused session",
+		description: "[--session <id>] Transfer context to a new focused session",
 		handler: async (args, ctx) => {
 			if (ctx.mode !== "tui") {
 				ctx.ui.notify("handoff requires interactive mode", "error");
@@ -175,10 +172,13 @@ export default function (pi: ExtensionAPI) {
 						return null;
 					}
 
-					return response.content
+					const context = response.content
 						.filter((c): c is { type: "text"; text: string } => c.type === "text")
 						.map((c) => c.text)
-						.join("\n");
+						.join("\n")
+						.trim();
+
+					return `${context}\n\n---\n\n${goal}`;
 				};
 
 				doGenerate()

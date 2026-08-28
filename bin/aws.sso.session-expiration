@@ -1,0 +1,16 @@
+#!/bin/bash
+
+session_file=$(
+find "$HOME/.aws/cli/cache" -type f -name '*.json' \
+  -exec stat -f "%m %N" {} + |
+  sort -nk1 | tail -1 | awk '{$1=""; $0=substr($0,2)}1'
+)
+
+if [[ ! -f $session_file ]]; then
+  echo "Unable to find info for current SSO session."
+  exit
+fi
+
+epoch_ts=$(jq '.Credentials.Expiration | fromdateiso8601' "$session_file")
+
+python3 -c "from datetime import datetime; print(datetime.fromtimestamp($epoch_ts).astimezone().isoformat())"

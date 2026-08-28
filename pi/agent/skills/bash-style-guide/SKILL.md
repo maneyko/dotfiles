@@ -1,6 +1,7 @@
 ---
 name: bash-style-guide
-description: Bash/shell script style rules. Covers shebang choice and max Bash version (3.x for #!/bin/bash, 4.x for CI/AWS, 5.x for laptop-only), set -e usage, main() entrypoint layout, $var vs ${var}, the [[ ]] test operator and quoting rules, awk/sed/jq/python portability between macOS and Linux, and argparse.sh vs getopts argument parsing. Use before writing or modifying any shell script (.sh files, bin/ scripts, CI shell steps, heredocs of shell code).
+description: |
+  Bash/shell script style rules. Covers shebang choice and max Bash version (3.x for #!/bin/bash, 4.x for CI/AWS, 5.x for laptop-only), set -e usage, main() entrypoint layout, $var vs ${var}, the [[ ]] test operator and quoting rules, awk/sed/jq/python portability between macOS and Linux, and argparse.sh vs getopts argument parsing. Use before writing or modifying any shell script (.sh files, bin/ scripts, CI shell steps, heredocs of shell code).
 ---
 
 # Bash Style Guide

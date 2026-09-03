@@ -119,14 +119,16 @@ $BREW_PREFIX/etc/bash_completion
 /etc/bash_completion
 )
 
-for f in ${completion_sources[@]}; do
-  if [[ -f $f ]]; then
-    : ${bash_completion:=$f}
-    # NOTE: This takes ~0.3 seconds
-    source "$bash_completion" 2>/dev/null
-    break
-  fi
-done
+if [[ -n $INTERACTIVE ]]; then
+  for f in ${completion_sources[@]}; do
+    if [[ -f $f ]]; then
+      : ${bash_completion:=$f}
+      # NOTE: This takes ~0.3 seconds
+      source "$bash_completion" 2>/dev/null
+      break
+    fi
+  done
+fi
 
 log_time "After bash completion"
 
@@ -314,9 +316,11 @@ log_time "After PS1"
 # ---------------------------------------------------------------------
 
 # Find and evaluate `dircolors` if exists
-_dircolors=$(type -P uu-dircolors gdircolors dircolors | head -1)
-if [[ -n $_dircolors && -f $HOME/.dotfiles/bash/dircolors ]]; then
-  eval "$($_dircolors -b $HOME/.dotfiles/bash/dircolors)"
+if [[ -n $INTERACTIVE ]]; then
+  _dircolors=$(type -P uu-dircolors gdircolors dircolors | head -1)
+  if [[ -n $_dircolors && -f $HOME/.dotfiles/bash/dircolors ]]; then
+    eval "$($_dircolors -b $HOME/.dotfiles/bash/dircolors)"
+  fi
 fi
 
 cp() {
@@ -333,6 +337,7 @@ grep() {
 if command -v rg >/dev/null 2>&1; then
   read -r -d '' _ag_alias << 'EOT'
 --smart-case
+--follow
 --hidden
 --glob='!**/.git/*'
 --glob='!**/.terraform/*'
@@ -381,11 +386,14 @@ rewrap()     { tput smam; }
 git-root()   { cd "$(git rev-parse --show-toplevel 2>/dev/null || echo ".")"; }
 hread()      { history -r; }
 mkdirpcd()   { mkdir -p "$1" ; cd "$1" ; }
+tree()       { command tree --filesfirst "$@"; }
 
-alias ..='cd ../'
-for i in {2..8}; do
-  alias .$i='cd '"$(printf '../%.0s' `seq 1 $i`)"
-done
+if [[ -n $INTERACTIVE ]]; then
+  alias ..='cd ../'
+  for i in {2..8}; do
+    alias .$i='cd '"$(printf '../%.0s' `seq 1 $i`)"
+  done
+fi
 
 # Platform specific
 if [[ $OSTYPE == *darwin* ]]; then
@@ -404,8 +412,10 @@ log_time "After aliases"
 # Specific Environment
 # ---------------------------------------------------------------------
 
-if command -v tmux >/dev/null 2>&1; then
-  export TMUX_VERSION_INT=$(tmux -V | awk "{match(\$2, /[[:digit:]]+\.[[:digit:]]+/); s = substr(\$2, RSTART, RLENGTH); split(s, a, \".\"); printf(\"%d%02d\", a[1], a[2])}")
+if [[ -n $INTERACTIVE ]] ;then
+  if command -v tmux >/dev/null 2>&1; then
+    export TMUX_VERSION_INT=$(tmux -V | awk "{match(\$2, /[[:digit:]]+\.[[:digit:]]+/); s = substr(\$2, RSTART, RLENGTH); split(s, a, \".\"); printf(\"%d%02d\", a[1], a[2])}")
+  fi
 fi
 
 if [[ $EDITOR == *nvim* ]]; then
@@ -414,7 +424,7 @@ else
   export VIM_CONFIG_DIR="$HOME/.vim"
 fi
 
-if [[ -f $HISTFILE ]]; then
+if [[ -f $HISTFILE && -n $INTERACTIVE ]]; then
   hist_size=$(wc -l < $HISTFILE)
   hist_size=$(($hist_size / 2))  # Every other line is a timestamp
   if [[ $(($HISTSIZE - $hist_size)) -le 1000 ]]; then
@@ -433,13 +443,15 @@ $BREW_PREFIX/bin/lesspipe.sh
 $BREW_PREFIX/bin/lesspipe
 )
 
-for f in ${lesspipes[@]}; do
-  if [[ -f $f ]]; then
-    export LESSOPEN="|$f %s"
-    [[ $OSTYPE == *darwin* ]] && LESSOPEN+=":"
-    break
-  fi
-done
+if [[ -n $INTERACTIVE ]]; then
+  for f in ${lesspipes[@]}; do
+    if [[ -f $f ]]; then
+      export LESSOPEN="|$f %s"
+      [[ $OSTYPE == *darwin* ]] && LESSOPEN+=":"
+      break
+    fi
+  done
+fi
 
 # https://github.com/h5py/h5py/blob/05ceae63a19ba0cbac7f37a5b2a8ecf745e2bc32/setup_configure.py#L108
 export HDF5_DIR="$BREW_PREFIX/opt/hdf5"
@@ -461,7 +473,9 @@ bashrc_load_rv() {
   command -v rv >/dev/null 2>&1 || return
 
   eval "$(rv shell init bash)"
-  eval "$(rv shell completions bash)"
+  if [[ -n $INTERACTIVE ]]; then
+    eval "$(rv shell completions bash)"
+  fi
   RV_LOADED=true
 }
 
@@ -530,3 +544,5 @@ if [[ -n $INTERACTIVE && $OSTYPE == *darwin* ]]; then
     fi
   fi
 fi
+
+log_time "After bashrc"

@@ -1,0 +1,74 @@
+#!/bin/bash
+
+set -e
+
+LAST_MESSAGE='
+  map(
+    select(.type == "assistant" and .isSidechain != true)
+    | .message.content[] | select(.type == "text") | .text
+  )
+  | last // empty
+'
+
+FULL_CONVERSATION='
+  def text: [.message.content[] | select(.type == "text") | .text] | join("\n\n");
+
+  def turn:
+    if .type == "user" and (.isMeta // false) == false then
+      (if (.message.content | type) == "string" then .message.content else text end)
+      | select(test("^<(local-command-stdout|local-command-caveat|command-message|task-notification)") | not)
+      | if test("^<command-name>") then
+          (capture("<command-name>(?<n>[^<]*)") | .n) + " "
+            + ((capture("<command-args>(?<a>[^<]*)") | .a) // "") | sub(" +$"; "")
+        else . end
+      | select(length > 0)
+      | {role: "User", text: .}
+    elif .type == "assistant" then
+      text | select(length > 0) | {role: "Claude", text: .}
+    else empty end;
+
+  [.[] | select(.isSidechain != true) | turn]
+  | reduce .[] as $t ([];
+      if length > 0 and .[-1].role == $t.role
+      then .[0:-1] + [{role: $t.role, text: (.[-1].text + "\n\n" + $t.text)}]
+      else . + [$t] end)
+  | map("# \(.role)\n\n\(.text)")
+  | join("\n\n")
+'
+
+JQ_PROGRAM=$LAST_MESSAGE
+
+for arg; do
+  case $arg in
+    -f|--file) FILE_ONLY=true ;;
+    --full) JQ_PROGRAM=$FULL_CONVERSATION ;;
+    *) SESSION=$arg ;;
+  esac
+done
+
+PROJECTS="$HOME/.claude/projects"
+
+if [[ -n $SESSION ]]; then
+  FILE=$(find "$PROJECTS" -type f -name "$SESSION*.jsonl")
+
+  if [[ $(echo "$FILE" | grep -c .) -gt 1 ]]; then
+    echo "Session prefix '$SESSION' is ambiguous:" >&2
+    echo "$FILE" | awk -F/ '{printf "  %s  %s\n", $NF, $(NF-1)}' | sort >&2
+    exit 1
+  fi
+else
+  FILE=$(find "$PROJECTS" -type f -name '*.jsonl' \
+    -exec stat -f "%m %N" {} + |
+    sort -nk1 | tail -1 | awk '{$1=""; print substr($0,2)}')
+fi
+
+if [[ -z $FILE ]]; then
+  echo "No session found${SESSION:+ matching '$SESSION'}" >&2
+  exit 1
+fi
+
+if [[ -n $FILE_ONLY ]]; then
+  echo "$FILE"
+else
+  jq -rs "$JQ_PROGRAM" "$FILE"
+fi

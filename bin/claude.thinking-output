@@ -1,0 +1,104 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Colors, the one-column pad and the 5-line output preview mirror pi's TUI:
+# dark.json (thinkingText, toolTitle, toolOutput) and BASH_PREVIEW_LINES in
+# packages/coding-agent/src/core/tools/bash.ts.
+gray=$'\033[38;2;128;128;128m'
+bright=$'\033[1m\033[38;2;212;212;212m'
+italic=$'\033[3m'
+reset=$'\033[0m'
+preview_lines=5
+
+width=$(tput cols 2>/dev/null || echo 80)
+body=$((width - 1))
+
+jq_stream='
+if .type == "assistant" then
+  .message.content[]?
+  | if .type == "thinking" then
+      # "-" keeps the id field non-empty: read collapses consecutive tabs.
+      ["thinking", "-", .thinking]
+    elif .type == "tool_use" and .name == "Bash" then
+      ["bash", .id, (.input.command // "")]
+    else empty end
+elif .type == "user" then
+  .message.content[]?
+  | select(.type == "tool_result")
+  | ["output", .tool_use_id,
+     (if (.content | type) == "string" then .content
+      else [.content[]? | select(.type == "text") | .text] | join("\n") end)]
+else empty end
+| select(.[2] | test("\\S"))
+| .[0] + "\t" + .[1] + "\t" + (.[2] | @json)
+'
+
+main() {
+  local session_id=$1 f kind id json
+  local -A pending
+
+  f=$(find "$HOME/.claude/projects" -type f -name "$session_id*.jsonl" | head -1)
+
+  if [[ ! -f $f ]]; then
+    echo "Could not find matching session" >&2
+    exit 1
+  fi
+
+  echo "Following session: $f"
+
+  tail -f "$f" |
+    jq -r --unbuffered "$jq_stream" |
+    while IFS=$'\t' read -r kind id json; do
+      case $kind in
+        thinking)
+          render_thinking "$(jq -r . <<< "$json")"
+          ;;
+        bash)
+          pending[$id]=1
+          render_command "$(jq -r . <<< "$json")"
+          ;;
+        output)
+          if [[ -n ${pending[$id]} ]]; then
+            unset "pending[$id]"
+            render_output "$(jq -r . <<< "$json")"
+          fi
+          ;;
+      esac
+    done
+}
+
+render_thinking() {
+  echo
+  printf '%s\n' "$1" | NO_COLOR=1 COLUMNS=$body pi.tui-md | pad "$italic$gray"
+}
+
+render_command() {
+  echo
+  printf '%s\n' "$bright \$ $1$reset"
+}
+
+render_output() {
+  local wrapped skipped
+  wrapped=$(printf '%s\n' "$1" | strip_ansi | fold -s -w $body)
+  skipped=$(printf '%s\n' "$wrapped" | awk -v keep=$preview_lines 'END {print NR - keep}')
+
+  echo
+  if [[ $skipped -gt 0 ]]; then
+    printf '%s\n' "$gray ... ($skipped earlier lines)$reset"
+  fi
+  printf '%s\n' "$wrapped" | tail -n $preview_lines | pad "$gray"
+}
+
+pad() {
+  local prefix=$1 line
+  while IFS= read -r line; do
+    printf '%s\n' "${line:+$prefix $line$reset}"
+  done
+}
+
+strip_ansi() {
+  awk -v esc=$'\033' '{gsub(esc "\\[[0-9;]*[a-zA-Z]", ""); print}'
+}
+
+main "$@"

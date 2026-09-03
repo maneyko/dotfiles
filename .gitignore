@@ -7,18 +7,27 @@ __pycache__/
 *.pyc
 _backups/
 
-config/coc/
-config/hub
-config/iterm2
-config/gh/
-config/jgit/
-config/neofetch/
-config/nvim/plugged/
-config/nvim/plugged
-config/configstore/
+claude/
+
+config/acli/
 config/argocd/
-config/osxphotos/themes/
+config/coc/
+config/configstore/
+config/gcloud/
+config/gh/
+config/git/
 config/gtk-2.0/
+config/hub
+config/icedtea-web/
+config/iterm2
+config/jgit/
+config/kitty/
+config/neofetch/
+config/nvim/plugged
+config/nvim/plugged/
+config/osxphotos/themes/
+config/ripgrep/
+config/wezterm/
 
 ipython/maneyko/build/
 ipython/maneyko/dist/
@@ -31,6 +40,9 @@ ipython/profile_default
 
 mac/SP*.txt
 
+
+# Force add everything
+pi/
 pi/agent/auth*
 pi/agent/sessions/
 pi/agent/models-store.json

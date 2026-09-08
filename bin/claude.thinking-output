@@ -3,26 +3,37 @@
 set -e
 
 # Colors, the one-column pad and the 5-line output preview mirror pi's TUI:
-# dark.json (thinkingText, toolTitle, toolOutput) and BASH_PREVIEW_LINES in
-# packages/coding-agent/src/core/tools/bash.ts.
+# dark.json (text, thinkingText, toolTitle, toolOutput) and BASH_PREVIEW_LINES
+# in packages/coding-agent/src/core/tools/bash.ts.
 gray=$'\033[38;2;128;128;128m'
-bright=$'\033[1m\033[38;2;212;212;212m'
+text=$'\033[38;2;212;212;212m'
+bright=$'\033[1m'$text
 italic=$'\033[3m'
 reset=$'\033[0m'
 preview_lines=5
 
-width=$(tput cols 2>/dev/null || echo 80)
+# Inside $() stdout is a pipe, so tput measures the window through stderr;
+# closing stderr makes it fall back to terminfo's static 80 and still exit 0.
+width=$(tput cols || echo 100)
+width=100
 body=$((width - 1))
 
 jq_stream='
 if .type == "assistant" then
-  .message.content[]?
-  | if .type == "thinking" then
-      # "-" keeps the id field non-empty: read collapses consecutive tabs.
-      ["thinking", "-", .thinking]
-    elif .type == "tool_use" and .name == "Bash" then
-      ["bash", .id, (.input.command // "")]
-    else empty end
+  (.message.content[]?
+   | if .type == "thinking" then
+       # "-" keeps the id field non-empty: read collapses consecutive tabs.
+       ["thinking", "-", .thinking]
+     elif .type == "text" then
+       ["text", "-", .text]
+     elif .type == "tool_use" and .name == "Bash" then
+       ["bash", .id, (.input.command // "")]
+     else empty end),
+  # One message spans several lines, each repeating stop_reason; the closing
+  # text block is always the last of them.
+  (select(.message.stop_reason == "end_turn"
+          and (.message.content | last | .type) == "text")
+   | ["end", "-", "-"])
 elif .type == "user" then
   .message.content[]?
   | select(.type == "tool_result")
@@ -35,8 +46,15 @@ else empty end
 '
 
 main() {
-  local session_id=$1 f kind id json
+  local session_id show_text arg f kind id json last
   local -A pending
+
+  for arg; do
+    case $arg in
+      -t|--text) show_text=true ;;
+      *) session_id=$arg ;;
+    esac
+  done
 
   f=$(find "$HOME/.claude/projects" -type f -name "$session_id*.jsonl" | head -1)
 
@@ -50,27 +68,62 @@ main() {
   tail -f "$f" |
     jq -r --unbuffered "$jq_stream" |
     while IFS=$'\t' read -r kind id json; do
+      # Anything not rendered leaves $last alone, so two thoughts with only a
+      # silent event between them still read as two thoughts.
       case $kind in
         thinking)
+          if [[ $last == thinking ]]; then
+            render_thought_break
+          fi
           render_thinking "$(jq -r . <<< "$json")"
+          ;;
+        text)
+          if [[ -z $show_text ]]; then
+            continue
+          fi
+          render_text "$(jq -r . <<< "$json")"
+          ;;
+        end)
+          render_separator
           ;;
         bash)
           pending[$id]=1
           render_command "$(jq -r . <<< "$json")"
           ;;
         output)
-          if [[ -n ${pending[$id]} ]]; then
-            unset "pending[$id]"
-            render_output "$(jq -r . <<< "$json")"
+          if [[ -z ${pending[$id]} ]]; then
+            continue
           fi
+          unset "pending[$id]"
+          render_output "$(jq -r . <<< "$json")"
           ;;
       esac
+      last=$kind
     done
 }
 
 render_thinking() {
   echo
   printf '%s\n' "$1" | NO_COLOR=1 COLUMNS=$body pi.tui-md | pad "$italic$gray"
+}
+
+render_text() {
+  echo
+  printf '%s\n' "$1" | COLUMNS=$body pi.tui-md | pad "$text"
+}
+
+render_separator() {
+  echo
+  printf '%s%s%s\n' "$gray" "$(rule $width)" "$reset"
+}
+
+render_thought_break() {
+  echo
+  printf '%s %s%s\n' "$gray" "$(rule 20)" "$reset"
+}
+
+rule() {
+  printf "%${1}s" | tr ' ' -
 }
 
 render_command() {

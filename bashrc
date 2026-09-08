@@ -68,7 +68,9 @@ $HOME/local/share/man:\
 
 export GPG_TTY=$(tty)
 
-export LANG="en_US.UTF-8"
+if [[ -z $LANG ]] && locale -a 2>/dev/null | grep -qixE 'en_us\.utf-?8'; then
+  export LANG="en_US.UTF-8"
+fi
 
 export EDITOR=$(type -P nvim vim vi | head -1)
 alias vi=$EDITOR
@@ -386,7 +388,7 @@ rewrap()     { tput smam; }
 git-root()   { cd "$(git rev-parse --show-toplevel 2>/dev/null || echo ".")"; }
 hread()      { history -r; }
 mkdirpcd()   { mkdir -p "$1" ; cd "$1" ; }
-tree()       { command tree --filesfirst "$@"; }
+tree()       { command tree --filesfirst --gitignore "$@"; }
 
 if [[ -n $INTERACTIVE ]]; then
   alias ..='cd ../'

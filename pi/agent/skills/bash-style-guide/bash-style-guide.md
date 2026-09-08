@@ -164,6 +164,64 @@ f=$(date)
 f="$(date)"
 ```
 
+### Local Variables
+
+Declaring and assigning on the same line is fine, *except* when the value comes from a command
+substitution. `local` is a builtin, so `local var=$(cmd)` returns the exit code of `local` -- which is
+always 0 -- and the exit code of `cmd` is thrown away. Combined with the `set -e` above, that is the
+difference between the script stopping at the failure and the script carrying on with an empty variable.
+
+When the value comes from a command substitution, declare on its own line and assign on the next one.
+Put that pair where the value is needed rather than hoisting the declaration to the top of the function --
+there is then nothing to keep in sync as the function changes.
+
+```bash
+# Good -- no command substitution, one line is fine
+local name=$1
+local delimiter=","
+local target=$build_dir
+
+# Bad -- the exit code of `git` is lost, and $? is `local`'s
+local branch=$(git rev-parse --abbrev-ref HEAD)
+
+# Good
+local branch
+branch=$(git rev-parse --abbrev-ref HEAD)
+```
+
+Rationale:
+
+<details>
+<summary>Click to expand</summary>
+
+The failure is silent, and the message the script prints afterwards is actively wrong:
+
+```bash
+set -e
+
+seed_tree() {
+  local tree=$1
+
+  # `find` fails (the directory does not exist), but `local` returns 0, so `set -e` does not
+  # fire. The script continues and reports the wrong reason.
+  local newest=$(find "$tree" -type f | newest_epoch)
+
+  if [[ -z $newest ]]; then
+    echo "$tree holds nothing recognisable, skipping"
+    return
+  fi
+
+  # ...
+}
+```
+
+Written as two statements, `set -e` stops the script at the assignment and the operator sees the
+real error.
+
+Note that a pipeline only reports the exit code of its *last* command, so `find` above is masked
+either way. `set -o pipefail` is the fix for that, and it is a separate decision from this one.
+</details>
+
 ### Test Operator
 
 Always use the Bash extended test operator: `[[`

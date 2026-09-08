@@ -308,26 +308,28 @@ if !minimal_vimrc
 endif
 call plug#end()
 
-lua << EOF
-require('blink.cmp').setup({
-  keymap = {
-    preset = 'default',
-    ["<Tab>"] = { 'accept' }
-  },
-  -- appearance = {
-  --   nerd_font_variant = 'mono'
-  -- },
-  completion = {
-    documentation = { auto_show = false }
-  },
-  sources = {
-    default = { 'lsp', 'path', 'snippets', 'buffer' },
-  },
-  fuzzy = {
-    implementation = "prefer_rust_with_warning"
-  }
-})
+if has('nvim')
+  lua << EOF
+  require('blink.cmp').setup({
+    keymap = {
+      preset = 'default',
+      ["<Tab>"] = { 'accept' }
+    },
+    -- appearance = {
+    --   nerd_font_variant = 'mono'
+    -- },
+    completion = {
+      documentation = { auto_show = false }
+    },
+    sources = {
+      default = { 'lsp', 'path', 'snippets', 'buffer' },
+    },
+    fuzzy = {
+      implementation = "prefer_rust_with_warning"
+    }
+  })
 EOF
+endif
 
 
 " Functions

@@ -28,7 +28,7 @@ else:
 EOT
 
 python_command() {
-  head -n$n "$ARG_FILE" | python -c "$python_script"
+  head -n$n "$ARG_FILE" | uv run --no-project --with pandas python3 -c "$python_script"
 }
 
 ruby_command() {

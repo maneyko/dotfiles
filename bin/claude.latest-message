@@ -7,7 +7,7 @@ LAST_MESSAGE='
     select(.type == "assistant" and .isSidechain != true)
     | .message.content[] | select(.type == "text") | .text
   )
-  | last // empty
+  | .[-1] // empty
 '
 
 FULL_CONVERSATION='

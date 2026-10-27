@@ -23,8 +23,14 @@ config/iterm2
 config/jgit/
 config/kitty/
 config/neofetch/
+config/nvim/*.bak
+config/nvim/config
+config/nvim/debug/
+config/nvim/nvim-pack-lock.json
+config/nvim/pack
 config/nvim/plugged
 config/nvim/plugged/
+config/nvim/plugins
 config/osxphotos/themes/
 config/ripgrep/
 config/wezterm/

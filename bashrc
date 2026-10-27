@@ -87,6 +87,7 @@ export TZ='America/Chicago'
 export PROMPT_COMMAND="__prompt_cmd"
 export HISTFILE=$HOME/.bash_history
 export HISTSIZE=200000
+export HISTFILESIZE=-1
 export HISTTIMEFORMAT="%F %T: "
 
 if [[ $- == *i* ]]; then
@@ -427,16 +428,15 @@ else
 fi
 
 if [[ -f $HISTFILE && -n $INTERACTIVE ]]; then
-  hist_size=$(wc -l < $HISTFILE)
-  hist_size=$(($hist_size / 2))  # Every other line is a timestamp
-  if [[ $(($HISTSIZE - $hist_size)) -le 1000 ]]; then
+  hist_count=$(grep -c '^#[0-9][0-9]*$' "$HISTFILE")
+  if [[ $hist_count -ge 100000 ]]; then
     hist_dir=$HISTFILE.d
     hist_logfile="$hist_dir/bash_history-$(date +'%Y%m%d')"
     hist_keep=1000
     echo "Rolling bash history. Backup will be saved to '$hist_logfile'. Keeping last $hist_keep commands."
     mkdir -p "${hist_dir}/"
     cp "$HISTFILE" "$hist_logfile"
-    tail -n $(($hist_keep * 2)) "$hist_logfile" > "$HISTFILE"
+    awk -v skip=$(($hist_count - $hist_keep)) '/^#[0-9]+$/ { n++ } n > skip' "$hist_logfile" > "$HISTFILE"
   fi
 fi
 
@@ -530,6 +530,10 @@ export DOCKER_CLI_HINTS=false
 
 if command -v pi >/dev/null 2>&1; then
   export PI_CACHE_RETENTION=long
+fi
+
+if command -v claude >/dev/null 2>&1; then
+  alias claude.orchestrator="claude --agent orchestrator"
 fi
 
 # First TTY Greeting
